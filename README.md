@@ -1,4 +1,4 @@
-# hashtag-website
+# hashtag-dApp
 
 ## Setup
 
