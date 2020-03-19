@@ -1,4 +1,4 @@
-# hashtag-protocol-frontend
+# hashtag-website
 
 ## Setup
 
