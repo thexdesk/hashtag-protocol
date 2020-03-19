@@ -7,7 +7,7 @@ import VueApollo from "vue-apollo";
 import "./styles/semantic.min.css";
 
 const client = new ApolloClient({
-  uri: "http://localhost:8000/subgraphs/name/swaylock/hashtag-protocol"
+  uri: "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag"
 });
 
 const apolloProvider = new VueApollo({

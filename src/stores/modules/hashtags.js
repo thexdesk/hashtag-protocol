@@ -5,21 +5,10 @@ import HashtagProtocolTruffleConf from '../../truffleconf/HashtagProtocol';
 import utils from '../../utils';
 
 const state = {
-  hashtags: [
-    {
-      id: 1,
-      hashtag: "jack",
-      tagAmounts: 200000,
-      earnings: 30
-    },
-    {
-      id: 2,
-      hashtag: "gaming",
-      tagAmounts: 100000,
-      earnings: 20
-    }
-  ],
-  web3Objects: {}
+  hashtags: [],
+  web3Objects: {},
+  publisher: '0x401cBf2194D35D078c0BcdAe4BeA42275483ab5F',
+  fee: ethers.utils.parseEther('0.01'), // FIXME look up from contract
 };
 const getters = {
   allHashtags: state => state.hashtags
@@ -64,7 +53,8 @@ const mutations = {
 
     await state.web3Objects.contracts.hashtagProtocolContract.mint(
         payload.newHashtag.hashtag,
-        '0x12D062B19a2DF1920eb9FC28Bd6E9A7E936de4c2'
+        state.publisher,
+        {gasLimit: 500000, value: state.fee}, // rinkeby testing
     );
 
     state.hashtags.push(payload.newHashtag);
