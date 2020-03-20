@@ -19,6 +19,5 @@ export default {
 <style lang="scss">
 @import "./styles/reset.css";
 
-#app {
-}
+#app {}
 </style>

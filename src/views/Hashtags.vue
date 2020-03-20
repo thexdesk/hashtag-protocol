@@ -6,7 +6,7 @@
       @onClose="closeModal"
     />
     <div class="hero">
-      <Header />
+      <Header></Header>
 
       <div class="layout">
         <div class="ui segment change-segment">
@@ -81,15 +81,22 @@
           <div class="eight wide column">
             <div class="ui segments">
               <div class="ui segment">
-                <h3 class="ui header">Popular Hashtags</h3>
+                <h3 class="ui header">Newest Hashtags</h3>
               </div>
-              <div class="ui container">
+              <div class="ui container" v-if="hashtags">
                 <table class="ui celled striped table change-table">
+                  <thead>
+                    <th>Hashtag</th>
+                    <th>Minted</th>
+                    <th>Owner</th>
+                    <th>Publisher</th>
+                  </thead>
                   <tbody>
                     <tr v-for="(hashtag,idx) in hashtags" :key="idx">
-                      <td>#{{ hashtag.name }}</td>
-                      <td>{{ 1 }}</td>
-                      <td>${{ 0 }}</td>
+                      <td><b>#{{ hashtag.name }}</b></td>
+                      <td>{{ new Date(hashtag.timestamp * 1000) | moment("from") }}</td>
+                      <td>{{ hashtag.owner | shortEth}}</td>
+                      <td>{{ hashtag.publisher | shortEth }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -146,49 +153,6 @@
               </div>
             </div>
           </div>
-          <div class="eight wide column">
-            <div class="ui segments">
-              <div class="ui segment">
-                <h3 class="ui header">Newest Hashtags</h3>
-              </div>
-              <div class="ui container">
-                <table class="ui celled striped table change-table">
-                  <tbody>
-                    <tr>
-                      <td>#ethereum</td>
-                      <td>04/22/2019</td>
-                      <td>0x07...4730b</td>
-                      <td>0x04...4820a</td>
-                    </tr>
-                    <tr>
-                      <td>#ethereum</td>
-                      <td>04/22/2019</td>
-                      <td>0x07...4730b</td>
-                      <td>0x04...4820a</td>
-                    </tr>
-                    <tr>
-                      <td>#ethereum</td>
-                      <td>04/22/2019</td>
-                      <td>0x07...4730b</td>
-                      <td>0x04...4820a</td>
-                    </tr>
-                    <tr>
-                      <td>#ethereum</td>
-                      <td>04/22/2019</td>
-                      <td>0x07...4730b</td>
-                      <td>0x04...4820a</td>
-                    </tr>
-                    <tr>
-                      <td>#ethereum</td>
-                      <td>04/22/2019</td>
-                      <td>0x07...4730b</td>
-                      <td>0x04...4820a</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -202,7 +166,7 @@ import Modal from "../components/Modal";
 import { ALL_HASH_TAGS } from "../queries";
 
 export default {
-  name: "HashtagInfo",
+  name: "Hashtags",
   components: {
     Header,
     Modal

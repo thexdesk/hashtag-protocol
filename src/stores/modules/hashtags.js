@@ -9,10 +9,14 @@ const state = {
   web3Objects: {},
   publisher: '0x401cBf2194D35D078c0BcdAe4BeA42275483ab5F',
   fee: ethers.utils.parseEther('0.01'), // FIXME look up from contract
+  account: null,
 };
+
 const getters = {
-  allHashtags: state => state.hashtags
+  allHashtags: state => state.hashtags,
+  account: state => state.account,
 };
+
 const actions = {
   async bootstrap({commit}) {
     await window.ethereum.enable();
@@ -29,28 +33,31 @@ const actions = {
         signer,
     );
 
+    const accounts = await provider.listAccounts();
+
     commit('setWeb3Objects', {
       provider,
       signer,
       chain,
       contracts: {
         hashtagProtocolContract
-      }
+      },
+      account: accounts[0],
     });
   },
+
   addNewHashtag({commit}, payload) {
     commit("addNewHashtag", payload);
   },
+
   mint({dispatch}, payload) {
     dispatch('addNewHashtag', payload);
   }
 };
-const mutations = {
-  async addNewHashtag(state, payload) {
-    // await state.web3Objects.contracts.hashtagProtocolContract.addPublisher(
-    //     '0x12D062B19a2DF1920eb9FC28Bd6E9A7E936de4c2'
-    // );
 
+const mutations = {
+
+  async addNewHashtag(state, payload) {
     await state.web3Objects.contracts.hashtagProtocolContract.mint(
         payload.newHashtag.hashtag,
         state.publisher,
@@ -59,8 +66,10 @@ const mutations = {
 
     state.hashtags.push(payload.newHashtag);
   },
+
   setWeb3Objects(state, payload) {
     Vue.set(state, 'web3Objects', payload);
+    state.account = payload.account;
   }
 };
 

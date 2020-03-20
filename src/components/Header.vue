@@ -2,15 +2,17 @@
   <header>
     <router-link to="/"><h1>Hashtag</h1></router-link>
     <ul>
-      <li>USD</li>
-      <li>0X07...5B0E</li>
+      <li><code>{{ account | shortEth }}</code></li>
     </ul>
   </header>
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
+
 export default {
-  name: "Header"
+  name: "header",
+  computed: mapGetters(["account"]),
 };
 </script>
 
