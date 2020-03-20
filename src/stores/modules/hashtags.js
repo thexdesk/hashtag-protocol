@@ -74,8 +74,6 @@ const mutations = {
         state.publisher,
         {gasLimit: 500000, value: state.fee}, // rinkeby testing
     );
-
-    state.hashtags.push(payload.newHashtag);
   },
 
   setWeb3Objects(state, payload) {

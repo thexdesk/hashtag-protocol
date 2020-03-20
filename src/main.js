@@ -27,7 +27,7 @@ Vue.filter('to2Dp', function (value) {
 
 Vue.filter('shortEth', function (value) {
     if (!value) return '';
-    return value.substr(0, 4) + '...' + value.substr(value.length - 4, value.length);
+    return value.substr(0, 6) + '...' + value.substr(value.length - 6, value.length);
 });
 
 new Vue({
