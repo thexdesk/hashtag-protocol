@@ -10,22 +10,22 @@
             muted
             loop
             playsinline
-            v-if="modalData.metadata.image.includes('.webm')"
+            v-if="modalData.image.includes('.webm')"
           >
             <source
-              v-bind:src="modalData.metadata.image"
+              v-bind:src="modalData.image"
               type='video/webm; codecs="vp8, vorbis"'
             />
           </video>
           <img
-            v-bind:src="modalData.metadata.image"
+            v-bind:src="modalData.image"
             type="image"
             v-else
             class="modalImage"
           />
         </div>
         <div class="modalInfoContent">
-          <h1>{{ modalData.metadata.name }}</h1>
+          <h1>{{ modalData.name }}</h1>
           <p>KnownOrigin</p>
         </div>
       </div>
@@ -63,9 +63,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
-  name: "Modal",
+  name: "modal",
   props: {
     isOpen: Boolean,
     modalData: Object
@@ -74,10 +73,9 @@ export default {
     return {
       isHashtagListOpen: false,
       hashtag: "",
-      hashtags: []
+      hashtags: ['cryptoart']
     };
   },
-  computed: mapGetters(["allHashtags"]),
   methods: {
     closeModal() {
       this.$emit("onClose");

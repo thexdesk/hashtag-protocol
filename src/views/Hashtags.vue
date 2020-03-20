@@ -67,11 +67,12 @@
               <div class="ui container">
                 <table class="ui celled striped table change-table">
                   <tbody>
-                    <tr v-for="(hashtag,idx) in hashtags" :key="idx">
+                    <tr v-for="(digitalAsset,idx) in digitalAssets" :key="idx" @click="openModal(digitalAsset)">
                       <td>
-                        {{ hashtag.name }}
+                        {{ digitalAsset.name }}
                       </td>
-                      <td>The Graph</td>
+                      <td>KnownOrigin</td>
+                      <td><b>#cryptoart</b></td>
                     </tr>
                   </tbody>
                 </table>
@@ -186,7 +187,7 @@ export default {
       pollInterval: 300, // ms
     }
   },
-  computed: mapGetters(["allHashtags"]),
+  computed: mapGetters(["digitalAssets"]),
   methods: {
     closeModal() {
       this.isModalOpen = false;
