@@ -1,9 +1,22 @@
 import { gql } from "apollo-boost";
 
-export const ALL_HASH_TAGS = gql`
+export const TOP_TENS = gql`
    query {
-        hashtags {
-            name
-        }
-    }
+       hashtags(first: 10, orderBy:timestamp, orderDirection:desc) {
+           id
+           name
+           owner
+           publisher
+           timestamp
+       }
+       publishers(first: 10, orderBy:count, orderDirection:desc) {
+           id
+           count
+       },
+       owners(first: 10, orderBy:count, orderDirection:desc){
+           id
+           count
+       }
+   }
+
 `;

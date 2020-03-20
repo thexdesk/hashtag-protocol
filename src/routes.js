@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Home from "./views/Home";
-import HashtagInfo from "./views/HashtagInfo";
+import Hashtags from "./views/Hashtags";
 
 Vue.use(VueRouter);
 
@@ -15,7 +15,7 @@ export const router = new VueRouter({
     },
     {
       path: "/hashtags",
-      component: HashtagInfo
+      component: Hashtags
     }
   ]
 });
