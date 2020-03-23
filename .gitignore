@@ -21,3 +21,6 @@ yarn-error.log*
 *.sln
 *.sw?
 *.iml
+
+# Ignore yarn.lock
+yarn.lock
