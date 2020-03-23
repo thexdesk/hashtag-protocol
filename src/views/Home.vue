@@ -4,15 +4,17 @@
       <header>
         <h1>Hashtag</h1>
         <ul>
-          <router-link to="/hashtags"
-            ><li class="headerLink emphasis">
+          <router-link to="/hashtags">
+            <li class="headerLink emphasis">
               Hashtags
-            </li></router-link
-          >
+            </li>
+          </router-link>
           <li class="headerLink emphasis">Developers</li>
         </ul>
         <ul>
-          <li class="appLink">APP</li>
+          <router-link to="/hashtags">
+            <li class="appLink">APP</li>
+          </router-link>
         </ul>
       </header>
 
