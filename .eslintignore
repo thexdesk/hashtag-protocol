@@ -9,7 +9,12 @@
 *.lock
 .global
 .platform/local
-node_modules*
 **/node_modules/**/*
-dist
 _www
+dist
+node_modules*
+public
+src/assets
+src/components
+src/styles
+src/truffleconf
