@@ -11,11 +11,11 @@ export const router = new VueRouter({
   routes: [
     {
       path: "/",
-      component: Home
+      component: Home,
     },
     {
       path: "/hashtags",
-      component: Hashtags
-    }
-  ]
+      component: Hashtags,
+    },
+  ],
 });
