@@ -15,7 +15,7 @@ web:
             # The folder from which to serve static assets, for this location.
             #
             # This is a filesystem path, relative to the application root.
-            root: "dist"
+            root: "build_platform"
             index:
                 - "index.html"
 
@@ -43,6 +43,7 @@ disk: 512
 # 'shared:files/NAME', where NAME is just a unique name for the mount.
 mounts:
   '/build_platform': 'shared:files/build_platform'
+  '/build_platform/test-results': 'shared:files/test-results'
   '/.tmp_platformsh': 'shared:files/tmp_platformsh'
 
 # Build dependencies
