@@ -33,12 +33,24 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^6.1.2",
     "graphql-tag": "^2.9.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.9",
     "node-sass": "^4.13.1",
     "prettier": "^2.0.2",
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-apollo": "~0.21.3",
     "vue-cli-plugin-platformsh": "~1.1.1",
     "vue-template-compiler": "^2.6.11"
+  },
+  "lint-staged": {
+    "src/**": [
+      "eslint ."
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "browserslist": [
     "> 1%",
