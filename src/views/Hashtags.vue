@@ -266,6 +266,12 @@ small {
   margin-top: 2em;
 }
 
+th {
+  font-size: 0.9rem;
+  color: gray !important;
+  font-weight: normal !important;
+}
+
 .segment.remove-padding {
   padding: 0 !important;
 
@@ -317,26 +323,6 @@ small {
   display: flex;
 }
 
-#hashtagList {
-  z-index: 5;
-  position: absolute;
-  top: 40px;
-  width: 100%;
-  background-color: #eee;
-  border-radius: 6px;
-  box-shadow: 0 5px 15px 3px #22222230;
-
-  li {
-    padding: 0.8em;
-    background: #ccc;
-    border: 1px solid #bbb;
-    width: auto;
-    display: inline-block;
-    margin: 10px 10px;
-    border-radius: 6px;
-  }
-}
-
 header {
   display: flex !important;
   flex-direction: row;
@@ -371,10 +357,24 @@ header {
   }
 }
 
-th {
-  font-size: 0.9rem;
-  color: gray !important;
-  font-weight: normal !important;
+#hashtagList {
+  z-index: 5;
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  background-color: #eee;
+  border-radius: 6px;
+  box-shadow: 0 5px 15px 3px #22222230;
+
+  li {
+    padding: 0.8em;
+    background: #ccc;
+    border: 1px solid #bbb;
+    width: auto;
+    display: inline-block;
+    margin: 10px 10px;
+    border-radius: 6px;
+  }
 }
 
 .resizeVideoContent {

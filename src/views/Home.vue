@@ -135,46 +135,6 @@ export default {
   font-weight: bold;
 }
 
-section.heroSection.darker {
-  background-color: #bdbdbb;
-  width: 100%;
-  color: #4a4a4a;
-
-  h1 {
-    color: #a7a7a7;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
-section.heroSection {
-  background-color: #fff;
-  height: 60vh;
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  p.heroContent {
-    width: 50%;
-    font-size: 30px;
-    font-weight: normal;
-    line-height: 50px;
-    color: #282828;
-  }
-
-  img {
-    width: 200px;
-    margin-right: 10em;
-  }
-}
-
 .hero {
   background-color: #bdbdbb;
   height: 60vh !important;
@@ -197,6 +157,23 @@ section.heroSection {
     font-weight: normal;
     line-height: 50px;
     color: #fff;
+  }
+}
+
+section.heroSection.darker {
+  background-color: #bdbdbb;
+  width: 100%;
+  color: #4a4a4a;
+
+  h1 {
+    color: #a7a7a7;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 
