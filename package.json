@@ -48,7 +48,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "lint-staged": {
-    "src/**/*.{vue,scss}": [
+    "src/**/*.{js,vue,scss}": [
       "eslint .",
       "stylelint"
     ]
