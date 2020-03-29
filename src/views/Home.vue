@@ -125,7 +125,7 @@
 
 <script>
 export default {
-  components: {}
+  components: {},
 };
 </script>
 
@@ -134,47 +134,7 @@ export default {
   color: #24ae60;
   font-weight: bold;
 }
-section.heroSection.darker {
-  background-color: #bdbdbb;
-  width: 100%;
 
-  color: #4a4a4a;
-
-  h1 {
-    color: #a7a7a7;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-section.heroSection {
-  background-color: #ffffff;
-  height: 60vh;
-  width: 90%;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  p.heroContent {
-    width: 50%;
-
-    font-size: 30px;
-    font-weight: normal;
-    line-height: 50px;
-    color: #282828;
-  }
-
-  img {
-    width: 200px;
-    margin-right: 10em;
-  }
-}
 .hero {
   background-color: #bdbdbb;
   height: 60vh !important;
@@ -196,13 +156,32 @@ section.heroSection {
     font-size: 2.6em;
     font-weight: normal;
     line-height: 50px;
-    color: #ffffff;
+    color: #fff;
   }
 }
+
+section.heroSection.darker {
+  background-color: #bdbdbb;
+  width: 100%;
+  color: #4a4a4a;
+
+  h1 {
+    color: #a7a7a7;
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
 .headerLink,
 .appLink {
   background-color: transparent;
 }
+
 .appLink {
   border-radius: 2px;
   border: 2px solid #24ae60;

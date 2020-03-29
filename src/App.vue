@@ -11,13 +11,11 @@ export default {
   name: "App",
   components: {},
   async created() {
-    this.$store.dispatch('bootstrap');
-  }
+    this.$store.dispatch("bootstrap");
+  },
 };
 </script>
 
 <style lang="scss">
 @import "./styles/reset.css";
-
-#app {}
 </style>
