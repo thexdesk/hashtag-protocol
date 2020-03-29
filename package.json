@@ -48,9 +48,9 @@
     "vue-template-compiler": "^2.6.11"
   },
   "lint-staged": {
-    "src/**": [
+    "src/**/*.{vue,scss}": [
       "eslint .",
-      "stylelint ."
+      "npx stylelint"
     ]
   },
   "husky": {

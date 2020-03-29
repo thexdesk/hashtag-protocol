@@ -278,8 +278,7 @@ small {
   border-bottom: none !important;
   border-left: none !important;
   border-right: none !important;
-
-  border-radius: 0px !important;
+  border-radius: 0 !important;
 }
 
 .segment.change-segment {
@@ -289,7 +288,7 @@ small {
 }
 
 .divider {
-  color: #ffffff !important;
+  color: #fff !important;
 }
 
 .layout {
@@ -322,16 +321,15 @@ small {
   z-index: 5;
   position: absolute;
   top: 40px;
-
   width: 100%;
-  background-color: #eeeeee;
+  background-color: #eee;
   border-radius: 6px;
-  box-shadow: 0px 5px 15px 3px #22222230;
+  box-shadow: 0 5px 15px 3px #22222230;
 
   li {
     padding: 0.8em;
-    background: #cccccc;
-    border: 1px solid #bbbbbb;
+    background: #ccc;
+    border: 1px solid #bbb;
     width: auto;
     display: inline-block;
     margin: 10px 10px;
@@ -344,7 +342,6 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
   position: absolute;
   top: 0;
   width: 100%;
