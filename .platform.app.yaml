@@ -57,10 +57,12 @@ dependencies:
     eslint-plugin-prettier: '2.6.2'
     prettier: '1.14.0'
     sass-lint: '1.12.1'
-    stylelint: '9.1.1'
+    stylelint: '13.2.1'
     stylelint-checkstyle-formatter: '0.1.1'
-    stylelint-config-standard: '18.2.0'
-    stylelint-no-browser-hacks: '1.1.0'
+    stylelint-config-recommended-scss: '4.2.0'
+    stylelint-config-standard: '20.0.0'
+    stylelint-processor-html: '1.0.0'
+    stylelint-scss: '3.16.0'
 
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
