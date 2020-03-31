@@ -10,7 +10,7 @@ import VueMoment from "vue-moment";
 Vue.use(VueMoment);
 
 const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
+  uri: "http://localhost:8000/subgraphs/name/blockrockettech/hashtag",
 });
 
 const apolloProvider = new VueApollo({

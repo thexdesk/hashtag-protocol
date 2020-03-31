@@ -134,7 +134,7 @@
                   <tbody>
                     <tr v-for="publisher in publishers" :key="publisher.id">
                       <td>{{ publisher.id | shortEth }}</td>
-                      <td>{{ publisher.count }}</td>
+                      <td>{{ publisher.taggedCount }}</td>
                       <td>x ETH</td>
                     </tr>
                   </tbody>
@@ -157,7 +157,7 @@
                   <tbody>
                     <tr v-for="owner in owners" :key="owner.id">
                       <td>{{ owner.id | shortEth }}</td>
-                      <td>{{ owner.count }}</td>
+                      <td>{{ owner.ownedCount }}</td>
                       <td>x ETH</td>
                     </tr>
                   </tbody>

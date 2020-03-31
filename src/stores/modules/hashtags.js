@@ -2,6 +2,7 @@ import Vue from "vue";
 import { ethers } from "ethers";
 
 import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
+import NFTTagger from "../../truffleconf/NFTTagger";
 import utils from "../../utils";
 
 const state = {
@@ -21,18 +22,23 @@ const state = {
     },
   ],
   web3Objects: {},
-  publisher: "0x401cBf2194D35D078c0BcdAe4BeA42275483ab5F",
-  fee: ethers.utils.parseEther("0.01"), // FIXME look up from contract
-  account: null,
+  fees: {
+    protocol: ethers.utils.parseEther("0.01"),
+    tagging: ethers.utils.parseEther("0.01"),
+  },
 };
 
 const getters = {
   digitalAssets: (state) => state.digitalAssets,
-  account: (state) => state.account,
+  account: (state) => {
+    return state.web3Objects && state.web3Objects.account
+      ? state.web3Objects.account
+      : null;
+  },
 };
 
 const actions = {
-  async bootstrap({ commit }) {
+  async bootstrap({ commit, dispatch }) {
     await window.ethereum.enable();
 
     /*global web3*/
@@ -50,6 +56,16 @@ const actions = {
       signer
     );
 
+    const nftTaggerContractAddress = utils.getContractAddressFromTruffleConf(
+      NFTTagger,
+      chain.chainId
+    );
+    const nftTaggerContract = new ethers.Contract(
+      nftTaggerContractAddress,
+      NFTTagger.abi,
+      signer
+    );
+
     const accounts = await provider.listAccounts();
 
     commit("setWeb3Objects", {
@@ -58,9 +74,14 @@ const actions = {
       chain,
       contracts: {
         hashtagProtocolContract,
+        nftTaggerContract,
       },
       account: accounts[0],
+      publisher: accounts[0], // This is now based on account #1 being a publisher. Will need changing for prod
     });
+
+    dispatch("getProtocolFee");
+    dispatch("getTaggingFee");
   },
 
   addNewHashtag({ commit }, payload) {
@@ -70,20 +91,63 @@ const actions = {
   mint({ dispatch }, payload) {
     dispatch("addNewHashtag", payload);
   },
+
+  tag({ dispatch }, payload) {
+    dispatch("tagAsset", payload);
+  },
+
+  getProtocolFee({ commit }, payload) {
+    commit("getProtocolFee", payload);
+  },
+
+  getTaggingFee({ commit }, payload) {
+    commit("getTaggingFee", payload);
+  },
 };
 
 const mutations = {
-  async addNewHashtag(state, payload) {
-    await state.web3Objects.contracts.hashtagProtocolContract.mint(
-      payload.newHashtag.hashtag,
-      state.publisher,
-      { gasLimit: 500000, value: state.fee } // rinkeby testing
+  async addNewHashtag(state) {
+    const { contracts, account } = state.web3Objects;
+    const { nftTaggerContract } = contracts;
+
+    // await hashtagProtocolContract.mint(
+    //   payload.newHashtag.hashtag,
+    //   publisher,
+    //   account,
+    //   { value: ethers.utils.bigNumberify(state.fees.protocol) }
+    // );
+
+    await nftTaggerContract.tag(
+      1,
+      "0xDdAC0CE12e2057F50EbCB70A19fC0500aFfa20e1",
+      1,
+      account,
+      { value: ethers.utils.bigNumberify(state.fees.protocol) }
     );
+  },
+
+  async tagAsset(state, payload) {
+    const { nftTaggerContract } = state.web3Objects.contracts;
+    const { hashtagId, nftContract, nftId } = payload;
+    await nftTaggerContract.tag(hashtagId, nftContract, nftId, state.account);
+  },
+
+  async getProtocolFee(state) {
+    const { hashtagProtocolContract } = state.web3Objects.contracts;
+    const fee = (await hashtagProtocolContract.fee()).toString();
+    Vue.set(state, "fees.platform", fee);
+  },
+
+  async getTaggingFee(state) {
+    const { nftTaggerContract } = state.web3Objects.contracts;
+    const fee = (
+      await nftTaggerContract.calculateTagFeeAfterDiscount()
+    ).toString();
+    Vue.set(state, "fees.tagging", fee);
   },
 
   setWeb3Objects(state, payload) {
     Vue.set(state, "web3Objects", payload);
-    state.account = payload.account;
   },
 };
 

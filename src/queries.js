@@ -9,13 +9,13 @@ export const TOP_TENS = gql`
       publisher
       timestamp
     }
-    publishers(first: 10, orderBy: count, orderDirection: desc) {
+    publishers(first: 10, orderBy: tagCount, orderDirection: desc) {
       id
-      count
+      tagCount
     }
-    owners(first: 10, orderBy: count, orderDirection: desc) {
+    owners(first: 10, orderBy: ownedCount, orderDirection: desc) {
       id
-      count
+      ownedCount
     }
   }
 `;
