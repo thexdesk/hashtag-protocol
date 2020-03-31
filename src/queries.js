@@ -17,5 +17,12 @@ export const TOP_TENS = gql`
       id
       ownedCount
     }
+    tags {
+      hashtagId
+      nftContract
+      nftId
+      tagger
+      timestamp
+    }
   }
 `;
