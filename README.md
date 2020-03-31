@@ -1,11 +1,13 @@
 # hashtag-dApp
 
-## Setup
+## Installation
 
-To install the dependencies needed:
+To run the Hashtag dApp locally, pull the repository from GitHub and install its dependencies. You will need yarn or npm installed.
 
 ```
-npm install
+git clone git@github.com:hashtag-protocol/hashtag-dapp.git
+cd hashtag-dapp
+yarn install --lock-file # or `npm install`
 ```
 
 ### Running the Frontend
