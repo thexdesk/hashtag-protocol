@@ -6,7 +6,7 @@
         <ul>
           <router-link to="/hashtags">
             <li class="headerLink emphasis">
-              Hashtags
+              Hashtag
             </li>
           </router-link>
           <li class="headerLink emphasis">Developers</li>

@@ -49,7 +49,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,vue,scss}": [
-      "eslint .",
+      "eslint",
       "stylelint"
     ]
   },
