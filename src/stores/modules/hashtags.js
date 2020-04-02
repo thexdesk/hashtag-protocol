@@ -116,20 +116,16 @@ const mutations = {
       account,
       { value: ethers.utils.bigNumberify(state.fees.protocol) }
     );
-
-    // await nftTaggerContract.tag(
-    //   1,
-    //   "0xDdAC0CE12e2057F50EbCB70A19fC0500aFfa20e1",
-    //   1,
-    //   account,
-    //   { value: ethers.utils.bigNumberify(state.fees.protocol) }
-    // );
   },
 
   async tagAsset(state, payload) {
-    const { nftTaggerContract } = state.web3Objects.contracts;
+    const { web3Objects, account, fees } = state;
+    const { nftTaggerContract } = web3Objects.contracts;
     const { hashtagId, nftContract, nftId } = payload;
-    await nftTaggerContract.tag(hashtagId, nftContract, nftId, state.account);
+
+    await nftTaggerContract.tag(hashtagId, nftContract, nftId, account, {
+      value: ethers.utils.bigNumberify(fees.protocol),
+    });
   },
 
   async getProtocolFee(state) {
