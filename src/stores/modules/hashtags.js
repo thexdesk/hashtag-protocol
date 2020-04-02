@@ -106,24 +106,24 @@ const actions = {
 };
 
 const mutations = {
-  async addNewHashtag(state) {
-    const { contracts, account } = state.web3Objects;
-    const { nftTaggerContract } = contracts;
+  async addNewHashtag(state, payload) {
+    const { contracts, account, publisher } = state.web3Objects;
+    const { hashtagProtocolContract } = contracts;
 
-    // await hashtagProtocolContract.mint(
-    //   payload.newHashtag.hashtag,
-    //   publisher,
-    //   account,
-    //   { value: ethers.utils.bigNumberify(state.fees.protocol) }
-    // );
-
-    await nftTaggerContract.tag(
-      1,
-      "0xDdAC0CE12e2057F50EbCB70A19fC0500aFfa20e1",
-      1,
+    await hashtagProtocolContract.mint(
+      payload.newHashtag.hashtag,
+      publisher,
       account,
       { value: ethers.utils.bigNumberify(state.fees.protocol) }
     );
+
+    // await nftTaggerContract.tag(
+    //   1,
+    //   "0xDdAC0CE12e2057F50EbCB70A19fC0500aFfa20e1",
+    //   1,
+    //   account,
+    //   { value: ethers.utils.bigNumberify(state.fees.protocol) }
+    // );
   },
 
   async tagAsset(state, payload) {
