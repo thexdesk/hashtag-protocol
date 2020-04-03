@@ -64,17 +64,28 @@
               </div>
               <div class="ui container">
                 <table class="ui celled striped table change-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        NFT ID
+                      </th>
+                      <th>
+                        NFT Contract
+                      </th>
+                      <th>
+                        Hashtag ID
+                      </th>
+                    </tr>
+                  </thead>
                   <tbody>
-                    <tr
-                      v-for="(digitalAsset, idx) in digitalAssets"
-                      :key="idx"
-                      @click="openModal(digitalAsset)"
-                    >
+                    <tr v-for="(tag, idx) in tags" :key="idx">
                       <td>
-                        {{ digitalAsset.name }}
+                        {{ tag.nftId }}
                       </td>
-                      <td>KnownOrigin</td>
-                      <td><b>#cryptoart</b></td>
+                      <td>{{ tag.nftContract }}</td>
+                      <td>
+                        <b>{{ tag.hashtagId }}</b>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -134,7 +145,7 @@
                   <tbody>
                     <tr v-for="publisher in publishers" :key="publisher.id">
                       <td>{{ publisher.id | shortEth }}</td>
-                      <td>{{ publisher.count }}</td>
+                      <td>{{ publisher.tagCount }}</td>
                       <td>x ETH</td>
                     </tr>
                   </tbody>
@@ -157,7 +168,7 @@
                   <tbody>
                     <tr v-for="owner in owners" :key="owner.id">
                       <td>{{ owner.id | shortEth }}</td>
-                      <td>{{ owner.count }}</td>
+                      <td>{{ owner.ownedCount }}</td>
                       <td>x ETH</td>
                     </tr>
                   </tbody>
@@ -202,6 +213,10 @@ export default {
       pollInterval: 500, // ms
     },
     owners: {
+      query: TOP_TENS,
+      pollInterval: 500, // ms
+    },
+    tags: {
       query: TOP_TENS,
       pollInterval: 500, // ms
     },
