@@ -88,6 +88,9 @@
                       <th>
                         Hashtag ID
                       </th>
+                      <th>
+                        Tagged
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -98,6 +101,9 @@
                       <td>{{ tag.nftContract }}</td>
                       <td>
                         <b>{{ tag.hashtagId }}</b>
+                      </td>
+                      <td>
+                        {{ new Date(tag.timestamp * 1000) | moment("from") }}
                       </td>
                     </tr>
                   </tbody>
