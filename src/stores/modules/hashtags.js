@@ -77,7 +77,7 @@ const actions = {
         nftTaggerContract,
       },
       account: accounts[0],
-      publisher: accounts[0], // This is now based on account #1 being a publisher. Will need changing for prod
+      publisher: "0x12D062B19a2DF1920eb9FC28Bd6E9A7E936de4c2", // fixme - hardcoded for now for rinkeby testing
     });
 
     dispatch("getProtocolFee");
@@ -92,8 +92,8 @@ const actions = {
     dispatch("addNewHashtag", payload);
   },
 
-  tag({ dispatch }, payload) {
-    dispatch("tagAsset", payload);
+  tag({ commit }, payload) {
+    commit("tagAsset", payload);
   },
 
   getProtocolFee({ commit }, payload) {
@@ -119,8 +119,9 @@ const mutations = {
   },
 
   async tagAsset(state, payload) {
-    const { web3Objects, account, fees } = state;
-    const { nftTaggerContract } = web3Objects.contracts;
+    const { web3Objects, fees } = state;
+    const { account, contracts } = web3Objects;
+    const { nftTaggerContract } = contracts;
     const { hashtagId, nftContract, nftId } = payload;
 
     await nftTaggerContract.tag(hashtagId, nftContract, nftId, account, {

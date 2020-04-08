@@ -16,8 +16,21 @@
                   <h3 class="ui header white">Tag a Digital Asset</h3>
                   <div class="ui input">
                     <input
-                      placeholder="Asset name, project name or project contract."
+                      v-model="tagForm.hashtagId"
+                      placeholder="Hashtag ID"
                     />
+                  </div>
+                  <div class="ui input">
+                    <input v-model="tagForm.nftId" placeholder="NFT ID" />
+                  </div>
+                  <div class="ui input">
+                    <input
+                      v-model="tagForm.nftContract"
+                      placeholder="NFT Contract"
+                    />
+                  </div>
+                  <div>
+                    <button @click="tagNft()">Tag</button>
                   </div>
                 </div>
               </div>
@@ -30,7 +43,7 @@
                     <input
                       v-model="hashtagSearch"
                       type="text"
-                      placeholder="Search users..."
+                      placeholder="Search for hashtags..."
                       @input="onHashtagChange"
                       @click="openHashtagList"
                     />
@@ -100,6 +113,7 @@
               <div v-if="hashtags" class="ui container">
                 <table class="ui celled striped table change-table">
                   <thead>
+                    <th>Hashtag ID</th>
                     <th>Hashtag</th>
                     <th>Minted</th>
                     <th>Owner</th>
@@ -107,6 +121,9 @@
                   </thead>
                   <tbody>
                     <tr v-for="hashtag in hashtags" :key="hashtag.name">
+                      <td>
+                        <b>{{ hashtag.id }}</b>
+                      </td>
                       <td>
                         <b>#{{ hashtag.name }}</b>
                       </td>
@@ -139,7 +156,7 @@
                 <table class="ui celled striped table change-table">
                   <thead>
                     <th>Publisher</th>
-                    <th>Hashtags</th>
+                    <th>Tag Count</th>
                     <th>Earnings</th>
                   </thead>
                   <tbody>
@@ -201,6 +218,11 @@ export default {
       filteredHashtags: [],
       isModalOpen: false,
       modalData: {},
+      tagForm: {
+        hashtagId: "",
+        nftId: "",
+        nftContract: "",
+      },
     };
   },
   apollo: {
@@ -267,6 +289,9 @@ export default {
           },
         });
       }
+    },
+    tagNft() {
+      this.$store.dispatch("tag", this.tagForm);
     },
   },
 };
