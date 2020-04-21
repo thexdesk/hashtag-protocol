@@ -9,7 +9,7 @@
         <h1>Hashtag</h1>
       </b-navbar-item>
       <a
-        href="https://github.com/buefy/buefy"
+        href="https://github.com/hashtag-protocol"
         target="_blank"
         title="Github"
         class="navbar-item"
@@ -17,7 +17,7 @@
         <span class="icon"><i class="mdi mdi-github-circle mdi-24px"></i></span>
       </a>
       <a
-        href="https://discordapp.com/invite/ZkdFJMr"
+        href="https://discord.gg/bSEdd4n"
         target="_blank"
         title="Discord"
         class="navbar-item"
