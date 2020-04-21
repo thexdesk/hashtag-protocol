@@ -13,7 +13,7 @@ module.exports = {
   },
   extends: [
     // use the recommended rule set for both plain javascript and vue
-    "plugin:vue/recommended",
+    "plugin:vue/essential",
     "eslint:recommended",
     "prettier/vue",
     "plugin:prettier/recommended",
