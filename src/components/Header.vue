@@ -3,27 +3,11 @@
     <template slot="brand">
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <img
-          src="../assets/logo.svg"
+          src="../assets/logo-white.svg"
           alt="Content tagging for the decentralized web"
         />
         <h1>Hashtag</h1>
       </b-navbar-item>
-      <a
-        href="https://github.com/hashtag-protocol"
-        target="_blank"
-        title="Github"
-        class="navbar-item is-hidden-mobile"
-      >
-        <span class="icon"><i class="mdi mdi-github-circle mdi-24px"></i></span>
-      </a>
-      <a
-        href="https://discord.gg/bSEdd4n"
-        target="_blank"
-        title="Discord"
-        class="navbar-item is-hidden-mobile"
-      >
-        <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
-      </a>
     </template>
     <template slot="end">
       <b-navbar-item tag="div">
