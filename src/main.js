@@ -4,11 +4,13 @@ import { router } from "./routes";
 import store from "./stores/index";
 import ApolloClient from "apollo-boost";
 import VueApollo from "vue-apollo";
-import "./styles/semantic.min.css";
 import VueMoment from "vue-moment";
+import Buefy from "buefy";
 
+Vue.use(Buefy);
 Vue.use(VueMoment);
 
+// Connection for GraphQL.
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
 });
@@ -26,9 +28,10 @@ Vue.filter("to2Dp", function (value) {
 });
 
 Vue.filter("shortEth", function (value) {
-  if (!value) return "";
+  // TODO: This seems brittle. Can we improve?
+  if (!value || value.substr(0, 2) != "0x") return value;
   return (
-    value.substr(0, 6) + "..." + value.substr(value.length - 6, value.length)
+    value.substr(0, 4) + "..." + value.substr(value.length - 4, value.length)
   );
 });
 

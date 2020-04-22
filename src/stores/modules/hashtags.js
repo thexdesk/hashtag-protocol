@@ -33,7 +33,7 @@ const getters = {
   account: (state) => {
     return state.web3Objects && state.web3Objects.account
       ? state.web3Objects.account
-      : null;
+      : "Connect wallet";
   },
 };
 
