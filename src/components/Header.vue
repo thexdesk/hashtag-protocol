@@ -12,7 +12,7 @@
         href="https://github.com/hashtag-protocol"
         target="_blank"
         title="Github"
-        class="navbar-item"
+        class="navbar-item is-hidden-mobile"
       >
         <span class="icon"><i class="mdi mdi-github-circle mdi-24px"></i></span>
       </a>
@@ -20,7 +20,7 @@
         href="https://discord.gg/bSEdd4n"
         target="_blank"
         title="Discord"
-        class="navbar-item"
+        class="navbar-item is-hidden-mobile"
       >
         <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
       </a>

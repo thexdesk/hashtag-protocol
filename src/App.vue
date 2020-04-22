@@ -67,8 +67,8 @@ $body-family: $family-sans-serif;
 $body-background-color: $grey-lighter;
 $link: $primary;
 
-$title-color: $black-ter;
-$subtitle-color: $black-ter;
+//$title-color: $black-ter;
+//$subtitle-color: $black-ter;
 
 $divider-background-color: $grey;
 $footer-padding: 3rem 1.5rem 6rem;

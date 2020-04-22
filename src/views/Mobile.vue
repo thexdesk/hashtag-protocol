@@ -27,7 +27,7 @@
                         :allow-new="true"
                         maxtags="1"
                         field="user.first_name"
-                        icon="label"
+                        icon="pound"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
                       >
