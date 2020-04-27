@@ -109,7 +109,7 @@
               <p class="title is-5">Recently tagged assets</p>
               <b-table :data="tags || []">
                 <template slot-scope="props">
-                  <b-table-column field="nftId" label="NFT ID" width="75">
+                  <b-table-column field="nftId" label="" width="75">
                     <img :src="props.row.nftImage" />
                   </b-table-column>
                   <b-table-column field="nftName" label="Asset Name">
@@ -171,6 +171,31 @@
           </div>
         </div>
       </div>
+
+      <div class="container">
+        <div class="columns is-tablet is-centered">
+          <div class="column is-6 is-12-mobile">
+            <article class="is-white notification">
+              <p class="title is-5">Popular hashtags</p>
+              <b-table :data="popular || []">
+                <template slot-scope="props">
+                  <b-table-column field="name" label="Hashtag">
+                    {{ props.row.name }}
+                  </b-table-column>
+                  <b-table-column field="tagCount" label="Tag count" centered>
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                </template>
+              </b-table>
+            </article>
+          </div>
+          <div class="column is-6 is-12-mobile">
+            <article class="is-white notification">
+              <p class="title is-5">Top taggers</p>
+            </article>
+          </div>
+        </div>
+      </div>
     </section>
     <Footer></Footer>
   </div>
@@ -221,6 +246,10 @@ export default {
       pollInterval: 1000, // ms
     },
     tags: {
+      query: TOP_TENS,
+      pollInterval: 1000, // ms
+    },
+    popular: {
       query: TOP_TENS,
       pollInterval: 1000, // ms
     },

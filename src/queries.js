@@ -35,5 +35,12 @@ export const TOP_TENS = gql`
       timestamp
       publisher
     }
+    popular: hashtags(first: 10, orderBy: tagCount, orderDirection: desc) {
+      id
+      name
+      owner
+      publisher
+      tagCount
+    }
   }
 `;
