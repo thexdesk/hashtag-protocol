@@ -1,7 +1,5 @@
 <template>
   <div class="body">
-    {{ hashtags }}
-
     <Modal
       :is-open="isModalOpen"
       :modal-data="modalData"
@@ -90,11 +88,8 @@
               <p class="title is-5">Newest hashtags</p>
               <b-table :data="hashtags">
                 <template slot-scope="props">
-                  <b-table-column field="id" label="ID" width="40" numeric>
-                    {{ props.row.id }}
-                  </b-table-column>
                   <b-table-column field="name" label="Hashtag">
-                    {{ props.row.name }}
+                    #{{ props.row.name }}
                   </b-table-column>
                   <b-table-column field="timestamp" label="Minted">
                     {{ props.row.timestamp | moment("from") }}
@@ -143,13 +138,40 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top publishers</p>
-              <b-table :data="data"></b-table>
+              <b-table :data="publishers">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Publisher">
+                    {{ props.row.id | shortEth }}
+                  </b-table-column>
+                  <b-table-column field="tagCount" label="Tag count">
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                  <b-table-column field="mintFess" label="Mint earnings">
+                    {{ props.row.mintFees | toEth }}
+                  </b-table-column>
+                  <b-table-column field="registryFees" label="Tag earnings">
+                    {{ props.row.registryFees | toEth }}
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top taggers</p>
-              <b-table :data="data"></b-table>
+              <b-table :data="owners">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Publisher">
+                    {{ props.row.id | shortEth }}
+                  </b-table-column>
+                  <b-table-column field="ownedCount" label="Tag count">
+                    {{ props.row.ownedCount }}
+                  </b-table-column>
+                  <b-table-column field="registryFees" label="Tag earnings">
+                    {{ props.row.registryFees | toEth }}
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
         </div>
@@ -189,29 +211,6 @@ export default {
         nftId: "",
         nftContract: "",
       },
-      data: [
-        {
-          id: 1,
-          name: "Jesse",
-          timestamp: 982734,
-          publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-          owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-        },
-        {
-          id: 2,
-          name: "Alice",
-          timestamp: 982734,
-          publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-          owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-        },
-        {
-          id: 3,
-          name: "Bob",
-          timestamp: 982734,
-          publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-          owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-        },
-      ],
     };
   },
   apollo: {

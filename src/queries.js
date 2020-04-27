@@ -12,10 +12,13 @@ export const TOP_TENS = gql`
     publishers(first: 10, orderBy: tagCount, orderDirection: desc) {
       id
       tagCount
+      mintFees
+      registryFees
     }
     owners(first: 10, orderBy: ownedCount, orderDirection: desc) {
       id
       ownedCount
+      registryFees
     }
     tags {
       hashtagId
