@@ -19,21 +19,21 @@
                 <p class="subtitle is-5 has-text-white">Mint a new hashtag</p>
                 <template>
                   <section>
-                    <b-field>
+                    <b-field v-if="hashtags">
                       <b-taginput
                         v-model="hashtagInput"
-                        :data="filteredTags"
+                        :data="hashtags"
                         autocomplete
                         :allow-new="true"
                         maxtags="1"
-                        field="user.first_name"
+                        field="name"
                         icon="pound"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
                       >
                         <template slot-scope="props">
-                          <strong>{{ props.option.id }}</strong
-                          >: {{ props.option.user.first_name }}
+                          {{ props.option.name }}
+                          <em>{{ props.option.tagCount }}</em>
                         </template>
                         <template slot="empty">
                           Unique hashtag! Press enter to begin minting.
@@ -109,10 +109,11 @@
               <p class="title is-5">Recently tagged assets</p>
               <b-table :data="tags || []">
                 <template slot-scope="props">
-                  <b-table-column field="nftId" label="NFT ID">
-                    <img
-                      :src="`https://picsum.photos/seed/${props.row.nftId}/50`"
-                    />
+                  <b-table-column field="nftId" label="NFT ID" width="75">
+                    <img :src="props.row.nftImage" />
+                  </b-table-column>
+                  <b-table-column field="nftName" label="Asset Name">
+                    {{ props.row.nftName }}
                   </b-table-column>
                   <b-table-column field="projectName" label="Project">
                     {{ props.row.nftContractName }}
@@ -183,7 +184,6 @@ import { TOP_TENS } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
-const names = require("@/data/names.json");
 
 export default {
   name: "Hashtags",
@@ -197,7 +197,6 @@ export default {
   },
   data() {
     return {
-      filteredTags: names,
       isModalOpen: false,
       modalData: {},
       hashtagInput: null,
@@ -235,7 +234,6 @@ export default {
       this.isModalOpen = true;
     },
     mintHashtag() {
-      // FIXME use real data from somewhere else?
       this.$store.dispatch("mint", this.hashtagInput[0].user.first_name);
     },
     tagNft() {
@@ -243,13 +241,8 @@ export default {
     },
     // Bulma taginput widget.
     getFilteredTags(text) {
-      this.filteredTags = names.filter((option) => {
-        return (
-          option.user.first_name
-            .toString()
-            .toLowerCase()
-            .indexOf(text.toLowerCase()) >= 0
-        );
+      return (this.hashtags || []).filter((option) => {
+        return option.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
       });
     },
   },

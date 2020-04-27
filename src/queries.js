@@ -8,6 +8,7 @@ export const TOP_TENS = gql`
       owner
       publisher
       timestamp
+      tagCount
     }
     publishers(first: 10, orderBy: tagCount, orderDirection: desc) {
       id
@@ -26,6 +27,9 @@ export const TOP_TENS = gql`
       hashtagName
       nftContract
       nftContractName
+      nftImage
+      nftName
+      nftDescription
       nftId
       tagger
       timestamp
