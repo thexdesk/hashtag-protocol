@@ -88,16 +88,16 @@
               <b-table :data="hashtags || []">
                 <template slot-scope="props">
                   <b-table-column field="name" label="Hashtag">
-                    #{{ props.row.name }}
+                    <hashtag :value="props.row.name"></hashtag>
                   </b-table-column>
                   <b-table-column field="timestamp" label="Minted">
                     {{ new Date(props.row.timestamp * 1000) | moment("from") }}
                   </b-table-column>
                   <b-table-column field="owner" label="Owner">
-                    {{ props.row.owner | shortEth }}
+                    <eth-account :value="props.row.owner"></eth-account>
                   </b-table-column>
                   <b-table-column field="publisher" label="Publisher">
-                    {{ props.row.publisher | shortEth }}
+                    <eth-account :value="props.row.publisher"></eth-account>
                   </b-table-column>
                 </template>
               </b-table>
@@ -112,10 +112,10 @@
                     {{ props.row.nftId }}
                   </b-table-column>
                   <b-table-column field="nftContract" label="Project">
-                    {{ props.row.nftContract | shortEth }}
+                    <eth-account :value="props.row.nftContract"></eth-account>
                   </b-table-column>
-                  <b-table-column field="hashtagId" label="Hashtag">
-                    {{ props.row.hashtagId }}
+                  <b-table-column field="hashtagName" label="Hashtag">
+                    <hashtag :value="props.row.hashtagName"></hashtag>
                   </b-table-column>
                 </template>
               </b-table>
@@ -132,16 +132,16 @@
               <b-table :data="publishers || []">
                 <template slot-scope="props">
                   <b-table-column field="id" label="Publisher">
-                    {{ props.row.id | shortEth }}
+                    <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
                   <b-table-column field="tagCount" label="Tag count" centered>
                     {{ props.row.tagCount }}
                   </b-table-column>
                   <b-table-column field="mintFess" label="Mint earnings">
-                    {{ props.row.mintFees | toEth | to2Dp }} Ξ
+                    <eth-amount :value="props.row.mintFees"></eth-amount>
                   </b-table-column>
                   <b-table-column field="registryFees" label="Tag earnings">
-                    {{ props.row.registryFees | toEth | to2Dp }} Ξ
+                    <eth-amount :value="props.row.registryFees"></eth-amount>
                   </b-table-column>
                 </template>
               </b-table>
@@ -153,13 +153,13 @@
               <b-table :data="owners || []">
                 <template slot-scope="props">
                   <b-table-column field="id" label="Publisher">
-                    {{ props.row.id | shortEth }}
+                    <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
                   <b-table-column field="ownedCount" label="Tag count" centered>
                     {{ props.row.ownedCount }}
                   </b-table-column>
                   <b-table-column field="registryFees" label="Tag earnings">
-                    {{ props.row.registryFees | toEth | to2Dp }} Ξ
+                    <eth-amount :value="props.row.registryFees"></eth-amount>
                   </b-table-column>
                 </template>
               </b-table>
@@ -177,11 +177,17 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import { TOP_TENS } from "../queries";
+import Hashtag from "../components/Hashtag";
+import EthAccount from "../components/EthAccount";
+import EthAmount from "../components/EthAmount";
 const names = require("@/data/names.json");
 
 export default {
   name: "Hashtags",
   components: {
+    EthAmount,
+    EthAccount,
+    Hashtag,
     Footer,
     Header,
     Modal,

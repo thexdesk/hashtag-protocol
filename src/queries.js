@@ -23,6 +23,7 @@ export const TOP_TENS = gql`
     tags {
       id
       hashtagId
+      hashtagName
       nftContract
       nftId
       tagger
