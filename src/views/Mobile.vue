@@ -1,5 +1,7 @@
 <template>
   <div class="body">
+    {{ hashtags }}
+
     <Modal
       :is-open="isModalOpen"
       :modal-data="modalData"
@@ -86,17 +88,31 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Newest hashtags</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="data">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="ID" width="40" numeric>
+                    {{ props.row.id }}
+                  </b-table-column>
+                  <b-table-column field="name" label="Hashtag">
+                    {{ props.row.name }}
+                  </b-table-column>
+                  <b-table-column field="timestamp" label="Minted">
+                    {{ props.row.timestamp | moment("from") }}
+                  </b-table-column>
+                  <b-table-column field="owner" label="Owner">
+                    {{ props.row.owner | shortEth }}
+                  </b-table-column>
+                  <b-table-column field="publisher" label="Publisher">
+                    {{ props.row.publisher | shortEth }}
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Recently tagged assets</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="data"></b-table>
             </article>
           </div>
         </div>
@@ -107,17 +123,13 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top publishers</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="data"></b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top taggers</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="data"></b-table>
             </article>
           </div>
         </div>
@@ -144,9 +156,9 @@ export default {
   },
   data() {
     return {
+      tags: null,
       filteredTags: names,
       isSelectOnly: false,
-
       hashtagSearch: "",
       isHashtagListOpen: false,
       filteredHashtags: [],
@@ -160,38 +172,24 @@ export default {
       data: [
         {
           id: 1,
-          first_name: "Jesse",
-          last_name: "Simmons",
-          date: "2016-10-15 13:43:27",
-          gender: "Male",
+          name: "Jesse",
+          timestamp: 982734,
+          publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
+          owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
         },
         {
           id: 2,
-          first_name: "John",
-          last_name: "Jacobs",
-          date: "2016-12-15 06:00:53",
-          gender: "Male",
+          name: "Alice",
+          timestamp: 982734,
+          publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
+          owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
         },
         {
           id: 3,
-          first_name: "Tina",
-          last_name: "Gilbert",
-          date: "2016-04-26 06:26:28",
-          gender: "Female",
-        },
-        {
-          id: 4,
-          first_name: "Clarence",
-          last_name: "Flores",
-          date: "2016-04-10 10:28:46",
-          gender: "Male",
-        },
-        {
-          id: 5,
-          first_name: "Anne",
-          last_name: "Lee",
-          date: "2016-12-06 14:38:38",
-          gender: "Female",
+          name: "Bob",
+          timestamp: 982734,
+          publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
+          owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
         },
       ],
       columns: [
@@ -202,21 +200,20 @@ export default {
           numeric: true,
         },
         {
-          field: "first_name",
-          label: "First Name",
+          field: "name",
+          label: "Hashtag",
         },
         {
-          field: "last_name",
-          label: "Last Name",
+          field: "minted",
+          label: "Minted",
         },
         {
-          field: "date",
-          label: "Date",
-          centered: true,
+          field: "publisher",
+          label: "publisher",
         },
         {
-          field: "gender",
-          label: "Gender",
+          field: "owner",
+          label: "Owner",
         },
       ],
     };
@@ -224,19 +221,19 @@ export default {
   apollo: {
     hashtags: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
     publishers: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
     owners: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
     recently_tagged: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
   },
   computed: mapGetters(["digitalAssets"]),
