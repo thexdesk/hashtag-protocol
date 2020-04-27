@@ -473,21 +473,14 @@
   "ast": {
     "absolutePath": "/Users/Natalie/Projects/hashtag-contracts/contracts/mock/ERC721BurnableMock.sol",
     "exportedSymbols": {
-      "ERC721BurnableMock": [
-        930
-      ]
+      "ERC721BurnableMock": [930]
     },
     "id": 931,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 871,
-        "literals": [
-          "solidity",
-          "^",
-          "0.6",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.6", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:4"
       },
@@ -768,10 +761,7 @@
             "visibility": "public"
           },
           {
-            "baseFunctions": [
-              3025,
-              3439
-            ],
+            "baseFunctions": [3025, 3439],
             "body": {
               "id": 912,
               "nodeType": "Block",
@@ -1240,21 +1230,14 @@
   "legacyAST": {
     "absolutePath": "/Users/Natalie/Projects/hashtag-contracts/contracts/mock/ERC721BurnableMock.sol",
     "exportedSymbols": {
-      "ERC721BurnableMock": [
-        930
-      ]
+      "ERC721BurnableMock": [930]
     },
     "id": 931,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 871,
-        "literals": [
-          "solidity",
-          "^",
-          "0.6",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.6", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:4"
       },
@@ -1535,10 +1518,7 @@
             "visibility": "public"
           },
           {
-            "baseFunctions": [
-              3025,
-              3439
-            ],
+            "baseFunctions": [3025, 3439],
             "body": {
               "id": 912,
               "nodeType": "Block",

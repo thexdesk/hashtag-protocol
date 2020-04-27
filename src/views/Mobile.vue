@@ -88,7 +88,7 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Newest hashtags</p>
-              <b-table :data="data">
+              <b-table :data="hashtags">
                 <template slot-scope="props">
                   <b-table-column field="id" label="ID" width="40" numeric>
                     {{ props.row.id }}
@@ -112,7 +112,27 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Recently tagged assets</p>
-              <b-table :data="data"></b-table>
+              <b-table :data="digitalAssets">
+                <template slot-scope="props">
+                  <b-table-column field="image" width="50">
+                    <img :src="props.row.image" />
+                  </b-table-column>
+                  <b-table-column field="name" label="Asset name">
+                    {{ props.row.name }}
+                  </b-table-column>
+                  <b-table-column field="project" label="Project">
+                    {{ props.row.project }}
+                  </b-table-column>
+                  <b-table-column field="hashtags" label="hashtags">
+                    <span
+                      v-for="hashtag in props.row.hashtags"
+                      v-bind:key="hashtag"
+                    >
+                      {{ hashtag }}
+                    </span>
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
         </div>
@@ -190,30 +210,6 @@ export default {
           timestamp: 982734,
           publisher: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
           owner: "0x693F55496aF37b1c000a1BEf74a0ed4ee7A92E70",
-        },
-      ],
-      columns: [
-        {
-          field: "id",
-          label: "ID",
-          width: "40",
-          numeric: true,
-        },
-        {
-          field: "name",
-          label: "Hashtag",
-        },
-        {
-          field: "minted",
-          label: "Minted",
-        },
-        {
-          field: "publisher",
-          label: "publisher",
-        },
-        {
-          field: "owner",
-          label: "Owner",
         },
       ],
     };
