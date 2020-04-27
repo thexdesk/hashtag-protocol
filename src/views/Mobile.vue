@@ -180,7 +180,7 @@
               <b-table :data="popular || []">
                 <template slot-scope="props">
                   <b-table-column field="name" label="Hashtag">
-                    {{ props.row.name }}
+                    <hashtag :value="props.row.name"></hashtag>
                   </b-table-column>
                   <b-table-column field="tagCount" label="Tag count" centered>
                     {{ props.row.tagCount }}
