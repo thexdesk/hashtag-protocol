@@ -21,11 +21,13 @@ export const TOP_TENS = gql`
       registryFees
     }
     tags {
+      id
       hashtagId
       nftContract
       nftId
       tagger
       timestamp
+      publisher
     }
   }
 `;

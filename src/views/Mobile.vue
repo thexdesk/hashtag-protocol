@@ -21,7 +21,6 @@
                   <section>
                     <b-field>
                       <b-taginput
-                        v-model="tags"
                         :data="filteredTags"
                         autocomplete
                         :allow-new="true"
@@ -86,13 +85,13 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Newest hashtags</p>
-              <b-table :data="hashtags">
+              <b-table :data="hashtags || []">
                 <template slot-scope="props">
                   <b-table-column field="name" label="Hashtag">
                     #{{ props.row.name }}
                   </b-table-column>
                   <b-table-column field="timestamp" label="Minted">
-                    {{ props.row.timestamp | moment("from") }}
+                    {{ new Date(props.row.timestamp * 1000) | moment("from") }}
                   </b-table-column>
                   <b-table-column field="owner" label="Owner">
                     {{ props.row.owner | shortEth }}
@@ -107,24 +106,16 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Recently tagged assets</p>
-              <b-table :data="digitalAssets">
+              <b-table :data="tags || []">
                 <template slot-scope="props">
-                  <b-table-column field="image" width="50">
-                    <img :src="props.row.image" />
+                  <b-table-column field="nftId" label="NFT ID">
+                    {{ props.row.nftId }}
                   </b-table-column>
-                  <b-table-column field="name" label="Asset name">
-                    {{ props.row.name }}
+                  <b-table-column field="nftContract" label="Project">
+                    {{ props.row.nftContract | shortEth }}
                   </b-table-column>
-                  <b-table-column field="project" label="Project">
-                    {{ props.row.project }}
-                  </b-table-column>
-                  <b-table-column field="hashtags" label="hashtags">
-                    <span
-                      v-for="hashtag in props.row.hashtags"
-                      v-bind:key="hashtag"
-                    >
-                      {{ hashtag }}
-                    </span>
+                  <b-table-column field="hashtagId" label="Hashtag">
+                    {{ props.row.hashtagId }}
                   </b-table-column>
                 </template>
               </b-table>
@@ -138,19 +129,19 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top publishers</p>
-              <b-table :data="publishers">
+              <b-table :data="publishers || []">
                 <template slot-scope="props">
                   <b-table-column field="id" label="Publisher">
                     {{ props.row.id | shortEth }}
                   </b-table-column>
-                  <b-table-column field="tagCount" label="Tag count">
+                  <b-table-column field="tagCount" label="Tag count" centered>
                     {{ props.row.tagCount }}
                   </b-table-column>
                   <b-table-column field="mintFess" label="Mint earnings">
-                    {{ props.row.mintFees | toEth }}
+                    {{ props.row.mintFees | toEth | to2Dp }} Ξ
                   </b-table-column>
                   <b-table-column field="registryFees" label="Tag earnings">
-                    {{ props.row.registryFees | toEth }}
+                    {{ props.row.registryFees | toEth | to2Dp }} Ξ
                   </b-table-column>
                 </template>
               </b-table>
@@ -159,16 +150,16 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top taggers</p>
-              <b-table :data="owners">
+              <b-table :data="owners || []">
                 <template slot-scope="props">
                   <b-table-column field="id" label="Publisher">
                     {{ props.row.id | shortEth }}
                   </b-table-column>
-                  <b-table-column field="ownedCount" label="Tag count">
+                  <b-table-column field="ownedCount" label="Tag count" centered>
                     {{ props.row.ownedCount }}
                   </b-table-column>
                   <b-table-column field="registryFees" label="Tag earnings">
-                    {{ props.row.registryFees | toEth }}
+                    {{ props.row.registryFees | toEth | to2Dp }} Ξ
                   </b-table-column>
                 </template>
               </b-table>
@@ -182,7 +173,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
@@ -226,12 +216,11 @@ export default {
       query: TOP_TENS,
       pollInterval: 1000, // ms
     },
-    recently_tagged: {
+    tags: {
       query: TOP_TENS,
       pollInterval: 1000, // ms
     },
   },
-  computed: mapGetters(["digitalAssets"]),
   methods: {
     closeModal() {
       this.isModalOpen = false;

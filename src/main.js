@@ -29,11 +29,13 @@ Vue.filter("to2Dp", function (value) {
 });
 
 Vue.filter("shortEth", function (value) {
-  // TODO: This seems brittle. Can we improve?
-  if (!value || value.substr(0, 2) != "0x") return value;
-  return (
-    value.substr(0, 4) + "..." + value.substr(value.length - 4, value.length)
-  );
+  if (!value) return value;
+
+  return `
+  ${value.substr(0, 4)}
+  ...
+  ${value.substr(value.length - 4, value.length)}
+  `;
 });
 
 Vue.filter("toEth", function (value) {
