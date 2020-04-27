@@ -20,11 +20,12 @@ export const TOP_TENS = gql`
       ownedCount
       registryFees
     }
-    tags {
+    tags(first: 5, orderBy: timestamp, orderDirection: desc) {
       id
       hashtagId
       hashtagName
       nftContract
+      nftContractName
       nftId
       tagger
       timestamp

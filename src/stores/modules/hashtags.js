@@ -62,7 +62,7 @@ const actions = {
         nftTaggerContract,
       },
       account: accounts[0],
-      publisher: "0x12D062B19a2DF1920eb9FC28Bd6E9A7E936de4c2", // fixme - hardcoded for now for rinkeby testing
+      publisher: "0xD677AEd0965AC9B54e709F01A99cEcA205aebC4B", //FIXME - hardcoded for now for rinkeby testing
     });
 
     dispatch("getProtocolFee");
@@ -95,12 +95,9 @@ const mutations = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    await hashtagProtocolContract.mint(
-      payload.newHashtag.hashtag,
-      publisher,
-      account,
-      { value: ethers.utils.bigNumberify(state.fees.protocol) }
-    );
+    await hashtagProtocolContract.mint(payload, publisher, account, {
+      value: ethers.utils.bigNumberify(state.fees.protocol),
+    });
   },
 
   async tagAsset(state, payload) {

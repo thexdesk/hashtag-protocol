@@ -21,6 +21,7 @@
                   <section>
                     <b-field>
                       <b-taginput
+                        v-model="hashtagInput"
                         :data="filteredTags"
                         autocomplete
                         :allow-new="true"
@@ -40,7 +41,7 @@
                       </b-taginput>
                     </b-field>
                     <div>
-                      <b-button type="is-primary" @click="tagNft()"
+                      <b-button type="is-primary" @click="mintHashtag()"
                         >Mint it</b-button
                       >
                     </div>
@@ -109,10 +110,12 @@
               <b-table :data="tags || []">
                 <template slot-scope="props">
                   <b-table-column field="nftId" label="NFT ID">
-                    {{ props.row.nftId }}
+                    <img
+                      :src="`https://picsum.photos/seed/${props.row.nftId}/50`"
+                    />
                   </b-table-column>
-                  <b-table-column field="nftContract" label="Project">
-                    <eth-account :value="props.row.nftContract"></eth-account>
+                  <b-table-column field="projectName" label="Project">
+                    {{ props.row.nftContractName }}
                   </b-table-column>
                   <b-table-column field="hashtagName" label="Hashtag">
                     <hashtag :value="props.row.hashtagName"></hashtag>
@@ -149,7 +152,7 @@
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
-              <p class="title is-5">Top taggers</p>
+              <p class="title is-5">Top owners</p>
               <b-table :data="owners || []">
                 <template slot-scope="props">
                   <b-table-column field="id" label="Publisher">
@@ -194,14 +197,10 @@ export default {
   },
   data() {
     return {
-      tags: null,
       filteredTags: names,
-      isSelectOnly: false,
-      hashtagSearch: "",
-      isHashtagListOpen: false,
-      filteredHashtags: [],
       isModalOpen: false,
       modalData: {},
+      hashtagInput: null,
       tagForm: {
         hashtagId: "",
         nftId: "",
@@ -235,43 +234,9 @@ export default {
       this.modalData = modalData;
       this.isModalOpen = true;
     },
-    onHashtagChange() {
-      this.filterHashtags();
-      if (this.hashtagSearch !== "") {
-        this.isHashtagListOpen = true;
-      } else {
-        this.closeHashtagList();
-      }
-    },
-    closeHashtagList() {
-      this.isHashtagListOpen = false;
-    },
-    openHashtagList() {
-      this.isHashtagListOpen = true;
-    },
-    filterHashtags() {},
-    selectHashtag() {
-      this.closeHashtagList();
-
-      let alreadyExists = false;
-      // this.hashtags.filter(hashtag => {
-      //     if (
-      //         this.hashtagSearch.toLowerCase() === hashtag.hashtag.toLowerCase()
-      //     ) {
-      //         alreadyExists = true;
-      //     }
-      // });
-
-      // TODO: Give an error message if alreadyExists is true
-      if (alreadyExists === false) {
-        this.$store.dispatch("mint", {
-          newHashtag: {
-            hashtag: this.hashtagSearch,
-            earnings: 0,
-            tagAmounts: 0,
-          },
-        });
-      }
+    mintHashtag() {
+      // FIXME use real data from somewhere else?
+      this.$store.dispatch("mint", this.hashtagInput[0].user.first_name);
     },
     tagNft() {
       this.$store.dispatch("tag", this.tagForm);
