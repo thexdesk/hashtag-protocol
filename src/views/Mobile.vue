@@ -32,8 +32,14 @@
                         @typing="getFilteredTags"
                       >
                         <template slot-scope="props">
-                          {{ props.option.name }}
-                          <em>existing {{ props.option.tagCount }} tags</em>
+                          <b-taglist attached>
+                            <b-tag type="is-light"
+                              >#{{ props.option.name }}</b-tag
+                            >
+                            <b-tag type="is-info">{{
+                              props.option.tagCount
+                            }}</b-tag>
+                          </b-taglist>
                         </template>
                         <template slot="empty">
                           Unique hashtag! Press enter to begin minting.
@@ -70,8 +76,12 @@
                     @typing="getFilteredTags"
                   >
                     <template slot-scope="props">
-                      {{ props.option.name }}
-                      <em>{{ props.option.tagCount }} tags</em>
+                      <b-taglist attached>
+                        <b-tag type="is-light">#{{ props.option.name }}</b-tag>
+                        <b-tag type="is-info">{{
+                          props.option.tagCount
+                        }}</b-tag>
+                      </b-taglist>
                     </template>
                   </b-taginput>
                 </b-field>
@@ -91,8 +101,31 @@
                   </b-select>
                 </b-field>
                 <b-field>
-                  <b-input v-model="tagForm.nftId" placeholder="NFT ID">
-                  </b-input>
+                  <b-autocomplete
+                    :data="nftAssetCache.assets"
+                    placeholder="Select NFT"
+                    icon="pound"
+                    field="name"
+                    @select="(option) => (tagForm.nftId = option)"
+                  >
+                    <template slot-scope="props">
+                      <div class="media">
+                        <div class="media-left">
+                          <img
+                            width="32"
+                            :src="props.option.image_preview_url"
+                          />
+                        </div>
+                        <div class="media-content">
+                          {{ props.option.name }}
+                          <br />
+                          <small
+                            >ID <b> {{ props.option.token_id }}</b>
+                          </small>
+                        </div>
+                      </div>
+                    </template>
+                  </b-autocomplete>
                 </b-field>
                 <div>
                   <b-button type="is-primary" @click="tagNft()"
@@ -219,7 +252,20 @@
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
-              <p class="title is-5">Top taggers</p>
+              <p class="title is-5">Hashtag protocol</p>
+              <b-table :data="platforms || []">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="">
+                    {{ props.row.id }}
+                  </b-table-column>
+                  <b-table-column field="mintFees" label="Mint fees" centered>
+                    <eth-amount :value="props.row.mintFees"></eth-amount>
+                  </b-table-column>
+                  <b-table-column field="registryFees" label="Tag earnings">
+                    <eth-amount :value="props.row.registryFees"></eth-amount>
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
         </div>
@@ -262,7 +308,7 @@ export default {
       },
     };
   },
-  computed: mapGetters(["supportedNfts"]),
+  computed: mapGetters(["supportedNfts", "nftAssetCache"]),
   apollo: {
     hashtags: {
       query: SNAPSHOT,
@@ -281,6 +327,10 @@ export default {
       pollInterval: 1000, // ms
     },
     popular: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+    platforms: {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
     },

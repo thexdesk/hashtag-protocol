@@ -5,6 +5,8 @@ import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
 import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
 import utils from "../../utils";
 
+const KO_RINKEBY_ADDRESS = "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e";
+
 const state = {
   web3Objects: {},
   fees: {
@@ -14,13 +16,15 @@ const state = {
   supportedNfts: [
     {
       name: "KnownOriginDigitalAsset",
-      contractAddress: "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+      contractAddress: KO_RINKEBY_ADDRESS,
     },
   ],
+  nftAssetCache: [],
 };
 
 const getters = {
   supportedNfts: (state) => state.supportedNfts,
+  nftAssetCache: (state) => state.nftAssetCache,
   account: (state) => {
     return state.web3Objects && state.web3Objects.account
       ? state.web3Objects.account
@@ -69,11 +73,13 @@ const actions = {
         erc721HashtagRegistryContract,
       },
       account: accounts[0],
-      publisher: "0xD677AEd0965AC9B54e709F01A99cEcA205aebC4B", //FIXME - hardcoded for now for rinkeby testing
+      publisher: "0xd677aed0965ac9b54e709f01a99ceca205aebc4b", //FIXME - hardcoded for now for rinkeby testing
     });
 
     dispatch("getProtocolFee");
     dispatch("getTaggingFee");
+
+    dispatch("cacheNFTAssets");
   },
 
   async mint({ state }, payload) {
@@ -124,6 +130,15 @@ const actions = {
 
     commit("setTaggingFee", fee);
   },
+
+  async cacheNFTAssets({ commit }) {
+    // just cache KO assets for now...
+    const res = await Vue.axios.get(
+      `https://rinkeby-api.opensea.io/api/v1/assets?asset_contract_addresses=${KO_RINKEBY_ADDRESS}&order_direction=asc&offset=0&limit=50`
+    );
+
+    commit("setNFTAssets", res.data);
+  },
 };
 
 const mutations = {
@@ -139,6 +154,10 @@ const mutations = {
 
   setWeb3Objects(state, payload) {
     Vue.set(state, "web3Objects", payload);
+  },
+
+  setNFTAssets(state, payload) {
+    Vue.set(state, "nftAssetCache", payload);
   },
 };
 

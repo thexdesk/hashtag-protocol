@@ -7,9 +7,12 @@ import VueApollo from "vue-apollo";
 import VueMoment from "vue-moment";
 import Buefy from "buefy";
 import { ethers } from "ethers";
+import axios from "axios";
+import VueAxios from "vue-axios";
 
 Vue.use(Buefy);
 Vue.use(VueMoment);
+Vue.use(VueAxios, axios);
 
 // Connection for GraphQL.
 const client = new ApolloClient({

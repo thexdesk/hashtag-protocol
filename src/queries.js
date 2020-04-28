@@ -42,5 +42,10 @@ export const SNAPSHOT = gql`
       publisher
       tagCount
     }
+    platforms(first: 1) {
+      id
+      mintFees
+      registryFees
+    }
   }
 `;
