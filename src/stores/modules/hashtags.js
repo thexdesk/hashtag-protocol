@@ -11,13 +11,16 @@ const state = {
     protocol: ethers.utils.parseEther("0.01"),
     tagging: ethers.utils.parseEther("0.01"),
   },
-  supportedNfts: {
-    ko: "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
-  },
+  supportedNfts: [
+    {
+      name: "KnownOriginDigitalAsset",
+      contractAddress: "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+    },
+  ],
 };
 
 const getters = {
-  digitalAssets: (state) => state.digitalAssets,
+  supportedNfts: (state) => state.supportedNfts,
   account: (state) => {
     return state.web3Objects && state.web3Objects.account
       ? state.web3Objects.account
@@ -74,7 +77,7 @@ const actions = {
   },
 
   async mint({ state }, payload) {
-    console.log(`mint ${payload}`);
+    console.log(`mint`, payload);
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
@@ -84,6 +87,7 @@ const actions = {
   },
 
   async tag({ state }, payload) {
+    console.log(`tag`, payload);
     const { web3Objects, fees } = state;
     const { account, contracts } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;

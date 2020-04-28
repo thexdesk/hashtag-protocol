@@ -58,18 +58,40 @@
               <article class="tile is-child">
                 <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
                 <b-field>
-                  <b-input v-model="tagForm.hashtagId" placeholder="Hashtag ID">
-                  </b-input>
+                  <b-taginput
+                    v-model="tagForm.hashtag"
+                    :data="hashtagInputTags"
+                    autocomplete
+                    :allow-new="false"
+                    maxtags="1"
+                    field="name"
+                    icon="pound"
+                    placeholder="Select hashtag"
+                    @typing="getFilteredTags"
+                  >
+                    <template slot-scope="props">
+                      {{ props.option.name }}
+                      <em>{{ props.option.tagCount }} tags</em>
+                    </template>
+                  </b-taginput>
+                </b-field>
+                <b-field>
+                  <b-select
+                    placeholder="Select a NFT Contract"
+                    v-model="tagForm.nftContract"
+                    expanded
+                  >
+                    <option
+                      v-for="option in supportedNfts"
+                      :value="option.contractAddress"
+                      :key="option.contractAddress"
+                    >
+                      {{ option.name }}
+                    </option>
+                  </b-select>
                 </b-field>
                 <b-field>
                   <b-input v-model="tagForm.nftId" placeholder="NFT ID">
-                  </b-input>
-                </b-field>
-                <b-field>
-                  <b-input
-                    v-model="tagForm.nftContract"
-                    placeholder="NFT Contract"
-                  >
                   </b-input>
                 </b-field>
                 <div>
@@ -215,6 +237,7 @@ import { SNAPSHOT } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Hashtags",
@@ -233,12 +256,13 @@ export default {
       hashtagInput: null,
       hashtagInputTags: [],
       tagForm: {
-        hashtagId: "",
+        hashtag: "",
         nftId: "",
         nftContract: "",
       },
     };
   },
+  computed: mapGetters(["supportedNfts"]),
   apollo: {
     hashtags: {
       query: SNAPSHOT,
