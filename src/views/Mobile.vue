@@ -22,7 +22,7 @@
                     <b-field v-if="hashtags">
                       <b-taginput
                         v-model="hashtagInput"
-                        :data="hashtags"
+                        :data="hashtagInputTags"
                         autocomplete
                         :allow-new="true"
                         maxtags="1"
@@ -33,7 +33,7 @@
                       >
                         <template slot-scope="props">
                           {{ props.option.name }}
-                          <em>{{ props.option.tagCount }}</em>
+                          <em>existing {{ props.option.tagCount }} tags</em>
                         </template>
                         <template slot="empty">
                           Unique hashtag! Press enter to begin minting.
@@ -41,7 +41,10 @@
                       </b-taginput>
                     </b-field>
                     <div>
-                      <b-button type="is-primary" @click="mintHashtag()"
+                      <b-button
+                        type="is-primary"
+                        @click="mintHashtag()"
+                        :disabled="!isNewTag()"
                         >Mint it</b-button
                       >
                     </div>
@@ -208,7 +211,7 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
-import { TOP_TENS } from "../queries";
+import { SNAPSHOT } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
@@ -228,6 +231,7 @@ export default {
       isModalOpen: false,
       modalData: {},
       hashtagInput: null,
+      hashtagInputTags: [],
       tagForm: {
         hashtagId: "",
         nftId: "",
@@ -237,23 +241,23 @@ export default {
   },
   apollo: {
     hashtags: {
-      query: TOP_TENS,
+      query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
     publishers: {
-      query: TOP_TENS,
+      query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
     owners: {
-      query: TOP_TENS,
+      query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
     tags: {
-      query: TOP_TENS,
+      query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
     popular: {
-      query: TOP_TENS,
+      query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
   },
@@ -266,16 +270,24 @@ export default {
       this.isModalOpen = true;
     },
     mintHashtag() {
-      this.$store.dispatch("mint", this.hashtagInput[0].user.first_name);
+      this.$store.dispatch("mint", this.hashtagInput[0]);
     },
     tagNft() {
       this.$store.dispatch("tag", this.tagForm);
     },
     // Bulma taginput widget.
-    getFilteredTags(text) {
-      return (this.hashtags || []).filter((option) => {
-        return option.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
+    getFilteredTags: function (text) {
+      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
+        return option.name.toLowerCase().indexOf(text.toLowerCase()) >= 0;
       });
+    },
+    isNewTag: function () {
+      return (
+        this.hashtagInput &&
+        Array.isArray(this.hashtagInput) &&
+        (typeof this.hashtagInput[0] === "string" ||
+          this.hashtagInput[0] instanceof String)
+      );
     },
   },
 };

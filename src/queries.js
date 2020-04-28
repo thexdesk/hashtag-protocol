@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-export const TOP_TENS = gql`
+export const SNAPSHOT = gql`
   query {
     hashtags(first: 10, orderBy: timestamp, orderDirection: desc) {
       id
