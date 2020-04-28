@@ -23,9 +23,9 @@ const apolloProvider = new VueApollo({
 Vue.use(VueApollo);
 Vue.config.productionTip = false;
 
-Vue.filter("to2Dp", function (value) {
+Vue.filter("to4Dp", function (value) {
   if (!value) return value;
-  return parseFloat(value).toFixed(2);
+  return parseFloat(value).toFixed(4);
 });
 
 Vue.filter("shortEth", function (value) {

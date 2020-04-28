@@ -81,6 +81,7 @@ const actions = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
+    // function mint(string memory _hashtag, address payable _publisher, address _recipient) payable public returns (uint256 _tokenId) {
     await hashtagProtocolContract.mint(payload, publisher, account, {
       value: ethers.utils.bigNumberify(state.fees.protocol),
     });
@@ -89,14 +90,18 @@ const actions = {
   async tag({ state }, payload) {
     console.log(`tag`, payload);
     const { web3Objects, fees } = state;
-    const { account, contracts } = web3Objects;
+    const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
-    const { hashtagId, nftContract, nftId } = payload;
+    const { hashtag, nftContract, nftId } = payload;
 
+    console.log(`hashtag`, hashtag);
+
+    // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
     await erc721HashtagRegistryContract.tag(
-      hashtagId,
+      hashtag[0].id,
       nftContract,
       nftId,
+      publisher,
       account,
       {
         value: ethers.utils.bigNumberify(fees.protocol),

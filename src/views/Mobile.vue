@@ -57,7 +57,7 @@
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
                 <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
-                <b-field>
+                <b-field v-if="hashtags">
                   <b-taginput
                     v-model="tagForm.hashtag"
                     :data="hashtagInputTags"
@@ -184,7 +184,7 @@
               <p class="title is-5">Top owners</p>
               <b-table :data="owners || []">
                 <template slot-scope="props">
-                  <b-table-column field="id" label="Publisher">
+                  <b-table-column field="id" label="Owner">
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
                   <b-table-column field="ownedCount" label="Tag count" centered>
