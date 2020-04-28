@@ -110,7 +110,10 @@
               <b-table :data="tags || []">
                 <template slot-scope="props">
                   <b-table-column field="nftId" label="" width="75">
-                    <img :src="props.row.nftImage" />
+                    <img
+                      :src="props.row.nftImage"
+                      style="max-width: 75px; max-height: 75px;"
+                    />
                   </b-table-column>
                   <b-table-column field="nftName" label="Asset Name">
                     {{ props.row.nftName }}

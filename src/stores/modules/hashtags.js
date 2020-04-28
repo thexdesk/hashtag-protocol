@@ -11,6 +11,9 @@ const state = {
     protocol: ethers.utils.parseEther("0.01"),
     tagging: ethers.utils.parseEther("0.01"),
   },
+  supportedNfts: {
+    ko: "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+  },
 };
 
 const getters = {
