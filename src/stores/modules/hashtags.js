@@ -7,6 +7,8 @@ import utils from "../../utils";
 
 const KO_RINKEBY_ADDRESS = "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e";
 
+import nftCache from "../../data/nfts";
+
 const state = {
   web3Objects: {},
   fees: {
@@ -19,7 +21,7 @@ const state = {
       contractAddress: KO_RINKEBY_ADDRESS,
     },
   ],
-  nftAssetCache: [],
+  nftAssetCache: nftCache,
 };
 
 const getters = {
@@ -79,7 +81,7 @@ const actions = {
     dispatch("getProtocolFee");
     dispatch("getTaggingFee");
 
-    dispatch("cacheNFTAssets");
+    // dispatch("cacheNFTAssets");
   },
 
   async mint({ state }, payload) {
@@ -143,12 +145,10 @@ const actions = {
 
 const mutations = {
   async setProtocolFee(state, fee) {
-    console.log(`setProtocolFee ${fee}`);
     Vue.set(state, "fees.platform", fee);
   },
 
   async setTaggingFee(state, fee) {
-    console.log(`setTaggingFee ${fee}`);
     Vue.set(state, "fees.tagging", fee);
   },
 

@@ -102,11 +102,12 @@
                 </b-field>
                 <b-field>
                   <b-autocomplete
-                    :data="nftAssetCache.assets"
+                    v-model="tagForm.nftName"
                     placeholder="Select NFT"
                     icon="pound"
                     field="name"
                     @select="(option) => (tagForm.nftId = option)"
+                    :data="getFilteredNFTs"
                   >
                     <template slot-scope="props">
                       <div class="media">
@@ -120,7 +121,8 @@
                           {{ props.option.name }}
                           <br />
                           <small
-                            >ID <b> {{ props.option.token_id }}</b>
+                            >{{ props.option.asset_contract.name }}
+                            <b>#{{ props.option.token_id }}</b>
                           </small>
                         </div>
                       </div>
@@ -305,10 +307,30 @@ export default {
         hashtag: "",
         nftId: "",
         nftContract: "",
+        nftName: "",
       },
     };
   },
-  computed: mapGetters(["supportedNfts", "nftAssetCache"]),
+  computed: {
+    ...mapGetters(["supportedNfts", "nftAssetCache"]),
+    getFilteredNFTs() {
+      if (!this.tagForm.nftName || !this.nftAssetCache) return [];
+
+      // FIXME add debounce
+      if (this.tagForm.nftName.length < 2) return [];
+
+      console.log(this.tagForm.nftName);
+      return this.nftAssetCache.assets.filter((option) => {
+        if (!option.name) return false;
+
+        return (
+          option.name
+            .toLowerCase()
+            .indexOf(this.tagForm.nftName.toLowerCase()) >= 0
+        );
+      });
+    },
+  },
   apollo: {
     hashtags: {
       query: SNAPSHOT,
