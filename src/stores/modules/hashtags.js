@@ -85,7 +85,6 @@ const actions = {
   },
 
   async mint({ state }, payload) {
-    console.log(`mint`, payload);
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
@@ -96,7 +95,6 @@ const actions = {
   },
 
   async tag({ state }, payload) {
-    console.log(`tag`, payload);
     const { web3Objects, fees } = state;
     const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
