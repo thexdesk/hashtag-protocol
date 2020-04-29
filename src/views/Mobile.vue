@@ -142,7 +142,7 @@
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
                   <b-table-column field="mintedCount" label="Minted" centered>
-                    -
+                    {{ props.row.mintCount }}
                   </b-table-column>
                   <b-table-column
                     field="tagCount"
@@ -153,7 +153,7 @@
                   </b-table-column>
                   <b-table-column field="earnings" label="Earnings" centered>
                     <eth-amount-sum
-                      :value1="props.row.registryFees"
+                      :value1="props.row.tagFees"
                       :value2="props.row.mintFees"
                     ></eth-amount-sum>
                   </b-table-column>
@@ -170,21 +170,17 @@
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
                   <b-table-column field="mintedCount" label="Minted" centered>
-                    -
+                    {{ props.row.mintCount }}
                   </b-table-column>
                   <b-table-column
                     field="ownedCount"
                     label="Assets tagged"
                     centered
                   >
-                    {{ props.row.ownedCount }}
+                    {{ props.row.tagCount }}
                   </b-table-column>
-                  <b-table-column
-                    field="registryFees"
-                    label="Earnings"
-                    centered
-                  >
-                    <eth-amount :value="props.row.registryFees"></eth-amount>
+                  <b-table-column field="tagFees" label="Earnings" centered>
+                    <eth-amount :value="props.row.tagFees"></eth-amount>
                   </b-table-column>
                 </template>
               </b-table>
