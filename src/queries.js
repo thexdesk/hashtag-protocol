@@ -49,7 +49,7 @@ export const SNAPSHOT = gql`
       mintFees
       tagFees
     }
-    taggers(first: 10) {
+    taggers(first: 10, orderBy: tagCount, orderDirection: desc) {
       id
       tagCount
     }
