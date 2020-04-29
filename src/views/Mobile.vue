@@ -320,10 +320,6 @@ export default {
     getFilteredNFTs() {
       if (!this.tagForm.nftName || !this.nftAssetCache) return [];
 
-      // FIXME add debounce
-      if (this.tagForm.nftName.length < 2) return [];
-
-      console.log(this.tagForm.nftName);
       return this.nftAssetCache.assets.filter((option) => {
         if (!option.name) return false;
 
@@ -382,12 +378,24 @@ export default {
       });
     },
     isNewTag: function () {
-      return (
+      if (
         this.hashtagInput &&
         Array.isArray(this.hashtagInput) &&
         (typeof this.hashtagInput[0] === "string" ||
           this.hashtagInput[0] instanceof String)
-      );
+      ) {
+        return (
+          (this.hashtags || []).filter((option) => {
+            return (
+              option.name
+                .toLowerCase()
+                .indexOf(this.hashtagInput[0].toLowerCase()) >= 0
+            );
+          }).length === 0
+        );
+      }
+
+      return false;
     },
   },
 };
