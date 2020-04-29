@@ -19,21 +19,21 @@
                 <p class="subtitle is-5 has-text-white">Mint a new hashtag</p>
                 <template>
                   <section>
-                    <b-field>
+                    <b-field v-if="hashtags">
                       <b-taginput
-                        v-model="tags"
-                        :data="filteredTags"
+                        v-model="hashtagInput"
+                        :data="hashtags"
                         autocomplete
                         :allow-new="true"
                         maxtags="1"
-                        field="user.first_name"
+                        field="name"
                         icon="pound"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
                       >
                         <template slot-scope="props">
-                          <strong>{{ props.option.id }}</strong
-                          >: {{ props.option.user.first_name }}
+                          {{ props.option.name }}
+                          <em>{{ props.option.tagCount }}</em>
                         </template>
                         <template slot="empty">
                           Unique hashtag! Press enter to begin minting.
@@ -41,7 +41,7 @@
                       </b-taginput>
                     </b-field>
                     <div>
-                      <b-button type="is-primary" @click="tagNft()"
+                      <b-button type="is-primary" @click="mintHashtag()"
                         >Mint it</b-button
                       >
                     </div>
@@ -86,17 +86,46 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Newest hashtags</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="hashtags || []">
+                <template slot-scope="props">
+                  <b-table-column field="name" label="Hashtag">
+                    <hashtag :value="props.row.name"></hashtag>
+                  </b-table-column>
+                  <b-table-column field="timestamp" label="Minted">
+                    {{ new Date(props.row.timestamp * 1000) | moment("from") }}
+                  </b-table-column>
+                  <b-table-column field="owner" label="Owner">
+                    <eth-account :value="props.row.owner"></eth-account>
+                  </b-table-column>
+                  <b-table-column field="publisher" label="Publisher">
+                    <eth-account :value="props.row.publisher"></eth-account>
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Recently tagged assets</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="tags || []">
+                <template slot-scope="props">
+                  <b-table-column field="nftId" label="" width="75">
+                    <img
+                      :src="props.row.nftImage"
+                      style="max-width: 75px; max-height: 75px;"
+                    />
+                  </b-table-column>
+                  <b-table-column field="nftName" label="Asset Name">
+                    {{ props.row.nftName }}
+                  </b-table-column>
+                  <b-table-column field="projectName" label="Project">
+                    {{ props.row.nftContractName }}
+                  </b-table-column>
+                  <b-table-column field="hashtagName" label="Hashtag">
+                    <hashtag :value="props.row.hashtagName"></hashtag>
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
         </div>
@@ -107,17 +136,83 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top publishers</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="publishers || []">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Publisher">
+                    <eth-account :value="props.row.id"></eth-account>
+                  </b-table-column>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    {{ props.row.mintCount }}
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                  <b-table-column field="earnings" label="Earnings" centered>
+                    <eth-amount-sum
+                      :value1="props.row.tagFees"
+                      :value2="props.row.mintFees"
+                    ></eth-amount-sum>
+                  </b-table-column>
+                </template>
+              </b-table>
+            </article>
+          </div>
+          <div class="column is-6 is-12-mobile">
+            <article class="is-white notification">
+              <p class="title is-5">Top owners</p>
+              <b-table :data="owners || []">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Publisher">
+                    <eth-account :value="props.row.id"></eth-account>
+                  </b-table-column>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    {{ props.row.mintCount }}
+                  </b-table-column>
+                  <b-table-column
+                    field="ownedCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                  <b-table-column field="tagFees" label="Earnings" centered>
+                    <eth-amount :value="props.row.tagFees"></eth-amount>
+                  </b-table-column>
+                </template>
+              </b-table>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="columns is-tablet is-centered">
+          <div class="column is-6 is-12-mobile">
+            <article class="is-white notification">
+              <p class="title is-5">Popular hashtags</p>
+              <b-table :data="popular || []">
+                <template slot-scope="props">
+                  <b-table-column field="name" label="Hashtag">
+                    <hashtag :value="props.row.name"></hashtag>
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top taggers</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
             </article>
           </div>
         </div>
@@ -128,118 +223,60 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import { TOP_TENS } from "../queries";
-const names = require("@/data/names.json");
+import Hashtag from "../components/Hashtag";
+import EthAccount from "../components/EthAccount";
+import EthAmount from "../components/EthAmount";
+import EthAmountSum from "../components/EthAmountSum";
 
 export default {
   name: "Hashtags",
   components: {
+    EthAmountSum,
+    EthAmount,
+    EthAccount,
+    Hashtag,
     Footer,
     Header,
     Modal,
   },
   data() {
     return {
-      filteredTags: names,
-      isSelectOnly: false,
-
-      hashtagSearch: "",
-      isHashtagListOpen: false,
-      filteredHashtags: [],
       isModalOpen: false,
       modalData: {},
+      hashtagInput: null,
       tagForm: {
         hashtagId: "",
         nftId: "",
         nftContract: "",
       },
-      data: [
-        {
-          id: 1,
-          first_name: "Jesse",
-          last_name: "Simmons",
-          date: "2016-10-15 13:43:27",
-          gender: "Male",
-        },
-        {
-          id: 2,
-          first_name: "John",
-          last_name: "Jacobs",
-          date: "2016-12-15 06:00:53",
-          gender: "Male",
-        },
-        {
-          id: 3,
-          first_name: "Tina",
-          last_name: "Gilbert",
-          date: "2016-04-26 06:26:28",
-          gender: "Female",
-        },
-        {
-          id: 4,
-          first_name: "Clarence",
-          last_name: "Flores",
-          date: "2016-04-10 10:28:46",
-          gender: "Male",
-        },
-        {
-          id: 5,
-          first_name: "Anne",
-          last_name: "Lee",
-          date: "2016-12-06 14:38:38",
-          gender: "Female",
-        },
-      ],
-      columns: [
-        {
-          field: "id",
-          label: "ID",
-          width: "40",
-          numeric: true,
-        },
-        {
-          field: "first_name",
-          label: "First Name",
-        },
-        {
-          field: "last_name",
-          label: "Last Name",
-        },
-        {
-          field: "date",
-          label: "Date",
-          centered: true,
-        },
-        {
-          field: "gender",
-          label: "Gender",
-        },
-      ],
     };
   },
   apollo: {
     hashtags: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
     publishers: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
     owners: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
     },
-    recently_tagged: {
+    tags: {
       query: TOP_TENS,
-      pollInterval: 500, // ms
+      pollInterval: 1000, // ms
+    },
+    popular: {
+      query: TOP_TENS,
+      pollInterval: 1000, // ms
     },
   },
-  computed: mapGetters(["digitalAssets"]),
   methods: {
     closeModal() {
       this.isModalOpen = false;
@@ -248,56 +285,16 @@ export default {
       this.modalData = modalData;
       this.isModalOpen = true;
     },
-    onHashtagChange() {
-      this.filterHashtags();
-      if (this.hashtagSearch !== "") {
-        this.isHashtagListOpen = true;
-      } else {
-        this.closeHashtagList();
-      }
-    },
-    closeHashtagList() {
-      this.isHashtagListOpen = false;
-    },
-    openHashtagList() {
-      this.isHashtagListOpen = true;
-    },
-    filterHashtags() {},
-    selectHashtag() {
-      this.closeHashtagList();
-
-      let alreadyExists = false;
-      // this.hashtags.filter(hashtag => {
-      //     if (
-      //         this.hashtagSearch.toLowerCase() === hashtag.hashtag.toLowerCase()
-      //     ) {
-      //         alreadyExists = true;
-      //     }
-      // });
-
-      // TODO: Give an error message if alreadyExists is true
-      if (alreadyExists === false) {
-        this.$store.dispatch("mint", {
-          newHashtag: {
-            hashtag: this.hashtagSearch,
-            earnings: 0,
-            tagAmounts: 0,
-          },
-        });
-      }
+    mintHashtag() {
+      this.$store.dispatch("mint", this.hashtagInput[0].user.first_name);
     },
     tagNft() {
       this.$store.dispatch("tag", this.tagForm);
     },
     // Bulma taginput widget.
     getFilteredTags(text) {
-      this.filteredTags = names.filter((option) => {
-        return (
-          option.user.first_name
-            .toString()
-            .toLowerCase()
-            .indexOf(text.toLowerCase()) >= 0
-        );
+      return (this.hashtags || []).filter((option) => {
+        return option.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
       });
     },
   },

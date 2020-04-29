@@ -6,25 +6,13 @@ import NFTTagger from "../../truffleconf/NFTTagger";
 import utils from "../../utils";
 
 const state = {
-  digitalAssets: [
-    {
-      name: "d a z e d",
-      description: "file under: current mood",
-      image:
-        "https://ipfs.infura.io/ipfs/QmQvSQJUEJ1wjN8Gm5kfp47YmDhMGbtp2bkfMynBZuqDdt/asset.jpeg",
-    },
-    {
-      name: "Las Parabolas, Elon Musk [Ethereum Version] - EM1ETH01",
-      description:
-        "The product of years of gaining knowledge and skills, and culmination of perfecting them, has resulted in this series, Republica De Las Parabolas - a commemoration of the crypto markets, its aspirations, hopes and dreams. This is the THIRD of SIX unique designs, featuring a portrait of Elon Musk. Musk represents bombastic entrepreneurship and aspiration, at the forefront of technology and exploration. He is also figure of parabolic speculation, given the rise of the Tesla stock price. The design features authentic and original banknote design - the centrepiece is the engraved portrait, made of hundreds of lines and dashes, each placed by hand. The design is filled with minute details and patterns, all reinforcing the central concept. As with all my works, the design is signed, and individually serial numbered - this is the ETHEREUM version of the original Bitcoin version. It one of just THREE uniquely serial numbered animations.",
-      image:
-        "https://ipfs.infura.io/ipfs/QmPQxVvRJNcXBTXoDCTnmc5nbQTRBpc2yFQWKqwcZd1YPV/asset.gif",
-    },
-  ],
   web3Objects: {},
   fees: {
     protocol: ethers.utils.parseEther("0.01"),
     tagging: ethers.utils.parseEther("0.01"),
+  },
+  supportedNfts: {
+    ko: "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
   },
 };
 
@@ -77,7 +65,7 @@ const actions = {
         nftTaggerContract,
       },
       account: accounts[0],
-      publisher: "0x12D062B19a2DF1920eb9FC28Bd6E9A7E936de4c2", // fixme - hardcoded for now for rinkeby testing
+      publisher: "0xD677AEd0965AC9B54e709F01A99cEcA205aebC4B", //FIXME - hardcoded for now for rinkeby testing
     });
 
     dispatch("getProtocolFee");
@@ -110,12 +98,9 @@ const mutations = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    await hashtagProtocolContract.mint(
-      payload.newHashtag.hashtag,
-      publisher,
-      account,
-      { value: ethers.utils.bigNumberify(state.fees.protocol) }
-    );
+    await hashtagProtocolContract.mint(payload, publisher, account, {
+      value: ethers.utils.bigNumberify(state.fees.protocol),
+    });
   },
 
   async tagAsset(state, payload) {
