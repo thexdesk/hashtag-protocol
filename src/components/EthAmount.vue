@@ -1,5 +1,5 @@
 <template>
-  <span>{{ value | toEth | to4Dp }} Ξ</span>
+  <span>{{ value | toEth | toDp }} Ξ</span>
 </template>
 
 <script>

@@ -12,14 +12,16 @@ export const SNAPSHOT = gql`
     }
     publishers(first: 10, orderBy: tagCount, orderDirection: desc) {
       id
+      mintCount
       tagCount
       mintFees
-      registryFees
+      tagFees
     }
-    owners(first: 10, orderBy: ownedCount, orderDirection: desc) {
+    owners(first: 10, orderBy: mintCount, orderDirection: desc) {
       id
-      ownedCount
-      registryFees
+      mintCount
+      tagCount
+      tagFees
     }
     tags(first: 5, orderBy: timestamp, orderDirection: desc) {
       id
@@ -45,7 +47,7 @@ export const SNAPSHOT = gql`
     platforms(first: 1) {
       id
       mintFees
-      registryFees
+      tagFees
     }
   }
 `;

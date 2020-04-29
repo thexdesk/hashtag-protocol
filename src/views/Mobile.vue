@@ -86,27 +86,12 @@
                   </b-taginput>
                 </b-field>
                 <b-field>
-                  <b-select
-                    placeholder="Select a NFT Contract"
-                    v-model="tagForm.nftContract"
-                    expanded
-                  >
-                    <option
-                      v-for="option in supportedNfts"
-                      :value="option.contractAddress"
-                      :key="option.contractAddress"
-                    >
-                      {{ option.name }}
-                    </option>
-                  </b-select>
-                </b-field>
-                <b-field>
                   <b-autocomplete
                     v-model="tagForm.nftName"
                     placeholder="Select NFT"
                     icon="pound"
                     field="name"
-                    @select="(option) => (tagForm.nftId = option)"
+                    @select="(option) => (tagForm.nft = option)"
                     :data="getFilteredNFTs"
                   >
                     <template slot-scope="props">
@@ -201,14 +186,21 @@
                   <b-table-column field="id" label="Publisher">
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
-                  <b-table-column field="tagCount" label="Tag count" centered>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    {{ props.row.mintCount }}
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
                     {{ props.row.tagCount }}
                   </b-table-column>
-                  <b-table-column field="mintFess" label="Mint earnings">
-                    <eth-amount :value="props.row.mintFees"></eth-amount>
-                  </b-table-column>
-                  <b-table-column field="registryFees" label="Tag earnings">
-                    <eth-amount :value="props.row.registryFees"></eth-amount>
+                  <b-table-column field="earnings" label="Earnings" centered>
+                    <eth-amount-sum
+                      :value1="props.row.tagFees"
+                      :value2="props.row.mintFees"
+                    ></eth-amount-sum>
                   </b-table-column>
                 </template>
               </b-table>
@@ -222,11 +214,18 @@
                   <b-table-column field="id" label="Owner">
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
-                  <b-table-column field="ownedCount" label="Tag count" centered>
-                    {{ props.row.ownedCount }}
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    {{ props.row.mintCount }}
                   </b-table-column>
-                  <b-table-column field="registryFees" label="Tag earnings">
-                    <eth-amount :value="props.row.registryFees"></eth-amount>
+                  <b-table-column
+                    field="ownedCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                  <b-table-column field="tagFees" label="Earnings" centered>
+                    <eth-amount :value="props.row.tagFees"></eth-amount>
                   </b-table-column>
                 </template>
               </b-table>
@@ -245,7 +244,11 @@
                   <b-table-column field="name" label="Hashtag">
                     <hashtag :value="props.row.name"></hashtag>
                   </b-table-column>
-                  <b-table-column field="tagCount" label="Tag count" centered>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
                     {{ props.row.tagCount }}
                   </b-table-column>
                 </template>
@@ -285,11 +288,13 @@ import { SNAPSHOT } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
+import EthAmountSum from "../components/EthAmountSum";
 import { mapGetters } from "vuex";
 
 export default {
   name: "Hashtags",
   components: {
+    EthAmountSum,
     EthAmount,
     EthAccount,
     Hashtag,
@@ -304,10 +309,9 @@ export default {
       hashtagInput: null,
       hashtagInputTags: [],
       tagForm: {
-        hashtag: "",
-        nftId: "",
-        nftContract: "",
-        nftName: "",
+        hashtag: null,
+        nft: null,
+        nftName: null,
       },
     };
   },
