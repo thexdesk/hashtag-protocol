@@ -260,17 +260,18 @@
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
-              <p class="title is-5">Hashtag protocol</p>
-              <b-table :data="platforms || []">
+              <p class="title is-5">Top taggers</p>
+              <b-table :data="taggers || []">
                 <template slot-scope="props">
                   <b-table-column field="id" label="">
-                    {{ props.row.id }}
+                    <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
-                  <b-table-column field="earnings" label="Earnings" centered>
-                    <eth-amount-sum
-                      :value1="props.row.mintFees"
-                      :value2="props.row.tagFees"
-                    ></eth-amount-sum>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
                   </b-table-column>
                 </template>
               </b-table>
@@ -279,7 +280,15 @@
         </div>
       </div>
     </section>
-    <Footer></Footer>
+    <Footer>
+      <span v-if="platform" class="has-text-grey-light">
+        Platform earnings
+        <eth-amount-sum
+          :value1="platform.mintFees"
+          :value2="platform.tagFees"
+        ></eth-amount-sum>
+      </span>
+    </Footer>
   </div>
 </template>
 
@@ -355,7 +364,11 @@ export default {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
-    platforms: {
+    platform: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+    taggers: {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
     },

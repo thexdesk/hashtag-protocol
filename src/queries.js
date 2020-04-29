@@ -44,10 +44,14 @@ export const SNAPSHOT = gql`
       publisher
       tagCount
     }
-    platforms(first: 1) {
+    platform(id: "platform") {
       id
       mintFees
       tagFees
+    }
+    taggers(first: 10) {
+      id
+      tagCount
     }
   }
 `;
