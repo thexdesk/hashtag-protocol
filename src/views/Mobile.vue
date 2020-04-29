@@ -115,7 +115,10 @@
                   </b-autocomplete>
                 </b-field>
                 <div>
-                  <b-button type="is-primary" @click="tagNft()"
+                  <b-button
+                    type="is-primary"
+                    @click="tagNft()"
+                    :disabled="!isTaggable()"
                     >Tag asset</b-button
                   >
                 </div>
@@ -263,11 +266,11 @@
                   <b-table-column field="id" label="">
                     {{ props.row.id }}
                   </b-table-column>
-                  <b-table-column field="mintFees" label="Mint fees" centered>
-                    <eth-amount :value="props.row.mintFees"></eth-amount>
-                  </b-table-column>
-                  <b-table-column field="registryFees" label="Tag earnings">
-                    <eth-amount :value="props.row.registryFees"></eth-amount>
+                  <b-table-column field="earnings" label="Earnings" centered>
+                    <eth-amount-sum
+                      :value1="props.row.mintFees"
+                      :value2="props.row.tagFees"
+                    ></eth-amount-sum>
                   </b-table-column>
                 </template>
               </b-table>
@@ -396,6 +399,14 @@ export default {
       }
 
       return false;
+    },
+    isTaggable: function () {
+      return (
+        this.tagForm.nftName &&
+        this.tagForm.nftName.length > 0 &&
+        this.tagForm.hashtag &&
+        this.tagForm.hashtag.length > 0
+      );
     },
   },
 };
