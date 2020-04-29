@@ -141,14 +141,21 @@
                   <b-table-column field="id" label="Publisher">
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
-                  <b-table-column field="tagCount" label="Tag count" centered>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    -
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
                     {{ props.row.tagCount }}
                   </b-table-column>
-                  <b-table-column field="mintFess" label="Mint earnings">
-                    <eth-amount :value="props.row.mintFees"></eth-amount>
-                  </b-table-column>
-                  <b-table-column field="registryFees" label="Tag earnings">
-                    <eth-amount :value="props.row.registryFees"></eth-amount>
+                  <b-table-column field="earnings" label="Earnings" centered>
+                    <eth-amount-sum
+                      :value1="props.row.registryFees"
+                      :value2="props.row.mintFees"
+                    ></eth-amount-sum>
                   </b-table-column>
                 </template>
               </b-table>
@@ -162,10 +169,21 @@
                   <b-table-column field="id" label="Publisher">
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
-                  <b-table-column field="ownedCount" label="Tag count" centered>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    -
+                  </b-table-column>
+                  <b-table-column
+                    field="ownedCount"
+                    label="Assets tagged"
+                    centered
+                  >
                     {{ props.row.ownedCount }}
                   </b-table-column>
-                  <b-table-column field="registryFees" label="Tag earnings">
+                  <b-table-column
+                    field="registryFees"
+                    label="Earnings"
+                    centered
+                  >
                     <eth-amount :value="props.row.registryFees"></eth-amount>
                   </b-table-column>
                 </template>
@@ -185,7 +203,11 @@
                   <b-table-column field="name" label="Hashtag">
                     <hashtag :value="props.row.name"></hashtag>
                   </b-table-column>
-                  <b-table-column field="tagCount" label="Tag count" centered>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
                     {{ props.row.tagCount }}
                   </b-table-column>
                 </template>
@@ -212,10 +234,12 @@ import { TOP_TENS } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
+import EthAmountSum from "../components/EthAmountSum";
 
 export default {
   name: "Hashtags",
   components: {
+    EthAmountSum,
     EthAmount,
     EthAccount,
     Hashtag,
