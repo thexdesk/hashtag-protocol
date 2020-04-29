@@ -263,7 +263,7 @@
               <p class="title is-5">Top taggers</p>
               <b-table :data="taggers || []">
                 <template slot-scope="props">
-                  <b-table-column field="id" label="">
+                  <b-table-column field="id" label="Tagger">
                     <eth-account :value="props.row.id"></eth-account>
                   </b-table-column>
                   <b-table-column
