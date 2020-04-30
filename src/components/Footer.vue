@@ -41,5 +41,8 @@
         </a>
       </div>
     </nav>
+    <p class="container">
+      <slot></slot>
+    </p>
   </footer>
 </template>

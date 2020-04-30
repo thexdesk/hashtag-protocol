@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-export const TOP_TENS = gql`
+export const SNAPSHOT = gql`
   query {
     hashtags(first: 10, orderBy: timestamp, orderDirection: desc) {
       id
@@ -42,6 +42,15 @@ export const TOP_TENS = gql`
       name
       owner
       publisher
+      tagCount
+    }
+    platform(id: "platform") {
+      id
+      mintFees
+      tagFees
+    }
+    taggers(first: 10, orderBy: tagCount, orderDirection: desc) {
+      id
       tagCount
     }
   }
