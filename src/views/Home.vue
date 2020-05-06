@@ -4,15 +4,17 @@
       <header>
         <h1>Hashtag</h1>
         <ul>
-          <router-link to="/hashtags"
-            ><li class="headerLink emphasis">
-              Hashtags
-            </li></router-link
-          >
+          <router-link to="/hashtags">
+            <li class="headerLink emphasis">
+              Hashtag
+            </li>
+          </router-link>
           <li class="headerLink emphasis">Developers</li>
         </ul>
         <ul>
-          <li class="appLink">APP</li>
+          <router-link to="/hashtags">
+            <li class="appLink">APP</li>
+          </router-link>
         </ul>
       </header>
 
@@ -123,89 +125,6 @@
 
 <script>
 export default {
-  components: {}
+  components: {},
 };
 </script>
-
-<style lang="scss">
-.emphasis {
-  color: #24ae60;
-  font-weight: bold;
-}
-section.heroSection.darker {
-  background-color: #bdbdbb;
-  width: 100%;
-
-  color: #4a4a4a;
-
-  h1 {
-    color: #a7a7a7;
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-section.heroSection {
-  background-color: #ffffff;
-  height: 60vh;
-  width: 90%;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-
-  p.heroContent {
-    width: 50%;
-
-    font-size: 30px;
-    font-weight: normal;
-    line-height: 50px;
-    color: #282828;
-  }
-
-  img {
-    width: 200px;
-    margin-right: 10em;
-  }
-}
-.hero {
-  background-color: #bdbdbb;
-  height: 60vh !important;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .layout.hero-flex {
-    display: flex;
-    flex-direction: row;
-
-    :nth-child(1) {
-      width: 70%;
-    }
-  }
-
-  .layout h1 {
-    font-size: 2.6em;
-    font-weight: normal;
-    line-height: 50px;
-    color: #ffffff;
-  }
-}
-.headerLink,
-.appLink {
-  background-color: transparent;
-}
-.appLink {
-  border-radius: 2px;
-  border: 2px solid #24ae60;
-  color: #24ae60;
-  width: 72px;
-  text-align: center;
-}
-</style>

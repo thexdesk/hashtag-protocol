@@ -1,8 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Home from "./views/Home";
-import Hashtags from "./views/Hashtags";
+import Mobile from "./views/Mobile";
 
 Vue.use(VueRouter);
 
@@ -11,11 +10,7 @@ export const router = new VueRouter({
   routes: [
     {
       path: "/",
-      component: Home
+      component: Mobile,
     },
-    {
-      path: "/hashtags",
-      component: Hashtags
-    }
-  ]
+  ],
 });

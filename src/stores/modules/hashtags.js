@@ -1,35 +1,41 @@
-import Vue from 'vue';
-import {ethers} from 'ethers';
+import Vue from "vue";
+import { ethers } from "ethers";
 
-import HashtagProtocolTruffleConf from '../../truffleconf/HashtagProtocol';
-import utils from '../../utils';
+import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
+import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
+import utils from "../../utils";
+
+const KO_RINKEBY_ADDRESS = "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e";
+
+import nftCache from "../../data/nfts";
 
 const state = {
-  digitalAssets: [
+  web3Objects: {},
+  fees: {
+    protocol: ethers.utils.parseEther("0.01"),
+    tagging: ethers.utils.parseEther("0.01"),
+  },
+  supportedNfts: [
     {
-      name: "d a z e d",
-      description: "file under: current mood",
-      image: "https://ipfs.infura.io/ipfs/QmQvSQJUEJ1wjN8Gm5kfp47YmDhMGbtp2bkfMynBZuqDdt/asset.jpeg"
-    },
-    {
-      name: "Las Parabolas, Elon Musk [Ethereum Version] - EM1ETH01",
-      description: "The product of years of gaining knowledge and skills, and culmination of perfecting them, has resulted in this series, Republica De Las Parabolas - a commemoration of the crypto markets, its aspirations, hopes and dreams. This is the THIRD of SIX unique designs, featuring a portrait of Elon Musk. Musk represents bombastic entrepreneurship and aspiration, at the forefront of technology and exploration. He is also figure of parabolic speculation, given the rise of the Tesla stock price. The design features authentic and original banknote design - the centrepiece is the engraved portrait, made of hundreds of lines and dashes, each placed by hand. The design is filled with minute details and patterns, all reinforcing the central concept. As with all my works, the design is signed, and individually serial numbered - this is the ETHEREUM version of the original Bitcoin version. It one of just THREE uniquely serial numbered animations.",
-      image: "https://ipfs.infura.io/ipfs/QmPQxVvRJNcXBTXoDCTnmc5nbQTRBpc2yFQWKqwcZd1YPV/asset.gif"
+      name: "KnownOriginDigitalAsset",
+      contractAddress: KO_RINKEBY_ADDRESS,
     },
   ],
-  web3Objects: {},
-  publisher: '0x401cBf2194D35D078c0BcdAe4BeA42275483ab5F',
-  fee: ethers.utils.parseEther('0.01'), // FIXME look up from contract
-  account: null,
+  nftAssetCache: nftCache,
 };
 
 const getters = {
-  digitalAssets: state => state.digitalAssets,
-  account: state => state.account,
+  supportedNfts: (state) => state.supportedNfts,
+  nftAssetCache: (state) => state.nftAssetCache,
+  account: (state) => {
+    return state.web3Objects && state.web3Objects.account
+      ? state.web3Objects.account
+      : "Connect wallet";
+  },
 };
 
 const actions = {
-  async bootstrap({commit}) {
+  async bootstrap({ commit, dispatch }) {
     await window.ethereum.enable();
 
     /*global web3*/
@@ -37,54 +43,123 @@ const actions = {
     const signer = provider.getSigner();
     const chain = await provider.getNetwork();
 
-    const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(HashtagProtocolTruffleConf, chain.chainId);
+    const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
+      HashtagProtocolTruffleConf,
+      chain.chainId
+    );
     const hashtagProtocolContract = new ethers.Contract(
-        hashtagProtocolContractAddress,
-        HashtagProtocolTruffleConf.abi,
-        signer,
+      hashtagProtocolContractAddress,
+      HashtagProtocolTruffleConf.abi,
+      signer
+    );
+
+    const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
+      ERC721HashtagRegistry,
+      chain.chainId
+    );
+
+    const erc721HashtagRegistryContract = new ethers.Contract(
+      erc721HashtagRegistryAddress,
+      ERC721HashtagRegistry.abi,
+      signer
     );
 
     const accounts = await provider.listAccounts();
 
-    commit('setWeb3Objects', {
+    commit("setWeb3Objects", {
       provider,
       signer,
       chain,
       contracts: {
-        hashtagProtocolContract
+        hashtagProtocolContract,
+        erc721HashtagRegistryContract,
       },
       account: accounts[0],
+      publisher: "0xd677aed0965ac9b54e709f01a99ceca205aebc4b", //FIXME - hardcoded for now for rinkeby testing
+    });
+
+    dispatch("getProtocolFee");
+    dispatch("getTaggingFee");
+
+    // dispatch("cacheNFTAssets");
+  },
+
+  async mint({ state }, payload) {
+    const { contracts, account, publisher } = state.web3Objects;
+    const { hashtagProtocolContract } = contracts;
+
+    // function mint(string memory _hashtag, address payable _publisher, address _recipient) payable public returns (uint256 _tokenId) {
+    await hashtagProtocolContract.mint(payload, publisher, account, {
+      value: ethers.utils.bigNumberify(state.fees.protocol),
     });
   },
 
-  addNewHashtag({commit}, payload) {
-    commit("addNewHashtag", payload);
-  },
+  async tag({ state }, payload) {
+    const { web3Objects, fees } = state;
+    const { account, contracts, publisher } = web3Objects;
+    const { erc721HashtagRegistryContract } = contracts;
+    const { hashtag, nft } = payload;
 
-  mint({dispatch}, payload) {
-    dispatch('addNewHashtag', payload);
-  }
-};
-
-const mutations = {
-
-  async addNewHashtag(state, payload) {
-    await state.web3Objects.contracts.hashtagProtocolContract.mint(
-        payload.newHashtag.hashtag,
-        state.publisher,
-        {gasLimit: 500000, value: state.fee}, // rinkeby testing
+    // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
+    await erc721HashtagRegistryContract.tag(
+      hashtag[0].id,
+      nft.asset_contract.address,
+      nft.token_id,
+      publisher,
+      account,
+      {
+        value: ethers.utils.bigNumberify(fees.protocol),
+      }
     );
   },
 
+  async getProtocolFee({ commit }) {
+    const { hashtagProtocolContract } = state.web3Objects.contracts;
+    const fee = (await hashtagProtocolContract.fee()).toString();
+
+    commit("setProtocolFee", fee);
+  },
+
+  async getTaggingFee({ commit }) {
+    const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
+    const fee = (
+      await erc721HashtagRegistryContract.calculateTagFeeAfterDiscount()
+    ).toString();
+
+    commit("setTaggingFee", fee);
+  },
+
+  async cacheNFTAssets({ commit }) {
+    // just cache KO assets for now...
+    const res = await Vue.axios.get(
+      `https://rinkeby-api.opensea.io/api/v1/assets?asset_contract_addresses=${KO_RINKEBY_ADDRESS}&order_direction=asc&offset=0&limit=50`
+    );
+
+    commit("setNFTAssets", res.data);
+  },
+};
+
+const mutations = {
+  async setProtocolFee(state, fee) {
+    Vue.set(state, "fees.platform", fee);
+  },
+
+  async setTaggingFee(state, fee) {
+    Vue.set(state, "fees.tagging", fee);
+  },
+
   setWeb3Objects(state, payload) {
-    Vue.set(state, 'web3Objects', payload);
-    state.account = payload.account;
-  }
+    Vue.set(state, "web3Objects", payload);
+  },
+
+  setNFTAssets(state, payload) {
+    Vue.set(state, "nftAssetCache", payload);
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };
