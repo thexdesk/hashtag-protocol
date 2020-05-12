@@ -416,8 +416,16 @@ export default {
     mintHashtag() {
       this.$store.dispatch("mint", this.hashtagInput[0]);
     },
-    tagNft() {
-      this.$store.dispatch("tag", this.modalForm);
+    async tagNft() {
+      await this.$store.dispatch("tag", this.modalForm);
+
+      this.modalForm = {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      };
+
+      this.isTagModalActive = false;
     },
     validateTag(hashtag) {
       if (hashtag.length < 3) {
