@@ -30,6 +30,7 @@
                         icon="pound"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
+                        :before-adding="validateTag"
                       >
                         <template slot-scope="props">
                           <b-taglist attached>
@@ -386,6 +387,38 @@ export default {
     },
     tagNft() {
       this.$store.dispatch("tag", this.tagForm);
+    },
+    validateTag(hashtag) {
+      if (hashtag.length < 3) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's less than 3 characters long.`
+        );
+        return false;
+      }
+
+      if (hashtag.length > 15) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's more than 15 characters long.`
+        );
+        return false;
+      }
+
+      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(hashtag)) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's either not alpha numeric or only numeric.`
+        );
+        return false;
+      }
+
+      return true;
+    },
+    dangerToast(message) {
+      this.$buefy.toast.open({
+        duration: 5000,
+        message,
+        position: "is-bottom",
+        type: "is-danger",
+      });
     },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
