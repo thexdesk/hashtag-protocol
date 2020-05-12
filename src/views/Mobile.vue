@@ -338,7 +338,7 @@ export default {
         return (
           option.name
             .toLowerCase()
-            .indexOf(this.tagForm.nftName.toLowerCase()) >= 0
+            .indexOf(this.tagForm.nftName.toLowerCase()) === 0
         );
       });
     },
@@ -390,7 +390,7 @@ export default {
     // Bulma taginput widget.
     getFilteredTags: function (text) {
       this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) >= 0;
+        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
       });
     },
     isNewTag: function () {
