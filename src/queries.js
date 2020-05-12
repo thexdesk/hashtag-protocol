@@ -5,6 +5,7 @@ export const SNAPSHOT = gql`
     hashtags(first: 10, orderBy: timestamp, orderDirection: desc) {
       id
       name
+      displayHashtag
       owner
       publisher
       timestamp

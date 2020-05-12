@@ -1,10 +1,5 @@
 <template>
   <div class="body">
-    <Modal
-      :is-open="isModalOpen"
-      :modal-data="modalData"
-      @onClose="closeModal"
-    />
     <section class="hero has-background-grey-dark is-bold">
       <div class="hero-head">
         <div class="container">
@@ -64,35 +59,13 @@
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
                 <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
-                <b-field v-if="hashtags">
-                  <b-taginput
-                    v-model="tagForm.hashtag"
-                    :data="hashtagInputTags"
-                    autocomplete
-                    :allow-new="false"
-                    maxtags="1"
-                    field="name"
-                    icon="pound"
-                    placeholder="Select hashtag"
-                    @typing="getFilteredTags"
-                  >
-                    <template slot-scope="props">
-                      <b-taglist attached>
-                        <b-tag type="is-light">#{{ props.option.name }}</b-tag>
-                        <b-tag type="is-info">{{
-                          props.option.tagCount
-                        }}</b-tag>
-                      </b-taglist>
-                    </template>
-                  </b-taginput>
-                </b-field>
                 <b-field>
                   <b-autocomplete
                     v-model="tagForm.nftName"
                     placeholder="Select NFT"
                     icon="pound"
                     field="name"
-                    @select="(option) => (tagForm.nft = option)"
+                    @select="onNftSelected"
                     :data="getFilteredNFTs"
                   >
                     <template slot-scope="props">
@@ -115,14 +88,6 @@
                     </template>
                   </b-autocomplete>
                 </b-field>
-                <div>
-                  <b-button
-                    type="is-primary"
-                    @click="tagNft()"
-                    :disabled="!isTaggable()"
-                    >Tag asset</b-button
-                  >
-                </div>
               </article>
             </div>
           </div>
@@ -138,7 +103,7 @@
               <b-table :data="hashtags || []">
                 <template slot-scope="props">
                   <b-table-column field="name" label="Hashtag">
-                    <hashtag :value="props.row.name"></hashtag>
+                    <hashtag :value="props.row.displayHashtag"></hashtag>
                   </b-table-column>
                   <b-table-column field="timestamp" label="Minted">
                     {{ new Date(props.row.timestamp * 1000) | moment("from") }}
@@ -280,6 +245,69 @@
           </div>
         </div>
       </div>
+
+      <b-modal :active.sync="isTagModalActive" :width="720" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image is-4by3">
+                      <img
+                        v-if="modalForm.nft"
+                        :src="modalForm.nft.image_original_url"
+                        alt="Image"
+                      />
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <span
+                      class="has-text-weight-bold is-size-6 is-block"
+                      v-if="modalForm.nft"
+                      >{{ modalForm.nft.name }}</span
+                    >
+                    <Span class="is-size-7 is-block">Known Origin</Span>
+                  </div>
+                </div>
+              </div>
+              <div class="media-content">
+                <span class="has-text-weight-bold is-size-4 is-block"
+                  >Tag this asset</span
+                >
+                <span class="is-block is-size-7"
+                  >Choose a hashtag to describe this digital asset.</span
+                >
+
+                <b-taginput
+                  v-model="modalForm.hashtag"
+                  :data="hashtagInputTags"
+                  autocomplete
+                  :allow-new="false"
+                  maxtags="1"
+                  field="name"
+                  icon="pound"
+                  placeholder="Select hashtag"
+                  @typing="getFilteredTags"
+                >
+                  <template slot-scope="props">
+                    <b-taglist attached>
+                      <b-tag type="is-light">#{{ props.option.name }}</b-tag>
+                      <b-tag type="is-info">{{ props.option.tagCount }}</b-tag>
+                    </b-taglist>
+                  </template>
+                </b-taginput>
+
+                <div>
+                  <b-button type="is-primary" @click="tagNft()"
+                    >Tag asset</b-button
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </b-modal>
     </section>
     <Footer>
       <span v-if="platform" class="has-text-grey-light">
@@ -296,7 +324,6 @@
 <script>
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Modal from "../components/Modal";
 import { SNAPSHOT } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
@@ -313,12 +340,15 @@ export default {
     Hashtag,
     Footer,
     Header,
-    Modal,
   },
   data() {
     return {
-      isModalOpen: false,
-      modalData: {},
+      isTagModalActive: false,
+      modalForm: {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      },
       hashtagInput: null,
       hashtagInputTags: [],
       tagForm: {
@@ -378,15 +408,16 @@ export default {
     closeModal() {
       this.isModalOpen = false;
     },
-    openModal(modalData) {
-      this.modalData = modalData;
-      this.isModalOpen = true;
+    onNftSelected(nft) {
+      this.modalForm.nft = nft;
+      this.modalForm.nftName = nft.name;
+      this.isTagModalActive = true;
     },
     mintHashtag() {
       this.$store.dispatch("mint", this.hashtagInput[0]);
     },
     tagNft() {
-      this.$store.dispatch("tag", this.tagForm);
+      this.$store.dispatch("tag", this.modalForm);
     },
     validateTag(hashtag) {
       if (hashtag.length < 3) {
