@@ -249,11 +249,19 @@
       <b-modal :active.sync="isTagModalActive" :width="720" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-left">
+            <!--            <div class="columns">-->
+            <!--              <div class="column is-narrow">-->
+            <!--              </div>-->
+            <!--              <div class="column">-->
+            <!--                -->
+            <!--              </div>-->
+            <!--            </div>-->
+            <div class="tile is-ancestor">
+              <div class="tile is-5">
+                <!-- 1/3 -->
                 <div class="card">
                   <div class="card-image">
-                    <figure class="image is-4by3">
+                    <figure class="image">
                       <img
                         v-if="modalForm.nft"
                         :src="modalForm.nft.image_original_url"
@@ -271,38 +279,46 @@
                   </div>
                 </div>
               </div>
-              <div class="media-content">
-                <span class="has-text-weight-bold is-size-4 is-block"
-                  >Tag this asset</span
-                >
-                <span class="is-block is-size-7"
-                  >Choose a hashtag to describe this digital asset.</span
-                >
+              <div class="tile">
+                <section class="section" style="width: 100%;">
+                  <div class="container">
+                    <span class="has-text-weight-bold is-size-4 is-block"
+                      >Tag this asset</span
+                    >
+                    <span class="is-block is-size-7"
+                      >Choose a hashtag to describe this digital asset.</span
+                    >
 
-                <b-taginput
-                  v-model="modalForm.hashtag"
-                  :data="hashtagInputTags"
-                  autocomplete
-                  :allow-new="false"
-                  maxtags="1"
-                  field="name"
-                  icon="pound"
-                  placeholder="Select hashtag"
-                  @typing="getFilteredTags"
-                >
-                  <template slot-scope="props">
-                    <b-taglist attached>
-                      <b-tag type="is-light">#{{ props.option.name }}</b-tag>
-                      <b-tag type="is-info">{{ props.option.tagCount }}</b-tag>
-                    </b-taglist>
-                  </template>
-                </b-taginput>
+                    <b-taginput
+                      v-model="modalForm.hashtag"
+                      :data="hashtagInputTags"
+                      autocomplete
+                      :allow-new="false"
+                      maxtags="1"
+                      field="name"
+                      icon="pound"
+                      placeholder="Select hashtag"
+                      @typing="getFilteredTags"
+                    >
+                      <template slot-scope="props">
+                        <b-taglist attached>
+                          <b-tag type="is-light"
+                            >#{{ props.option.name }}</b-tag
+                          >
+                          <b-tag type="is-info">{{
+                            props.option.tagCount
+                          }}</b-tag>
+                        </b-taglist>
+                      </template>
+                    </b-taginput>
 
-                <div>
-                  <b-button type="is-primary" @click="tagNft()"
-                    >Tag asset</b-button
-                  >
-                </div>
+                    <div>
+                      <b-button type="is-primary" @click="tagNft()"
+                        >Tag asset</b-button
+                      >
+                    </div>
+                  </div>
+                </section>
               </div>
             </div>
           </div>
