@@ -246,16 +246,14 @@
         </div>
       </div>
 
-      <b-modal :active.sync="isTagModalActive" :width="720" scroll="keep">
+      <b-modal
+        :active.sync="isTagModalActive"
+        :width="720"
+        scroll="keep"
+        @close="resetModalForm"
+      >
         <div class="card">
           <div class="card-content">
-            <!--            <div class="columns">-->
-            <!--              <div class="column is-narrow">-->
-            <!--              </div>-->
-            <!--              <div class="column">-->
-            <!--                -->
-            <!--              </div>-->
-            <!--            </div>-->
             <div class="tile is-ancestor">
               <div class="tile is-5">
                 <!-- 1/3 -->
@@ -282,41 +280,53 @@
               <div class="tile">
                 <section class="section" style="width: 100%;">
                   <div class="container">
-                    <span class="has-text-weight-bold is-size-4 is-block"
-                      >Tag this asset</span
-                    >
-                    <span class="is-block is-size-7"
-                      >Choose a hashtag to describe this digital asset.</span
-                    >
-
-                    <b-taginput
-                      v-model="modalForm.hashtag"
-                      :data="hashtagInputTags"
-                      autocomplete
-                      :allow-new="false"
-                      maxtags="1"
-                      field="name"
-                      icon="pound"
-                      placeholder="Select hashtag"
-                      @typing="getFilteredTags"
-                    >
-                      <template slot-scope="props">
-                        <b-taglist attached>
-                          <b-tag type="is-light"
-                            >#{{ props.option.name }}</b-tag
-                          >
-                          <b-tag type="is-info">{{
-                            props.option.tagCount
-                          }}</b-tag>
-                        </b-taglist>
-                      </template>
-                    </b-taginput>
-
-                    <div>
-                      <b-button type="is-primary" @click="tagNft()"
-                        >Tag asset</b-button
+                    <div class="content">
+                      <span class="has-text-weight-bold is-size-4 is-block"
+                        >Tag this asset</span
+                      >
+                      <span class="is-block is-size-7"
+                        >Choose a hashtag to describe this digital asset.</span
                       >
                     </div>
+
+                    <form>
+                      <div class="field">
+                        <div class="control">
+                          <b-taginput
+                            v-model="modalForm.hashtag"
+                            :data="hashtagInputTags"
+                            autocomplete
+                            :allow-new="false"
+                            maxtags="1"
+                            field="name"
+                            icon="pound"
+                            placeholder="Select hashtag"
+                            @typing="getFilteredTags"
+                          >
+                            <template slot-scope="props">
+                              <b-taglist attached>
+                                <b-tag type="is-light"
+                                  >#{{ props.option.name }}</b-tag
+                                >
+                                <b-tag type="is-info">{{
+                                  props.option.tagCount
+                                }}</b-tag>
+                              </b-taglist>
+                            </template>
+                          </b-taginput>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="control">
+                          <b-button
+                            type="is-primary"
+                            @click="tagNft()"
+                            :disabled="!isTaggable"
+                            >Tag asset</b-button
+                          >
+                        </div>
+                      </div>
+                    </form>
                   </div>
                 </section>
               </div>
@@ -389,6 +399,14 @@ export default {
         );
       });
     },
+    isTaggable() {
+      return (
+        this.modalForm.nftName &&
+        this.modalForm.nftName.length > 0 &&
+        this.modalForm.hashtag &&
+        this.modalForm.hashtag.length > 0
+      );
+    },
   },
   apollo: {
     hashtags: {
@@ -421,26 +439,25 @@ export default {
     },
   },
   methods: {
-    closeModal() {
-      this.isModalOpen = false;
+    resetModalForm() {
+      this.modalForm = {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      };
     },
     onNftSelected(nft) {
       this.modalForm.nft = nft;
       this.modalForm.nftName = nft.name;
       this.isTagModalActive = true;
+      console.log(nft);
     },
     mintHashtag() {
       this.$store.dispatch("mint", this.hashtagInput[0]);
     },
     async tagNft() {
       await this.$store.dispatch("tag", this.modalForm);
-
-      this.modalForm = {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      };
-
+      this.resetModalForm();
       this.isTagModalActive = false;
     },
     validateTag(hashtag) {
@@ -500,14 +517,6 @@ export default {
       }
 
       return false;
-    },
-    isTaggable: function () {
-      return (
-        this.tagForm.nftName &&
-        this.tagForm.nftName.length > 0 &&
-        this.tagForm.hashtag &&
-        this.tagForm.hashtag.length > 0
-      );
     },
   },
 };
