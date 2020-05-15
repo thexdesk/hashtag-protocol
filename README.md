@@ -1,4 +1,4 @@
-# hashtag-dApp
+# hashtag-dApp (sneaky sneaky)
 
 ## Installation
 
