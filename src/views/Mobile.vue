@@ -450,7 +450,6 @@ export default {
       this.modalForm.nft = nft;
       this.modalForm.nftName = nft.name;
       this.isTagModalActive = true;
-      console.log(nft);
     },
     mintHashtag() {
       this.$store.dispatch("mint", this.hashtagInput[0]);
