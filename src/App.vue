@@ -121,6 +121,8 @@ section.main {
   padding-bottom: 2rem;
 }
 
+$section-padding: 0.25rem 0.8rem;
+
 @import "@creativebulma/bulma-divider";
 @import "bulma";
 @import "buefy/src/scss/buefy";
