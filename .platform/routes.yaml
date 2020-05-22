@@ -5,12 +5,12 @@ https://{default}/:
 http://{default}/:
   cache:
     cookies:
-      - "*"
+    - '*'
     default_ttl: 0
     enabled: true
     headers:
-      - Accept
-      - Accept-Language
+    - Accept
+    - Accept-Language
   ssi:
     enabled: false
   type: upstream
