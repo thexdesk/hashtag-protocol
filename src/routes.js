@@ -11,10 +11,12 @@ export const router = new VueRouter({
   routes: [
     {
       path: "/",
+      name: "dashboard",
       component: Mobile,
     },
     {
       path: "/hashtag",
+      name: "hashtag-detail",
       component: HashtagDetail,
     },
   ],
