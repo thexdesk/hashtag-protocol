@@ -14,7 +14,7 @@ export const router = new VueRouter({
       component: Mobile,
     },
     {
-      path: "/hashtagdetail",
+      path: "/hashtag-detail",
       component: HashtagDetail,
     },
   ],

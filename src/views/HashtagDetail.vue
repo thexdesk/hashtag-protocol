@@ -393,7 +393,7 @@ import EthAmountSum from "../components/EthAmountSum";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Hashtags",
+  name: "HashtagDetail",
   components: {
     EthAmountSum,
     Footer,
