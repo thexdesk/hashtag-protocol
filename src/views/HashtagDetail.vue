@@ -9,7 +9,7 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">#SharkWeek</h1>
+        <h1 class="title is-1">#{{ $route.params.hashtag }}</h1>
         <h2 class="subtitle">Hashtag Protocol Token</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
