@@ -1,5 +1,5 @@
 <template>
-  <span>{{ value | shortEth }}</span>
+  <span class="">{{ value | shortEth }}</span>
 </template>
 
 <script>

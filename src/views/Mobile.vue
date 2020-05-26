@@ -3,7 +3,6 @@
     <section class="hero dash has-background-grey-dark is-bold">
       <div class="hero-head">
         <div class="container">
-          <router-link :to="{ name: 'hashtag-detail' }">#SharkWeek</router-link>
           <Header></Header>
         </div>
       </div>
