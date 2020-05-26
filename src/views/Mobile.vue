@@ -1,10 +1,5 @@
 <template>
   <div class="body">
-    <Modal
-      :is-open="isModalOpen"
-      :modal-data="modalData"
-      @onClose="closeModal"
-    />
     <section class="hero has-background-grey-dark is-bold">
       <div class="hero-head">
         <div class="container">
@@ -19,21 +14,28 @@
                 <p class="subtitle is-5 has-text-white">Mint a new hashtag</p>
                 <template>
                   <section>
-                    <b-field>
+                    <b-field v-if="hashtags">
                       <b-taginput
-                        v-model="tags"
-                        :data="filteredTags"
+                        v-model="hashtagInput"
+                        :data="hashtagInputTags"
                         autocomplete
                         :allow-new="true"
                         maxtags="1"
-                        field="user.first_name"
+                        field="name"
                         icon="pound"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
+                        :before-adding="validateTag"
                       >
                         <template slot-scope="props">
-                          <strong>{{ props.option.id }}</strong
-                          >: {{ props.option.user.first_name }}
+                          <b-taglist attached>
+                            <b-tag type="is-light"
+                              >#{{ props.option.name }}</b-tag
+                            >
+                            <b-tag type="is-info">{{
+                              props.option.tagCount
+                            }}</b-tag>
+                          </b-taglist>
                         </template>
                         <template slot="empty">
                           Unique hashtag! Press enter to begin minting.
@@ -41,7 +43,10 @@
                       </b-taginput>
                     </b-field>
                     <div>
-                      <b-button type="is-primary" @click="tagNft()"
+                      <b-button
+                        type="is-primary"
+                        @click="mintHashtag()"
+                        :disabled="!isNewTag()"
                         >Mint it</b-button
                       >
                     </div>
@@ -55,25 +60,34 @@
               <article class="tile is-child">
                 <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
                 <b-field>
-                  <b-input v-model="tagForm.hashtagId" placeholder="Hashtag ID">
-                  </b-input>
-                </b-field>
-                <b-field>
-                  <b-input v-model="tagForm.nftId" placeholder="NFT ID">
-                  </b-input>
-                </b-field>
-                <b-field>
-                  <b-input
-                    v-model="tagForm.nftContract"
-                    placeholder="NFT Contract"
+                  <b-autocomplete
+                    v-model="tagForm.nftName"
+                    placeholder="Select NFT"
+                    icon="pound"
+                    field="name"
+                    @select="onNftSelected"
+                    :data="getFilteredNFTs"
                   >
-                  </b-input>
+                    <template slot-scope="props">
+                      <div class="media">
+                        <div class="media-left">
+                          <img
+                            width="32"
+                            :src="props.option.image_preview_url"
+                          />
+                        </div>
+                        <div class="media-content">
+                          {{ props.option.name }}
+                          <br />
+                          <small
+                            >{{ props.option.asset_contract.name }}
+                            <b>#{{ props.option.token_id }}</b>
+                          </small>
+                        </div>
+                      </div>
+                    </template>
+                  </b-autocomplete>
                 </b-field>
-                <div>
-                  <b-button type="is-primary" @click="tagNft()"
-                    >Tag asset</b-button
-                  >
-                </div>
               </article>
             </div>
           </div>
@@ -86,17 +100,46 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Newest hashtags</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="hashtags || []">
+                <template slot-scope="props">
+                  <b-table-column field="name" label="Hashtag">
+                    <hashtag :value="props.row.displayHashtag"></hashtag>
+                  </b-table-column>
+                  <b-table-column field="timestamp" label="Minted">
+                    {{ new Date(props.row.timestamp * 1000) | moment("from") }}
+                  </b-table-column>
+                  <b-table-column field="owner" label="Owner">
+                    <eth-account :value="props.row.owner"></eth-account>
+                  </b-table-column>
+                  <b-table-column field="publisher" label="Publisher">
+                    <eth-account :value="props.row.publisher"></eth-account>
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Recently tagged assets</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="tags || []">
+                <template slot-scope="props">
+                  <b-table-column field="nftId" label="" width="75">
+                    <img
+                      :src="props.row.nftImage"
+                      style="max-width: 75px; max-height: 75px;"
+                    />
+                  </b-table-column>
+                  <b-table-column field="nftName" label="Asset Name">
+                    {{ props.row.nftName }}
+                  </b-table-column>
+                  <b-table-column field="projectName" label="Project">
+                    {{ props.row.nftContractName }}
+                  </b-table-column>
+                  <b-table-column field="hashtagName" label="Hashtag">
+                    <hashtag :value="props.row.hashtagName"></hashtag>
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
         </div>
@@ -107,198 +150,372 @@
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top publishers</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="publishers || []">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Publisher">
+                    <eth-account :value="props.row.id"></eth-account>
+                  </b-table-column>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    {{ props.row.mintCount }}
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                  <b-table-column field="earnings" label="Earnings" centered>
+                    <eth-amount-sum
+                      :value1="props.row.tagFees"
+                      :value2="props.row.mintFees"
+                    ></eth-amount-sum>
+                  </b-table-column>
+                </template>
+              </b-table>
+            </article>
+          </div>
+          <div class="column is-6 is-12-mobile">
+            <article class="is-white notification">
+              <p class="title is-5">Top owners</p>
+              <b-table :data="owners || []">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Owner">
+                    <eth-account :value="props.row.id"></eth-account>
+                  </b-table-column>
+                  <b-table-column field="mintedCount" label="Minted" centered>
+                    {{ props.row.mintCount }}
+                  </b-table-column>
+                  <b-table-column
+                    field="ownedCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                  <b-table-column field="tagFees" label="Earnings" centered>
+                    <eth-amount :value="props.row.tagFees"></eth-amount>
+                  </b-table-column>
+                </template>
+              </b-table>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="columns is-tablet is-centered">
+          <div class="column is-6 is-12-mobile">
+            <article class="is-white notification">
+              <p class="title is-5">Popular hashtags</p>
+              <b-table :data="popular || []">
+                <template slot-scope="props">
+                  <b-table-column field="name" label="Hashtag">
+                    <hashtag :value="props.row.name"></hashtag>
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
           <div class="column is-6 is-12-mobile">
             <article class="is-white notification">
               <p class="title is-5">Top taggers</p>
-              <template>
-                <b-table :data="data" :columns="columns"></b-table>
-              </template>
+              <b-table :data="taggers || []">
+                <template slot-scope="props">
+                  <b-table-column field="id" label="Tagger">
+                    <eth-account :value="props.row.id"></eth-account>
+                  </b-table-column>
+                  <b-table-column
+                    field="tagCount"
+                    label="Assets tagged"
+                    centered
+                  >
+                    {{ props.row.tagCount }}
+                  </b-table-column>
+                </template>
+              </b-table>
             </article>
           </div>
         </div>
       </div>
+
+      <b-modal
+        :active.sync="isTagModalActive"
+        :width="720"
+        scroll="keep"
+        @close="resetModalForm"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="tile is-ancestor">
+              <div class="tile is-5">
+                <!-- 1/3 -->
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image">
+                      <img
+                        v-if="modalForm.nft"
+                        :src="modalForm.nft.image_original_url"
+                        alt="Image"
+                      />
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <span
+                      class="has-text-weight-bold is-size-6 is-block"
+                      v-if="modalForm.nft"
+                      >{{ modalForm.nft.name }}</span
+                    >
+                    <Span class="is-size-7 is-block">Known Origin</Span>
+                  </div>
+                </div>
+              </div>
+              <div class="tile">
+                <section class="section" style="width: 100%;">
+                  <div class="container">
+                    <div class="content">
+                      <span class="has-text-weight-bold is-size-4 is-block"
+                        >Tag this asset</span
+                      >
+                      <span class="is-block is-size-7"
+                        >Choose a hashtag to describe this digital asset.</span
+                      >
+                    </div>
+
+                    <form>
+                      <div class="field">
+                        <div class="control">
+                          <b-taginput
+                            v-model="modalForm.hashtag"
+                            :data="hashtagInputTags"
+                            autocomplete
+                            :allow-new="false"
+                            maxtags="1"
+                            field="name"
+                            icon="pound"
+                            placeholder="Select hashtag"
+                            @typing="getFilteredTags"
+                          >
+                            <template slot-scope="props">
+                              <b-taglist attached>
+                                <b-tag type="is-light"
+                                  >#{{ props.option.name }}</b-tag
+                                >
+                                <b-tag type="is-info">{{
+                                  props.option.tagCount
+                                }}</b-tag>
+                              </b-taglist>
+                            </template>
+                          </b-taginput>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="control">
+                          <b-button
+                            type="is-primary"
+                            @click="tagNft()"
+                            :disabled="!isTaggable"
+                            >Tag asset</b-button
+                          >
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </b-modal>
     </section>
-    <Footer></Footer>
+    <Footer>
+      <span v-if="platform" class="has-text-grey-light">
+        Platform earnings
+        <eth-amount-sum
+          :value1="platform.mintFees"
+          :value2="platform.tagFees"
+        ></eth-amount-sum>
+      </span>
+    </Footer>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Modal from "../components/Modal";
-import { TOP_TENS } from "../queries";
-const names = require("@/data/names.json");
+import { SNAPSHOT } from "../queries";
+import Hashtag from "../components/Hashtag";
+import EthAccount from "../components/EthAccount";
+import EthAmount from "../components/EthAmount";
+import EthAmountSum from "../components/EthAmountSum";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Hashtags",
   components: {
+    EthAmountSum,
+    EthAmount,
+    EthAccount,
+    Hashtag,
     Footer,
     Header,
-    Modal,
   },
   data() {
     return {
-      filteredTags: names,
-      isSelectOnly: false,
-
-      hashtagSearch: "",
-      isHashtagListOpen: false,
-      filteredHashtags: [],
-      isModalOpen: false,
-      modalData: {},
-      tagForm: {
-        hashtagId: "",
-        nftId: "",
-        nftContract: "",
+      isTagModalActive: false,
+      modalForm: {
+        hashtag: null,
+        nft: null,
+        nftName: null,
       },
-      data: [
-        {
-          id: 1,
-          first_name: "Jesse",
-          last_name: "Simmons",
-          date: "2016-10-15 13:43:27",
-          gender: "Male",
-        },
-        {
-          id: 2,
-          first_name: "John",
-          last_name: "Jacobs",
-          date: "2016-12-15 06:00:53",
-          gender: "Male",
-        },
-        {
-          id: 3,
-          first_name: "Tina",
-          last_name: "Gilbert",
-          date: "2016-04-26 06:26:28",
-          gender: "Female",
-        },
-        {
-          id: 4,
-          first_name: "Clarence",
-          last_name: "Flores",
-          date: "2016-04-10 10:28:46",
-          gender: "Male",
-        },
-        {
-          id: 5,
-          first_name: "Anne",
-          last_name: "Lee",
-          date: "2016-12-06 14:38:38",
-          gender: "Female",
-        },
-      ],
-      columns: [
-        {
-          field: "id",
-          label: "ID",
-          width: "40",
-          numeric: true,
-        },
-        {
-          field: "first_name",
-          label: "First Name",
-        },
-        {
-          field: "last_name",
-          label: "Last Name",
-        },
-        {
-          field: "date",
-          label: "Date",
-          centered: true,
-        },
-        {
-          field: "gender",
-          label: "Gender",
-        },
-      ],
+      hashtagInput: null,
+      hashtagInputTags: [],
+      tagForm: {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      },
     };
+  },
+  computed: {
+    ...mapGetters(["supportedNfts", "nftAssetCache"]),
+    getFilteredNFTs() {
+      if (!this.tagForm.nftName || !this.nftAssetCache) return [];
+
+      return this.nftAssetCache.assets.filter((option) => {
+        if (!option.name) return false;
+
+        return (
+          option.name
+            .toLowerCase()
+            .indexOf(this.tagForm.nftName.toLowerCase()) === 0
+        );
+      });
+    },
+    isTaggable() {
+      return (
+        this.modalForm.nftName &&
+        this.modalForm.nftName.length > 0 &&
+        this.modalForm.hashtag &&
+        this.modalForm.hashtag.length > 0
+      );
+    },
   },
   apollo: {
     hashtags: {
-      query: TOP_TENS,
-      pollInterval: 500, // ms
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
     },
     publishers: {
-      query: TOP_TENS,
-      pollInterval: 500, // ms
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
     },
     owners: {
-      query: TOP_TENS,
-      pollInterval: 500, // ms
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
     },
-    recently_tagged: {
-      query: TOP_TENS,
-      pollInterval: 500, // ms
+    tags: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+    popular: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+    platform: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+    taggers: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
     },
   },
-  computed: mapGetters(["digitalAssets"]),
   methods: {
-    closeModal() {
-      this.isModalOpen = false;
+    resetModalForm() {
+      this.modalForm = {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      };
     },
-    openModal(modalData) {
-      this.modalData = modalData;
-      this.isModalOpen = true;
+    onNftSelected(nft) {
+      this.modalForm.nft = nft;
+      this.modalForm.nftName = nft.name;
+      this.isTagModalActive = true;
     },
-    onHashtagChange() {
-      this.filterHashtags();
-      if (this.hashtagSearch !== "") {
-        this.isHashtagListOpen = true;
-      } else {
-        this.closeHashtagList();
+    mintHashtag() {
+      this.$store.dispatch("mint", this.hashtagInput[0]);
+    },
+    async tagNft() {
+      await this.$store.dispatch("tag", this.modalForm);
+      this.resetModalForm();
+      this.isTagModalActive = false;
+    },
+    validateTag(hashtag) {
+      if (hashtag.length < 3) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's less than 3 characters long.`
+        );
+        return false;
       }
-    },
-    closeHashtagList() {
-      this.isHashtagListOpen = false;
-    },
-    openHashtagList() {
-      this.isHashtagListOpen = true;
-    },
-    filterHashtags() {},
-    selectHashtag() {
-      this.closeHashtagList();
 
-      let alreadyExists = false;
-      // this.hashtags.filter(hashtag => {
-      //     if (
-      //         this.hashtagSearch.toLowerCase() === hashtag.hashtag.toLowerCase()
-      //     ) {
-      //         alreadyExists = true;
-      //     }
-      // });
-
-      // TODO: Give an error message if alreadyExists is true
-      if (alreadyExists === false) {
-        this.$store.dispatch("mint", {
-          newHashtag: {
-            hashtag: this.hashtagSearch,
-            earnings: 0,
-            tagAmounts: 0,
-          },
-        });
+      if (hashtag.length > 15) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's more than 15 characters long.`
+        );
+        return false;
       }
+
+      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(hashtag)) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's either not alpha numeric or only numeric.`
+        );
+        return false;
+      }
+
+      return true;
     },
-    tagNft() {
-      this.$store.dispatch("tag", this.tagForm);
+    dangerToast(message) {
+      this.$buefy.toast.open({
+        duration: 5000,
+        message,
+        position: "is-bottom",
+        type: "is-danger",
+      });
     },
     // Bulma taginput widget.
-    getFilteredTags(text) {
-      this.filteredTags = names.filter((option) => {
-        return (
-          option.user.first_name
-            .toString()
-            .toLowerCase()
-            .indexOf(text.toLowerCase()) >= 0
-        );
+    getFilteredTags: function (text) {
+      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
+        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
       });
+    },
+    isNewTag: function () {
+      if (
+        this.hashtagInput &&
+        Array.isArray(this.hashtagInput) &&
+        (typeof this.hashtagInput[0] === "string" ||
+          this.hashtagInput[0] instanceof String)
+      ) {
+        return (
+          (this.hashtags || []).filter((option) => {
+            return (
+              option.name
+                .toLowerCase()
+                .indexOf(this.hashtagInput[0].toLowerCase()) >= 0
+            );
+          }).length === 0
+        );
+      }
+
+      return false;
     },
   },
 };
