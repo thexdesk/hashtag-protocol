@@ -15,17 +15,16 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip label="Help" position="is-bottom is-pulled-right">
+                <b-tooltip
+                  label="Help"
+                  position="is-bottom is-pulled-right"
+                  type="is-dark"
+                >
                   <button
                     class="button is-white"
                     @click="isOverviewModalActive = true"
                   >
-                    <b-icon
-                      icon="help-circle-outline"
-                      type="is-dark"
-                      @click="isOverviewModalActive = true"
-                    >
-                    </b-icon>
+                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
                   </button>
                 </b-tooltip>
                 <h2 class="title is-4">Token overview</h2>
@@ -61,17 +60,16 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip label="Help" position="is-bottom is-pulled-right">
+                <b-tooltip
+                  label="Help"
+                  position="is-bottom is-pulled-right"
+                  type="is-dark"
+                >
                   <button
                     class="button is-white is-pulled-right"
                     @click="isSummaryModalActive = true"
                   >
-                    <b-icon
-                      icon="help-circle-outline"
-                      type="is-dark"
-                      @click="isSummaryModalActive = true"
-                    >
-                    </b-icon>
+                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
                   </button>
                 </b-tooltip>
                 <h2 class="title is-4">Revenue summary</h2>
@@ -103,7 +101,11 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <b-tooltip label="Help" position="is-bottom is-pulled-right">
+              <b-tooltip
+                label="Help"
+                position="is-bottom is-pulled-right"
+                type="is-dark"
+              >
                 <button
                   class="button is-white"
                   @click="isTaggedModalActive = true"
