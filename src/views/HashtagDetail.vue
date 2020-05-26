@@ -9,13 +9,17 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">#{{ $route.params.hashtag }}</h1>
+        <h1 class="title is-1">#{{ hashtag }}</h1>
         <h2 class="subtitle">Hashtag Protocol Token</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip label="Help" position="is-bottom is-pulled-right">
+                <b-tooltip
+                  label="Help"
+                  position="is-bottom"
+                  class="is-pulled-right"
+                >
                   <button
                     class="button is-white"
                     @click="isOverviewModalActive = true"
@@ -61,7 +65,11 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip label="Help" position="is-bottom is-pulled-right">
+                <b-tooltip
+                  label="Help"
+                  position="is-bottom"
+                  class="is-pulled-right"
+                >
                   <button
                     class="button is-white is-pulled-right"
                     @click="isSummaryModalActive = true"
@@ -103,7 +111,11 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <b-tooltip label="Help" position="is-bottom is-pulled-right">
+              <b-tooltip
+                label="Help"
+                position="is-bottom"
+                class="is-pulled-right"
+              >
                 <button
                   class="button is-white"
                   @click="isTaggedModalActive = true"
@@ -112,9 +124,9 @@
                 </button>
               </b-tooltip>
               <h2 class="title is-4 is-spaced">
-                Content tagged with #SharkWeek
+                Content tagged with #{{ hashtag }}
               </h2>
-              <b-tabs v-model="activeTab" animated="false">
+              <b-tabs v-model="activeTab" :animated="true">
                 <b-tab-item label="ERC-721 NFTs">
                   <div class="b-table">
                     <!---->
@@ -163,145 +175,40 @@
                           <!---->
                           <!---->
                         </thead>
-                        <tbody>
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
+                        <tbody v-if="tagsByHashtag">
+                          <tr
+                            v-for="tag in tagsByHashtag"
+                            v-bind:key="tag.id"
+                            draggable="false"
+                            class=""
+                          >
                             <td data-label="" class="">
                               <img
-                                src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
+                                :src="tag.nftImage"
                                 style="max-width: 75px; max-height: 75px;"
                               />
                             </td>
                             <td data-label="Asset Name" class="">
-                              Nr. 111 - The Pit
+                              {{ tag.nftName }}
                             </td>
                             <td data-label="Project" class="">
-                              KnownOriginDigitalAsset
+                              {{ tag.nftContractName }}
                             </td>
                             <td data-label="Tagged" class="">
-                              <span>2 days ago</span>
+                              <time>
+                                {{
+                                  new Date(tag.timestamp * 1000)
+                                    | moment("from")
+                                }}
+                              </time>
                             </td>
                             <td data-label="Tagger" class="">
-                              <span>0x07 ... 5b0e</span>
+                              <eth-account :value="tag.tagger"></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
-                              <span>0xd6 ... bc4b</span>
+                              <eth-account :value="tag.publisher"></eth-account>
                             </td>
-                            <!---->
                           </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
-                            </td>
-                            <td data-label="Asset Name" class="">
-                              Nr. 111 - The Pit
-                            </td>
-                            <td data-label="Project" class="">
-                              KnownOriginDigitalAsset
-                            </td>
-                            <td data-label="Tagged" class="">
-                              <span>2 days ago</span>
-                            </td>
-                            <td data-label="Tagger" class="">
-                              <span>0x07 ... 5b0e</span>
-                            </td>
-                            <td data-label="Publisher" class="">
-                              <span>0xd6 ... bc4b</span>
-                            </td>
-                            <!---->
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmPfpZToedF2MnBgmBAhmWf5rXUYKvMbww2zA16J8JG8tc"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
-                            </td>
-                            <td data-label="Asset Name" class="">
-                              MetaFactory Tester Badge
-                            </td>
-                            <td data-label="Project" class="">
-                              KnownOriginDigitalAsset
-                            </td>
-                            <td data-label="Tagged" class="">
-                              <span>2 days ago</span>
-                            </td>
-                            <td data-label="Tagger" class="">
-                              <span>0x07 ... 5b0e</span>
-                            </td>
-                            <td data-label="Publisher" class="">
-                              <span>0xd6 ... bc4b</span>
-                            </td>
-                            <!---->
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmSas9z2iudgDFfZc5fJzpzMYEbv5hy6LyroYQCGLtT9GW"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
-                            </td>
-                            <td data-label="Asset Name" class="">
-                              Dreaming Big Color Dreams
-                            </td>
-                            <td data-label="Project" class="">
-                              KnownOriginDigitalAsset
-                            </td>
-                            <td data-label="Tagged" class="">
-                              <span>2 days ago</span>
-                            </td>
-                            <td data-label="Tagger" class="">
-                              <span>0x07 ... 5b0e</span>
-                            </td>
-                            <td data-label="Publisher" class="">
-                              <span>0xd6 ... bc4b</span>
-                            </td>
-                            <!---->
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmRomtVxLDmRrZG11Z6wtARQWnCChRT17VaEXPf24ykRfD/asset.webp"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
-                            </td>
-                            <td data-label="Asset Name" class="">final test</td>
-                            <td data-label="Project" class="">
-                              KnownOriginDigitalAsset
-                            </td>
-                            <td data-label="Tagged" class="">
-                              <span>2 days ago</span>
-                            </td>
-                            <td data-label="Tagger" class="">
-                              <span>0x07 ... 5b0e</span>
-                            </td>
-                            <td data-label="Publisher" class="">
-                              <span>0xd6 ... bc4b</span>
-                            </td>
-                            <!---->
-                          </tr>
-                          <!---->
-                          <!---->
                         </tbody>
                         <!---->
                       </table>
@@ -428,25 +335,44 @@
       </b-modal>
     </section>
     <Footer></Footer>
+
+    {{ tagsByHashtag }}
   </div>
 </template>
 
 <script>
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import { TAGS_BY_HASHTAG } from "../queries";
+import EthAccount from "../components/EthAccount";
 
 export default {
   name: "HashtagDetail",
   components: {
+    EthAccount,
     Footer,
     Header,
   },
   data() {
     return {
+      activeTab: null,
       isOverviewModalActive: false,
       isSummaryModalActive: false,
       isTaggedModalActive: false,
+      hashtag: this.$route.params.hashtag,
+      tagsByHashtag: null,
     };
+  },
+  apollo: {
+    tagsByHashtag: {
+      query: TAGS_BY_HASHTAG,
+      variables() {
+        return {
+          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+        };
+      },
+      pollInterval: 1000, // ms
+    },
   },
 };
 </script>
