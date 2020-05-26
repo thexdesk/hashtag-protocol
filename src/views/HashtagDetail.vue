@@ -335,8 +335,6 @@
       </b-modal>
     </section>
     <Footer></Footer>
-
-    {{ tagsByHashtag }}
   </div>
 </template>
 
