@@ -75,3 +75,17 @@ query tagsByHashtag($hashtag: String!) {
    }
 }
 `);
+
+export const HASHTAGS_BY_NAME = gql(`
+query hashtagsByName($name: String!) {
+   hashtagsByName:  hashtags(first:1, where: {name:$name}) {
+        id
+        name
+        displayHashtag
+        owner
+        publisher
+        timestamp
+        tagCount
+   }
+}
+`);

@@ -33,29 +33,60 @@
                   </button>
                 </b-tooltip>
                 <h2 class="title is-4">Token overview</h2>
-                <div class="b-table">
+                <div class="b-table" v-if="hashtagsByName">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Minted</td>
-                          <td>11/22/20</td>
+                          <td>
+                            {{
+                              new Date(hashtagsByName[0].timestamp * 1000)
+                                | moment("MMM Do YYYY")
+                            }}
+                          </td>
+                        </tr>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Tag Count</td>
+                          <td>
+                            {{ hashtagsByName[0].tagCount }}
+                          </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Publisher</td>
-                          <td>knownorigin.eth</td>
+                          <td>
+                            <eth-account
+                              :value="hashtagsByName[0].publisher"
+                            ></eth-account>
+                          </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Creator</td>
-                          <td>artist.eth</td>
+                          <td>
+                            <eth-account
+                              :value="hashtagsByName[0].owner"
+                            ></eth-account>
+                          </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Owner</td>
-                          <td>artist.eth</td>
+                          <td>
+                            <eth-account
+                              :value="hashtagsByName[0].owner"
+                            ></eth-account>
+                          </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Expires</td>
-                          <td>11/22/2022 (629 days)</td>
+                          <td>
+                            {{
+                              new Date(
+                                (parseInt(hashtagsByName[0].timestamp) +
+                                  63113904) *
+                                  1000
+                              ) | moment("MMM Do YYYY")
+                            }}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -216,10 +247,10 @@
                     <!---->
                   </div>
                 </b-tab-item>
-                <b-tab-item label="IPFS">
+                <b-tab-item label="IPFS" :disabled="true">
                   Coming soon...
                 </b-tab-item>
-                <b-tab-item label="Unstoppable domains">
+                <b-tab-item label="Unstoppable domains" :disabled="true">
                   Coming soon...
                 </b-tab-item>
               </b-tabs>
@@ -341,7 +372,7 @@
 <script>
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { TAGS_BY_HASHTAG } from "../queries";
+import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
 import EthAccount from "../components/EthAccount";
 
 export default {
@@ -359,6 +390,7 @@ export default {
       isTaggedModalActive: false,
       hashtag: this.$route.params.hashtag,
       tagsByHashtag: null,
+      hashtagsByName: null,
     };
   },
   apollo: {
@@ -367,6 +399,15 @@ export default {
       variables() {
         return {
           hashtag: this.hashtag && this.hashtag.toLowerCase(),
+        };
+      },
+      pollInterval: 1000, // ms
+    },
+    hashtagsByName: {
+      query: HASHTAGS_BY_NAME,
+      variables() {
+        return {
+          name: this.hashtag && this.hashtag.toLowerCase(),
         };
       },
       pollInterval: 1000, // ms
