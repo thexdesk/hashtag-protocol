@@ -50,9 +50,9 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Publisher</td>
                           <td>
-                            <eth-account
+                            <publisher-link
                               :value="hashtagsByName[0].publisher"
-                            ></eth-account>
+                            ></publisher-link>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
@@ -364,6 +364,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
 import EthAccount from "../components/EthAccount";
+import PublisherLink from "../components/PublisherLink";
 
 export default {
   name: "HashtagDetail",
@@ -371,6 +372,7 @@ export default {
     EthAccount,
     Footer,
     Header,
+    PublisherLink,
   },
   data() {
     return {

@@ -102,7 +102,7 @@
               <div class="tile is-child box">
                 <article class="is-white">
                   <p class="title is-5">Newest hashtags</p>
-                  <b-table :data="hashtags || []">
+                  <b-table :data="hashtags || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="name" label="Hashtag">
                         <hashtag :value="props.row.displayHashtag"></hashtag>
@@ -129,7 +129,7 @@
               <div class="tile is-child box">
                 <article class="is-white">
                   <p class="title is-5">Recently tagged content</p>
-                  <b-table :data="tags || []">
+                  <b-table :data="tags || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="nftId" label="" width="75">
                         <img
@@ -160,9 +160,9 @@
                 <article class="is-white">
                   <p class="title is-5">Top publishers</p>
                   <b-table :data="publishers || []">
-                    <template slot-scope="props">
+                    <template slot-scope="props" focusable>
                       <b-table-column field="id" label="Publisher">
-                        <eth-account :value="props.row.id"></eth-account>
+                        <publisher-link :value="props.row.id"></publisher-link>
                       </b-table-column>
                       <b-table-column
                         field="mintedCount"
@@ -197,7 +197,7 @@
               <div class="tile is-child box">
                 <article class="is-white">
                   <p class="title is-5">Top owners</p>
-                  <b-table :data="owners || []">
+                  <b-table :data="owners || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="id" label="Owner">
                         <eth-account :value="props.row.id"></eth-account>
@@ -233,7 +233,7 @@
               <div class="tile is-child box">
                 <article class="is-white">
                   <p class="title is-5">Popular hashtags</p>
-                  <b-table :data="popular || []">
+                  <b-table :data="popular || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="name" label="Hashtag">
                         <hashtag :value="props.row.name"></hashtag>
@@ -254,7 +254,7 @@
               <div class="tile is-child box">
                 <article class="is-white">
                   <p class="title is-5">Top taggers</p>
-                  <b-table :data="taggers || []">
+                  <b-table :data="taggers || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="id" label="Tagger">
                         <eth-account :value="props.row.id"></eth-account>
