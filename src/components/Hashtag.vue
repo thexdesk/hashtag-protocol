@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span class="has-text-weight-bold">
     <router-link :to="{ name: 'hashtag-detail', params: { hashtag: value } }">
       #{{ value }}
     </router-link>

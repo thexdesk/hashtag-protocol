@@ -42,7 +42,7 @@
                           </td>
                         </tr>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Tag Count</td>
+                          <td class="has-text-weight-bold">Tag count</td>
                           <td>
                             {{ hashtagsByName[0].tagCount }}
                           </td>

@@ -35,9 +35,7 @@ Vue.filter("shortEth", function (value) {
   if (!value) return value;
 
   return `
-  ${value.substr(0, 4)}
-  ...
-  ${value.substr(value.length - 4, value.length)}
+  ${value.substr(0, 4)}...${value.substr(value.length - 4, value.length)}
   `;
 });
 
