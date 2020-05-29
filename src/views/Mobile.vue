@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
+    <section class="hero dash has-background-grey-dark is-bold">
       <div class="hero-head">
         <div class="container">
           <Header></Header>
@@ -96,152 +96,181 @@
     </section>
     <section class="main">
       <div class="container">
-        <div class="columns is-tablet is-centered">
-          <div class="column is-6 is-12-mobile">
-            <article class="is-white notification">
-              <p class="title is-5">Newest hashtags</p>
-              <b-table :data="hashtags || []">
-                <template slot-scope="props">
-                  <b-table-column field="name" label="Hashtag">
-                    <hashtag :value="props.row.displayHashtag"></hashtag>
-                  </b-table-column>
-                  <b-table-column field="timestamp" label="Minted">
-                    {{ new Date(props.row.timestamp * 1000) | moment("from") }}
-                  </b-table-column>
-                  <b-table-column field="owner" label="Owner">
-                    <eth-account :value="props.row.owner"></eth-account>
-                  </b-table-column>
-                  <b-table-column field="publisher" label="Publisher">
-                    <eth-account :value="props.row.publisher"></eth-account>
-                  </b-table-column>
-                </template>
-              </b-table>
-            </article>
-          </div>
-          <div class="column is-6 is-12-mobile">
-            <article class="is-white notification">
-              <p class="title is-5">Recently tagged assets</p>
-              <b-table :data="tags || []">
-                <template slot-scope="props">
-                  <b-table-column field="nftId" label="" width="75">
-                    <img
-                      :src="props.row.nftImage"
-                      style="max-width: 75px; max-height: 75px;"
-                    />
-                  </b-table-column>
-                  <b-table-column field="nftName" label="Asset Name">
-                    {{ props.row.nftName }}
-                  </b-table-column>
-                  <b-table-column field="projectName" label="Project">
-                    {{ props.row.nftContractName }}
-                  </b-table-column>
-                  <b-table-column field="hashtagName" label="Hashtag">
-                    <hashtag :value="props.row.hashtagName"></hashtag>
-                  </b-table-column>
-                </template>
-              </b-table>
-            </article>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="columns is-tablet is-centered">
-          <div class="column is-6 is-12-mobile">
-            <article class="is-white notification">
-              <p class="title is-5">Top publishers</p>
-              <b-table :data="publishers || []">
-                <template slot-scope="props">
-                  <b-table-column field="id" label="Publisher">
-                    <eth-account :value="props.row.id"></eth-account>
-                  </b-table-column>
-                  <b-table-column field="mintedCount" label="Minted" centered>
-                    {{ props.row.mintCount }}
-                  </b-table-column>
-                  <b-table-column
-                    field="tagCount"
-                    label="Assets tagged"
-                    centered
-                  >
-                    {{ props.row.tagCount }}
-                  </b-table-column>
-                  <b-table-column field="earnings" label="Earnings" centered>
-                    <eth-amount-sum
-                      :value1="props.row.tagFees"
-                      :value2="props.row.mintFees"
-                    ></eth-amount-sum>
-                  </b-table-column>
-                </template>
-              </b-table>
-            </article>
-          </div>
-          <div class="column is-6 is-12-mobile">
-            <article class="is-white notification">
-              <p class="title is-5">Top owners</p>
-              <b-table :data="owners || []">
-                <template slot-scope="props">
-                  <b-table-column field="id" label="Owner">
-                    <eth-account :value="props.row.id"></eth-account>
-                  </b-table-column>
-                  <b-table-column field="mintedCount" label="Minted" centered>
-                    {{ props.row.mintCount }}
-                  </b-table-column>
-                  <b-table-column
-                    field="ownedCount"
-                    label="Assets tagged"
-                    centered
-                  >
-                    {{ props.row.tagCount }}
-                  </b-table-column>
-                  <b-table-column field="tagFees" label="Earnings" centered>
-                    <eth-amount :value="props.row.tagFees"></eth-amount>
-                  </b-table-column>
-                </template>
-              </b-table>
-            </article>
+        <div class="tile is-ancestor">
+          <div class="tile is-horizontal">
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <article class="is-white">
+                  <p class="title is-5">Newest hashtags</p>
+                  <b-table :data="hashtags || []" focusable>
+                    <template slot-scope="props">
+                      <b-table-column field="name" label="Hashtag">
+                        <hashtag :value="props.row.displayHashtag"></hashtag>
+                      </b-table-column>
+                      <b-table-column field="timestamp" label="Minted">
+                        {{
+                          new Date(props.row.timestamp * 1000) | moment("from")
+                        }}
+                      </b-table-column>
+                      <b-table-column field="owner" label="Owner">
+                        <eth-account :value="props.row.owner"></eth-account>
+                      </b-table-column>
+                      <b-table-column field="publisher" label="Publisher">
+                        <publisher-link
+                          :value="props.row.publisher"
+                        ></publisher-link>
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </article>
+              </div>
+            </div>
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <article class="is-white">
+                  <p class="title is-5">Recently tagged content</p>
+                  <b-table :data="tags || []" focusable>
+                    <template slot-scope="props">
+                      <b-table-column field="nftId" label="" width="75">
+                        <img
+                          :src="props.row.nftImage"
+                          style="max-width: 75px; max-height: 75px;"
+                        />
+                      </b-table-column>
+                      <b-table-column field="nftName" label="Asset Name">
+                        {{ props.row.nftName }}
+                      </b-table-column>
+                      <b-table-column field="projectName" label="Project">
+                        {{ props.row.nftContractName }}
+                      </b-table-column>
+                      <b-table-column field="hashtagName" label="Hashtag">
+                        <hashtag :value="props.row.hashtagName"></hashtag>
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </article>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="container">
-        <div class="columns is-tablet is-centered">
-          <div class="column is-6 is-12-mobile">
-            <article class="is-white notification">
-              <p class="title is-5">Popular hashtags</p>
-              <b-table :data="popular || []">
-                <template slot-scope="props">
-                  <b-table-column field="name" label="Hashtag">
-                    <hashtag :value="props.row.name"></hashtag>
-                  </b-table-column>
-                  <b-table-column
-                    field="tagCount"
-                    label="Assets tagged"
-                    centered
-                  >
-                    {{ props.row.tagCount }}
-                  </b-table-column>
-                </template>
-              </b-table>
-            </article>
+        <div class="tile is-ancestor">
+          <div class="tile is-horizontal">
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <article class="is-white">
+                  <p class="title is-5">Top publishers</p>
+                  <b-table :data="publishers || []">
+                    <template slot-scope="props" focusable>
+                      <b-table-column field="id" label="Publisher">
+                        <publisher-link :value="props.row.id"></publisher-link>
+                      </b-table-column>
+                      <b-table-column
+                        field="mintedCount"
+                        label="Hashtags"
+                        centered
+                      >
+                        {{ props.row.mintCount }}
+                      </b-table-column>
+                      <b-table-column
+                        field="tagCount"
+                        label="Content tagged"
+                        centered
+                      >
+                        {{ props.row.tagCount }}
+                      </b-table-column>
+                      <b-table-column
+                        field="earnings"
+                        label="Earnings"
+                        centered
+                      >
+                        <eth-amount-sum
+                          :value1="props.row.tagFees"
+                          :value2="props.row.mintFees"
+                        ></eth-amount-sum>
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </article>
+              </div>
+            </div>
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <article class="is-white">
+                  <p class="title is-5">Top owners</p>
+                  <b-table :data="owners || []" focusable>
+                    <template slot-scope="props">
+                      <b-table-column field="id" label="Owner">
+                        <eth-account :value="props.row.id"></eth-account>
+                      </b-table-column>
+                      <b-table-column
+                        field="mintedCount"
+                        label="Minted"
+                        centered
+                      >
+                        {{ props.row.mintCount }}
+                      </b-table-column>
+                      <b-table-column
+                        field="ownedCount"
+                        label="Content tagged"
+                        centered
+                      >
+                        {{ props.row.tagCount }}
+                      </b-table-column>
+                      <b-table-column field="tagFees" label="Earnings" centered>
+                        <eth-amount :value="props.row.tagFees"></eth-amount>
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </article>
+              </div>
+            </div>
           </div>
-          <div class="column is-6 is-12-mobile">
-            <article class="is-white notification">
-              <p class="title is-5">Top taggers</p>
-              <b-table :data="taggers || []">
-                <template slot-scope="props">
-                  <b-table-column field="id" label="Tagger">
-                    <eth-account :value="props.row.id"></eth-account>
-                  </b-table-column>
-                  <b-table-column
-                    field="tagCount"
-                    label="Assets tagged"
-                    centered
-                  >
-                    {{ props.row.tagCount }}
-                  </b-table-column>
-                </template>
-              </b-table>
-            </article>
+        </div>
+
+        <div class="tile is-ancestor">
+          <div class="tile is-horizontal">
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <article class="is-white">
+                  <p class="title is-5">Popular hashtags</p>
+                  <b-table :data="popular || []" focusable>
+                    <template slot-scope="props">
+                      <b-table-column field="name" label="Hashtag">
+                        <hashtag :value="props.row.name"></hashtag>
+                      </b-table-column>
+                      <b-table-column
+                        field="tagCount"
+                        label="Content tagged"
+                        centered
+                      >
+                        {{ props.row.tagCount }}
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </article>
+              </div>
+            </div>
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <article class="is-white">
+                  <p class="title is-5">Top taggers</p>
+                  <b-table :data="taggers || []" focusable>
+                    <template slot-scope="props">
+                      <b-table-column field="id" label="Tagger">
+                        <eth-account :value="props.row.id"></eth-account>
+                      </b-table-column>
+                      <b-table-column
+                        field="tagCount"
+                        label="Content tagged"
+                        centered
+                      >
+                        {{ props.row.tagCount }}
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </article>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -348,24 +377,26 @@
 </template>
 
 <script>
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import { SNAPSHOT } from "../queries";
-import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
+import Footer from "../components/Footer";
+import Hashtag from "../components/Hashtag";
+import Header from "../components/Header";
+import PublisherLink from "../components/PublisherLink";
+import { SNAPSHOT } from "../queries";
 import { mapGetters } from "vuex";
 
 export default {
   name: "Hashtags",
   components: {
-    EthAmountSum,
-    EthAmount,
     EthAccount,
-    Hashtag,
+    EthAmount,
+    EthAmountSum,
     Footer,
+    Hashtag,
     Header,
+    PublisherLink,
   },
   data() {
     return {

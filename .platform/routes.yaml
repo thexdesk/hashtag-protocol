@@ -1,17 +1,30 @@
-https://{default}/:
-  to: http://{default}/
-  type: redirect
+# The routes of the project.
+#
+# Each route describes how an incoming URL is going
+# to be processed by Platform.sh.
 
-http://{default}/:
-  cache:
-    cookies:
-      - "*"
-    default_ttl: 0
-    enabled: true
-    headers:
-      - Accept
-      - Accept-Language
-  ssi:
-    enabled: false
-  type: upstream
-  upstream: ui:http
+"https://www.{default}/":
+    type: upstream
+    upstream: "ui:http"
+
+"https://{default}/":
+    type: redirect
+    to: "https://www.{default}/"
+
+"http://{default}/":
+    type: redirect
+    to: "https://www.{default}/"
+
+#http://{default}/:
+#  cache:
+#    cookies:
+#    - '*'
+#    default_ttl: 0
+#    enabled: true
+##    headers:
+ #   - Accept
+ #   - Accept-Language
+ # ssi:
+ #   enabled: false
+ # type: upstream
+ # upstream: ui:http
