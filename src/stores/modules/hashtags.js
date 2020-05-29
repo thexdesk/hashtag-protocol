@@ -27,6 +27,7 @@ const state = {
 const getters = {
   supportedNfts: (state) => state.supportedNfts,
   nftAssetCache: (state) => state.nftAssetCache,
+  homesteadProvider: (state) => state.web3Objects.homesteadProvider,
   account: (state) => {
     return state.web3Objects && state.web3Objects.account
       ? state.web3Objects.account
@@ -68,6 +69,7 @@ const actions = {
 
     commit("setWeb3Objects", {
       provider,
+      homesteadProvider: ethers.getDefaultProvider("homestead"),
       signer,
       chain,
       contracts: {
