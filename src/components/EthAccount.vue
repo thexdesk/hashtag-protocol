@@ -20,7 +20,9 @@ export default {
     };
   },
   async mounted() {
-    this.ens = await this.homesteadProvider.lookupAddress(this.value);
+    this.ens = this.homesteadProvider
+      ? await this.homesteadProvider.lookupAddress(this.value)
+      : null;
   },
 };
 </script>

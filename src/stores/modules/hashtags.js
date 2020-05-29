@@ -1,5 +1,21 @@
 import Vue from "vue";
 import { ethers } from "ethers";
+import Onboard from "bnc-onboard";
+
+let provider;
+
+const onboard = Onboard({
+  dappId: "773ba398-31f9-4816-a3b3-960a075a0f31", // Hashtag API key
+  networkId: 4, // Dapp currently only supports Rinkeby
+  subscriptions: {
+    wallet: (wallet) => {
+      provider = new ethers.providers.Web3Provider(wallet.provider);
+
+      // store the selected wallet name to be retrieved next time the app loads
+      localStorage.setItem("selectedWallet", wallet.name);
+    },
+  },
+});
 
 import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
 import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
@@ -37,56 +53,85 @@ const getters = {
 
 const actions = {
   async bootstrap({ commit, dispatch }) {
-    await window.ethereum.enable();
+    // check if a wallet was previously selected and use that
+    const previouslySelectedWallet = localStorage.getItem("selectedWallet");
 
-    /*global web3*/
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
-    const signer = provider.getSigner();
-    const chain = await provider.getNetwork();
+    let userSelectedAWallet;
+    if (
+      previouslySelectedWallet != null &&
+      previouslySelectedWallet !== "null"
+    ) {
+      userSelectedAWallet = await onboard.walletSelect(
+        previouslySelectedWallet
+      );
+    } else {
+      userSelectedAWallet = await onboard.walletSelect();
+    }
 
-    const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
-      HashtagProtocolTruffleConf,
-      chain.chainId
-    );
-    const hashtagProtocolContract = new ethers.Contract(
-      hashtagProtocolContractAddress,
-      HashtagProtocolTruffleConf.abi,
-      signer
-    );
+    // True if either a wallet was previously selected or was now selected from the modal
+    // Will be false if the user closes the modal before selecting a wallet
+    if (userSelectedAWallet) {
+      // Check wallet is ready to transact
+      const readyToTransact = await onboard.walletCheck();
 
-    const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
-      ERC721HashtagRegistry,
-      chain.chainId
-    );
+      if (readyToTransact) {
+        const onboardState = onboard.getState();
 
-    const erc721HashtagRegistryContract = new ethers.Contract(
-      erc721HashtagRegistryAddress,
-      ERC721HashtagRegistry.abi,
-      signer
-    );
+        const signer = provider.getSigner();
+        const chain = await provider.getNetwork();
 
-    const accounts = await provider.listAccounts();
+        const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
+          HashtagProtocolTruffleConf,
+          chain.chainId
+        );
+        const hashtagProtocolContract = new ethers.Contract(
+          hashtagProtocolContractAddress,
+          HashtagProtocolTruffleConf.abi,
+          signer
+        );
 
-    commit("setWeb3Objects", {
-      provider,
-      homesteadProvider: ethers.getDefaultProvider("homestead"),
-      signer,
-      chain,
-      contracts: {
-        hashtagProtocolContract,
-        erc721HashtagRegistryContract,
-      },
-      account: accounts[0],
-      publisher: "0xd677aed0965ac9b54e709f01a99ceca205aebc4b", //FIXME - hardcoded for now for rinkeby testing
-    });
+        const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
+          ERC721HashtagRegistry,
+          chain.chainId
+        );
 
-    dispatch("getProtocolFee");
-    dispatch("getTaggingFee");
+        const erc721HashtagRegistryContract = new ethers.Contract(
+          erc721HashtagRegistryAddress,
+          ERC721HashtagRegistry.abi,
+          signer
+        );
+
+        commit("setWeb3Objects", {
+          provider,
+          homesteadProvider: ethers.getDefaultProvider("homestead"),
+          signer,
+          chain,
+          contracts: {
+            hashtagProtocolContract,
+            erc721HashtagRegistryContract,
+          },
+          account: onboardState.address,
+          publisher: "0xd677aed0965ac9b54e709f01a99ceca205aebc4b", //FIXME - hardcoded for now for rinkeby testing
+          readyToTransact,
+        });
+
+        dispatch("getProtocolFee");
+        dispatch("getTaggingFee");
+      }
+    }
 
     // dispatch("cacheNFTAssets");
   },
 
-  async mint({ state }, payload) {
+  async changeWallet() {
+    await onboard.walletSelect();
+  },
+
+  async mint({ state, dispatch }, payload) {
+    if (!state.web3Objects.readyToTransact) {
+      await dispatch("bootstrap");
+    }
+
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
@@ -96,7 +141,11 @@ const actions = {
     });
   },
 
-  async tag({ state }, payload) {
+  async tag({ state, dispatch }, payload) {
+    if (!state.web3Objects.readyToTransact) {
+      await dispatch("bootstrap");
+    }
+
     const { web3Objects, fees } = state;
     const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
