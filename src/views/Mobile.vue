@@ -101,7 +101,12 @@
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="is-white">
-                  <p class="title is-5">Newest hashtags</p>
+                  <help-modal
+                    modal="isNewHashtagsModalActive"
+                    @popModalFromChild="popModal"
+                    class="is-pulled-right"
+                  ></help-modal>
+                  <h2 class="title is-5">Newest hashtags</h2>
                   <b-table :data="hashtags || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="name" label="Hashtag">
@@ -113,12 +118,16 @@
                         }}
                       </b-table-column>
                       <b-table-column field="owner" label="Owner">
-                        <eth-account :value="props.row.owner"></eth-account>
+                        <eth-account
+                          :value="props.row.owner"
+                          route="owner-detail"
+                        ></eth-account>
                       </b-table-column>
                       <b-table-column field="publisher" label="Publisher">
-                        <publisher-link
+                        <eth-account
                           :value="props.row.publisher"
-                        ></publisher-link>
+                          route="publisher-detail"
+                        ></eth-account>
                       </b-table-column>
                     </template>
                   </b-table>
@@ -128,7 +137,12 @@
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="is-white">
-                  <p class="title is-5">Recently tagged content</p>
+                  <help-modal
+                    modal="isRecentlyTaggedModalActive"
+                    @popModalFromChild="popModal"
+                    class="is-pulled-right"
+                  ></help-modal>
+                  <h2 class="title is-5">Recently tagged content</h2>
                   <b-table :data="tags || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="nftId" label="" width="75">
@@ -158,11 +172,19 @@
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="is-white">
-                  <p class="title is-5">Top publishers</p>
+                  <help-modal
+                    modal="isTopPublishersModalActive"
+                    @popModalFromChild="popModal"
+                    class="is-pulled-right"
+                  ></help-modal>
+                  <h2 class="title is-5">Top publishers</h2>
                   <b-table :data="publishers || []">
                     <template slot-scope="props" focusable>
                       <b-table-column field="id" label="Publisher">
-                        <publisher-link :value="props.row.id"></publisher-link>
+                        <eth-account
+                          :value="props.row.id"
+                          route="publisher-detail"
+                        ></eth-account>
                       </b-table-column>
                       <b-table-column
                         field="mintedCount"
@@ -196,11 +218,19 @@
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="is-white">
-                  <p class="title is-5">Top owners</p>
+                  <help-modal
+                    modal="isTopOwnersModalActive"
+                    @popModalFromChild="popModal"
+                    class="is-pulled-right"
+                  ></help-modal>
+                  <h2 class="title is-5">Top owners</h2>
                   <b-table :data="owners || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="id" label="Owner">
-                        <eth-account :value="props.row.id"></eth-account>
+                        <eth-account
+                          :value="props.row.id"
+                          route="owner-detail"
+                        ></eth-account>
                       </b-table-column>
                       <b-table-column
                         field="mintedCount"
@@ -226,13 +256,17 @@
             </div>
           </div>
         </div>
-
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="is-white">
-                  <p class="title is-5">Popular hashtags</p>
+                  <help-modal
+                    modal="isPopHashtagsModalActive"
+                    @popModalFromChild="popModal"
+                    class="is-pulled-right"
+                  ></help-modal>
+                  <h2 class="title is-5">Popular hashtags</h2>
                   <b-table :data="popular || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="name" label="Hashtag">
@@ -252,12 +286,20 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
+                <help-modal
+                  modal="isTopTaggersModalActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
                 <article class="is-white">
-                  <p class="title is-5">Top taggers</p>
+                  <h2 class="title is-5">Top taggers</h2>
                   <b-table :data="taggers || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="id" label="Tagger">
-                        <eth-account :value="props.row.id"></eth-account>
+                        <eth-account
+                          :value="props.row.id"
+                          route="tagger-detail"
+                        ></eth-account>
                       </b-table-column>
                       <b-table-column
                         field="tagCount"
@@ -274,7 +316,101 @@
           </div>
         </div>
       </div>
-
+      <!-- Help modals -->
+      <b-modal
+        :active.sync="isNewHashtagsModalActive"
+        :width="640"
+        scroll="keep"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Newest hashtags</p>
+              </div>
+            </div>
+            <div class="content">
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal
+        :active.sync="isRecentlyTaggedModalActive"
+        :width="640"
+        scroll="keep"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Recently tagged content explained</p>
+              </div>
+            </div>
+            <div class="content"></div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal
+        :active.sync="isTopPublishersModalActive"
+        :width="640"
+        scroll="keep"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Top publishers explained</p>
+              </div>
+            </div>
+            <div class="content"></div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal :active.sync="isTopOwnersModalActive" :width="640" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Top owners explained</p>
+              </div>
+            </div>
+            <div class="content"></div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal
+        :active.sync="isPopHashtagsModalActive"
+        :width="640"
+        scroll="keep"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Popular hashtags explained</p>
+              </div>
+            </div>
+            <div class="content"></div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal
+        :active.sync="isTopTaggersModalActive"
+        :width="640"
+        scroll="keep"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Top taggers explained</p>
+              </div>
+            </div>
+            <div class="content"></div>
+          </div>
+        </div>
+      </b-modal>
       <b-modal
         :active.sync="isTagModalActive"
         :width="720"
@@ -383,7 +519,7 @@ import EthAmountSum from "../components/EthAmountSum";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import PublisherLink from "../components/PublisherLink";
+import HelpModal from "../components/HelpModal";
 import { SNAPSHOT } from "../queries";
 import { mapGetters } from "vuex";
 
@@ -396,10 +532,16 @@ export default {
     Footer,
     Hashtag,
     Header,
-    PublisherLink,
+    HelpModal,
   },
   data() {
     return {
+      isNewHashtagsModalActive: false,
+      isRecentlyTaggedModalActive: false,
+      isTopPublishersModalActive: false,
+      isTopOwnersModalActive: false,
+      isPopHashtagsModalActive: false,
+      isTopTaggersModalActive: false,
       isTagModalActive: false,
       modalForm: {
         hashtag: null,
@@ -470,49 +612,10 @@ export default {
     },
   },
   methods: {
-    resetModalForm() {
-      this.modalForm = {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      };
-    },
-    onNftSelected(nft) {
-      this.modalForm.nft = nft;
-      this.modalForm.nftName = nft.name;
-      this.isTagModalActive = true;
-    },
-    mintHashtag() {
-      this.$store.dispatch("mint", this.hashtagInput[0]);
-    },
     async tagNft() {
       await this.$store.dispatch("tag", this.modalForm);
       this.resetModalForm();
       this.isTagModalActive = false;
-    },
-    validateTag(hashtag) {
-      if (hashtag.length < 3) {
-        this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's less than 3 characters long.`
-        );
-        return false;
-      }
-
-      if (hashtag.length > 15) {
-        this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's more than 15 characters long.`
-        );
-        return false;
-      }
-
-      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(hashtag)) {
-        this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's either not alpha numeric or only numeric.`
-        );
-        return false;
-      }
-
-      return true;
     },
     dangerToast(message) {
       this.$buefy.toast.open({
@@ -547,6 +650,45 @@ export default {
       }
 
       return false;
+    },
+    mintHashtag() {
+      this.$store.dispatch("mint", this.hashtagInput[0]);
+    },
+    onNftSelected(nft) {
+      this.modalForm.nft = nft;
+      this.modalForm.nftName = nft.name;
+      this.isTagModalActive = true;
+    },
+    resetModalForm() {
+      this.modalForm = {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      };
+    },
+    validateTag(hashtag) {
+      if (hashtag.length < 3) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's less than 3 characters long.`
+        );
+        return false;
+      }
+
+      if (hashtag.length > 15) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's more than 15 characters long.`
+        );
+        return false;
+      }
+
+      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(hashtag)) {
+        this.dangerToast(
+          `Sorry, but '${hashtag}' is an invalid tag as it's either not alpha numeric or only numeric.`
+        );
+        return false;
+      }
+
+      return true;
     },
   },
 };

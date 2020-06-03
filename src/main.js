@@ -9,6 +9,7 @@ import Buefy from "buefy";
 import { ethers } from "ethers";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import "@/mixins/global";
 
 Vue.use(Buefy);
 Vue.use(VueMoment);

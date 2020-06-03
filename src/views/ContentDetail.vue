@@ -9,46 +9,48 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">
-          Publisher: KnownOrigin
-        </h1>
+        <h1 class="title is-1">Publisher: {{ publisher }}</h1>
         <h2 class="subtitle">Hashtag Protocol Publisher</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isPubInfoModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
+                <b-tooltip
+                  label="Help"
+                  position="is-bottom is-pulled-right"
+                  type="is-dark"
+                >
+                  <button
+                    class="button is-white"
+                    @click="isOverviewModalActive = true"
+                  >
+                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
+                  </button>
+                </b-tooltip>
                 <h2 class="title is-4">Publisher information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
-                        <tr>
-                          <td class="has-text-weight-bold">Name</td>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Publisher</td>
                           <td>
-                            {{ publisherName }}
+                            KnownOrigin
                           </td>
                         </tr>
-                        <tr>
-                          <td class="has-text-weight-bold">
-                            Publisher address
-                          </td>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Wallet address</td>
                           <td>
-                            <eth-account :value="publisher"></eth-account>
+                            0x7c00c9f0e7aed440c0c730a9bd9ee4f49de20d5c
                           </td>
                         </tr>
-                        <tr>
-                          <td class="has-text-weight-bold">Official website</td>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Official site</td>
                           <td>
-                            <a v-bind:href="publisherWebsite"
-                              >{{ publisherWebsite }}
-                              <b-icon icon="open-in-new" size="is-small">
-                              </b-icon
-                            ></a>
+                            <a href="https://knownorigin.io/"
+                              >https://knownorigin.io
+                              <b-icon icon="open-in-new" size="is-small"
+                            /></a>
                           </td>
                         </tr>
                       </tbody>
@@ -59,41 +61,48 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
-                <h2 class="title is-4">Market summary</h2>
+                <b-tooltip
+                  label="Help"
+                  position="is-bottom is-pulled-right"
+                  type="is-dark"
+                >
+                  <button
+                    class="button is-white is-pulled-right"
+                    @click="isSummaryModalActive = true"
+                  >
+                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
+                  </button>
+                </b-tooltip>
+                <h2 class="title is-4">Activity summary</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
-                        <tr>
-                          <td class="has-text-weight-bold">Hashtags</td>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Hashtags minted</td>
                           <td>
                             322
                           </td>
                         </tr>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Hashtag revenue</td>
                           <td>
                             1.361 ETH
                           </td>
                         </tr>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagged content</td>
                           <td>
                             1121
                           </td>
                         </tr>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
                             0.191 ETH
                           </td>
                         </tr>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Total revenue</td>
                           <td>
                             1.553 ETH
@@ -110,13 +119,20 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isActivityModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
+              <b-tooltip
+                label="Help"
+                position="is-bottom is-pulled-right"
+                type="is-dark"
+              >
+                <button
+                  class="button is-white"
+                  @click="isTaggedModalActive = true"
+                >
+                  <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
+                </button>
+              </b-tooltip>
               <h2 class="title is-4 is-spaced">
-                Recent activity on KnownOrigin
+                Recent activity for KnownOrigin
               </h2>
               <b-tabs v-model="activeTab" :animated="false">
                 <b-tab-item label="Hashtags">
@@ -159,7 +175,7 @@
                           <!---->
                         </thead>
                         <tbody>
-                          <tr>
+                          <tr draggable="false" class="">
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
@@ -190,7 +206,7 @@
                           </tr>
                           <!---->
                           <!---->
-                          <tr>
+                          <tr draggable="false" class="">
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
@@ -215,7 +231,7 @@
                           </tr>
                           <!---->
                           <!---->
-                          <tr>
+                          <tr draggable="false" class="">
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
@@ -240,7 +256,7 @@
                           </tr>
                           <!---->
                           <!---->
-                          <tr>
+                          <tr draggable="false" class="">
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
@@ -265,7 +281,7 @@
                           </tr>
                           <!---->
                           <!---->
-                          <tr>
+                          <tr draggable="false" class="">
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
@@ -442,30 +458,39 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isPubInfoModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Publisher information</p>
+                <p class="title is-4">Token overview explained</p>
               </div>
             </div>
             <div class="content">
               <p>
-                A publisher is an application, network or platform that is
-                implementing the Hashtag Protocol to provide rich, decentralized
-                tagging for their users.
+                <strong>Minted</strong> - Date token was created and added to
+                Ethereum blockchain.
               </p>
               <p>
-                <strong>Name</strong> - Name of the participating Publisher.
+                <strong>Publisher</strong> - Wallet address of application
+                running Hashtag Protocol where token was minted. This address
+                receives share of token minting fees.
               </p>
               <p>
-                <strong>Publisher address</strong> - Ethereum address of the
-                Publisher.
+                <strong>Creator</strong> - Wallet address that payed the token
+                minting fee.
               </p>
               <p>
-                <strong>Official website</strong> - URL and hyperlink to the
-                Publisher's official website.
+                <strong>Owner</strong> - Wallet address of current token owner.
+                This address receives share of content tagging fees.
+              </p>
+              <p>
+                <strong>Expires</strong> - Date from which
+                <strong>Owner</strong> has 30 days to renew token ownership
+                without cost. This is done by sending a transaction to the token
+                contract signed by the current owner address. If token is not
+                renewed within 30 days, ownership is transferred to the Protocol
+                wallet address.
               </p>
             </div>
           </div>
@@ -476,75 +501,36 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Market summary</p>
+                <p class="title is-4">Revenue summary explained</p>
               </div>
             </div>
             <div class="content">
               <p>
-                <strong>Hashtags</strong> - Number of hashtags created on
-                <strong>Publisher</strong> application.
+                Stitched into the design of the Hashtag Protocol is a virtuous
+                incentive structure that rewards all participants of the system.
               </p>
               <p>
-                <strong>Hashtag revenue</strong> - Publisher revenue for
-                hashtags created on <strong>Publisher</strong> application.
+                <strong>Mint price</strong> - Hashtag Protocol uses a fair
+                auction method to determine the price of a new Hashtag token.
+                The mint price is the amount the winning bidder pays to acquire
+                the newly minted Hashtag Token. The proceeds of the auction are
+                automatically divided between the Publisher and the Protocol.
               </p>
+              <p></p>
               <p>
-                <strong>Tagged content</strong> - Number of content items tagged
-                on <strong>Publisher</strong> application.
-              </p>
-              <p>
-                <strong>Tagging revenue</strong> - Revenue from content tagged
-                on <strong>Publisher</strong> application.
-              </p>
-              <p>
-                <strong>Total revenue</strong> - Total Hashtag Protocol revenue
-                for this <strong>Publisher</strong>.
+                <strong>Earnings</strong> - When a digital artifact is tagged
+                with a Hashtag token, the Tagger pays a small fee added to the
+                standard Ethereum network gas fee. This fee is automatically
+                divided among the Hastag Token owner, the originating Publisher
+                and the Protocol. The summary shown here represents the lifetime
+                sum total of tagging revenue distributed to the Owner, Publisher
+                & Protocol for this Hashtag token.
               </p>
             </div>
-            <b-collapse
-              :open="false"
-              position="is-bottom"
-              aria-id="contentIdForA11y1"
-            >
-              <a
-                slot="trigger"
-                slot-scope="props"
-                aria-controls="contentIdForA11y1"
-              >
-                <b-icon :icon="!props.open ? 'menu-down' : 'menu-up'"></b-icon>
-                {{ !props.open ? "Learn more" : "Close" }}
-              </a>
-              <p>
-                A publisher is an application, network or platform that is
-                implementing the Hashtag Protocol to provide rich, decentralized
-                tagging for their users.
-              </p>
-              <p>
-                Publishers are incentivized both financially and functionally to
-                use the Protocol. Financially, the publisher receives a portion
-                of the fee paid by the Creator to mint the token if it takes
-                place on their system. Additionally, a Publisher could create
-                their own tag set thereby reducing their cost to create new
-                hashtag tokens and becoming both publisher and owner of the
-                token. Finally, when a tagger pays the small fee to tag their
-                content (explained in the next section), the protocol splits it
-                between the Creator and Publisher.
-              </p>
-              <p>
-                The functional benefits to the publisher and their customers are
-                significant as well. Potentially slick functionality and
-                interface for their users; cleanly structured and tagged
-                content; and a standard interface to query their data all in a
-                decentralized system. Additionally, being a global content
-                tagging network, the Protocol immediately exposes their
-                structured content to other dApps, applications and systems
-                providing benefits to one or both parties.
-              </p>
-            </b-collapse>
           </div>
         </div>
       </b-modal>
-      <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isTaggedModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
             <div class="media">
@@ -584,32 +570,29 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
 //import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
 //import EthAccount from "../components/EthAccount";
 
 export default {
-  name: "PublisherDetail",
+  name: "ContentDetail",
   components: {
-    EthAccount,
+    //EthAccount,
     Footer,
     Header,
-    HelpModal,
   },
   data() {
     return {
       activeTab: null,
-      hashtagsByName: null,
-      isPubInfoModalActive: false,
+      isOverviewModalActive: false,
       isSummaryModalActive: false,
-      isActivityModalActive: false,
-      publisher: this.$route.params.address,
-      publisherWebsite: "https://knownorigin.io",
-      publisherName: "KnownOrigin",
+      isTaggedModalActive: false,
+      type: this.$route.params.type,
+      contract: this.$route.params.contract,
+      id: this.$route.params.id,
       tagsByHashtag: null,
+      hashtagsByName: null,
     };
   },
 };
