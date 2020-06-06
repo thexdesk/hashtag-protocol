@@ -117,13 +117,22 @@
                           new Date(props.row.timestamp * 1000) | moment("from")
                         }}
                       </b-table-column>
-                      <b-table-column field="owner" label="Owner">
+                      <b-table-column
+                        field="owner"
+                        label="Owner"
+                        class="is-hidden-touch"
+                        :visible="false"
+                      >
                         <eth-account
                           :value="props.row.owner"
                           route="owner-detail"
                         ></eth-account>
                       </b-table-column>
-                      <b-table-column field="publisher" label="Publisher">
+                      <b-table-column
+                        field="publisher"
+                        label="Publisher"
+                        class="is-hidden-touch"
+                      >
                         <eth-account
                           :value="props.row.publisher"
                           route="publisher-detail"
@@ -152,9 +161,18 @@
                         />
                       </b-table-column>
                       <b-table-column field="nftName" label="Asset Name">
-                        {{ props.row.nftName }}
+                        <nft-link
+                          type="nft"
+                          :name="props.row.nftName"
+                          :contract="props.row.nftContract"
+                          :id="props.row.nftId"
+                        ></nft-link>
                       </b-table-column>
-                      <b-table-column field="projectName" label="Project">
+                      <b-table-column
+                        field="projectName"
+                        label="Project"
+                        class="is-hidden-touch"
+                      >
                         {{ props.row.nftContractName }}
                       </b-table-column>
                       <b-table-column field="hashtagName" label="Hashtag">
@@ -520,6 +538,7 @@ import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import NftLink from "../components/NftLink";
 import { SNAPSHOT } from "../queries";
 import { mapGetters } from "vuex";
 
@@ -533,6 +552,7 @@ export default {
     Hashtag,
     Header,
     HelpModal,
+    NftLink,
   },
   data() {
     return {

@@ -22,7 +22,7 @@
                   @popModalFromChild="popModal"
                   class="is-pulled-right"
                 ></help-modal>
-                <h2 class="title is-4">Owner summary</h2>
+                <h2 class="title is-4">Owner information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
@@ -33,6 +33,24 @@
                             <eth-account :value="owner"></eth-account>
                           </td>
                         </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <help-modal
+                  modal="isMarketSummaryActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
+                <h2 class="title is-4">Market summary</h2>
+                <div class="b-table">
+                  <div class="table-wrapper">
+                    <table class="table">
+                      <tbody>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Hashtags</td>
                           <td>
@@ -342,6 +360,12 @@
                             </th>
                             <th class="">
                               <div class="th-wrap">
+                                Project
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
                                 Hashtag
                                 <!---->
                               </div>
@@ -373,13 +397,29 @@
                             <td data-label="Asset Name" class="">
                               Nr. 111 - The Pit
                             </td>
+                            <td data-label="Asset Name" class="">
+                              KnownOrigin
+                            </td>
                             <td data-label="Hashtag" class="">
-                              #SharkWeek
+                              <span
+                                ><a href="/hashtag/SharkWeek" class="">
+                                  #SharkWeek
+                                </a></span
+                              >
                             </td>
                             <td data-label="Tagged" class="">
                               2 days ago
                             </td>
-                            <td data-label="Tagger" class="">0x40 ... ab5f</td>
+                            <td data-label="Tagger" class="">
+                              <span
+                                ><a
+                                  href="/tagger/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
+                                  0x40 ... ab5f
+                                </a></span
+                              >
+                            </td>
                           </tr>
                         </tbody>
                         <!---->
@@ -398,7 +438,7 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Owner summary</p>
+                <p class="title is-4">Owner information</p>
               </div>
             </div>
             <div class="content">
@@ -406,12 +446,72 @@
                 <strong>Owner address</strong> - An Ethereum address that owns
                 one or more Hasthag Protocol tokens.
               </p>
+              <b-collapse
+                :open="false"
+                position="is-top"
+                aria-id="ownerOverview"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="ownerOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open ? 'What\'s an "Owner?"' : 'What\'s an "Owner"?'
+                  }}
+                </a>
+                <p>
+                  <br />
+                  Simply put, an “Owner” is an Ethereum address that owns one or
+                  more Hashtag Tokens. An “Owner” can come to “own” a Hashtag
+                  Token by either creating one on a participating Publisher
+                  platform, or by purchasing one on a secondary market such as
+                  OpenSea.io. As soon as a Hashtag Token is created, the
+                  “Creator” becomes de facto “Owner”. The successful purchaser
+                  of a Hashtag Token on the secondary market becomes the new
+                  “Owner” of that Hashtag Token, and assumes certain benefits
+                  that include but are not limited to:
+                </p>
+                <ol>
+                  <li>
+                    Sole ownership of a unique Hashtag Token containing and
+                    representing a unique hashtag string.
+                  </li>
+                  <li>
+                    Dividends received from The Protocol when a Tagger tags
+                    content with their hashtag.
+                  </li>
+                  <li>
+                    Ability to re-sell their token either peer-to-peer or on a
+                    standard NFT marketplace such as Opensea.
+                  </li>
+                </ol>
+              </b-collapse>
+            </div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal :active.sync="isMarketSummaryActive" :width="640" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Market summary</p>
+              </div>
+            </div>
+            <div class="content">
               <p>
-                <strong>Hashtags</strong> - Current number of hashtags owned.
+                <strong>Hashtags</strong> - Current number of Hasthag Protocol
+                tokens owned by this Owner.
               </p>
               <p>
-                <strong>Hashtag revenue</strong> - Total revenue for hashtags
-                sold.
+                <strong>Hashtag revenue</strong> - Total revenue for Hasthag
+                Protocol tokens sold by this Owner.
               </p>
               <p>
                 <strong>Tagged content</strong> - Number of content items tagged
@@ -425,6 +525,71 @@
                 <strong>Total revenue</strong> - Total Hashtag Protocol revenue
                 for this owner.
               </p>
+              <p>
+                <strong>Total revenue</strong> - Total Hashtag Protocol revenue
+                for this Publisher.
+              </p>
+              <b-collapse
+                :open="false"
+                position="is-top"
+                aria-id="ownerOverview"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is the "Hashtag Market"?'
+                      : 'What is the "Hashtag Market"?'
+                  }}
+                </a>
+                <p>
+                  <br />
+                  Hashtag is a protocol on the Ethereum blockchain that creates
+                  a market & incentive economy around the creation and use of
+                  hashtags. The protocol aims to create a virtuous, financially
+                  incentivized system that creates more value to all
+                  participants the more it grows.
+                </p>
+                <p>
+                  The system revolves around four participants: Creator, Owner,
+                  Publisher and Tagger. These key market participants interact
+                  directly with the protocol, paying to use and earning from the
+                  system without having to negotiate terms of use. The data
+                  generated by the protocol is immutable (impervious to
+                  censorship) and globally accessible.
+                </p>
+                <p>
+                  Hashtag Protocol uses an auction method to determine the price
+                  of a new Hashtag Token. The "creation price" is the amount the
+                  winning bidder pays to acquire the newly created Hashtag
+                  Token. The proceeds of the auction are automatically divided
+                  between the originating Publisher and the Protocol.
+                </p>
+                <p>
+                  In addition to creating unique, non-fungible tokens that both
+                  contain and represent a single, natural language hashtag, the
+                  Protocol also provides facilities for linking a token any
+                  online digital artifact, effectively tagging that content with
+                  the hashtag. Tag count quantifies how many pieces of content
+                  have been tagged with this hashtag.
+                </p>
+                <p>
+                  In exchange for facilitating an entry to a decentralized,
+                  immutable and globally accessible database, the Protocol
+                  collects a small fee from the Tagger when they tag content.
+                  The Protocol smart contract then automatically distributes
+                  this fee among the token owner, the publisher facilitating the
+                  tagging and the Protocol.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -439,8 +604,8 @@
             </div>
             <div class="content">
               <p>
-                <strong>Hashtags</strong><br />Listing of hashtags owned by this
-                address.
+                <strong>Hashtags</strong><br />Listing of Hasthag Protocol
+                tokens owned by this address.
               </p>
               <ul>
                 <li>
@@ -449,9 +614,7 @@
                 </li>
                 <li>
                   <strong>Publisher</strong> - Ethereum address of application
-                  implementing Hashtag Protocol where token was created. This
-                  address receives a share of token creation fee paid for by the
-                  token Creator.
+                  implementing Hashtag Protocol where token was created.
                 </li>
               </ul>
               <p>
@@ -464,7 +627,12 @@
                   <strong>Asset name</strong> - Name of the ERC-721 token.
                 </li>
                 <li>
-                  <strong>Hashtag</strong> - Hashtag asset is tagged with.
+                  <strong>Project</strong> - Name of project producing the
+                  digital assets that Hashtag Tokens are being linked to.
+                </li>
+                <li>
+                  <strong>Hashtag</strong> - Hashtag Token the asset is tagged
+                  with.
                 </li>
                 <li><strong>Tagged</strong> - Date asset was tagged.</li>
                 <li>
@@ -500,7 +668,7 @@ export default {
     return {
       activeTab: null,
       isOverviewModalActive: false,
-      isSummaryModalActive: false,
+      isMarketSummaryActive: false,
       isTaggedModalActive: false,
       owner: this.$route.params.address,
       tagsByHashtag: null,

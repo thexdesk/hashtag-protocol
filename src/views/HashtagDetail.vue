@@ -56,15 +56,6 @@
                           </td>
                         </tr>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Publisher</td>
-                          <td>
-                            <eth-account
-                              :value="hashtagsByName[0].publisher"
-                              route="publisher-detail"
-                            ></eth-account>
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Creator</td>
                           <td>
                             <eth-account
@@ -79,6 +70,15 @@
                             <eth-account
                               :value="hashtagsByName[0].owner"
                               route="owner-detail"
+                            ></eth-account>
+                          </td>
+                        </tr>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Publisher</td>
+                          <td>
+                            <eth-account
+                              :value="hashtagsByName[0].publisher"
+                              route="publisher-detail"
                             ></eth-account>
                           </td>
                         </tr>
@@ -227,10 +227,16 @@
                               </time>
                             </td>
                             <td data-label="Tagger" class="">
-                              <eth-account :value="tag.tagger"></eth-account>
+                              <eth-account
+                                :value="tag.tagger"
+                                route="tagger-detail"
+                              ></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
-                              <eth-account :value="tag.publisher"></eth-account>
+                              <eth-account
+                                :value="tag.publisher"
+                                route="publisher-detail"
+                              ></eth-account>
                             </td>
                           </tr>
                         </tbody>
@@ -261,23 +267,6 @@
             </div>
             <div class="content">
               <p>
-                Hashtags in the Hashtag Protocol are contained within
-                <a v-bind:href="erc721"
-                  >ERC-721 cryptographic tokens
-                  <b-icon icon="open-in-new" size="is-small"> </b-icon
-                ></a>
-                recorded on the Ethereum blockchain. Hashtag Protocol tokens are
-                created by (human or machine) implementing the mint() method in
-                a smart contract provided by Protocol. ERC-721 tokens differ
-                from the more common ERC-20 tokens with the key difference being
-                that ERC-721 tokens are “non-fungible”. This means that each
-                token is unique and as a result, not interchangeable. This
-                property makes them ideally suited to represent hashtags. In
-                addition, each ERC-721 has one owner and can be bought or sold.
-                These properties make ideally suited for treating Hashtags as
-                digital assets that can be created and openly bought and sold.
-              </p>
-              <p>
                 <strong>Token ID</strong> - Numerical Id for this token on the
                 Ethereum blockchain.
               </p>
@@ -299,12 +288,56 @@
                 owner. This address receives a share of content tagging fee.
               </p>
               <p>
-                <strong>Expires</strong> - Date from which
-                <strong>Owner</strong> has 30 days to renew token ownership.
-                This is done by sending a transaction to the token contract
-                signed by the current owner address. If token is not renewed
-                within 30 days, ownership is transferred to the Protocol.
+                <strong>Expires</strong> - Date from which Owner has 30 days to
+                renew token ownership. This is done by sending a transaction to
+                the token contract signed by the current owner address. If token
+                is not renewed within 30 days, ownership is transferred to the
+                Protocol.
               </p>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? "What's a Hashtag Token?"
+                      : "What's a Hashtag Token?"
+                  }}
+                </a>
+                <p>
+                  <br />
+                  Hashtag Tokens are digital representations of hashtag text
+                  strings stored on the Ethereum blockchain. The Hashtag
+                  Protocol uses the
+                  <a v-bind:href="erc721"
+                    >Ethereum ERC-721 specification
+                    <b-icon icon="open-in-new" size="is-small"> </b-icon
+                  ></a>
+                  for Hashtag Tokens. This specification has a few properties
+                  that makes it both ideally suited for and perhaps
+                  revolutionary to the use of hashtags. First, as opposed to the
+                  more common ERC-20 specification in which many, identical
+                  copies of a digital token exist, each ERC-721 token is
+                  completely unique; there is and always be only one copy.
+                  Because of this, ERC-721 tokens are ideally suited to
+                  represent or contain one-of-a-kind items of value; artworks,
+                  gaming skins, movie tickets, domain names, real estate titles.
+                  In the case of the Hashtag Protocol, each Hashtag Token both
+                  contains and represents a unique hashtag string. Second, as
+                  digital assets, Hashtag Tokens can be created, bought and sold
+                  by anyone.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -319,35 +352,77 @@
             </div>
             <div class="content">
               <p>
-                Stitched into the design of the Hashtag Protocol is an incentive
-                structure that rewards all participants of the system.
+                <strong>Creation price</strong> - Amount the winning bidder pays
+                to acquire a newly created Hashtag Token.
               </p>
               <p>
-                <strong>Creation price</strong> - Hashtag Protocol uses a fair
-                auction method to determine the price of a new Hashtag Token.
-                The creation price is the amount the winning bidder pays to
-                acquire the newly created Hashtag Token. The proceeds of the
-                auction are automatically divided between the originating
-                Publisher and the Protocol.
+                <strong>Tag count</strong> - How many content items have been
+                tagged with this hashtag.
               </p>
               <p>
-                <strong>Tag count</strong> - In addition to creating unique,
-                non-fungible tokens that represent/contain a single, natural
-                language hashtag, the Protocol also provides facilities for
-                linking a token any online digital artifact, effectively tagging
-                that content with the hashtag. Tag count represents how many
-                pieces of content have been tagged with this hashtag.
+                <strong>Earnings</strong> - Total tagging revenue distributed by
+                the Protocol for this Hashtag token.
               </p>
-              <p>
-                <strong>Earnings</strong> - In exchange for facilitating an
-                entry to a decentralized, immutable and globally accessible
-                database, the Protocol collects a small fee from the
-                <strong>Tagger</strong>. The Protocol smart contract then
-                automatically distributes this fee among the token owner, the
-                publisher facilitating the tagging and the Protocol. The summary
-                shown here represents the lifetime sum total of tagging revenue
-                distributed by the Protocol for this Hashtag token.
-              </p>
+              <b-collapse
+                :open="false"
+                aria-id="MarketOverview"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is the "Hashtag Market"?'
+                      : 'What is the "Hashtag Market"?'
+                  }}
+                </a>
+                <p>
+                  <br />
+                  Hashtag is a protocol on the Ethereum blockchain that creates
+                  a market & incentive economy around the creation and use of
+                  hashtags. The protocol aims to create a virtuous, financially
+                  incentivized system that creates more value to all
+                  participants the more it grows.
+                </p>
+                <p>
+                  The system revolves around four participants: Creator, Owner,
+                  Publisher and Tagger. These key market participants interact
+                  directly with the protocol, paying to use and earning from the
+                  system without having to negotiate terms of use. The data
+                  generated by the protocol is immutable (impervious to
+                  censorship) and globally accessible.
+                </p>
+                <p>
+                  Hashtag Protocol uses an auction method to determine the price
+                  of a new Hashtag Token. The "creation price" is the amount the
+                  winning bidder pays to acquire the newly created Hashtag
+                  Token. The proceeds of the auction are automatically divided
+                  between the originating Publisher and the Protocol.
+                </p>
+                <p>
+                  In addition to creating unique, non-fungible tokens that both
+                  contain and represent a single, natural language hashtag, the
+                  Protocol also provides facilities for linking a token any
+                  online digital artifact, effectively tagging that content with
+                  the hashtag. Tag count quantifies how many pieces of content
+                  have been tagged with this hashtag.
+                </p>
+                <p>
+                  In exchange for facilitating an entry to a decentralized,
+                  immutable and globally accessible database, the Protocol
+                  collects a small fee from the Tagger when they tag content.
+                  The Protocol smart contract then automatically distributes
+                  this fee among the token owner, the publisher facilitating the
+                  tagging and the Protocol.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -362,15 +437,63 @@
             </div>
             <div class="content">
               <p>
-                In addition to creating unique, non-fungible tokens that
-                represent/contain a single, natural language hashtag, the
-                Protocol also provides a facility for linking a token any online
-                digital artifact, effectively tagging that content with the
-                hashtag. Displayed here is a list of all digital artifacts that
-                have been tagged with
+                <strong>ERC-721 NFTs</strong><br />Listing of ERC-721
+                non-fungible tokens (digital assets) tagged with
                 <strong>#{{ hashtagsByName[0].displayHashtag }}</strong
                 >.
               </p>
+              <ul>
+                <li>
+                  <strong>Asset name</strong> - Name of the ERC-721 token
+                  tagged.
+                </li>
+                <li>
+                  <strong>Project</strong> - Name of project producing the
+                  digital assets that Hashtag Tokens are being linked to.
+                </li>
+                <li><strong>Tagged</strong> - Date asset was tagged.</li>
+                <li>
+                  <strong>Tagger</strong> - Ethereum address used to pay tagging
+                  fee.
+                </li>
+                <li>
+                  <strong>Publisher</strong> - Ethereum address of the Publisher
+                  platform tagging took place on.
+                </li>
+              </ul>
+              <b-collapse
+                :open="false"
+                aria-id="taggedContent"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="taggedContent"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content?"'
+                      : 'What is "tagged content?"'
+                  }}
+                </a>
+                <p>
+                  <br />In addition to creating crytographic tokens that both
+                  contain and represent hashtag strings, Hashtag Protocol
+                  provides a facility for linking them to any online digital
+                  artifact, effectively "tagging" that content with the hashtag.
+                  This is facilitated by "linking smart contracts" that support
+                  a many-to-many token-to-content relationship. For example, one
+                  Hashtag Token can be used to tag many pieces of content and
+                  one price of content can be tagged with many hashtags.
+                  Presently, only linking to other ERC-721 NFTs is supported.
+                  The Protocol can be extended to tag other digital assets.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>

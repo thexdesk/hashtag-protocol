@@ -64,7 +64,9 @@
                   @popModalFromChild="popModal"
                   class="is-pulled-right"
                 ></help-modal>
-                <h2 class="title is-4">Market summary</h2>
+                <h2 class="title is-4">
+                  Market summary for KnownOrigin
+                </h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
@@ -82,7 +84,7 @@
                           </td>
                         </tr>
                         <tr>
-                          <td class="has-text-weight-bold">Tagged content</td>
+                          <td class="has-text-weight-bold">Tag count</td>
                           <td>
                             1121
                           </td>
@@ -137,7 +139,7 @@
                             </th>
                             <th class="">
                               <div class="th-wrap">
-                                Minted
+                                Created
                                 <!---->
                               </div>
                             </th>
@@ -149,11 +151,10 @@
                             </th>
                             <th class="">
                               <div class="th-wrap">
-                                Revenue
+                                Tag count
                                 <!---->
                               </div>
                             </th>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -171,22 +172,20 @@
                             </td>
                             <td data-label="Minted" class="">11 hours ago</td>
                             <td data-label="Owner" class="">
-                              <b-tooltip
-                                label="Help"
-                                position="is-bottom"
-                                type="is-dark"
-                              >
-                                <span>
+                              <span
+                                ><a
+                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
                                   0x40 ... ab5f
-                                </span>
-                              </b-tooltip>
+                                </a></span
+                              >
                             </td>
-                            <td data-label="Publisher" class="">
+                            <td data-label="tag-count" class="">
                               <span>
-                                0.25 ETH
+                                23
                               </span>
                             </td>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -202,16 +201,20 @@
                             </td>
                             <td data-label="Minted" class="">7 days ago</td>
                             <td data-label="Owner" class="">
+                              <span
+                                ><a
+                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
+                                  0x40 ... ab5f
+                                </a></span
+                              >
+                            </td>
+                            <td data-label="tag-count" class="">
                               <span>
-                                0x07 ... 5b0e
+                                23
                               </span>
                             </td>
-                            <td data-label="Publisher" class="">
-                              <span>
-                                0.25 ETH
-                              </span>
-                            </td>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -227,16 +230,20 @@
                             </td>
                             <td data-label="Minted" class="">11 days ago</td>
                             <td data-label="Owner" class="">
+                              <span
+                                ><a
+                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
+                                  0x40 ... ab5f
+                                </a></span
+                              >
+                            </td>
+                            <td data-label="tag-count" class="">
                               <span>
-                                0x12 ... e4c2
+                                23
                               </span>
                             </td>
-                            <td data-label="Publisher" class="">
-                              <span>
-                                0.25 ETH
-                              </span>
-                            </td>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -252,16 +259,20 @@
                             </td>
                             <td data-label="Minted" class="">14 days ago</td>
                             <td data-label="Owner" class="">
+                              <span
+                                ><a
+                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
+                                  0x40 ... ab5f
+                                </a></span
+                              >
+                            </td>
+                            <td data-label="tag-count" class="">
                               <span>
-                                0x12 ... e4c2
+                                23
                               </span>
                             </td>
-                            <td data-label="Publisher" class="">
-                              <span>
-                                0.25 ETH
-                              </span>
-                            </td>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -277,16 +288,20 @@
                             </td>
                             <td data-label="Minted" class="">14 days ago</td>
                             <td data-label="Owner" class="">
+                              <span
+                                ><a
+                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
+                                  0x40 ... ab5f
+                                </a></span
+                              >
+                            </td>
+                            <td data-label="tag-count" class="">
                               <span>
-                                0x12 ... e4c2
+                                23
                               </span>
                             </td>
-                            <td data-label="Publisher" class="">
-                              <span>
-                                0.25 ETH
-                              </span>
-                            </td>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -362,7 +377,7 @@
                     <!---->
                   </div>
                 </b-tab-item>
-                <b-tab-item label="Tagged content">
+                <b-tab-item label="Tag count">
                   <div class="b-table">
                     <!---->
                     <!---->
@@ -378,6 +393,12 @@
                             <th class="">
                               <div class="th-wrap">
                                 Asset Name
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Project
                                 <!---->
                               </div>
                             </th>
@@ -399,13 +420,6 @@
                                 <!---->
                               </div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Revenue
-                                <!---->
-                              </div>
-                            </th>
-                            <!---->
                           </tr>
                           <!---->
                           <!---->
@@ -421,14 +435,29 @@
                             <td data-label="Asset Name" class="">
                               Nr. 111 - The Pit
                             </td>
+                            <td data-label="Project" class="">
+                              KnownOrigin
+                            </td>
                             <td data-label="Hashtag" class="">
-                              #SharkWeek
+                              <span
+                                ><a href="/hashtag/SharkWeek" class="">
+                                  #SharkWeek
+                                </a></span
+                              >
                             </td>
                             <td data-label="Tagged" class="">
                               2 days ago
                             </td>
-                            <td data-label="Tagger" class="">0x40 ... ab5f</td>
-                            <td data-label="Revenue" class="">0.001 ETH</td>
+                            <td data-label="Tagger" class="">
+                              <span
+                                ><a
+                                  href="/tagger/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
+                                  class=""
+                                >
+                                  0x40 ... ab5f
+                                </a></span
+                              >
+                            </td>
                           </tr>
                         </tbody>
                         <!---->
@@ -452,11 +481,6 @@
             </div>
             <div class="content">
               <p>
-                A publisher is an application, network or platform that is
-                implementing the Hashtag Protocol to provide rich, decentralized
-                tagging for their users.
-              </p>
-              <p>
                 <strong>Name</strong> - Name of the participating Publisher.
               </p>
               <p>
@@ -466,6 +490,45 @@
               <p>
                 <strong>Official website</strong> - URL and hyperlink to the
                 Publisher's official website.
+              </p>
+              <p>
+                <b-collapse
+                  :open="false"
+                  position="is-top"
+                  aria-id="contentIdForA11y1"
+                  animation="slide"
+                >
+                  <a
+                    slot="trigger"
+                    slot-scope="props"
+                    aria-controls="MarketOverview"
+                    class="has-text-weight-bold"
+                  >
+                    <b-icon
+                      :icon="!props.open ? 'menu-down' : 'menu-up'"
+                    ></b-icon>
+                    {{
+                      !props.open
+                        ? 'What\'s a "Publisher"?'
+                        : 'What\'s a "Publisher"?'
+                    }}
+                  </a>
+                  <p>
+                    <br />
+                    A Publisher is an application, network or platform
+                    implementing the Hashtag Protocol to provide their customers
+                    and/or application content tagging stored to a
+                    decentralized, globally readable database.
+                  </p>
+                  <p>
+                    At the present time, Publishers must be white-listed to use
+                    The Protocol. If you'd like to whitelist your application,
+                    please
+                    <a v-bind:href="publisherRegURL"
+                      >register your application</a
+                    >.
+                  </p>
+                </b-collapse>
               </p>
             </div>
           </div>
@@ -481,66 +544,89 @@
             </div>
             <div class="content">
               <p>
-                <strong>Hashtags</strong> - Number of hashtags created on
-                <strong>Publisher</strong> application.
+                <strong>Hashtags</strong> - Number of Hashtags Tokens created
+                through Publisher application.
               </p>
               <p>
-                <strong>Hashtag revenue</strong> - Publisher revenue for
-                hashtags created on <strong>Publisher</strong> application.
+                <strong>Hashtag revenue</strong> - Publisher revenue for Hashtag
+                Tokens created on Publisher application.
               </p>
               <p>
-                <strong>Tagged content</strong> - Number of content items tagged
-                on <strong>Publisher</strong> application.
+                <strong>Tag count</strong> - Number of content items tagged with
+                any hashtag on Publisher application.
               </p>
               <p>
-                <strong>Tagging revenue</strong> - Revenue from content tagged
-                on <strong>Publisher</strong> application.
+                <strong>Tagging revenue</strong> - Publisher revenue from
+                content tagged on Publisher application.
               </p>
               <p>
                 <strong>Total revenue</strong> - Total Hashtag Protocol revenue
-                for this <strong>Publisher</strong>.
+                for this Publisher.
+              </p>
+              <p>
+                <b-collapse
+                  :open="false"
+                  position="is-top"
+                  aria-id="contentIdForA11y1"
+                  animation="slide"
+                >
+                  <a
+                    slot="trigger"
+                    slot-scope="props"
+                    aria-controls="MarketOverview"
+                    class="has-text-weight-bold"
+                  >
+                    <b-icon
+                      :icon="!props.open ? 'menu-down' : 'menu-up'"
+                    ></b-icon>
+                    {{
+                      !props.open
+                        ? 'What is the "Hashtag Market"?'
+                        : 'What is the "Hashtag Market"?'
+                    }}
+                  </a>
+                  <p>
+                    <br />
+                    Hashtag is a protocol on the Ethereum blockchain that
+                    creates a market & incentive economy around the creation and
+                    use of hashtags. The protocol aims to create a virtuous,
+                    financially incentivized system that creates more value to
+                    all participants the more it grows.
+                  </p>
+                  <p>
+                    The system revolves around four participants: Creator,
+                    Owner, Publisher and Tagger. These key market participants
+                    interact directly with the protocol, paying to use and
+                    earning from the system without having to negotiate terms of
+                    use. The data generated by the protocol is immutable
+                    (impervious to censorship) and globally accessible.
+                  </p>
+                  <p>
+                    Hashtag Protocol uses an auction method to determine the
+                    price of a new Hashtag Token. The "creation price" is the
+                    amount the winning bidder pays to acquire the newly created
+                    Hashtag Token. The proceeds of the auction are automatically
+                    divided between the originating Publisher and the Protocol.
+                  </p>
+                  <p>
+                    In addition to creating unique, non-fungible tokens that
+                    both contain and represent a single, natural language
+                    hashtag, the Protocol also provides facilities for linking a
+                    token any online digital artifact, effectively tagging that
+                    content with the hashtag. Tag count quantifies how many
+                    pieces of content have been tagged with this hashtag.
+                  </p>
+                  <p>
+                    In exchange for facilitating an entry to a decentralized,
+                    immutable and globally accessible database, the Protocol
+                    collects a small fee from the Tagger when they tag content.
+                    The Protocol smart contract then automatically distributes
+                    this fee among the token owner, the publisher facilitating
+                    the tagging and the Protocol.
+                  </p>
+                </b-collapse>
               </p>
             </div>
-            <b-collapse
-              :open="false"
-              position="is-bottom"
-              aria-id="contentIdForA11y1"
-            >
-              <a
-                slot="trigger"
-                slot-scope="props"
-                aria-controls="contentIdForA11y1"
-              >
-                <b-icon :icon="!props.open ? 'menu-down' : 'menu-up'"></b-icon>
-                {{ !props.open ? "Learn more" : "Close" }}
-              </a>
-              <p>
-                A publisher is an application, network or platform that is
-                implementing the Hashtag Protocol to provide rich, decentralized
-                tagging for their users.
-              </p>
-              <p>
-                Publishers are incentivized both financially and functionally to
-                use the Protocol. Financially, the publisher receives a portion
-                of the fee paid by the Creator to mint the token if it takes
-                place on their system. Additionally, a Publisher could create
-                their own tag set thereby reducing their cost to create new
-                hashtag tokens and becoming both publisher and owner of the
-                token. Finally, when a tagger pays the small fee to tag their
-                content (explained in the next section), the protocol splits it
-                between the Creator and Publisher.
-              </p>
-              <p>
-                The functional benefits to the publisher and their customers are
-                significant as well. Potentially slick functionality and
-                interface for their users; cleanly structured and tagged
-                content; and a standard interface to query their data all in a
-                decentralized system. Additionally, being a global content
-                tagging network, the Protocol immediately exposes their
-                structured content to other dApps, applications and systems
-                providing benefits to one or both parties.
-              </p>
-            </b-collapse>
           </div>
         </div>
       </b-modal>
@@ -549,31 +635,57 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Tagged content explained</p>
+                <p class="title is-4">Publisher activity</p>
               </div>
             </div>
             <div class="content">
               <p>
-                Stitched into the design of the Hashtag Protocol is a virtuous
-                incentive structure that rewards all participants of the system.
+                <strong>Hashtags</strong><br />Listing of Hasthag Protocol
+                tokens created on this Publisher platform.
               </p>
+              <ul>
+                <li>
+                  <strong>Hashtag</strong> - Name of the Hashtag Token; same as
+                  the hashtag string stored inside the token.
+                </li>
+                <li>
+                  <strong>Created</strong> - Date token was created and added to
+                  Ethereum blockchain.
+                </li>
+                <li>
+                  <strong>Owner</strong> - Ethereum address of token owner.
+                </li>
+                <li>
+                  <strong>Tag count</strong> - Number of content items tagged
+                  with Hashtag Token across all Publisher platforms.
+                </li>
+                <li>
+                  <strong>Tagging revenue</strong> - Total revenue generated for
+                  tagging fees for this token across all Publisher platforms.
+                </li>
+              </ul>
               <p>
-                <strong>Mint price</strong> - Hashtag Protocol uses a fair
-                auction method to determine the price of a new Hashtag token.
-                The mint price is the amount the winning bidder pays to acquire
-                the newly minted Hashtag Token. The proceeds of the auction are
-                automatically divided between the Publisher and the Protocol.
+                <strong>Tag count</strong><br />Listing of content tagged on
+                this Publisher application.
               </p>
-              <p></p>
-              <p>
-                <strong>Earnings</strong> - When a digital artifact is tagged
-                with a Hashtag token, the Tagger pays a small fee added to the
-                standard Ethereum network gas fee. This fee is automatically
-                divided among the Hastag Token owner, the originating Publisher
-                and the Protocol. The summary shown here represents the lifetime
-                sum total of tagging revenue distributed to the Owner, Publisher
-                & Protocol for this Hashtag token.
-              </p>
+              <ul>
+                <li>
+                  <strong>Asset name</strong> - Name of the ERC-721 token.
+                </li>
+                <li>
+                  <strong>Hashtag</strong> - Hashtag Token the asset is tagged
+                  with.
+                </li>
+                <li>
+                  <strong>Project</strong> - Name of project producing the
+                  digital assets that Hashtag Tokens are being linked to.
+                </li>
+                <li><strong>Tagged</strong> - Date asset was tagged.</li>
+                <li>
+                  <strong>Tagger</strong> - Ethereum address used to pay tagging
+                  fee.
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -607,8 +719,9 @@ export default {
       isSummaryModalActive: false,
       isActivityModalActive: false,
       publisher: this.$route.params.address,
-      publisherWebsite: "https://knownorigin.io",
       publisherName: "KnownOrigin",
+      publisherRegistration: "https://#",
+      publisherWebsite: "https://knownorigin.io",
       tagsByHashtag: null,
     };
   },

@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import ContentDetail from "./views/ContentDetail";
 import HashtagDetail from "./views/HashtagDetail";
 import Mobile from "./views/Mobile";
+import NftDetail from "./views/NftDetail";
 import OwnerDetail from "./views/OwnerDetail";
 import PublisherDetail from "./views/PublisherDetail";
 import TaggerDetail from "./views/TaggerDetail";
@@ -19,9 +19,9 @@ export const router = new VueRouter({
       component: Mobile,
     },
     {
-      path: "/content/:type/:contract/:id",
-      name: "content-detail",
-      component: ContentDetail,
+      path: "/:type/:contract/:id",
+      name: "nft-detail",
+      component: NftDetail,
     },
     {
       path: "/hashtag/:hashtag",
