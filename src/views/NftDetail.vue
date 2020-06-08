@@ -15,18 +15,11 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip
-                  label="Help"
-                  position="is-bottom is-pulled-right"
-                  type="is-dark"
-                >
-                  <button
-                    class="button is-white"
-                    @click="isOverviewModalActive = true"
-                  >
-                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
-                  </button>
-                </b-tooltip>
+                <help-modal
+                  modal="isNewHashtagsModalActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
                 <div class="card">
                   <div class="card-image">
                     <figure class="image">
@@ -37,36 +30,33 @@
                     </figure>
                   </div>
                   <div class="card-content">
-                    <span class="has-text-weight-bold is-size-6 is-block"
-                      >MetaFactory Tester Badge</span
-                    ><span class="is-size-7 is-block">Known Origin</span>
-                  </div>
-                </div>
-                <h2 class="title is-4">Asset information</h2>
-                <div class="b-table">
-                  <div class="table-wrapper">
-                    <table class="table">
-                      <tbody>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Name</td>
-                          <td>
-                            MetaFactory Tester Badge
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Project</td>
-                          <td>
-                            KnownOrigin
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Asset Id</td>
-                          <td>
-                            {{ id }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <h2 class="title is-4">Asset information</h2>
+                    <div class="b-table">
+                      <div class="table-wrapper">
+                        <table class="table">
+                          <tbody>
+                            <tr draggable="false" class="">
+                              <td class="has-text-weight-bold">Name</td>
+                              <td>
+                                MetaFactory Tester Badge
+                              </td>
+                            </tr>
+                            <tr draggable="false" class="">
+                              <td class="has-text-weight-bold">Project</td>
+                              <td>
+                                KnownOrigin
+                              </td>
+                            </tr>
+                            <tr draggable="false" class="">
+                              <td class="has-text-weight-bold">Asset Id</td>
+                              <td>
+                                {{ id }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -85,45 +75,6 @@
                     <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
                   </button>
                 </b-tooltip>
-                <h2 class="title is-4">Activity summary</h2>
-                <div class="b-table">
-                  <div class="table-wrapper">
-                    <table class="table">
-                      <tbody>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Hashtags minted</td>
-                          <td>
-                            322
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Hashtag revenue</td>
-                          <td>
-                            1.361 ETH
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Tagged content</td>
-                          <td>
-                            1121
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Tagging revenue</td>
-                          <td>
-                            0.191 ETH
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Total revenue</td>
-                          <td>
-                            1.553 ETH
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -243,15 +194,14 @@
 <script>
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-//import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
-//import EthAccount from "../components/EthAccount";
+import HelpModal from "../components/HelpModal";
 
 export default {
   name: "NftDetail",
   components: {
-    //EthAccount,
     Footer,
     Header,
+    HelpModal,
   },
   data() {
     return {

@@ -120,8 +120,7 @@
                       <b-table-column
                         field="owner"
                         label="Owner"
-                        class="is-hidden-touch"
-                        :visible="false"
+                        :visible="$screen.desktop"
                       >
                         <eth-account
                           :value="props.row.owner"
@@ -131,7 +130,7 @@
                       <b-table-column
                         field="publisher"
                         label="Publisher"
-                        class="is-hidden-touch"
+                        :visible="$screen.widescreen"
                       >
                         <eth-account
                           :value="props.row.publisher"
@@ -151,7 +150,9 @@
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
-                  <h2 class="title is-5">Recently tagged content</h2>
+                  <h2 class="title is-5">
+                    Recently tagged content
+                  </h2>
                   <b-table :data="tags || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="nftId" label="" width="75">
@@ -171,7 +172,7 @@
                       <b-table-column
                         field="projectName"
                         label="Project"
-                        class="is-hidden-touch"
+                        :visible="$screen.widescreen"
                       >
                         {{ props.row.nftContractName }}
                       </b-table-column>
