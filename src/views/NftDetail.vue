@@ -139,9 +139,9 @@
                               </span>
                             </td>
                             <td data-label="Minted" class="">
-                              {{
-                                new Date(tag.timestamp * 1000) | moment("from")
-                              }}
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
                             </td>
                             <td data-label="Owner" class="">
                               <eth-account
@@ -218,10 +218,12 @@ import HelpModal from "../components/HelpModal";
 import { TAGS_BY_DIGITAL_ASSET } from "../queries";
 import Hashtag from "../components/Hashtag";
 import EthAccount from "../components/EthAccount";
+import TimestampFrom from "../components/TimestampFrom";
 
 export default {
   name: "NftDetail",
   components: {
+    TimestampFrom,
     EthAccount,
     Hashtag,
     Footer,

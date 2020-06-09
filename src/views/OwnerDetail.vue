@@ -7,7 +7,7 @@
         </div>
       </div>
     </section>
-    <section class="main">
+    <section class="main" v-if="ownerByAcc">
       <div class="container">
         <h1 class="title is-1">
           Owner: <eth-account :value="owner"></eth-account>
@@ -54,31 +54,36 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Hashtags</td>
                           <td>
-                            322
+                            {{ ownerByAcc.mintCount }}
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Hashtag revenue</td>
                           <td>
-                            1.361 ETH
+                            <eth-amount
+                              :value="ownerByAcc.tagFees"
+                            ></eth-amount>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagged content</td>
                           <td>
-                            1121
+                            {{ ownerByAcc.tagCount }}
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
-                            0.191 ETH
+                            <code>TODO</code>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Total revenue</td>
                           <td>
-                            1.553 ETH
+                            <eth-amount-sum
+                              :value1="ownerByAcc.tagFees"
+                              :value2="0"
+                            ></eth-amount-sum>
                           </td>
                         </tr>
                       </tbody>
@@ -94,7 +99,8 @@
             <article class="is-white box">
               <b-tooltip
                 label="Help"
-                position="is-bottom is-pulled-right"
+                position="is-bottom"
+                class="is-pulled-right"
                 type="is-dark"
               >
                 <button
@@ -147,126 +153,31 @@
                           <!---->
                         </thead>
                         <tbody>
-                          <tr draggable="false" class="">
+                          <tr
+                            draggable="false"
+                            class=""
+                            v-for="hashtag in hashtagsByOwner"
+                            v-bind:key="hashtag.id"
+                          >
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/genesis" class="">
-                                  #genesis
-                                </a></span
-                              >
+                              <hashtag :value="hashtag.name"></hashtag>
                             </td>
-                            <td data-label="Created" class="">11 hours ago</td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x40 ... ab5f
-                              </span>
+                            <td data-label="Created" class="">
+                              <timestamp-from
+                                :value="hashtag.timestamp"
+                              ></timestamp-from>
                             </td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x40 ... ab5f
-                              </span>
+                            <td data-label="Creator" class="">
+                              <eth-account :value="hashtag.owner"></eth-account>
+                            </td>
+                            <td data-label="Publisher" class="">
+                              <eth-account
+                                :value="hashtag.publisher"
+                              ></eth-account>
                             </td>
                           </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/SharkWeek" class="">
-                                  #SharkWeek
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Created" class="">7 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x07 ... 5b0e
-                              </span>
-                            </td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x40 ... ab5f
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/Micha3l" class="">
-                                  #Micha3l
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Created" class="">11 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x12 ... e4c2
-                              </span>
-                            </td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x40 ... ab5f
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/James" class="">
-                                  #James
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Created" class="">14 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x12 ... e4c2
-                              </span>
-                            </td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x40 ... ab5f
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr draggable="false" class="">
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/AmaZ3" class="">
-                                  #AmaZ3
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Created" class="">14 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x12 ... e4c2
-                              </span>
-                            </td>
-                            <td data-label="Owner" class="">
-                              <span>
-                                0x40 ... ab5f
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
                         </tbody>
                         <!---->
                       </table>
@@ -654,11 +565,19 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-//import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
+import { HASHTAGS_BY_OWNER, OWNER_BY_ACC } from "../queries";
+import EthAmount from "../components/EthAmount";
+import EthAmountSum from "../components/EthAmountSum";
+import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
 
 export default {
   name: "OwnerDetail",
   components: {
+    TimestampFrom,
+    Hashtag,
+    EthAmountSum,
+    EthAmount,
     EthAccount,
     Footer,
     Header,
@@ -674,6 +593,24 @@ export default {
       tagsByHashtag: null,
       hashtagsByName: null,
     };
+  },
+  apollo: {
+    ownerByAcc: {
+      query: OWNER_BY_ACC,
+      variables() {
+        return {
+          id: this.owner,
+        };
+      },
+    },
+    hashtagsByOwner: {
+      query: HASHTAGS_BY_OWNER,
+      variables() {
+        return {
+          owner: this.owner,
+        };
+      },
+    },
   },
 };
 </script>

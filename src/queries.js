@@ -108,3 +108,28 @@ export const TAGS_BY_DIGITAL_ASSET = gql(`
     hashtagName
   }
 }`);
+
+export const OWNER_BY_ACC = gql(`
+query ownerByAcc($id: String!) {
+  ownerByAcc: owner(id: $id) {
+    id
+    mintCount
+    tagCount
+    tagFees
+  }
+}
+`);
+
+export const HASHTAGS_BY_OWNER = gql(`
+query hashtagsByOwner($owner: String!) {
+  hashtagsByOwner: hashtags(where:{ owner: $owner}) {
+    id
+    name
+    displayHashtag
+    owner
+    publisher
+    timestamp
+    tagCount
+  }
+}
+`);
