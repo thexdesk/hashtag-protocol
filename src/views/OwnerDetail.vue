@@ -181,71 +181,71 @@
                         </tbody>
                         <!---->
                       </table>
-                      <div class="level">
-                        <div class="level-left"></div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <nav class="pagination">
-                              <a
-                                role="button"
-                                href="#"
-                                disabled="disabled"
-                                aria-label="Page 0."
-                                class="pagination-link pagination-previous"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-left mdi-24px"
-                                  ></i></span
-                              ></a>
-                              <a
-                                role="button"
-                                href="#"
-                                aria-label="Page 2."
-                                class="pagination-link pagination-next"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-right mdi-24px"
-                                  ></i></span
-                              ></a>
-                              <ul class="pagination-list">
-                                <!---->
-                                <!---->
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Current page, Page 1."
-                                    aria-current="true"
-                                    class="pagination-link is-current"
-                                    >1</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 2."
-                                    class="pagination-link"
-                                    >2</a
-                                  >
-                                </li>
-                                <li>
-                                  <span class="pagination-ellipsis">…</span>
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 12."
-                                    class="pagination-link"
-                                    >12</a
-                                  >
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                      <!--                      <div class="level">-->
+                      <!--                        <div class="level-left"></div>-->
+                      <!--                        <div class="level-right">-->
+                      <!--                          <div class="level-item">-->
+                      <!--                            <nav class="pagination">-->
+                      <!--                              <a-->
+                      <!--                                role="button"-->
+                      <!--                                href="#"-->
+                      <!--                                disabled="disabled"-->
+                      <!--                                aria-label="Page 0."-->
+                      <!--                                class="pagination-link pagination-previous"-->
+                      <!--                                ><span class="icon" aria-hidden="true"-->
+                      <!--                                  ><i-->
+                      <!--                                    class="mdi mdi-chevron-left mdi-24px"-->
+                      <!--                                  ></i></span-->
+                      <!--                              ></a>-->
+                      <!--                              <a-->
+                      <!--                                role="button"-->
+                      <!--                                href="#"-->
+                      <!--                                aria-label="Page 2."-->
+                      <!--                                class="pagination-link pagination-next"-->
+                      <!--                                ><span class="icon" aria-hidden="true"-->
+                      <!--                                  ><i-->
+                      <!--                                    class="mdi mdi-chevron-right mdi-24px"-->
+                      <!--                                  ></i></span-->
+                      <!--                              ></a>-->
+                      <!--                              <ul class="pagination-list">-->
+                      <!--                                &lt;!&ndash;&ndash;&gt;-->
+                      <!--                                &lt;!&ndash;&ndash;&gt;-->
+                      <!--                                <li>-->
+                      <!--                                  <a-->
+                      <!--                                    role="button"-->
+                      <!--                                    href="#"-->
+                      <!--                                    aria-label="Current page, Page 1."-->
+                      <!--                                    aria-current="true"-->
+                      <!--                                    class="pagination-link is-current"-->
+                      <!--                                    >1</a-->
+                      <!--                                  >-->
+                      <!--                                </li>-->
+                      <!--                                <li>-->
+                      <!--                                  <a-->
+                      <!--                                    role="button"-->
+                      <!--                                    href="#"-->
+                      <!--                                    aria-label="Page 2."-->
+                      <!--                                    class="pagination-link"-->
+                      <!--                                    >2</a-->
+                      <!--                                  >-->
+                      <!--                                </li>-->
+                      <!--                                <li>-->
+                      <!--                                  <span class="pagination-ellipsis">…</span>-->
+                      <!--                                </li>-->
+                      <!--                                <li>-->
+                      <!--                                  <a-->
+                      <!--                                    role="button"-->
+                      <!--                                    href="#"-->
+                      <!--                                    aria-label="Page 12."-->
+                      <!--                                    class="pagination-link"-->
+                      <!--                                    >12</a-->
+                      <!--                                  >-->
+                      <!--                                </li>-->
+                      <!--                              </ul>-->
+                      <!--                            </nav>-->
+                      <!--                          </div>-->
+                      <!--                        </div>-->
+                      <!--                      </div>-->
                     </div>
                     <!---->
                   </div>
@@ -298,38 +298,28 @@
                           <!---->
                         </thead>
                         <tbody>
-                          <tr>
+                          <tr v-for="tag in tagsByTagger" v-bind:key="tag.id">
                             <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
+                              <figure class="image">
+                                <img :src="tag.nftImage" :alt="tag.nftName" />
+                              </figure>
                             </td>
                             <td data-label="Asset Name" class="">
-                              Nr. 111 - The Pit
+                              {{ tag.nftName }}
                             </td>
                             <td data-label="Asset Name" class="">
-                              KnownOrigin
+                              {{ tag.nftContractName }}
                             </td>
                             <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/SharkWeek" class="">
-                                  #SharkWeek
-                                </a></span
-                              >
+                              <hashtag :value="tag.hashtagName"></hashtag>
                             </td>
                             <td data-label="Tagged" class="">
-                              2 days ago
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
                             </td>
                             <td data-label="Tagger" class="">
-                              <span
-                                ><a
-                                  href="/tagger/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
+                              <eth-account :value="tag.tagger"></eth-account>
                             </td>
                           </tr>
                         </tbody>
@@ -565,7 +555,7 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { HASHTAGS_BY_OWNER, OWNER_BY_ACC } from "../queries";
+import { HASHTAGS_BY_OWNER, OWNER_BY_ACC, TAGS_BY_TAGGER } from "../queries";
 import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
 import Hashtag from "../components/Hashtag";
@@ -608,6 +598,14 @@ export default {
       variables() {
         return {
           owner: this.owner,
+        };
+      },
+    },
+    tagsByTagger: {
+      query: TAGS_BY_TAGGER,
+      variables() {
+        return {
+          tagger: this.owner,
         };
       },
     },

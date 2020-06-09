@@ -133,3 +133,22 @@ query hashtagsByOwner($owner: String!) {
   }
 }
 `);
+
+export const TAGS_BY_TAGGER = gql(`
+query tagsByTagger($tagger: String!) {
+  tagsByTagger: tags(where:{ tagger: $tagger}) {
+    id
+    hashtagId
+    hashtagName
+    nftContract
+    nftId
+    nftContractName
+    nftTokenUri
+    nftName
+    nftImage
+    tagger
+    timestamp
+    publisher
+  }
+}
+`);
