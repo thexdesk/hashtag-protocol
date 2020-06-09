@@ -7,9 +7,9 @@
         </div>
       </div>
     </section>
-    <section class="main">
+    <section class="main" v-if="nftFromTag">
       <div class="container">
-        <h1 class="title is-1">MetaFactory Tester Badge</h1>
+        <h1 class="title is-1">{{ nftFromTag[0].nftName }}</h1>
         <h2 class="subtitle">ERC-721 Digital asset</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
@@ -24,8 +24,8 @@
                   <div class="card-image">
                     <figure class="image">
                       <img
-                        src="https://ipfs.infura.io/ipfs/QmPfpZToedF2MnBgmBAhmWf5rXUYKvMbww2zA16J8JG8tc"
-                        alt="Image"
+                        :src="nftFromTag[0].nftImage"
+                        :alt="nftFromTag[0].nftName"
                       />
                     </figure>
                   </div>
@@ -38,19 +38,19 @@
                             <tr draggable="false" class="">
                               <td class="has-text-weight-bold">Name</td>
                               <td>
-                                MetaFactory Tester Badge
+                                {{ nftFromTag[0].nftName }}
                               </td>
                             </tr>
                             <tr draggable="false" class="">
                               <td class="has-text-weight-bold">Project</td>
                               <td>
-                                KnownOrigin
+                                {{ nftFromTag[0].nftContractName }}
                               </td>
                             </tr>
                             <tr draggable="false" class="">
                               <td class="has-text-weight-bold">Asset Id</td>
                               <td>
-                                {{ id }}
+                                {{ nftFromTag[0].nftId }}
                               </td>
                             </tr>
                           </tbody>
@@ -643,6 +643,9 @@
         </div>
       </b-modal>
     </section>
+    <section v-else>
+      Loading...
+    </section>
     <Footer></Footer>
   </div>
 </template>
@@ -651,6 +654,7 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import { NFT_FROM_TAG } from "../queries";
 
 export default {
   name: "NftDetail",
@@ -671,6 +675,17 @@ export default {
       tagsByHashtag: null,
       hashtagsByName: null,
     };
+  },
+  apollo: {
+    nftFromTag: {
+      query: NFT_FROM_TAG,
+      variables() {
+        return {
+          nftContract: this.contract,
+          nftId: this.id,
+        };
+      },
+    },
   },
 };
 </script>

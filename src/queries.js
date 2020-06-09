@@ -89,3 +89,17 @@ query hashtagsByName($name: String!) {
    }
 }
 `);
+
+export const NFT_FROM_TAG = gql(`
+   query nftFromTag($nftContract: String!, $nftId: String!) {
+    nftFromTag: tags(where:{nftContract: $nftContract, nftId: $nftId}) {
+    id
+    nftContract
+    nftContractName
+    nftImage
+    nftId
+    nftName
+    nftTokenUri
+    nftDescription
+  }
+}`);
