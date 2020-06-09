@@ -49,10 +49,9 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Created</td>
                           <td>
-                            {{
-                              new Date(hashtagsByName[0].timestamp * 1000)
-                                | moment("MMM Do YYYY")
-                            }}
+                            <timestamp-formatted
+                              :value="parseInt(hashtagsByName[0].timestamp)"
+                            ></timestamp-formatted>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
@@ -85,13 +84,9 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Expires</td>
                           <td>
-                            {{
-                              new Date(
-                                (parseInt(hashtagsByName[0].timestamp) +
-                                  63113904) *
-                                  1000
-                              ) | moment("MMM Do YYYY")
-                            }}
+                            <timestamp-formatted
+                              :value="(parseInt(hashtagsByName[0].timestamp) + 63113904)"
+                            ></timestamp-formatted>
                           </td>
                         </tr>
                       </tbody>
@@ -219,12 +214,9 @@
                               {{ tag.nftContractName }}
                             </td>
                             <td data-label="Tagged" class="">
-                              <time>
-                                {{
-                                  new Date(tag.timestamp * 1000)
-                                    | moment("from")
-                                }}
-                              </time>
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
                             </td>
                             <td data-label="Tagger" class="">
                               <eth-account
@@ -509,10 +501,14 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
+import TimestampFrom from "../components/TimestampFrom";
+import TimestampFormatted from "../components/TimestampFormatted";
 
 export default {
   name: "HashtagDetail",
   components: {
+    TimestampFormatted,
+    TimestampFrom,
     EthAccount,
     Footer,
     Header,

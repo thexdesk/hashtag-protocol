@@ -113,9 +113,9 @@
                         <hashtag :value="props.row.displayHashtag"></hashtag>
                       </b-table-column>
                       <b-table-column field="timestamp" label="Minted">
-                        {{
-                          new Date(props.row.timestamp * 1000) | moment("from")
-                        }}
+                        <timestamp-from
+                          :value="props.row.timestamp"
+                        ></timestamp-from>
                       </b-table-column>
                       <b-table-column
                         field="owner"
@@ -542,10 +542,12 @@ import HelpModal from "../components/HelpModal";
 import NftLink from "../components/NftLink";
 import { SNAPSHOT } from "../queries";
 import { mapGetters } from "vuex";
+import TimestampFrom from "../components/TimestampFrom";
 
 export default {
   name: "Hashtags",
   components: {
+    TimestampFrom,
     EthAccount,
     EthAmount,
     EthAmountSum,
