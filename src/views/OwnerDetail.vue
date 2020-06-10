@@ -305,7 +305,12 @@
                               </figure>
                             </td>
                             <td data-label="Asset Name" class="">
-                              {{ tag.nftName }}
+                              <nft-link
+                                type="nft"
+                                :name="tag.nftName"
+                                :contract="tag.nftContract"
+                                :id="tag.nftId"
+                              ></nft-link>
                             </td>
                             <td data-label="Asset Name" class="">
                               {{ tag.nftContractName }}
@@ -560,10 +565,12 @@ import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
+import NftLink from "../components/NftLink";
 
 export default {
   name: "OwnerDetail",
   components: {
+    NftLink,
     TimestampFrom,
     Hashtag,
     EthAmountSum,

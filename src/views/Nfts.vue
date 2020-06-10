@@ -101,7 +101,10 @@
                           ></timestamp-from>
                         </td>
                         <td>
-                          <eth-account :value="tag.publisher"></eth-account>
+                          <eth-account
+                            :value="tag.publisher"
+                            route="publisher-detail"
+                          ></eth-account>
                         </td>
                         <!---->
                       </tr>

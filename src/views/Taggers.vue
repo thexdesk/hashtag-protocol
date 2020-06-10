@@ -56,7 +56,10 @@
                         <!---->
                         <!---->
                         <td data-label="Tagger" class="">
-                          <eth-account :value="tagger.id"></eth-account>
+                          <eth-account
+                            :value="tagger.id"
+                            route="tagger-detail"
+                          ></eth-account>
                         </td>
                         <td data-label="Tag count" class="has-text-centered">
                           {{ tagger.tagCount }}

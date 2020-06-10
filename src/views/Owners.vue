@@ -68,7 +68,10 @@
                         <!---->
                         <!---->
                         <td data-label="Owner" class="">
-                          <eth-account :value="owner.id"></eth-account>
+                          <eth-account
+                            :value="owner.id"
+                            route="owner-detail"
+                          ></eth-account>
                         </td>
                         <td data-label="Hashtags" class="has-text-centered">
                           {{ owner.mintCount }}
