@@ -82,7 +82,12 @@
                           />
                         </td>
                         <td data-label="Asset Name" class="">
-                          {{ tag.nftName }}
+                          <nft-link
+                            type="nft"
+                            :name="tag.nftName"
+                            :contract="tag.nftContract"
+                            :id="tag.nftId"
+                          ></nft-link>
                         </td>
                         <td data-label="Project" class="">
                           {{ tag.nftContractName }}
@@ -185,10 +190,12 @@ import { PAGED_TAGS } from "../queries";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
 import EthAccount from "../components/EthAccount";
+import NftLink from "../components/NftLink";
 
 export default {
   name: "Nfts",
   components: {
+    NftLink,
     EthAccount,
     TimestampFrom,
     Hashtag,

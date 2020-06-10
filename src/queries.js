@@ -206,3 +206,34 @@ query pagedTags($first: Int!, $skip: Int!) {
         }
    }     
 `);
+
+export const PAGED_PUBLISHERS = gql(`
+query pagedPublishers($first: Int!, $skip: Int!) {
+    pagedPublishers: publishers(first: $first, skip: $skip, orderBy: tagCount, orderDirection: desc) {
+        id
+        mintCount
+        tagCount
+        mintFees
+        tagFees
+    }
+}`);
+
+export const PAGED_OWNERS = gql(`
+query pagedOwners($first: Int!, $skip: Int!) {
+    pagedOwners: owners(first: $first, skip: $skip, orderBy: mintCount, orderDirection: desc) {
+        id
+        mintCount
+        tagCount
+        tagFees
+    }
+}
+`);
+
+export const PAGED_TAGGERS = gql(`
+query pagedOwners($first: Int!, $skip: Int!) {
+    pagedTaggers: taggers(first: $first, skip: $skip, orderBy: tagCount, orderDirection: desc) {
+        id
+        tagCount
+    }
+}
+`);

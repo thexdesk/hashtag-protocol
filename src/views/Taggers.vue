@@ -46,78 +46,20 @@
                       <!---->
                       <!---->
                     </thead>
-                    <tbody>
-                      <tr draggable="false" class="">
+                    <tbody v-if="pagedTaggers">
+                      <tr
+                        draggable="false"
+                        class=""
+                        v-for="tagger in pagedTaggers"
+                        v-bind:key="tagger.id"
+                      >
                         <!---->
                         <!---->
                         <td data-label="Tagger" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/tagger/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
+                          <eth-account :value="tagger.id"></eth-account>
                         </td>
                         <td data-label="Tag count" class="has-text-centered">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Tagger" class="">
-                          <span
-                            data-label="0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/tagger/0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e"
-                                class=""
-                                ><span> swaylocks.eth </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          1
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Tagger" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/tagger/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          1
+                          {{ tagger.tagCount }}
                         </td>
                         <!---->
                       </tr>
@@ -200,10 +142,13 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import { PAGED_TAGGERS } from "../queries";
+import EthAccount from "../components/EthAccount";
 
 export default {
   name: "Nfts",
   components: {
+    EthAccount,
     Footer,
     Header,
     HelpModal,
@@ -212,7 +157,20 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
+      first: 10,
+      skip: 0,
     };
+  },
+  apollo: {
+    pagedTaggers: {
+      query: PAGED_TAGGERS,
+      variables() {
+        return {
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+    },
   },
 };
 </script>

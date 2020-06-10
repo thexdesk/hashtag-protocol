@@ -58,190 +58,29 @@
                       <!---->
                       <!---->
                     </thead>
-                    <tbody>
-                      <tr draggable="false" class="">
+                    <tbody v-if="pagedPublishers">
+                      <tr
+                        draggable="false"
+                        class=""
+                        v-for="publisher in pagedPublishers"
+                        v-bind:key="publisher.id"
+                      >
                         <!---->
                         <!---->
                         <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
+                          <eth-account :value="publisher.id"></eth-account>
                         </td>
                         <td data-label="Hashtags" class="has-text-centered">
-                          6
+                          {{ publisher.mintCount }}
                         </td>
                         <td data-label="Tag count" class="has-text-centered">
-                          5
+                          {{ publisher.tagCount }}
                         </td>
                         <td data-label="Earnings" class="has-text-centered">
-                          <span>0.0450 Ξ</span>
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x95cc25de913e3703ef73d5e95f96c01134474a11"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x95cc25de913e3703ef73d5e95f96c01134474a11"
-                                class=""
-                                ><span>
-                                  0x95...4a11
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Hashtags" class="has-text-centered">
-                          2
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          3
-                        </td>
-                        <td data-label="Earnings" class="has-text-centered">
-                          <span>0.0270 Ξ</span>
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0xf718da09e7f07a0ee3b73d26d3b469aa29d2b5b9"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0xf718da09e7f07a0ee3b73d26d3b469aa29d2b5b9"
-                                class=""
-                                ><span>
-                                  0xf7...b5b9
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Hashtags" class="has-text-centered">
-                          2
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          1
-                        </td>
-                        <td data-label="Earnings" class="has-text-centered">
-                          <span>0.0090 Ξ</span>
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e"
-                                class=""
-                                ><span> swaylocks.eth </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Hashtags" class="has-text-centered">
-                          1
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          1
-                        </td>
-                        <td data-label="Earnings" class="has-text-centered">
-                          <span>0.0090 Ξ</span>
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x401cbf2194d35d078c0bcdae4bea42275483ab5f"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x401cbf2194d35d078c0bcdae4bea42275483ab5f"
-                                class=""
-                                ><span> andy.knownorigin.eth </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Hashtags" class="has-text-centered">
-                          1
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          0
-                        </td>
-                        <td data-label="Earnings" class="has-text-centered">
-                          <span>0.0000 Ξ</span>
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Hashtags" class="has-text-centered">
-                          1
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          2
-                        </td>
-                        <td data-label="Earnings" class="has-text-centered">
-                          <span>0.0180 Ξ</span>
+                          <eth-amount-sum
+                            :value1="publisher.mintFees"
+                            :value2="publisher.tagFees"
+                          ></eth-amount-sum>
                         </td>
                         <!---->
                       </tr>
@@ -324,10 +163,15 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import { PAGED_PUBLISHERS } from "../queries";
+import EthAccount from "../components/EthAccount";
+import EthAmountSum from "../components/EthAmountSum";
 
 export default {
   name: "Nfts",
   components: {
+    EthAmountSum,
+    EthAccount,
     Footer,
     Header,
     HelpModal,
@@ -336,7 +180,20 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
+      first: 10,
+      skip: 0,
     };
+  },
+  apollo: {
+    pagedPublishers: {
+      query: PAGED_PUBLISHERS,
+      variables() {
+        return {
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+    },
   },
 };
 </script>
