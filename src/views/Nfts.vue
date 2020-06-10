@@ -66,240 +66,37 @@
                       <!---->
                       <!---->
                     </thead>
-                    <tbody>
-                      <tr draggable="false" class="">
+                    <tbody v-if="pagedTags">
+                      <tr
+                        draggable="false"
+                        class=""
+                        v-for="tag in pagedTags"
+                        v-bind:key="tag.id"
+                      >
                         <!---->
                         <!---->
                         <td data-label="" class="">
                           <img
-                            src="https://ipfs.infura.io/ipfs/QmU65xAi3H5oaZk1L9dVjZ7EqGFjoJbydXiSAp2ankgQxc"
+                            :src="tag.nftImage"
                             style="max-width: 75px; max-height: 75px;"
                           />
                         </td>
                         <td data-label="Asset Name" class="">
-                          <span class="has-text-weight-bold"
-                            ><a
-                              href="/nft/0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e/51001"
-                              class=""
-                            >
-                              test
-                            </a></span
-                          >
+                          {{ tag.nftName }}
                         </td>
                         <td data-label="Project" class="">
-                          KnownOriginDigitalAsset
+                          {{ tag.nftContractName }}
                         </td>
                         <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/dapp" class=""> #dapp </a></span
-                          >
+                          <hashtag :value="tag.hashtagName"></hashtag>
                         </td>
                         <td>
-                          12 days ago
+                          <timestamp-from
+                            :value="tag.timestamp"
+                          ></timestamp-from>
                         </td>
                         <td>
-                          <span
-                            ><a
-                              href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                              class=""
-                            >
-                              <span>
-                                0xd6...bc4b
-                              </span></a
-                            ></span
-                          >
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="" class="">
-                          <img
-                            src="https://ipfs.infura.io/ipfs/QmRomtVxLDmRrZG11Z6wtARQWnCChRT17VaEXPf24ykRfD/asset.webp"
-                            style="max-width: 75px; max-height: 75px;"
-                          />
-                        </td>
-                        <td data-label="Asset Name" class="">
-                          <span class="has-text-weight-bold"
-                            ><a
-                              href="/nft/0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e/53901"
-                              class=""
-                            >
-                              final test
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Project" class="">
-                          KnownOriginDigitalAsset
-                        </td>
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/vinc3" class="">
-                              #vinc3
-                            </a></span
-                          >
-                        </td>
-                        <td>
-                          12 days ago
-                        </td>
-                        <td>
-                          <span
-                            ><a
-                              href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                              class=""
-                            >
-                              <span>
-                                0xd6...bc4b
-                              </span></a
-                            ></span
-                          >
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="" class="">
-                          <img
-                            src="https://ipfs.infura.io/ipfs/QmPfpZToedF2MnBgmBAhmWf5rXUYKvMbww2zA16J8JG8tc"
-                            style="max-width: 75px; max-height: 75px;"
-                          />
-                        </td>
-                        <td data-label="Asset Name" class="">
-                          <span class="has-text-weight-bold"
-                            ><a
-                              href="/nft/0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e/54001"
-                              class=""
-                            >
-                              MetaFactory Tester Badge
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Project" class="">
-                          KnownOriginDigitalAsset
-                        </td>
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/blockrocket" class="">
-                              #blockrocket
-                            </a></span
-                          >
-                        </td>
-                        <td>
-                          12 days ago
-                        </td>
-                        <td>
-                          <span
-                            ><a
-                              href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                              class=""
-                            >
-                              <span>
-                                0xd6...bc4b
-                              </span></a
-                            ></span
-                          >
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="" class="">
-                          <img
-                            src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
-                            style="max-width: 75px; max-height: 75px;"
-                          />
-                        </td>
-                        <td data-label="Asset Name" class="">
-                          <span class="has-text-weight-bold"
-                            ><a
-                              href="/nft/0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e/21001"
-                              class=""
-                            >
-                              Nr. 111 - The Pit
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Project" class="">
-                          KnownOriginDigitalAsset
-                        </td>
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/sharkweek" class="">
-                              #sharkweek
-                            </a></span
-                          >
-                        </td>
-                        <td>
-                          12 days ago
-                        </td>
-                        <td>
-                          <span
-                            ><a
-                              href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                              class=""
-                            >
-                              <span>
-                                0xd6...bc4b
-                              </span></a
-                            ></span
-                          >
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="" class="">
-                          <img
-                            src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
-                            style="max-width: 75px; max-height: 75px;"
-                          />
-                        </td>
-                        <td data-label="Asset Name" class="">
-                          <span class="has-text-weight-bold"
-                            ><a
-                              href="/nft/0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e/21001"
-                              class=""
-                            >
-                              Nr. 111 - The Pit
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Project" class="">
-                          KnownOriginDigitalAsset
-                        </td>
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/micha3l" class="">
-                              #micha3l
-                            </a></span
-                          >
-                        </td>
-                        <td>
-                          12 days ago
-                        </td>
-                        <td>
-                          <span
-                            ><a
-                              href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                              class=""
-                            >
-                              <span>
-                                0xd6...bc4b
-                              </span></a
-                            ></span
-                          >
+                          <eth-account :value="tag.publisher"></eth-account>
                         </td>
                         <!---->
                       </tr>
@@ -352,6 +149,7 @@
                             href="#"
                             aria-label="Page 2."
                             class="pagination-link"
+                            @click="skip = skip + first"
                             >2</a
                           >
                         </li>
@@ -383,10 +181,17 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import { PAGED_TAGS } from "../queries";
+import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
+import EthAccount from "../components/EthAccount";
 
 export default {
   name: "Nfts",
   components: {
+    EthAccount,
+    TimestampFrom,
+    Hashtag,
     Footer,
     Header,
     HelpModal,
@@ -395,7 +200,20 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
+      first: 10,
+      skip: 0,
     };
+  },
+  apollo: {
+    pagedTags: {
+      query: PAGED_TAGS,
+      variables() {
+        return {
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+    },
   },
 };
 </script>
