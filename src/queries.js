@@ -173,3 +173,17 @@ query publisherByAcc($id: String!) {
     }
 }
 `);
+
+export const PAGED_HASHTAGS = gql(`
+query pagedHashtags($first: Int!, $skip: Int!) {
+        pagedHashtags: hashtags(first: $first, skip: $skip, orderBy: timestamp, orderDirection: desc) {
+            id
+            name
+            displayHashtag
+            owner
+            publisher
+            timestamp
+            tagCount
+        }
+}
+`);

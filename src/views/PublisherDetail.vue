@@ -316,71 +316,71 @@
                         </tbody>
                         <!---->
                       </table>
-                      <!--                      <div class="level">-->
-                      <!--                        <div class="level-left"></div>-->
-                      <!--                        <div class="level-right">-->
-                      <!--                          <div class="level-item">-->
-                      <!--                            <nav class="pagination">-->
-                      <!--                              <a-->
-                      <!--                                role="button"-->
-                      <!--                                href="#"-->
-                      <!--                                disabled="disabled"-->
-                      <!--                                aria-label="Page 0."-->
-                      <!--                                class="pagination-link pagination-previous"-->
-                      <!--                                ><span class="icon" aria-hidden="true"-->
-                      <!--                                  ><i-->
-                      <!--                                    class="mdi mdi-chevron-left mdi-24px"-->
-                      <!--                                  ></i></span-->
-                      <!--                              ></a>-->
-                      <!--                              <a-->
-                      <!--                                role="button"-->
-                      <!--                                href="#"-->
-                      <!--                                aria-label="Page 2."-->
-                      <!--                                class="pagination-link pagination-next"-->
-                      <!--                                ><span class="icon" aria-hidden="true"-->
-                      <!--                                  ><i-->
-                      <!--                                    class="mdi mdi-chevron-right mdi-24px"-->
-                      <!--                                  ></i></span-->
-                      <!--                              ></a>-->
-                      <!--                              <ul class="pagination-list">-->
-                      <!--                                &lt;!&ndash;&ndash;&gt;-->
-                      <!--                                &lt;!&ndash;&ndash;&gt;-->
-                      <!--                                <li>-->
-                      <!--                                  <a-->
-                      <!--                                    role="button"-->
-                      <!--                                    href="#"-->
-                      <!--                                    aria-label="Current page, Page 1."-->
-                      <!--                                    aria-current="true"-->
-                      <!--                                    class="pagination-link is-current"-->
-                      <!--                                    >1</a-->
-                      <!--                                  >-->
-                      <!--                                </li>-->
-                      <!--                                <li>-->
-                      <!--                                  <a-->
-                      <!--                                    role="button"-->
-                      <!--                                    href="#"-->
-                      <!--                                    aria-label="Page 2."-->
-                      <!--                                    class="pagination-link"-->
-                      <!--                                    >2</a-->
-                      <!--                                  >-->
-                      <!--                                </li>-->
-                      <!--                                <li>-->
-                      <!--                                  <span class="pagination-ellipsis">…</span>-->
-                      <!--                                </li>-->
-                      <!--                                <li>-->
-                      <!--                                  <a-->
-                      <!--                                    role="button"-->
-                      <!--                                    href="#"-->
-                      <!--                                    aria-label="Page 12."-->
-                      <!--                                    class="pagination-link"-->
-                      <!--                                    >12</a-->
-                      <!--                                  >-->
-                      <!--                                </li>-->
-                      <!--                              </ul>-->
-                      <!--                            </nav>-->
-                      <!--                          </div>-->
-                      <!--                        </div>-->
-                      <!--                      </div>-->
+                      <div class="level">
+                        <div class="level-left"></div>
+                        <div class="level-right">
+                          <div class="level-item">
+                            <nav class="pagination">
+                              <a
+                                role="button"
+                                href="#"
+                                disabled="disabled"
+                                aria-label="Page 0."
+                                class="pagination-link pagination-previous"
+                                ><span class="icon" aria-hidden="true"
+                                  ><i
+                                    class="mdi mdi-chevron-left mdi-24px"
+                                  ></i></span
+                              ></a>
+                              <a
+                                role="button"
+                                href="#"
+                                aria-label="Page 2."
+                                class="pagination-link pagination-next"
+                                ><span class="icon" aria-hidden="true"
+                                  ><i
+                                    class="mdi mdi-chevron-right mdi-24px"
+                                  ></i></span
+                              ></a>
+                              <ul class="pagination-list">
+                                <!---->
+                                <!---->
+                                <li>
+                                  <a
+                                    role="button"
+                                    href="#"
+                                    aria-label="Current page, Page 1."
+                                    aria-current="true"
+                                    class="pagination-link is-current"
+                                    >1</a
+                                  >
+                                </li>
+                                <li>
+                                  <a
+                                    role="button"
+                                    href="#"
+                                    aria-label="Page 2."
+                                    class="pagination-link"
+                                    >2</a
+                                  >
+                                </li>
+                                <li>
+                                  <span class="pagination-ellipsis">…</span>
+                                </li>
+                                <li>
+                                  <a
+                                    role="button"
+                                    href="#"
+                                    aria-label="Page 12."
+                                    class="pagination-link"
+                                    >12</a
+                                  >
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <!---->
                   </div>

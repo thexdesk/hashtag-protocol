@@ -64,499 +64,34 @@
                       <!---->
                       <!---->
                     </thead>
-                    <tbody>
-                      <tr draggable="false" class="">
+                    <tbody v-if="pagedHashtags">
+                      <tr
+                        draggable="false"
+                        class=""
+                        v-for="hashtag in pagedHashtags"
+                        v-bind:key="hashtag.id"
+                      >
                         <!---->
                         <!---->
                         <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/Kaiju" class="">
-                              #Kaiju
-                            </a></span
-                          >
+                          <hashtag :value="hashtag.displayHashtag"></hashtag>
                         </td>
-                        <td data-label="Minted" class="">12 days ago</td>
+                        <td data-label="Minted" class="">
+                          <timestamp-from
+                            :value="hashtag.timestamp"
+                          ></timestamp-from>
+                        </td>
                         <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
+                          <eth-account :value="hashtag.owner"></eth-account>
                         </td>
                         <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
+                          <eth-account :value="hashtag.publisher"></eth-account>
                         </td>
-                        <td data-label="Publisher" class="">
-                          10
+                        <td data-label="Count" class="">
+                          {{ hashtag.tagCount }}
                         </td>
                         <!---->
                       </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/Dapp" class=""> #Dapp </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">12 days ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/Vinc3" class="">
-                              #Vinc3
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">12 days ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/genesis" class="">
-                              #genesis
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">15 days ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x401cbf2194d35d078c0bcdae4bea42275483ab5f"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x401cbf2194d35d078c0bcdae4bea42275483ab5f"
-                                class=""
-                                ><span> andy.knownorigin.eth </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/SharkWeek" class="">
-                              #SharkWeek
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">21 days ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e"
-                                class=""
-                                ><span> swaylocks.eth </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/Micha3l" class="">
-                              #Micha3l
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">a month ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/James" class="">
-                              #James
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">a month ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/AmaZ3" class="">
-                              #AmaZ3
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">a month ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                class=""
-                                ><span>
-                                  0x12...e4c2
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/bob" class=""> #bob </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">a month ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0xf718da09e7f07a0ee3b73d26d3b469aa29d2b5b9"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0xf718da09e7f07a0ee3b73d26d3b469aa29d2b5b9"
-                                class=""
-                                ><span>
-                                  0xf7...b5b9
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                      <tr draggable="false" class="">
-                        <!---->
-                        <!---->
-                        <td data-label="Hashtag" class="">
-                          <span class="has-text-weight-bold"
-                            ><a href="/hashtag/blockchain" class="">
-                              #blockchain
-                            </a></span
-                          >
-                        </td>
-                        <td data-label="Minted" class="">a month ago</td>
-                        <td data-label="Owner" class="">
-                          <span
-                            data-label="0xf718da09e7f07a0ee3b73d26d3b469aa29d2b5b9"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/owner/0xf718da09e7f07a0ee3b73d26d3b469aa29d2b5b9"
-                                class=""
-                                ><span>
-                                  0xf7...b5b9
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          <span
-                            data-label="0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                            class="is-dark is-bottom is-medium b-tooltip"
-                            style="transition-delay: 0ms;"
-                            ><span
-                              ><a
-                                href="/publisher/0xd677aed0965ac9b54e709f01a99ceca205aebc4b"
-                                class=""
-                                ><span>
-                                  0xd6...bc4b
-                                </span></a
-                              ></span
-                            ></span
-                          >
-                        </td>
-                        <td data-label="Publisher" class="">
-                          10
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
                     </tbody>
                   </table>
                 </div>
@@ -594,6 +129,7 @@
                             aria-label="Current page, Page 1."
                             aria-current="true"
                             class="pagination-link is-current"
+                            @click="skip = skip - first"
                             >1</a
                           >
                         </li>
@@ -603,6 +139,7 @@
                             href="#"
                             aria-label="Page 2."
                             class="pagination-link"
+                            @click="skip = skip + first"
                             >2</a
                           >
                         </li>
@@ -634,10 +171,17 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import { PAGED_HASHTAGS } from "../queries";
+import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
+import EthAccount from "../components/EthAccount";
 
 export default {
   name: "Nfts",
   components: {
+    EthAccount,
+    TimestampFrom,
+    Hashtag,
     Footer,
     Header,
     HelpModal,
@@ -646,7 +190,20 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
+      first: 10,
+      skip: 0,
     };
+  },
+  apollo: {
+    pagedHashtags: {
+      query: PAGED_HASHTAGS,
+      variables() {
+        return {
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+    },
   },
 };
 </script>

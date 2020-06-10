@@ -644,6 +644,7 @@ export default {
       isPopHashtagsModalActive: false,
       isTopTaggersModalActive: false,
       isTagModalActive: false,
+      isCustom: false,
       modalForm: {
         hashtag: null,
         nft: null,
