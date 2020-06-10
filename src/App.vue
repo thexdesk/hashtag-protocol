@@ -76,6 +76,8 @@ $footer-padding: 3rem 1.5rem 6rem;
 // Removes hamburger in global nav.
 $navbar-breakpoint: 414px;
 
+$section-padding: 0.25rem 0.8rem;
+
 @mixin my-touch {
   @media screen and (max-width: $navbar-breakpoint - 1px) {
     @content;
@@ -113,15 +115,18 @@ $navbar-breakpoint: 414px;
 
 section.hero {
   padding-top: 0.75rem;
-  padding-bottom: 3rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+
+  &.dash {
+    padding-bottom: 3rem;
+    margin-bottom: -4rem;
+  }
 }
 
 section.main {
-  margin-top: -4rem;
   padding-bottom: 2rem;
 }
-
-$section-padding: 0.25rem 0.8rem;
 
 @import "@creativebulma/bulma-divider";
 @import "bulma";

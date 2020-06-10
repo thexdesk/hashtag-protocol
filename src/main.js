@@ -6,13 +6,16 @@ import ApolloClient from "apollo-boost";
 import VueApollo from "vue-apollo";
 import VueMoment from "vue-moment";
 import Buefy from "buefy";
+import VueScreen from "vue-screen";
 import { ethers } from "ethers";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import "@/mixins/global";
 
 Vue.use(Buefy);
 Vue.use(VueMoment);
 Vue.use(VueAxios, axios);
+Vue.use(VueScreen, "bulma");
 
 // Connection for GraphQL.
 const client = new ApolloClient({
@@ -35,9 +38,7 @@ Vue.filter("shortEth", function (value) {
   if (!value) return value;
 
   return `
-  ${value.substr(0, 4)}
-  ...
-  ${value.substr(value.length - 4, value.length)}
+  ${value.substr(0, 4)}...${value.substr(value.length - 4, value.length)}
   `;
 });
 

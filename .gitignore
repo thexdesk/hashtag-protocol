@@ -28,3 +28,5 @@ package-lock.json
 # Platform build directories
 /build_platform
 .tmp_platformsh
+
+.grenrc.yaml
