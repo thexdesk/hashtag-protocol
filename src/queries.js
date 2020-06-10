@@ -152,3 +152,24 @@ query tagsByTagger($tagger: String!) {
   }
 }
 `);
+
+export const TAGGER_BY_ACC = gql(`
+query taggerByAcc($id: String!) {
+    taggerByAcc: tagger(id: $id){
+        id  
+        tagCount
+    }
+}
+`);
+
+export const PUBLISHER_BY_ACC = gql(`
+query publisherByAcc($id: String!) {
+    publisherByAcc: publisher(id: $id){
+      id  
+      mintCount
+      tagCount
+      mintFees
+      tagFees
+    }
+}
+`);

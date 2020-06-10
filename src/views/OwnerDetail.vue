@@ -47,7 +47,7 @@
                   class="is-pulled-right"
                 ></help-modal>
                 <h2 class="title is-4">Market summary</h2>
-                <div class="b-table">
+                <div class="b-table" v-if="ownerByAcc">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>

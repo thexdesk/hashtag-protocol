@@ -31,6 +31,7 @@
                           <td class="has-text-weight-bold">Name</td>
                           <td>
                             {{ publisherName }}
+                            <code>TODO</code>
                           </td>
                         </tr>
                         <tr>
@@ -67,38 +68,45 @@
                 <h2 class="title is-4">
                   Market summary for KnownOrigin
                 </h2>
-                <div class="b-table">
+                <div class="b-table" v-if="publisherByAcc">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
                         <tr>
                           <td class="has-text-weight-bold">Hashtags</td>
                           <td>
-                            322
+                            {{ publisherByAcc.mintCount }}
                           </td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Hashtag revenue</td>
                           <td>
-                            1.361 ETH
+                            <eth-amount
+                              :value="publisherByAcc.mintFees"
+                            ></eth-amount>
                           </td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Tag count</td>
                           <td>
-                            1121
+                            {{ publisherByAcc.tagCount }}
                           </td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
-                            0.191 ETH
+                            <eth-amount
+                              :value="publisherByAcc.tagFees"
+                            ></eth-amount>
                           </td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Total revenue</td>
                           <td>
-                            1.553 ETH
+                            <eth-amount-sum
+                              :value1="publisherByAcc.mintFees"
+                              :value2="publisherByAcc.tagFees"
+                            ></eth-amount-sum>
                           </td>
                         </tr>
                       </tbody>
@@ -308,71 +316,71 @@
                         </tbody>
                         <!---->
                       </table>
-                      <div class="level">
-                        <div class="level-left"></div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <nav class="pagination">
-                              <a
-                                role="button"
-                                href="#"
-                                disabled="disabled"
-                                aria-label="Page 0."
-                                class="pagination-link pagination-previous"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-left mdi-24px"
-                                  ></i></span
-                              ></a>
-                              <a
-                                role="button"
-                                href="#"
-                                aria-label="Page 2."
-                                class="pagination-link pagination-next"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-right mdi-24px"
-                                  ></i></span
-                              ></a>
-                              <ul class="pagination-list">
-                                <!---->
-                                <!---->
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Current page, Page 1."
-                                    aria-current="true"
-                                    class="pagination-link is-current"
-                                    >1</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 2."
-                                    class="pagination-link"
-                                    >2</a
-                                  >
-                                </li>
-                                <li>
-                                  <span class="pagination-ellipsis">…</span>
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 12."
-                                    class="pagination-link"
-                                    >12</a
-                                  >
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                      <!--                      <div class="level">-->
+                      <!--                        <div class="level-left"></div>-->
+                      <!--                        <div class="level-right">-->
+                      <!--                          <div class="level-item">-->
+                      <!--                            <nav class="pagination">-->
+                      <!--                              <a-->
+                      <!--                                role="button"-->
+                      <!--                                href="#"-->
+                      <!--                                disabled="disabled"-->
+                      <!--                                aria-label="Page 0."-->
+                      <!--                                class="pagination-link pagination-previous"-->
+                      <!--                                ><span class="icon" aria-hidden="true"-->
+                      <!--                                  ><i-->
+                      <!--                                    class="mdi mdi-chevron-left mdi-24px"-->
+                      <!--                                  ></i></span-->
+                      <!--                              ></a>-->
+                      <!--                              <a-->
+                      <!--                                role="button"-->
+                      <!--                                href="#"-->
+                      <!--                                aria-label="Page 2."-->
+                      <!--                                class="pagination-link pagination-next"-->
+                      <!--                                ><span class="icon" aria-hidden="true"-->
+                      <!--                                  ><i-->
+                      <!--                                    class="mdi mdi-chevron-right mdi-24px"-->
+                      <!--                                  ></i></span-->
+                      <!--                              ></a>-->
+                      <!--                              <ul class="pagination-list">-->
+                      <!--                                &lt;!&ndash;&ndash;&gt;-->
+                      <!--                                &lt;!&ndash;&ndash;&gt;-->
+                      <!--                                <li>-->
+                      <!--                                  <a-->
+                      <!--                                    role="button"-->
+                      <!--                                    href="#"-->
+                      <!--                                    aria-label="Current page, Page 1."-->
+                      <!--                                    aria-current="true"-->
+                      <!--                                    class="pagination-link is-current"-->
+                      <!--                                    >1</a-->
+                      <!--                                  >-->
+                      <!--                                </li>-->
+                      <!--                                <li>-->
+                      <!--                                  <a-->
+                      <!--                                    role="button"-->
+                      <!--                                    href="#"-->
+                      <!--                                    aria-label="Page 2."-->
+                      <!--                                    class="pagination-link"-->
+                      <!--                                    >2</a-->
+                      <!--                                  >-->
+                      <!--                                </li>-->
+                      <!--                                <li>-->
+                      <!--                                  <span class="pagination-ellipsis">…</span>-->
+                      <!--                                </li>-->
+                      <!--                                <li>-->
+                      <!--                                  <a-->
+                      <!--                                    role="button"-->
+                      <!--                                    href="#"-->
+                      <!--                                    aria-label="Page 12."-->
+                      <!--                                    class="pagination-link"-->
+                      <!--                                    >12</a-->
+                      <!--                                  >-->
+                      <!--                                </li>-->
+                      <!--                              </ul>-->
+                      <!--                            </nav>-->
+                      <!--                          </div>-->
+                      <!--                        </div>-->
+                      <!--                      </div>-->
                     </div>
                     <!---->
                   </div>
@@ -700,12 +708,15 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-//import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
-//import EthAccount from "../components/EthAccount";
+import { PUBLISHER_BY_ACC } from "../queries";
+import EthAmountSum from "../components/EthAmountSum";
+import EthAmount from "../components/EthAmount";
 
 export default {
   name: "PublisherDetail",
   components: {
+    EthAmount,
+    EthAmountSum,
     EthAccount,
     Footer,
     Header,
@@ -724,6 +735,16 @@ export default {
       publisherWebsite: "https://knownorigin.io",
       tagsByHashtag: null,
     };
+  },
+  apollo: {
+    publisherByAcc: {
+      query: PUBLISHER_BY_ACC,
+      variables() {
+        return {
+          id: this.publisher,
+        };
+      },
+    },
   },
 };
 </script>

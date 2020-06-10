@@ -47,20 +47,20 @@
                   class="is-pulled-right"
                 ></help-modal>
                 <h2 class="title is-4">Market summary</h2>
-                <div class="b-table">
+                <div class="b-table" v-if="taggerByAcc">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tag count</td>
                           <td>
-                            1121
+                            {{ taggerByAcc.tagCount }}
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging fees</td>
                           <td>
-                            0.191 ETH
+                            <code>TODO</code>
                           </td>
                         </tr>
                       </tbody>
@@ -131,38 +131,28 @@
                           <!---->
                         </thead>
                         <tbody>
-                          <tr>
+                          <tr v-for="tag in tagsByTagger" v-bind:key="tag.id">
                             <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
+                              <figure class="image">
+                                <img :src="tag.nftImage" :alt="tag.nftName" />
+                              </figure>
                             </td>
                             <td data-label="Asset Name" class="">
-                              Nr. 111 - The Pit
+                              {{ tag.nftName }}
                             </td>
-                            <td data-label="Project" class="">
-                              KnownOrigin
+                            <td data-label="Asset Name" class="">
+                              {{ tag.nftContractName }}
                             </td>
                             <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/SharkWeek" class="">
-                                  #SharkWeek
-                                </a></span
-                              >
+                              <hashtag :value="tag.hashtagName"></hashtag>
                             </td>
                             <td data-label="Tagged" class="">
-                              2 days ago
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
                             </td>
-                            <td data-label="Tagged" class="">
-                              <span
-                                ><a
-                                  href="/publisher/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
+                            <td data-label="Tagger" class="">
+                              <eth-account :value="tag.tagger"></eth-account>
                             </td>
                           </tr>
                         </tbody>
@@ -313,11 +303,15 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-//import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
+import { TAGGER_BY_ACC, TAGS_BY_TAGGER } from "../queries";
+import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
 
 export default {
   name: "TaggerDetail",
   components: {
+    TimestampFrom,
+    Hashtag,
     EthAccount,
     Footer,
     Header,
@@ -333,6 +327,24 @@ export default {
       tagsByHashtag: null,
       hashtagsByName: null,
     };
+  },
+  apollo: {
+    taggerByAcc: {
+      query: TAGGER_BY_ACC,
+      variables() {
+        return {
+          id: this.tagger,
+        };
+      },
+    },
+    tagsByTagger: {
+      query: TAGS_BY_TAGGER,
+      variables() {
+        return {
+          tagger: this.tagger,
+        };
+      },
+    },
   },
 };
 </script>
