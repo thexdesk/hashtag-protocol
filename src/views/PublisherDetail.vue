@@ -9,9 +9,7 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">
-          Publisher: KnownOrigin
-        </h1>
+        <h1 class="title is-1">Publisher: {{ publisherName }}</h1>
         <h2 class="subtitle">Hashtag Protocol Publisher</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
@@ -167,148 +165,29 @@
                           <!---->
                           <!---->
                         </thead>
-                        <tbody>
-                          <tr>
+                        <tbody v-if="hashtagsByPublisher">
+                          <tr
+                            v-for="hashtag in hashtagsByPublisher"
+                            v-bind:key="hashtag.id"
+                          >
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/genesis" class="">
-                                  #genesis
-                                </a></span
-                              >
+                              <hashtag :value="hashtag.name"></hashtag>
                             </td>
-                            <td data-label="Minted" class="">11 hours ago</td>
+                            <td data-label="Minted" class="">
+                              <timestamp-from
+                                :value="hashtag.timestamp"
+                              ></timestamp-from>
+                            </td>
                             <td data-label="Owner" class="">
-                              <span
-                                ><a
-                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
+                              <eth-account
+                                :value="hashtag.owner"
+                                route="owner-detail"
+                              ></eth-account>
                             </td>
                             <td data-label="tag-count" class="">
-                              <span>
-                                23
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr>
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/SharkWeek" class="">
-                                  #SharkWeek
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Minted" class="">7 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span
-                                ><a
-                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="tag-count" class="">
-                              <span>
-                                23
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr>
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/Micha3l" class="">
-                                  #Micha3l
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Minted" class="">11 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span
-                                ><a
-                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="tag-count" class="">
-                              <span>
-                                23
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr>
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/James" class="">
-                                  #James
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Minted" class="">14 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span
-                                ><a
-                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="tag-count" class="">
-                              <span>
-                                23
-                              </span>
-                            </td>
-                          </tr>
-                          <!---->
-                          <!---->
-                          <tr>
-                            <!---->
-                            <!---->
-                            <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/AmaZ3" class="">
-                                  #AmaZ3
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="Minted" class="">14 days ago</td>
-                            <td data-label="Owner" class="">
-                              <span
-                                ><a
-                                  href="/owner/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
-                            </td>
-                            <td data-label="tag-count" class="">
-                              <span>
-                                23
-                              </span>
+                              {{ hashtag.tagCount }}
                             </td>
                           </tr>
                           <!---->
@@ -432,39 +311,40 @@
                           <!---->
                           <!---->
                         </thead>
-                        <tbody>
-                          <tr>
+                        <tbody v-if="tagsByPublisher">
+                          <tr
+                            v-for="tag in tagsByPublisher"
+                            v-bind:key="tag.id"
+                          >
                             <td data-label="" class="">
-                              <img
-                                src="https://ipfs.infura.io/ipfs/QmdkqXoVfY8icbqK9BGS9EdMtJXzpPfR5BWeYC4DTu9EtJ"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
+                              <figure class="image">
+                                <img :src="tag.nftImage" :alt="tag.nftName" />
+                              </figure>
                             </td>
                             <td data-label="Asset Name" class="">
-                              Nr. 111 - The Pit
+                              <nft-link
+                                type="nft"
+                                :name="tag.nftName"
+                                :contract="tag.nftContract"
+                                :id="tag.nftId"
+                              ></nft-link>
                             </td>
-                            <td data-label="Project" class="">
-                              KnownOrigin
+                            <td data-label="Asset Name" class="">
+                              {{ tag.nftContractName }}
                             </td>
                             <td data-label="Hashtag" class="">
-                              <span
-                                ><a href="/hashtag/SharkWeek" class="">
-                                  #SharkWeek
-                                </a></span
-                              >
+                              <hashtag :value="tag.hashtagName"></hashtag>
                             </td>
                             <td data-label="Tagged" class="">
-                              2 days ago
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
                             </td>
                             <td data-label="Tagger" class="">
-                              <span
-                                ><a
-                                  href="/tagger/0x12d062b19a2df1920eb9fc28bd6e9a7e936de4c2"
-                                  class=""
-                                >
-                                  0x40 ... ab5f
-                                </a></span
-                              >
+                              <eth-account
+                                :value="tag.tagger"
+                                route="tagger-detail"
+                              ></eth-account>
                             </td>
                           </tr>
                         </tbody>
@@ -708,13 +588,23 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PUBLISHER_BY_ACC } from "../queries";
+import {
+  HASHTAGS_BY_PUBLISHER,
+  PUBLISHER_BY_ACC,
+  TAGS_BY_PUBLISHER,
+} from "../queries";
 import EthAmountSum from "../components/EthAmountSum";
 import EthAmount from "../components/EthAmount";
+import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
+import NftLink from "../components/NftLink";
 
 export default {
   name: "PublisherDetail",
   components: {
+    NftLink,
+    TimestampFrom,
+    Hashtag,
     EthAmount,
     EthAmountSum,
     EthAccount,
@@ -733,6 +623,7 @@ export default {
       publisherName: "KnownOrigin",
       publisherRegistration: "https://#",
       publisherWebsite: "https://knownorigin.io",
+      publisherRegURL: null,
       tagsByHashtag: null,
     };
   },
@@ -742,6 +633,22 @@ export default {
       variables() {
         return {
           id: this.publisher,
+        };
+      },
+    },
+    hashtagsByPublisher: {
+      query: HASHTAGS_BY_PUBLISHER,
+      variables() {
+        return {
+          publisher: this.publisher,
+        };
+      },
+    },
+    tagsByPublisher: {
+      query: TAGS_BY_PUBLISHER,
+      variables() {
+        return {
+          publisher: this.publisher,
         };
       },
     },

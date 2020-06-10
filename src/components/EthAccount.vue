@@ -37,6 +37,7 @@ export default {
     };
   },
   async mounted() {
+    if (!this.homesteadProvider) return;
     this.ens = await this.homesteadProvider.lookupAddress(this.value);
   },
 };

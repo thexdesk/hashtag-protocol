@@ -170,11 +170,15 @@
                               ></timestamp-from>
                             </td>
                             <td data-label="Creator" class="">
-                              <eth-account :value="hashtag.owner"></eth-account>
+                              <eth-account
+                                :value="hashtag.owner"
+                                route="owner-detail"
+                              ></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
                               <eth-account
                                 :value="hashtag.publisher"
+                                route="publisher-detail"
                               ></eth-account>
                             </td>
                           </tr>
@@ -324,7 +328,10 @@
                               ></timestamp-from>
                             </td>
                             <td data-label="Tagger" class="">
-                              <eth-account :value="tag.tagger"></eth-account>
+                              <eth-account
+                                :value="tag.tagger"
+                                route="tagger-detail"
+                              ></eth-account>
                             </td>
                           </tr>
                         </tbody>

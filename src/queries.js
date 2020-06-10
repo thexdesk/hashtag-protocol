@@ -134,9 +134,42 @@ query hashtagsByOwner($owner: String!) {
 }
 `);
 
+export const HASHTAGS_BY_PUBLISHER = gql(`
+query hashtagsByPublisher($publisher: String!) {
+  hashtagsByPublisher: hashtags(where:{publisher: $publisher}) {
+    id
+    name
+    displayHashtag
+    owner
+    publisher
+    timestamp
+    tagCount
+  }
+}
+`);
+
 export const TAGS_BY_TAGGER = gql(`
 query tagsByTagger($tagger: String!) {
   tagsByTagger: tags(where:{ tagger: $tagger}) {
+    id
+    hashtagId
+    hashtagName
+    nftContract
+    nftId
+    nftContractName
+    nftTokenUri
+    nftName
+    nftImage
+    tagger
+    timestamp
+    publisher
+  }
+}
+`);
+
+export const TAGS_BY_PUBLISHER = gql(`
+query tagsByPublisher($publisher: String!) {
+  tagsByPublisher: tags(where:{ publisher: $publisher}) {
     id
     hashtagId
     hashtagName
