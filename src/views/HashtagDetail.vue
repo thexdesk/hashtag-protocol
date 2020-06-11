@@ -9,50 +9,49 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">#{{ hashtag }}</h1>
+        <h1 class="title is-1">#{{ hashtagsByName[0].displayHashtag }}</h1>
         <h2 class="subtitle">Hashtag Protocol Token</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip
-                  label="Help"
-                  position="is-bottom is-pulled-right"
-                  type="is-dark"
-                >
-                  <button
-                    class="button is-white"
-                    @click="isOverviewModalActive = true"
-                  >
-                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
-                  </button>
-                </b-tooltip>
+                <help-modal
+                  modal="isOverviewModalActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
                 <h2 class="title is-4">Token overview</h2>
                 <div class="b-table" v-if="hashtagsByName">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Minted</td>
+                          <td class="has-text-weight-bold">Token ID</td>
                           <td>
-                            {{
-                              new Date(hashtagsByName[0].timestamp * 1000)
-                                | moment("MMM Do YYYY")
-                            }}
+                            {{ hashtagsByName[0].id }}
+                            <b-tooltip
+                              label="view on Etherscan"
+                              position="is-bottom"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                              <a v-bind:href="hashtagsByName[0].id">
+                                <b-icon
+                                  icon="ethereum"
+                                  type="is-dark"
+                                  size="is-small"
+                                >
+                                </b-icon>
+                              </a>
+                            </b-tooltip>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Tag count</td>
+                          <td class="has-text-weight-bold">Created</td>
                           <td>
-                            {{ hashtagsByName[0].tagCount }}
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Publisher</td>
-                          <td>
-                            <publisher-link
-                              :value="hashtagsByName[0].publisher"
-                            ></publisher-link>
+                            <timestamp-formatted
+                              :value="parseInt(hashtagsByName[0].timestamp)"
+                            ></timestamp-formatted>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
@@ -60,6 +59,7 @@
                           <td>
                             <eth-account
                               :value="hashtagsByName[0].owner"
+                              route="owner-detail"
                             ></eth-account>
                           </td>
                         </tr>
@@ -68,19 +68,25 @@
                           <td>
                             <eth-account
                               :value="hashtagsByName[0].owner"
+                              route="owner-detail"
+                            ></eth-account>
+                          </td>
+                        </tr>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Publisher</td>
+                          <td>
+                            <eth-account
+                              :value="hashtagsByName[0].publisher"
+                              route="publisher-detail"
                             ></eth-account>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Expires</td>
                           <td>
-                            {{
-                              new Date(
-                                (parseInt(hashtagsByName[0].timestamp) +
-                                  63113904) *
-                                  1000
-                              ) | moment("MMM Do YYYY")
-                            }}
+                            <timestamp-formatted
+                              :value="(parseInt(hashtagsByName[0].timestamp) + 63113904)"
+                            ></timestamp-formatted>
                           </td>
                         </tr>
                       </tbody>
@@ -91,34 +97,33 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <b-tooltip
-                  label="Help"
-                  position="is-bottom is-pulled-right"
-                  type="is-dark"
-                >
-                  <button
-                    class="button is-white is-pulled-right"
-                    @click="isSummaryModalActive = true"
-                  >
-                    <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
-                  </button>
-                </b-tooltip>
-                <h2 class="title is-4">Revenue summary</h2>
+                <help-modal
+                  modal="isSummaryModalActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
+                <h2 class="title is-4">Market summary</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Mint price</td>
+                          <td class="has-text-weight-bold">Creation price</td>
                           <td>
                             0.8265 ETH<br />0.57855 to Publisher<br />0.24795 to
                             Protocol
                           </td>
                         </tr>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Earnings</td>
+                          <td class="has-text-weight-bold">Tagged content</td>
                           <td>
-                            0.001 Owner<br />0.001 Publisher<br />0.001 Protocol
+                            {{ hashtagsByName[0].tagCount }}
+                          </td>
+                        </tr>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Tagging revenue</td>
+                          <td>
+                            0.000 Owner<br />0.000 Publisher<br />0.000 Protocol
                           </td>
                         </tr>
                       </tbody>
@@ -132,18 +137,11 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <b-tooltip
-                label="Help"
-                position="is-bottom is-pulled-right"
-                type="is-dark"
-              >
-                <button
-                  class="button is-white"
-                  @click="isTaggedModalActive = true"
-                >
-                  <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
-                </button>
-              </b-tooltip>
+              <help-modal
+                modal="isTaggedModalActive"
+                @popModalFromChild="popModal"
+                class="is-pulled-right"
+              ></help-modal>
               <h2 class="title is-4 is-spaced">
                 Content tagged with #{{ hashtag }}
               </h2>
@@ -216,18 +214,21 @@
                               {{ tag.nftContractName }}
                             </td>
                             <td data-label="Tagged" class="">
-                              <time>
-                                {{
-                                  new Date(tag.timestamp * 1000)
-                                    | moment("from")
-                                }}
-                              </time>
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
                             </td>
                             <td data-label="Tagger" class="">
-                              <eth-account :value="tag.tagger"></eth-account>
+                              <eth-account
+                                :value="tag.tagger"
+                                route="tagger-detail"
+                              ></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
-                              <eth-account :value="tag.publisher"></eth-account>
+                              <eth-account
+                                :value="tag.publisher"
+                                route="publisher-detail"
+                              ></eth-account>
                             </td>
                           </tr>
                         </tbody>
@@ -253,35 +254,82 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Token overview explained</p>
+                <p class="title is-4">Token overview</p>
               </div>
             </div>
             <div class="content">
               <p>
-                <strong>Minted</strong> - Date token was created and added to
+                <strong>Token ID</strong> - Numerical Id for this token on the
                 Ethereum blockchain.
               </p>
               <p>
-                <strong>Publisher</strong> - Wallet address of application
-                running Hashtag Protocol where token was minted. This address
-                receives share of token minting fees.
+                <strong>Created</strong> - Date this token was created and added
+                to Ethereum blockchain.
               </p>
               <p>
-                <strong>Creator</strong> - Wallet address that payed the token
-                minting fee.
+                <strong>Publisher</strong> - Ethereum address of application
+                implementing Hashtag Protocol where this token was created. This
+                address receives a share of token creation fee.
               </p>
               <p>
-                <strong>Owner</strong> - Wallet address of current token owner.
-                This address receives share of content tagging fees.
+                <strong>Creator</strong> - Ethereum address that payed the token
+                creation fee.
               </p>
               <p>
-                <strong>Expires</strong> - Date from which
-                <strong>Owner</strong> has 30 days to renew token ownership
-                without cost. This is done by sending a transaction to the token
-                contract signed by the current owner address. If token is not
-                renewed within 30 days, ownership is transferred to the Protocol
-                wallet address.
+                <strong>Owner</strong> - Ethereum address of current token
+                owner. This address receives a share of content tagging fee.
               </p>
+              <p>
+                <strong>Expires</strong> - Date from which Owner has 30 days to
+                renew token ownership. This is done by sending a transaction to
+                the token contract signed by the current owner address. If token
+                is not renewed within 30 days, ownership is transferred to the
+                Protocol.
+              </p>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? "What's a Hashtag Token?"
+                      : "What's a Hashtag Token?"
+                  }}
+                </a>
+                <p>
+                  <br />
+                  Hashtag Tokens are digital representations of hashtag text
+                  strings stored on the Ethereum blockchain. The Hashtag
+                  Protocol uses the
+                  <a v-bind:href="erc721"
+                    >Ethereum ERC-721 specification
+                    <b-icon icon="open-in-new" size="is-small"> </b-icon
+                  ></a>
+                  for Hashtag Tokens. This specification has a few properties
+                  that makes it both ideally suited for and perhaps
+                  revolutionary to the use of hashtags. First, as opposed to the
+                  more common ERC-20 specification in which many, identical
+                  copies of a digital token exist, each ERC-721 token is
+                  completely unique; there is and always be only one copy.
+                  Because of this, ERC-721 tokens are ideally suited to
+                  represent or contain one-of-a-kind items of value; artworks,
+                  gaming skins, movie tickets, domain names, real estate titles.
+                  In the case of the Hashtag Protocol, each Hashtag Token both
+                  contains and represents a unique hashtag string. Second, as
+                  digital assets, Hashtag Tokens can be created, bought and sold
+                  by anyone.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -291,31 +339,82 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Revenue summary explained</p>
+                <p class="title is-4">Market summary</p>
               </div>
             </div>
             <div class="content">
               <p>
-                Stitched into the design of the Hashtag Protocol is a virtuous
-                incentive structure that rewards all participants of the system.
+                <strong>Creation price</strong> - Amount the winning bidder pays
+                to acquire a newly created Hashtag Token.
               </p>
               <p>
-                <strong>Mint price</strong> - Hashtag Protocol uses a fair
-                auction method to determine the price of a new Hashtag token.
-                The mint price is the amount the winning bidder pays to acquire
-                the newly minted Hashtag Token. The proceeds of the auction are
-                automatically divided between the Publisher and the Protocol.
+                <strong>Tag count</strong> - How many content items have been
+                tagged with this hashtag.
               </p>
-              <p></p>
               <p>
-                <strong>Earnings</strong> - When a digital artifact is tagged
-                with a Hashtag token, the Tagger pays a small fee added to the
-                standard Ethereum network gas fee. This fee is automatically
-                divided among the Hastag Token owner, the originating Publisher
-                and the Protocol. The summary shown here represents the lifetime
-                sum total of tagging revenue distributed to the Owner, Publisher
-                & Protocol for this Hashtag token.
+                <strong>Earnings</strong> - Total tagging revenue distributed by
+                the Protocol for this Hashtag token.
               </p>
+              <b-collapse
+                :open="false"
+                aria-id="MarketOverview"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is the "Hashtag Market"?'
+                      : 'What is the "Hashtag Market"?'
+                  }}
+                </a>
+                <p>
+                  <br />
+                  Hashtag is a protocol on the Ethereum blockchain that creates
+                  a market & incentive economy around the creation and use of
+                  hashtags. The protocol aims to create a virtuous, financially
+                  incentivized system that creates more value to all
+                  participants the more it grows.
+                </p>
+                <p>
+                  The system revolves around four participants: Creator, Owner,
+                  Publisher and Tagger. These key market participants interact
+                  directly with the protocol, paying to use and earning from the
+                  system without having to negotiate terms of use. The data
+                  generated by the protocol is immutable (impervious to
+                  censorship) and globally accessible.
+                </p>
+                <p>
+                  Hashtag Protocol uses an auction method to determine the price
+                  of a new Hashtag Token. The "creation price" is the amount the
+                  winning bidder pays to acquire the newly created Hashtag
+                  Token. The proceeds of the auction are automatically divided
+                  between the originating Publisher and the Protocol.
+                </p>
+                <p>
+                  In addition to creating unique, non-fungible tokens that both
+                  contain and represent a single, natural language hashtag, the
+                  Protocol also provides facilities for linking a token any
+                  online digital artifact, effectively tagging that content with
+                  the hashtag. Tag count quantifies how many pieces of content
+                  have been tagged with this hashtag.
+                </p>
+                <p>
+                  In exchange for facilitating an entry to a decentralized,
+                  immutable and globally accessible database, the Protocol
+                  collects a small fee from the Tagger when they tag content.
+                  The Protocol smart contract then automatically distributes
+                  this fee among the token owner, the publisher facilitating the
+                  tagging and the Protocol.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -325,31 +424,68 @@
           <div class="card-content">
             <div class="media">
               <div class="media-content">
-                <p class="title is-4">Tagged content explained</p>
+                <p class="title is-4">Tagged content</p>
               </div>
             </div>
             <div class="content">
               <p>
-                Stitched into the design of the Hashtag Protocol is a virtuous
-                incentive structure that rewards all participants of the system.
+                <strong>ERC-721 NFTs</strong><br />Listing of ERC-721
+                non-fungible tokens (digital assets) tagged with
+                <strong>#{{ hashtagsByName[0].displayHashtag }}</strong
+                >.
               </p>
-              <p>
-                <strong>Mint price</strong> - Hashtag Protocol uses a fair
-                auction method to determine the price of a new Hashtag token.
-                The mint price is the amount the winning bidder pays to acquire
-                the newly minted Hashtag Token. The proceeds of the auction are
-                automatically divided between the Publisher and the Protocol.
-              </p>
-              <p></p>
-              <p>
-                <strong>Earnings</strong> - When a digital artifact is tagged
-                with a Hashtag token, the Tagger pays a small fee added to the
-                standard Ethereum network gas fee. This fee is automatically
-                divided among the Hastag Token owner, the originating Publisher
-                and the Protocol. The summary shown here represents the lifetime
-                sum total of tagging revenue distributed to the Owner, Publisher
-                & Protocol for this Hashtag token.
-              </p>
+              <ul>
+                <li>
+                  <strong>Asset name</strong> - Name of the ERC-721 token
+                  tagged.
+                </li>
+                <li>
+                  <strong>Project</strong> - Name of project producing the
+                  digital assets that Hashtag Tokens are being linked to.
+                </li>
+                <li><strong>Tagged</strong> - Date asset was tagged.</li>
+                <li>
+                  <strong>Tagger</strong> - Ethereum address used to pay tagging
+                  fee.
+                </li>
+                <li>
+                  <strong>Publisher</strong> - Ethereum address of the Publisher
+                  platform tagging took place on.
+                </li>
+              </ul>
+              <b-collapse
+                :open="false"
+                aria-id="taggedContent"
+                animation="slide"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="taggedContent"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content?"'
+                      : 'What is "tagged content?"'
+                  }}
+                </a>
+                <p>
+                  <br />In addition to creating crytographic tokens that both
+                  contain and represent hashtag strings, Hashtag Protocol
+                  provides a facility for linking them to any online digital
+                  artifact, effectively "tagging" that content with the hashtag.
+                  This is facilitated by "linking smart contracts" that support
+                  a many-to-many token-to-content relationship. For example, one
+                  Hashtag Token can be used to tag many pieces of content and
+                  one price of content can be tagged with many hashtags.
+                  Presently, only linking to other ERC-721 NFTs is supported.
+                  The Protocol can be extended to tag other digital assets.
+                </p>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -360,29 +496,34 @@
 </template>
 
 <script>
+import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import HelpModal from "../components/HelpModal";
 import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
-import EthAccount from "../components/EthAccount";
-import PublisherLink from "../components/PublisherLink";
+import TimestampFrom from "../components/TimestampFrom";
+import TimestampFormatted from "../components/TimestampFormatted";
 
 export default {
   name: "HashtagDetail",
   components: {
+    TimestampFormatted,
+    TimestampFrom,
     EthAccount,
     Footer,
     Header,
-    PublisherLink,
+    HelpModal,
   },
   data() {
     return {
       activeTab: null,
+      erc721: "http://erc721.org",
+      hashtag: this.$route.params.hashtag,
+      hashtagsByName: null,
       isOverviewModalActive: false,
       isSummaryModalActive: false,
       isTaggedModalActive: false,
-      hashtag: this.$route.params.hashtag,
       tagsByHashtag: null,
-      hashtagsByName: null,
     };
   },
   apollo: {
