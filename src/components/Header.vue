@@ -24,8 +24,15 @@
       </b-navbar-item>
       <b-navbar-item tag="div">
         <div class="buttons">
-          <a class="button is-primary is-outlined">
+          <a
+            v-if="account !== 'Connect wallet'"
+            class="button is-primary is-outlined"
+            @click="changeWallet"
+          >
             {{ account | shortEth }}
+          </a>
+          <a v-else class="button is-primary is-outlined" @click="connect">
+            {{ account }}
           </a>
         </div>
       </b-navbar-item>
@@ -39,5 +46,13 @@ import { mapGetters } from "vuex";
 export default {
   name: "Header",
   computed: mapGetters(["account"]),
+  methods: {
+    connect() {
+      this.$store.dispatch("bootstrap");
+    },
+    changeWallet() {
+      this.$store.dispatch("changeWallet");
+    },
+  },
 };
 </script>
