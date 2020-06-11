@@ -37,6 +37,9 @@ web:
                 ^/robots\.txt$:
                     allow: true
 
+            # Direct all paths/routes to the application root.
+            passthru: true
+
 disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application. The keys are
