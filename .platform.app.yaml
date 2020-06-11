@@ -19,6 +19,7 @@ web:
             root: "build_platform"
             index:
                 - "index.html"
+            passthru: /index.html
 
             # How long to allow static assets from this location to be cached.
             #
@@ -26,6 +27,7 @@ web:
             # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
             # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
             # 365 days).
+            
             expires: 300s
             scripts: true
 
@@ -36,9 +38,6 @@ web:
                     allow: true
                 ^/robots\.txt$:
                     allow: true
-
-            # Direct all paths/routes to the application root.
-            passthru: true
 
 disk: 512
 
