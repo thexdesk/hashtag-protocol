@@ -1,0 +1,17 @@
+{
+  "name": "hashtag-protocol",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ blockrockettech/hashtag",
+    "create-local": "graph create --node http://localhost:8020/ blockrockettech/hashtag",
+    "remove-local": "graph remove --node http://localhost:8020/ blockrockettech/hashtag",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 blockrockettech/hashtag",
+    "run-graph-node": "docker-compose -f graph-node/docker-compose.yml up -d && ganache-cli -h 0.0.0.0 -i 5777"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.16.2",
+    "@graphprotocol/graph-ts": "0.16.0"
+  }
+}
