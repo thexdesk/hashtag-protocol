@@ -1,0 +1,67 @@
+name: hashtag-docs
+
+# The toolstack used to build the application.
+type: nodejs:10
+
+# Configuration of the build of this application.
+build:
+    flavor: none
+
+# The configuration of app when it is exposed to the web.
+web:
+    # Specific parameters for different URL prefixes.
+    locations:
+        "/":
+            # The folder from which to serve static assets, for this location.
+            #
+            # This is a filesystem path, relative to the application root.
+            # Folder name is set in npm run buildenvvar.
+            root: "build_platform"
+            index:
+                - "index.html"
+            passthru: /index.html
+
+            # How long to allow static assets from this location to be cached.
+            #
+            # Can be a time in seconds, or -1 for no caching. Times can be
+            # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+            # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+            # 365 days).
+            
+            expires: 300s
+            scripts: true
+
+            # Deny access to static files in this location.
+            allow: false
+            rules:
+                \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
+                    allow: true
+                ^/robots\.txt$:
+                    allow: true
+
+disk: 512
+
+# The 'mounts' describe writable, persistent filesystem mounts in the application. The keys are
+# directory paths, relative to the application root. The values are strings such as
+# 'shared:files/NAME', where NAME is just a unique name for the mount.
+mounts:
+  '/build_platform': 'shared:files/build_platform'
+  '/build_platform/test-results': 'shared:files/test-results'
+  '/.tmp_platformsh': 'shared:files/tmp_platformsh'
+
+# Build dependencies
+dependencies:
+  nodejs:
+    yarn: "*"
+
+# The hooks executed at various points in the lifecycle of the application.
+hooks:
+    build: |
+      set -e
+      yarn install
+      npm run build
+      docs:build
+
+    # The deploy hook runs after your application has been deployed and started.
+    deploy: |
+      npm run buildenvvar
