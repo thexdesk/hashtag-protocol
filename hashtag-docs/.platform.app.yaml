@@ -60,7 +60,6 @@ hooks:
       set -e
       yarn install
       npm run build
-      docs:build
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
