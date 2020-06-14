@@ -18,7 +18,7 @@ web:
             # The folder from which to serve static assets, for this location.
             #
             # This is a filesystem path, relative to the application root.
-            root: "docs/.vuepress/dist"
+            root: "docs/dist"
             index:
                 - "index.html"
             # How long to allow static assets from this location to be cached.
@@ -56,9 +56,12 @@ disk: 512
 # directory paths, relative to the application root. The values are strings such as
 # 'shared:files/NAME', where NAME is just a unique name for the mount.
 mounts:
-  '/docs/.vuepress/dist': 'shared:files/files'
-  '/docs/tmp': 'shared:files/tmp'
-
+  '/docs/dist':
+    source: local
+    source_path: dist
+  '/docs/tmp':
+    source: local
+    source_path: tmp
 # Build dependencies
 dependencies:
   nodejs:
