@@ -9,6 +9,9 @@ build:
 
 # The configuration of app when it is exposed to the web.
 web:
+    commands:
+      # Run a no-op process that uses no CPU resources, since this is a static site.
+      start: sleep infinity
     # Specific parameters for different URL prefixes.
     locations:
         "/":
@@ -19,7 +22,7 @@ web:
             root: "docs/.vuepress/dist"
             index:
                 - "index.html"
-            passthru: /index.html
+            passthru: true
 
             # How long to allow static assets from this location to be cached.
             #
@@ -29,10 +32,10 @@ web:
             # 365 days).
             
             expires: 300s
-            scripts: true
+            scripts: false
 
             # Deny access to static files in this location.
-            allow: false
+            allow: true
             rules:
                 \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
                     allow: true
@@ -59,7 +62,3 @@ hooks:
       set -e
       yarn install
       npm run docs:build
-
-    # The deploy hook runs after your application has been deployed and started.
-    deploy: |
-      npm run buildenvvar
