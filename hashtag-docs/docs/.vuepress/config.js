@@ -2,6 +2,7 @@ module.exports = {
   title: 'Hashtag Documentation',
   description: 'Just playing around',
   theme: '@vuepress/theme-default',
+  temp: 'docs/tmp',
   themeConfig: {
     logo: '/assets/img/logo.svg',
     smoothScroll: true,
