@@ -22,19 +22,14 @@ web:
             root: "docs/.vuepress/dist"
             index:
                 - "index.html"
-            passthru: true
-
             # How long to allow static assets from this location to be cached.
             #
             # Can be a time in seconds, or -1 for no caching. Times can be
             # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
             # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
             # 365 days).
-            
             expires: 300s
             scripts: false
-
-            # Deny access to static files in this location.
             allow: true
             rules:
                 \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
@@ -48,9 +43,7 @@ disk: 512
 # directory paths, relative to the application root. The values are strings such as
 # 'shared:files/NAME', where NAME is just a unique name for the mount.
 mounts:
-  'docs/.vuepress/dist': 
-    source: local
-    source_path: dist
+  '/docs/.vuepress/dist': 'shared:files/files'
 
 # Build dependencies
 dependencies:
