@@ -55,4 +55,7 @@ hooks:
     build: |
       set -e
       yarn install
+    deploy: |
       npm run docs:build
+    # The post_deploy hook runs after the site is reopened to the world to
+    # accept new requests.
