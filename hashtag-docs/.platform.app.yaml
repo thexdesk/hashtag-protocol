@@ -49,8 +49,7 @@ disk: 512
 # 'shared:files/NAME', where NAME is just a unique name for the mount.
 mounts:
   'docs/.vuepress/dist': 
-    source: service
-    service: files
+    source: local
     source_path: dist
 
 # Build dependencies
