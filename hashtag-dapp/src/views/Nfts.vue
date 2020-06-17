@@ -9,7 +9,7 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">Tagged NFTs ({{ tagsCount }})</h1>
+        <h1 class="title is-1">Tagged NFTs</h1>
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">

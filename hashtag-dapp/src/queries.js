@@ -57,6 +57,39 @@ export const SNAPSHOT = gql(`
     }
 `);
 
+export const ALL_TAGS_BY_HASHTAG = gql`
+  query allTagsByHashtag($hashtag: String!) {
+    allTagsByHashtag: tags(where: { hashtagName: $hashtag }) {
+      id
+    }
+  }
+`;
+
+export const PAGED_TAGS_BY_HASHTAG = gql`
+  query tagsByHashtag($hashtag: String!, $first: Int!, $skip: Int!) {
+    tagsByHashtag: tags(
+      first: $first
+      skip: $skip
+      orderBy: timestamp
+      orderDirection: desc
+      where: { hashtagName: $hashtag }
+    ) {
+      id
+      hashtagId
+      hashtagName
+      nftContract
+      nftContractName
+      nftImage
+      nftName
+      nftDescription
+      nftId
+      tagger
+      timestamp
+      publisher
+    }
+  }
+`;
+
 export const TAGS_BY_HASHTAG = gql(`
 query tagsByHashtag($hashtag: String!) {
    tagsByHashtag: tags(orderBy: timestamp, orderDirection: desc, where: {hashtagName: $hashtag}) {

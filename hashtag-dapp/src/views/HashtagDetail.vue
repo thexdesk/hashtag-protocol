@@ -234,6 +234,59 @@
                         </tbody>
                         <!---->
                       </table>
+                      <div class="level">
+                        <div class="level-left"></div>
+                        <div class="level-right">
+                          <div class="level-item">
+                            <nav class="pagination">
+                              <b-button
+                                role="button"
+                                :disabled="currentPage === 0"
+                                @click="previousPage"
+                                class="pagination-link pagination-previous"
+                                ><span class="icon" aria-hidden="true"
+                                  ><i
+                                    class="mdi mdi-chevron-left mdi-24px"
+                                  ></i></span
+                              ></b-button>
+                              <b-button
+                                role="button"
+                                :disabled="
+                                  currentPage ===
+                                  Math.ceil(tagsCount / pageSize) - 1
+                                "
+                                @click="nextPage"
+                                class="pagination-link pagination-next"
+                                ><span class="icon" aria-hidden="true"
+                                  ><i
+                                    class="mdi mdi-chevron-right mdi-24px"
+                                  ></i></span
+                              ></b-button>
+                              <ul class="pagination-list">
+                                <li
+                                  v-for="(page, idx) in Array.from(
+                                    {
+                                      length: Math.ceil(tagsCount / pageSize),
+                                    },
+                                    (v, k) => k
+                                  )"
+                                  :key="idx"
+                                  @click="tabSelected(page)"
+                                >
+                                  <b-button
+                                    role="button"
+                                    class="pagination-link"
+                                    v-bind:class="{
+                                      'is-current': currentPage === page,
+                                    }"
+                                    >{{ page + 1 }}</b-button
+                                  >
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <!---->
                   </div>
@@ -500,9 +553,15 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
+import {
+  PAGED_TAGS_BY_HASHTAG,
+  HASHTAGS_BY_NAME,
+  ALL_TAGS_BY_HASHTAG,
+} from "../queries";
 import TimestampFrom from "../components/TimestampFrom";
 import TimestampFormatted from "../components/TimestampFormatted";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "HashtagDetail",
@@ -524,17 +583,36 @@ export default {
       isSummaryModalActive: false,
       isTaggedModalActive: false,
       tagsByHashtag: null,
+      pageSize: PAGE_SIZE,
+      first: PAGE_SIZE,
+      skip: 0,
+      tagsCount: 0,
+      currentPage: 0,
     };
   },
   apollo: {
     tagsByHashtag: {
-      query: TAGS_BY_HASHTAG,
+      query: PAGED_TAGS_BY_HASHTAG,
+      variables() {
+        return {
+          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+      pollInterval: 1000, // ms
+    },
+    tagsByHashtagCount: {
+      query: ALL_TAGS_BY_HASHTAG,
       variables() {
         return {
           hashtag: this.hashtag && this.hashtag.toLowerCase(),
         };
       },
-      pollInterval: 1000, // ms
+      manual: true,
+      result({ data }) {
+        this.tagsCount = data.allTagsByHashtag.length;
+      },
     },
     hashtagsByName: {
       query: HASHTAGS_BY_NAME,
@@ -544,6 +622,18 @@ export default {
         };
       },
       pollInterval: 1000, // ms
+    },
+  },
+  methods: {
+    nextPage() {
+      this.tabSelected(this.currentPage + 1);
+    },
+    previousPage() {
+      this.tabSelected(this.currentPage - 1);
+    },
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
+      this.currentPage = id;
     },
   },
 };
