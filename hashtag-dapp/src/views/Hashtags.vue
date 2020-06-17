@@ -9,7 +9,7 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">Hashtags ({{ hashtagCount }})</h1>
+        <h1 class="title is-1">Hashtags</h1>
         <h2 class="subtitle">Hashtag Protocol Tokens</h2>
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
@@ -123,7 +123,7 @@
                       <ul class="pagination-list">
                         <li
                           v-for="(page, idx) in Array.from(
-                            { length: Math.ceil(hashtagCount / this.first) },
+                            { length: Math.ceil(hashtagCount / pageSize) },
                             (v, k) => k
                           )"
                           :key="idx"

@@ -99,53 +99,43 @@
                 <div class="level-right">
                   <div class="level-item">
                     <nav class="pagination">
-                      <a
+                      <b-button
                         role="button"
-                        href="#"
-                        disabled="disabled"
-                        aria-label="Page 0."
+                        :disabled="currentPage === 0"
+                        @click="previousPage"
                         class="pagination-link pagination-previous"
                         ><span class="icon" aria-hidden="true"
                           ><i class="mdi mdi-chevron-left mdi-24px"></i></span
-                      ></a>
-                      <a
+                      ></b-button>
+                      <b-button
                         role="button"
-                        href="#"
-                        aria-label="Page 2."
+                        :disabled="
+                          currentPage ===
+                          Math.ceil(publishersCount / pageSize) - 1
+                        "
+                        @click="nextPage"
                         class="pagination-link pagination-next"
                         ><span class="icon" aria-hidden="true"
                           ><i class="mdi mdi-chevron-right mdi-24px"></i></span
-                      ></a>
+                      ></b-button>
                       <ul class="pagination-list">
-                        <!---->
-                        <!---->
-                        <li>
-                          <a
+                        <li
+                          v-for="(page, idx) in Array.from(
+                            {
+                              length: Math.ceil(publishersCount / pageSize),
+                            },
+                            (v, k) => k
+                          )"
+                          :key="idx"
+                          @click="tabSelected(page)"
+                        >
+                          <b-button
                             role="button"
-                            href="#"
-                            aria-label="Current page, Page 1."
-                            aria-current="true"
-                            class="pagination-link is-current"
-                            >1</a
-                          >
-                        </li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 2."
                             class="pagination-link"
-                            >2</a
-                          >
-                        </li>
-                        <li><span class="pagination-ellipsis">…</span></li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 12."
-                            class="pagination-link"
-                            >12</a
+                            v-bind:class="{
+                              'is-current': currentPage === page,
+                            }"
+                            >{{ page + 1 }}</b-button
                           >
                         </li>
                       </ul>
@@ -166,9 +156,11 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PAGED_PUBLISHERS } from "../queries";
+import { PAGED_PUBLISHERS, ALL_PUBLISHERS } from "../queries";
 import EthAccount from "../components/EthAccount";
 import EthAmountSum from "../components/EthAmountSum";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "Nfts",
@@ -183,8 +175,11 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
-      first: 10,
+      pageSize: PAGE_SIZE,
+      first: PAGE_SIZE,
       skip: 0,
+      publishersCount: 0,
+      currentPage: 0,
     };
   },
   apollo: {
@@ -196,6 +191,25 @@ export default {
           skip: this.skip,
         };
       },
+    },
+    publishersCount: {
+      query: ALL_PUBLISHERS,
+      manual: true,
+      result({ data }) {
+        this.publishersCount = data.publishers.length;
+      },
+    },
+  },
+  methods: {
+    nextPage() {
+      this.tabSelected(this.currentPage + 1);
+    },
+    previousPage() {
+      this.tabSelected(this.currentPage - 1);
+    },
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
+      this.currentPage = id;
     },
   },
 };

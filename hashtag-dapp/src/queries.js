@@ -248,6 +248,14 @@ query pagedTags($first: Int!, $skip: Int!) {
    }     
 `);
 
+export const ALL_PUBLISHERS = gql`
+  query {
+    publishers {
+      id
+    }
+  }
+`;
+
 export const PAGED_PUBLISHERS = gql(`
 query pagedPublishers($first: Int!, $skip: Int!) {
     pagedPublishers: publishers(first: $first, skip: $skip, orderBy: tagCount, orderDirection: desc) {
