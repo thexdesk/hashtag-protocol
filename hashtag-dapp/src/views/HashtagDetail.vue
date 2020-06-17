@@ -613,6 +613,7 @@ export default {
       result({ data }) {
         this.tagsCount = data.allTagsByHashtag.length;
       },
+      pollInterval: 1000, // ms
     },
     hashtagsByName: {
       query: HASHTAGS_BY_NAME,
