@@ -86,6 +86,12 @@ query hashtagsByName($name: String!) {
         publisher
         timestamp
         tagCount
+        totalMintingFee
+        publisherMintingFee
+        platformMintingFee
+        ownerRevenue
+        publisherRevenue
+        protocolRevenue
    }
 }
 `);
