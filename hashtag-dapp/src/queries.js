@@ -207,6 +207,14 @@ query publisherByAcc($id: String!) {
 }
 `);
 
+export const ALL_HASHTAG_TOKEN_IDS = gql`
+  query {
+    hashtags {
+      id
+    }
+  }
+`;
+
 export const PAGED_HASHTAGS = gql(`
 query pagedHashtags($first: Int!, $skip: Int!) {
         pagedHashtags: hashtags(first: $first, skip: $skip, orderBy: timestamp, orderDirection: desc) {

@@ -9,7 +9,7 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">Hashtags</h1>
+        <h1 class="title is-1">Hashtags ({{ hashtagCount }})</h1>
         <h2 class="subtitle">Hashtag Protocol Tokens</h2>
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
@@ -102,55 +102,19 @@
                 <div class="level-right">
                   <div class="level-item">
                     <nav class="pagination">
-                      <a
-                        role="button"
-                        href="#"
-                        disabled="disabled"
-                        aria-label="Page 0."
-                        class="pagination-link pagination-previous"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-left mdi-24px"></i></span
-                      ></a>
-                      <a
-                        role="button"
-                        href="#"
-                        aria-label="Page 2."
-                        class="pagination-link pagination-next"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-right mdi-24px"></i></span
-                      ></a>
                       <ul class="pagination-list">
-                        <!---->
-                        <!---->
-                        <li>
-                          <a
+                        <li
+                          v-for="(page, idx) in Array.from(
+                            { length: Math.ceil(hashtagCount / this.first) },
+                            (v, k) => k
+                          )"
+                          :key="idx"
+                          @click="tabSelected(page)"
+                        >
+                          <b-button
                             role="button"
-                            href="#"
-                            aria-label="Current page, Page 1."
-                            aria-current="true"
                             class="pagination-link is-current"
-                            @click="skip = skip - first"
-                            >1</a
-                          >
-                        </li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 2."
-                            class="pagination-link"
-                            @click="skip = skip + first"
-                            >2</a
-                          >
-                        </li>
-                        <li><span class="pagination-ellipsis">…</span></li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 12."
-                            class="pagination-link"
-                            >12</a
+                            >{{ page + 1 }}</b-button
                           >
                         </li>
                       </ul>
@@ -171,10 +135,12 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PAGED_HASHTAGS } from "../queries";
+import { PAGED_HASHTAGS, ALL_HASHTAG_TOKEN_IDS } from "../queries";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
 import EthAccount from "../components/EthAccount";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "Nfts",
@@ -190,8 +156,9 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
-      first: 10,
+      first: PAGE_SIZE,
       skip: 0,
+      hashtagCount: 0,
     };
   },
   apollo: {
@@ -203,6 +170,18 @@ export default {
           skip: this.skip,
         };
       },
+    },
+    hashtagCount: {
+      query: ALL_HASHTAG_TOKEN_IDS,
+      manual: true,
+      result({ data }) {
+        this.hashtagCount = data.hashtags.length;
+      },
+    },
+  },
+  methods: {
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
     },
   },
 };
