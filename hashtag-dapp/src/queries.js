@@ -243,9 +243,17 @@ query tagsByTagger($tagger: String!) {
 }
 `);
 
-export const TAGS_BY_PUBLISHER = gql(`
-query tagsByPublisher($publisher: String!) {
-  tagsByPublisher: tags(where:{ publisher: $publisher}) {
+export const ALL_TAG_IDS_BY_PUBLISHER = gql`
+  query allTagIdsByPublisher($publisher: String!) {
+    allTagIdsByPublisher: tags(where: { publisher: $publisher }) {
+      id
+    }
+  }
+`;
+
+export const PAGED_TAGS_BY_PUBLISHER = gql(`
+query tagsByPublisher($publisher: String!, $first: Int!, $skip: Int!) {
+  tagsByPublisher: tags(first: $first, skip: $skip, where:{ publisher: $publisher}) {
     id
     hashtagId
     hashtagName

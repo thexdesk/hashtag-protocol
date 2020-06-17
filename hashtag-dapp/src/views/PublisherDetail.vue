@@ -346,6 +346,67 @@
                         </tbody>
                         <!---->
                       </table>
+                      <div class="level">
+                        <div class="level-left"></div>
+                        <div class="level-right">
+                          <div class="level-item">
+                            <nav class="pagination">
+                              <b-button
+                                role="button"
+                                :disabled="taggedContentTab.currentPage === 0"
+                                @click="previousPage('taggedContentTab')"
+                                class="pagination-link pagination-previous"
+                                ><span class="icon" aria-hidden="true"
+                                  ><i
+                                    class="mdi mdi-chevron-left mdi-24px"
+                                  ></i></span
+                              ></b-button>
+                              <b-button
+                                role="button"
+                                :disabled="
+                                  taggedContentTab.currentPage ===
+                                  Math.ceil(
+                                    taggedContentTab.taggedCount /
+                                      taggedContentTab.pageSize
+                                  ) -
+                                    1
+                                "
+                                @click="nextPage('taggedContentTab')"
+                                class="pagination-link pagination-next"
+                                ><span class="icon" aria-hidden="true"
+                                  ><i
+                                    class="mdi mdi-chevron-right mdi-24px"
+                                  ></i></span
+                              ></b-button>
+                              <ul class="pagination-list">
+                                <li
+                                  v-for="(page, idx) in Array.from(
+                                    {
+                                      length: Math.ceil(
+                                        taggedContentTab.taggedCount /
+                                          taggedContentTab.pageSize
+                                      ),
+                                    },
+                                    (v, k) => k
+                                  )"
+                                  :key="idx"
+                                  @click="tabSelected('taggedContentTab', page)"
+                                >
+                                  <b-button
+                                    role="button"
+                                    class="pagination-link"
+                                    v-bind:class="{
+                                      'is-current':
+                                        taggedContentTab.currentPage === page,
+                                    }"
+                                    >{{ page + 1 }}</b-button
+                                  >
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <!---->
                   </div>
@@ -588,7 +649,8 @@ import {
   ALL_HASHTAG_IDS_BY_PUBLISHER,
   PAGED_HASHTAGS_BY_PUBLISHER,
   PUBLISHER_BY_ACC,
-  TAGS_BY_PUBLISHER,
+  ALL_TAG_IDS_BY_PUBLISHER,
+  PAGED_TAGS_BY_PUBLISHER,
 } from "../queries";
 import EthAmountSum from "../components/EthAmountSum";
 import EthAmount from "../components/EthAmount";
@@ -671,11 +733,25 @@ export default {
         };
       },
     },
-    tagsByPublisher: {
-      query: TAGS_BY_PUBLISHER,
+    tagsByPublisherCount: {
+      query: ALL_TAG_IDS_BY_PUBLISHER,
+      manual: true,
       variables() {
         return {
           publisher: this.publisher,
+        };
+      },
+      result({ data }) {
+        this.taggedContentTab.taggedCount = data.allTagIdsByPublisher.length;
+      },
+    },
+    tagsByPublisher: {
+      query: PAGED_TAGS_BY_PUBLISHER,
+      variables() {
+        return {
+          publisher: this.publisher,
+          first: this.taggedContentTab.first,
+          skip: this.taggedContentTab.skip,
         };
       },
     },
