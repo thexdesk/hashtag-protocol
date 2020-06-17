@@ -120,9 +120,17 @@ query ownerByAcc($id: String!) {
 }
 `);
 
-export const HASHTAGS_BY_OWNER = gql(`
-query hashtagsByOwner($owner: String!) {
-  hashtagsByOwner: hashtags(where:{ owner: $owner}) {
+export const ALL_HASHTAG_IDS_BY_OWNER = gql`
+  query allHashtagsByOwner($owner: String!) {
+    allHashtagsByOwner: hashtags(where: { owner: $owner }) {
+      id
+    }
+  }
+`;
+
+export const PAGED_HASHTAGS_BY_OWNER = gql(`
+query hashtagsByOwner($owner: String!, $first: Int!, $skip: Int!) {
+  hashtagsByOwner: hashtags(first: $first, skip: $skip, where:{ owner: $owner}) {
     id
     name
     displayHashtag
@@ -147,6 +155,33 @@ query hashtagsByPublisher($publisher: String!) {
   }
 }
 `);
+
+export const ALL_TAG_IDS_BY_TAGGER = gql`
+  query allTagIdsByTagger($tagger: String!) {
+    allTagIdsByTagger: tags(where: { tagger: $tagger }) {
+      id
+    }
+  }
+`;
+
+export const PAGED_TAGS_BY_TAGGER = gql`
+  query tagsByTagger($tagger: String!, $first: Int!, $skip: Int!) {
+    tagsByTagger: tags(first: $first, skip: $skip, where: { tagger: $tagger }) {
+      id
+      hashtagId
+      hashtagName
+      nftContract
+      nftId
+      nftContractName
+      nftTokenUri
+      nftName
+      nftImage
+      tagger
+      timestamp
+      publisher
+    }
+  }
+`;
 
 export const TAGS_BY_TAGGER = gql(`
 query tagsByTagger($tagger: String!) {
@@ -274,6 +309,14 @@ query pagedPublishers($first: Int!, $skip: Int!) {
         tagFees
     }
 }`);
+
+export const ALL_OWNER_ADDRESSES = gql`
+  query {
+    owners {
+      id
+    }
+  }
+`;
 
 export const PAGED_OWNERS = gql(`
 query pagedOwners($first: Int!, $skip: Int!) {
