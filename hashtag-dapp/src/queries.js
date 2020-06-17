@@ -378,8 +378,16 @@ query pagedOwners($first: Int!, $skip: Int!) {
 }
 `);
 
+export const ALL_TAGGERS = gql`
+  query {
+    taggers {
+      id
+    }
+  }
+`;
+
 export const PAGED_TAGGERS = gql(`
-query pagedOwners($first: Int!, $skip: Int!) {
+query pagedTaggers($first: Int!, $skip: Int!) {
     pagedTaggers: taggers(first: $first, skip: $skip, orderBy: tagCount, orderDirection: desc) {
         id
         tagCount
