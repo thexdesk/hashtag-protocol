@@ -12,7 +12,6 @@ module.exports = {
     docsDir: 'hashtag-docs/docs',
     nav: [
       { text: 'Guide', link: '/guide/' },
-      { text: 'External', link: 'https://google.com' }
     ],
     sidebar: {
       '/guide/': [
@@ -21,5 +20,27 @@ module.exports = {
       ]
     },
     sidebarDepth: 2,
-  }
+  },
+  plugins: [
+    [
+      'vuepress-plugin-merge-pages',
+      {
+        bundles: [{
+          // Merge faq.md files in /guide/faqs into a single page.
+          path: '/guide/faqs.html',
+          filter: (pages) => { // optional
+            return pages.filter(({ path }) => path.includes('/faqs/'))
+          },
+          mergePages: pages => { // optional
+            const pageBreak = '<hr class="page-break" />\n\n'
+            const initialValue = `# FAQs\n\n[[toc]]\n${pageBreak}`
+            return pages
+              .reduce((acc, current) => {
+                return `${acc}${current.content}\n\n${pageBreak}`
+              }, initialValue)
+          }
+        }]
+      }
+    ]
+  ]
 }

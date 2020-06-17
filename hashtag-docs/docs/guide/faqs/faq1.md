@@ -1,1 +1,0 @@
-# Faq 1: Some title
