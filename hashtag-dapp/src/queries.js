@@ -229,6 +229,14 @@ query pagedHashtags($first: Int!, $skip: Int!) {
 }
 `);
 
+export const ALL_TAG_IDS = gql`
+  query {
+    tags {
+      id
+    }
+  }
+`;
+
 export const PAGED_TAGS = gql(`
 query pagedTags($first: Int!, $skip: Int!) {
         pagedTags: tags(first: $first, skip: $skip, orderBy: timestamp, orderDirection: desc) {
