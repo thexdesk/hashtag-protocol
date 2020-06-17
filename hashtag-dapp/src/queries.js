@@ -175,9 +175,17 @@ query hashtagsByOwner($owner: String!, $first: Int!, $skip: Int!) {
 }
 `);
 
-export const HASHTAGS_BY_PUBLISHER = gql(`
-query hashtagsByPublisher($publisher: String!) {
-  hashtagsByPublisher: hashtags(where:{publisher: $publisher}) {
+export const ALL_HASHTAG_IDS_BY_PUBLISHER = gql`
+  query hashtagIdsByPublisher($publisher: String!) {
+    hashtagIdsByPublisher: hashtags(where: { publisher: $publisher }) {
+      id
+    }
+  }
+`;
+
+export const PAGED_HASHTAGS_BY_PUBLISHER = gql(`
+query hashtagsByPublisher($publisher: String!, $first: Int!, $skip: Int!) {
+  hashtagsByPublisher: hashtags(first: $first, skip: $skip, where:{publisher: $publisher}) {
     id
     name
     displayHashtag

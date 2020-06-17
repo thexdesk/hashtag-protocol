@@ -200,59 +200,55 @@
                         <div class="level-right">
                           <div class="level-item">
                             <nav class="pagination">
-                              <a
+                              <b-button
                                 role="button"
-                                href="#"
-                                disabled="disabled"
-                                aria-label="Page 0."
+                                :disabled="hashtagsTab.currentPage === 0"
+                                @click="previousPage('hashtagsTab')"
                                 class="pagination-link pagination-previous"
                                 ><span class="icon" aria-hidden="true"
                                   ><i
                                     class="mdi mdi-chevron-left mdi-24px"
                                   ></i></span
-                              ></a>
-                              <a
+                              ></b-button>
+                              <b-button
                                 role="button"
-                                href="#"
-                                aria-label="Page 2."
+                                :disabled="
+                                  hashtagsTab.currentPage ===
+                                  Math.ceil(
+                                    hashtagsTab.hashtagsCount /
+                                      hashtagsTab.pageSize
+                                  ) -
+                                    1
+                                "
+                                @click="nextPage('hashtagsTab')"
                                 class="pagination-link pagination-next"
                                 ><span class="icon" aria-hidden="true"
                                   ><i
                                     class="mdi mdi-chevron-right mdi-24px"
                                   ></i></span
-                              ></a>
+                              ></b-button>
                               <ul class="pagination-list">
-                                <!---->
-                                <!---->
-                                <li>
-                                  <a
+                                <li
+                                  v-for="(page, idx) in Array.from(
+                                    {
+                                      length: Math.ceil(
+                                        hashtagsTab.hashtagsCount /
+                                          hashtagsTab.pageSize
+                                      ),
+                                    },
+                                    (v, k) => k
+                                  )"
+                                  :key="idx"
+                                  @click="tabSelected('hashtagsTab', page)"
+                                >
+                                  <b-button
                                     role="button"
-                                    href="#"
-                                    aria-label="Current page, Page 1."
-                                    aria-current="true"
-                                    class="pagination-link is-current"
-                                    >1</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 2."
                                     class="pagination-link"
-                                    >2</a
-                                  >
-                                </li>
-                                <li>
-                                  <span class="pagination-ellipsis">…</span>
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 12."
-                                    class="pagination-link"
-                                    >12</a
+                                    v-bind:class="{
+                                      'is-current':
+                                        hashtagsTab.currentPage === page,
+                                    }"
+                                    >{{ page + 1 }}</b-button
                                   >
                                 </li>
                               </ul>
@@ -589,7 +585,8 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import {
-  HASHTAGS_BY_PUBLISHER,
+  ALL_HASHTAG_IDS_BY_PUBLISHER,
+  PAGED_HASHTAGS_BY_PUBLISHER,
   PUBLISHER_BY_ACC,
   TAGS_BY_PUBLISHER,
 } from "../queries";
@@ -598,6 +595,8 @@ import EthAmount from "../components/EthAmount";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
 import NftLink from "../components/NftLink";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "PublisherDetail",
@@ -625,6 +624,20 @@ export default {
       publisherWebsite: "https://knownorigin.io",
       publisherRegURL: null,
       tagsByHashtag: null,
+      hashtagsTab: {
+        pageSize: PAGE_SIZE,
+        first: PAGE_SIZE,
+        skip: 0,
+        hashtagsCount: 0,
+        currentPage: 0,
+      },
+      taggedContentTab: {
+        pageSize: PAGE_SIZE,
+        first: PAGE_SIZE,
+        skip: 0,
+        taggedCount: 0,
+        currentPage: 0,
+      },
     };
   },
   apollo: {
@@ -636,11 +649,25 @@ export default {
         };
       },
     },
-    hashtagsByPublisher: {
-      query: HASHTAGS_BY_PUBLISHER,
+    hashtagsByPublisherCount: {
+      query: ALL_HASHTAG_IDS_BY_PUBLISHER,
+      manual: true,
       variables() {
         return {
           publisher: this.publisher,
+        };
+      },
+      result({ data }) {
+        this.hashtagsTab.hashtagsCount = data.hashtagIdsByPublisher.length;
+      },
+    },
+    hashtagsByPublisher: {
+      query: PAGED_HASHTAGS_BY_PUBLISHER,
+      variables() {
+        return {
+          publisher: this.publisher,
+          first: this.hashtagsTab.first,
+          skip: this.hashtagsTab.skip,
         };
       },
     },
@@ -651,6 +678,18 @@ export default {
           publisher: this.publisher,
         };
       },
+    },
+  },
+  methods: {
+    nextPage(tab) {
+      this.tabSelected(tab, this[tab].currentPage + 1);
+    },
+    previousPage(tab) {
+      this.tabSelected(tab, this[tab].currentPage - 1);
+    },
+    tabSelected(tab, id) {
+      this[tab].skip = id * PAGE_SIZE;
+      this[tab].currentPage = id;
     },
   },
 };
