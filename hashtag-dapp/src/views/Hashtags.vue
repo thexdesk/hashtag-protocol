@@ -102,6 +102,24 @@
                 <div class="level-right">
                   <div class="level-item">
                     <nav class="pagination">
+                      <b-button
+                        role="button"
+                        :disabled="currentPage === 0"
+                        @click="previousPage"
+                        class="pagination-link pagination-previous"
+                        ><span class="icon" aria-hidden="true"
+                          ><i class="mdi mdi-chevron-left mdi-24px"></i></span
+                      ></b-button>
+                      <b-button
+                        role="button"
+                        :disabled="
+                          currentPage === Math.ceil(hashtagCount / pageSize) - 1
+                        "
+                        @click="nextPage"
+                        class="pagination-link pagination-next"
+                        ><span class="icon" aria-hidden="true"
+                          ><i class="mdi mdi-chevron-right mdi-24px"></i></span
+                      ></b-button>
                       <ul class="pagination-list">
                         <li
                           v-for="(page, idx) in Array.from(
@@ -113,7 +131,10 @@
                         >
                           <b-button
                             role="button"
-                            class="pagination-link is-current"
+                            class="pagination-link"
+                            v-bind:class="{
+                              'is-current': currentPage === page,
+                            }"
                             >{{ page + 1 }}</b-button
                           >
                         </li>
@@ -156,9 +177,11 @@ export default {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
+      pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,
       hashtagCount: 0,
+      currentPage: 0,
     };
   },
   apollo: {
@@ -180,8 +203,15 @@ export default {
     },
   },
   methods: {
+    nextPage() {
+      this.tabSelected(this.currentPage + 1);
+    },
+    previousPage() {
+      this.tabSelected(this.currentPage - 1);
+    },
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
+      this.currentPage = id;
     },
   },
 };
