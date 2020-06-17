@@ -110,10 +110,13 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Creation price</td>
                           <td>
-                            {{ totalMintingFee | toEth }} Ξ<br />{{
-                              publisherMintingFee | toEth
+                            {{ hashtagsByName[0].totalMintingFee | toEth }}
+                            Ξ<br />{{
+                              hashtagsByName[0].publisherMintingFee | toEth
                             }}
-                            Ξ to Publisher<br />{{ platformMintingFee | toEth }}
+                            Ξ to Publisher<br />{{
+                              hashtagsByName[0].platformMintingFee | toEth
+                            }}
                             Ξ to Protocol
                           </td>
                         </tr>
@@ -126,10 +129,14 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
-                            {{ ownerRevenue }} Ξ Owner<br />{{
-                              publisherRevenue
+                            {{ hashtagsByName[0].ownerRevenue | toEth }} Ξ
+                            Owner<br />{{
+                              hashtagsByName[0].publisherRevenue | toEth
                             }}
-                            Ξ Publisher<br />{{ protocolRevenue }} Ξ Protocol
+                            Ξ Publisher<br />{{
+                              hashtagsByName[0].protocolRevenue | toEth
+                            }}
+                            Ξ Protocol
                           </td>
                         </tr>
                       </tbody>
