@@ -14,7 +14,7 @@
 //import txt from 'raw-loader!./guide/faqs/faq1.md';
 // const media = require('../../guide/faqs/faq1.txt');
 function test(postPath) {
-    return require("raw-loader!../../" + postPath + ".md")
+    //return require("raw-loader!../../" + postPath + ".md")
 }
 
 const media = test('guide/faqs/faq1');
