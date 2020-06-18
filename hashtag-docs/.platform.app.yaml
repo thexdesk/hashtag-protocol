@@ -73,4 +73,4 @@ hooks:
       set -e
       yarn install
     deploy: |
-      npm run docs:build
+      yarn docs:build
