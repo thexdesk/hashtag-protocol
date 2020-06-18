@@ -1,6 +1,9 @@
 .DS_Store
 node_modules
 /dist
+hashtag-docs/docs/.vuepress/dist/*
+hashtag-docs/docs/tmp
+hashtag-docs/docs/dist/*
 
 # local env files
 .env.local
