@@ -6,6 +6,14 @@ type Hashtag @entity {
   publisher: Bytes!
   timestamp: BigInt!
   tagCount: BigInt!
+  totalMintingFee: BigInt!
+  publisherMintingFee: BigInt!
+  platformMintingFee: BigInt!
+
+  #tagging revenue
+  ownerRevenue: BigInt!
+  publisherRevenue: BigInt!
+  protocolRevenue: BigInt!
 }
 
 type Tag @entity {
