@@ -7,7 +7,7 @@
         </div>
       </div>
     </section>
-    <section class="main">
+    <section class="main" v-if="hashtagsByName && hashtagsByName[0]">
       <div class="container">
         <h1 class="title is-1">#{{ hashtagsByName[0].displayHashtag }}</h1>
         <h2 class="subtitle">Hashtag Protocol Token</h2>
@@ -247,6 +247,11 @@
                         </tbody>
                         <!---->
                       </table>
+                      <Pagination
+                        :entity-count="tagsCount"
+                        :page-size="pageSize"
+                        @tabSelected="tabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
@@ -513,9 +518,16 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { TAGS_BY_HASHTAG, HASHTAGS_BY_NAME } from "../queries";
+import Pagination from "../components/Pagination";
+import {
+  PAGED_TAGS_BY_HASHTAG,
+  HASHTAGS_BY_NAME,
+  ALL_TAGS_BY_HASHTAG,
+} from "../queries";
 import TimestampFrom from "../components/TimestampFrom";
 import TimestampFormatted from "../components/TimestampFormatted";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "HashtagDetail",
@@ -526,6 +538,7 @@ export default {
     Footer,
     Header,
     HelpModal,
+    Pagination,
   },
   data() {
     return {
@@ -537,15 +550,34 @@ export default {
       isSummaryModalActive: false,
       isTaggedModalActive: false,
       tagsByHashtag: null,
+      first: PAGE_SIZE,
+      skip: 0,
+      tagsCount: 0,
+      pageSize: PAGE_SIZE,
     };
   },
   apollo: {
     tagsByHashtag: {
-      query: TAGS_BY_HASHTAG,
+      query: PAGED_TAGS_BY_HASHTAG,
+      variables() {
+        return {
+          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+      pollInterval: 1000, // ms
+    },
+    tagsByHashtagCount: {
+      query: ALL_TAGS_BY_HASHTAG,
       variables() {
         return {
           hashtag: this.hashtag && this.hashtag.toLowerCase(),
         };
+      },
+      manual: true,
+      result({ data }) {
+        this.tagsCount = data.allTagsByHashtag.length;
       },
       pollInterval: 1000, // ms
     },
@@ -557,6 +589,11 @@ export default {
         };
       },
       pollInterval: 1000, // ms
+    },
+  },
+  methods: {
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
     },
   },
 };

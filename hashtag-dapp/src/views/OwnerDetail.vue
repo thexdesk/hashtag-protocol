@@ -185,71 +185,11 @@
                         </tbody>
                         <!---->
                       </table>
-                      <div class="level">
-                        <div class="level-left"></div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <nav class="pagination">
-                              <a
-                                role="button"
-                                href="#"
-                                disabled="disabled"
-                                aria-label="Page 0."
-                                class="pagination-link pagination-previous"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-left mdi-24px"
-                                  ></i></span
-                              ></a>
-                              <a
-                                role="button"
-                                href="#"
-                                aria-label="Page 2."
-                                class="pagination-link pagination-next"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-right mdi-24px"
-                                  ></i></span
-                              ></a>
-                              <ul class="pagination-list">
-                                <!---->
-                                <!---->
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Current page, Page 1."
-                                    aria-current="true"
-                                    class="pagination-link is-current"
-                                    >1</a
-                                  >
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 2."
-                                    class="pagination-link"
-                                    >2</a
-                                  >
-                                </li>
-                                <li>
-                                  <span class="pagination-ellipsis">…</span>
-                                </li>
-                                <li>
-                                  <a
-                                    role="button"
-                                    href="#"
-                                    aria-label="Page 12."
-                                    class="pagination-link"
-                                    >12</a
-                                  >
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                      <Pagination
+                        :entity-count="hashtagsTab.hashtagsCount"
+                        :page-size="hashtagsTab.pageSize"
+                        @tabSelected="hashtagsTabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
@@ -337,6 +277,11 @@
                         </tbody>
                         <!---->
                       </table>
+                      <Pagination
+                        :entity-count="taggedContentTab.taggedCount"
+                        :page-size="taggedContentTab.pageSize"
+                        @tabSelected="taggedContentTabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
@@ -567,12 +512,21 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { HASHTAGS_BY_OWNER, OWNER_BY_ACC, TAGS_BY_TAGGER } from "../queries";
+import {
+  PAGED_HASHTAGS_BY_OWNER,
+  OWNER_BY_ACC,
+  PAGED_TAGS_BY_TAGGER,
+  ALL_TAG_IDS_BY_TAGGER,
+  ALL_HASHTAG_IDS_BY_OWNER,
+} from "../queries";
 import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
 import NftLink from "../components/NftLink";
+import Pagination from "../components/Pagination";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "OwnerDetail",
@@ -586,6 +540,7 @@ export default {
     Footer,
     Header,
     HelpModal,
+    Pagination,
   },
   data() {
     return {
@@ -596,6 +551,18 @@ export default {
       owner: this.$route.params.address,
       tagsByHashtag: null,
       hashtagsByName: null,
+      hashtagsTab: {
+        pageSize: PAGE_SIZE,
+        first: PAGE_SIZE,
+        skip: 0,
+        hashtagsCount: 0,
+      },
+      taggedContentTab: {
+        pageSize: PAGE_SIZE,
+        first: PAGE_SIZE,
+        skip: 0,
+        taggedCount: 0,
+      },
     };
   },
   apollo: {
@@ -608,7 +575,21 @@ export default {
       },
     },
     hashtagsByOwner: {
-      query: HASHTAGS_BY_OWNER,
+      query: PAGED_HASHTAGS_BY_OWNER,
+      variables() {
+        return {
+          owner: this.owner,
+          first: this.hashtagsTab.first,
+          skip: this.hashtagsTab.skip,
+        };
+      },
+    },
+    hashtagsByOwnerCount: {
+      query: ALL_HASHTAG_IDS_BY_OWNER,
+      manual: true,
+      result({ data }) {
+        this.hashtagsTab.hashtagsCount = data.allHashtagsByOwner.length;
+      },
       variables() {
         return {
           owner: this.owner,
@@ -616,12 +597,34 @@ export default {
       },
     },
     tagsByTagger: {
-      query: TAGS_BY_TAGGER,
+      query: PAGED_TAGS_BY_TAGGER,
+      variables() {
+        return {
+          tagger: this.owner,
+          first: this.taggedContentTab.first,
+          skip: this.taggedContentTab.skip,
+        };
+      },
+    },
+    tagsByTaggerCount: {
+      query: ALL_TAG_IDS_BY_TAGGER,
+      manual: true,
+      result({ data }) {
+        this.taggedContentTab.taggedCount = data.allTagIdsByTagger.length;
+      },
       variables() {
         return {
           tagger: this.owner,
         };
       },
+    },
+  },
+  methods: {
+    hashtagsTabSelected(pageId) {
+      this.hashtagsTab.skip = pageId * PAGE_SIZE;
+    },
+    taggedContentTabSelected(pageId) {
+      this.taggedContentTab.skip = pageId * PAGE_SIZE;
     },
   },
 };

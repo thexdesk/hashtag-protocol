@@ -73,65 +73,11 @@
                 </div>
                 <!---->
               </div>
-              <div class="level">
-                <div class="level-left"></div>
-                <div class="level-right">
-                  <div class="level-item">
-                    <nav class="pagination">
-                      <a
-                        role="button"
-                        href="#"
-                        disabled="disabled"
-                        aria-label="Page 0."
-                        class="pagination-link pagination-previous"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-left mdi-24px"></i></span
-                      ></a>
-                      <a
-                        role="button"
-                        href="#"
-                        aria-label="Page 2."
-                        class="pagination-link pagination-next"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-right mdi-24px"></i></span
-                      ></a>
-                      <ul class="pagination-list">
-                        <!---->
-                        <!---->
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Current page, Page 1."
-                            aria-current="true"
-                            class="pagination-link is-current"
-                            >1</a
-                          >
-                        </li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 2."
-                            class="pagination-link"
-                            >2</a
-                          >
-                        </li>
-                        <li><span class="pagination-ellipsis">…</span></li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 12."
-                            class="pagination-link"
-                            >12</a
-                          >
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              </div>
+              <Pagination
+                :entity-count="taggersCount"
+                :page-size="pageSize"
+                @tabSelected="tabSelected"
+              />
             </article>
           </div>
         </div>
@@ -145,8 +91,11 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PAGED_TAGGERS } from "../queries";
+import { PAGED_TAGGERS, ALL_TAGGERS } from "../queries";
 import EthAccount from "../components/EthAccount";
+import Pagination from "../components/Pagination";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "Nfts",
@@ -155,16 +104,26 @@ export default {
     Footer,
     Header,
     HelpModal,
+    Pagination,
   },
   data() {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
-      first: 10,
+      pageSize: PAGE_SIZE,
+      first: PAGE_SIZE,
       skip: 0,
+      taggersCount: 0,
     };
   },
   apollo: {
+    taggerCount: {
+      query: ALL_TAGGERS,
+      manual: true,
+      result({ data }) {
+        this.taggersCount = data.taggers.length;
+      },
+    },
     pagedTaggers: {
       query: PAGED_TAGGERS,
       variables() {
@@ -173,6 +132,11 @@ export default {
           skip: this.skip,
         };
       },
+    },
+  },
+  methods: {
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
     },
   },
 };

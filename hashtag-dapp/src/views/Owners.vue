@@ -91,65 +91,11 @@
                 </div>
                 <!---->
               </div>
-              <div class="level">
-                <div class="level-left"></div>
-                <div class="level-right">
-                  <div class="level-item">
-                    <nav class="pagination">
-                      <a
-                        role="button"
-                        href="#"
-                        disabled="disabled"
-                        aria-label="Page 0."
-                        class="pagination-link pagination-previous"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-left mdi-24px"></i></span
-                      ></a>
-                      <a
-                        role="button"
-                        href="#"
-                        aria-label="Page 2."
-                        class="pagination-link pagination-next"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-right mdi-24px"></i></span
-                      ></a>
-                      <ul class="pagination-list">
-                        <!---->
-                        <!---->
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Current page, Page 1."
-                            aria-current="true"
-                            class="pagination-link is-current"
-                            >1</a
-                          >
-                        </li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 2."
-                            class="pagination-link"
-                            >2</a
-                          >
-                        </li>
-                        <li><span class="pagination-ellipsis">…</span></li>
-                        <li>
-                          <a
-                            role="button"
-                            href="#"
-                            aria-label="Page 12."
-                            class="pagination-link"
-                            >12</a
-                          >
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              </div>
+              <Pagination
+                :entity-count="ownersCount"
+                :page-size="pageSize"
+                @tabSelected="tabSelected"
+              />
             </article>
           </div>
         </div>
@@ -163,9 +109,12 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PAGED_OWNERS } from "../queries";
+import { PAGED_OWNERS, ALL_OWNER_ADDRESSES } from "../queries";
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
+import Pagination from "../components/Pagination";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "Nfts",
@@ -175,13 +124,16 @@ export default {
     Footer,
     Header,
     HelpModal,
+    Pagination,
   },
   data() {
     return {
       activeTab: null,
       isRecentlyTaggedModalActive: false,
-      first: 10,
+      pageSize: PAGE_SIZE,
+      first: PAGE_SIZE,
       skip: 0,
+      ownersCount: 0,
     };
   },
   apollo: {
@@ -193,6 +145,18 @@ export default {
           skip: this.skip,
         };
       },
+    },
+    ownersCount: {
+      query: ALL_OWNER_ADDRESSES,
+      manual: true,
+      result({ data }) {
+        this.ownersCount = data.owners.length;
+      },
+    },
+  },
+  methods: {
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
     },
   },
 };
