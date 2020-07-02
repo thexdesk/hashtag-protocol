@@ -195,67 +195,11 @@
                         </tbody>
                         <!---->
                       </table>
-                      <div class="level">
-                        <div class="level-left"></div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <nav class="pagination">
-                              <b-button
-                                role="button"
-                                :disabled="hashtagsTab.currentPage === 0"
-                                @click="previousPage('hashtagsTab')"
-                                class="pagination-link pagination-previous"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-left mdi-24px"
-                                  ></i></span
-                              ></b-button>
-                              <b-button
-                                role="button"
-                                :disabled="
-                                  hashtagsTab.currentPage ===
-                                  Math.ceil(
-                                    hashtagsTab.hashtagsCount /
-                                      hashtagsTab.pageSize
-                                  ) -
-                                    1
-                                "
-                                @click="nextPage('hashtagsTab')"
-                                class="pagination-link pagination-next"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-right mdi-24px"
-                                  ></i></span
-                              ></b-button>
-                              <ul class="pagination-list">
-                                <li
-                                  v-for="(page, idx) in Array.from(
-                                    {
-                                      length: Math.ceil(
-                                        hashtagsTab.hashtagsCount /
-                                          hashtagsTab.pageSize
-                                      ),
-                                    },
-                                    (v, k) => k
-                                  )"
-                                  :key="idx"
-                                  @click="tabSelected('hashtagsTab', page)"
-                                >
-                                  <b-button
-                                    role="button"
-                                    class="pagination-link"
-                                    v-bind:class="{
-                                      'is-current':
-                                        hashtagsTab.currentPage === page,
-                                    }"
-                                    >{{ page + 1 }}</b-button
-                                  >
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                      <Pagination
+                        :entity-count="hashtagsTab.hashtagsCount"
+                        :page-size="hashtagsTab.pageSize"
+                        @tabSelected="hashtagsTabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
@@ -346,67 +290,11 @@
                         </tbody>
                         <!---->
                       </table>
-                      <div class="level">
-                        <div class="level-left"></div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <nav class="pagination">
-                              <b-button
-                                role="button"
-                                :disabled="taggedContentTab.currentPage === 0"
-                                @click="previousPage('taggedContentTab')"
-                                class="pagination-link pagination-previous"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-left mdi-24px"
-                                  ></i></span
-                              ></b-button>
-                              <b-button
-                                role="button"
-                                :disabled="
-                                  taggedContentTab.currentPage ===
-                                  Math.ceil(
-                                    taggedContentTab.taggedCount /
-                                      taggedContentTab.pageSize
-                                  ) -
-                                    1
-                                "
-                                @click="nextPage('taggedContentTab')"
-                                class="pagination-link pagination-next"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-right mdi-24px"
-                                  ></i></span
-                              ></b-button>
-                              <ul class="pagination-list">
-                                <li
-                                  v-for="(page, idx) in Array.from(
-                                    {
-                                      length: Math.ceil(
-                                        taggedContentTab.taggedCount /
-                                          taggedContentTab.pageSize
-                                      ),
-                                    },
-                                    (v, k) => k
-                                  )"
-                                  :key="idx"
-                                  @click="tabSelected('taggedContentTab', page)"
-                                >
-                                  <b-button
-                                    role="button"
-                                    class="pagination-link"
-                                    v-bind:class="{
-                                      'is-current':
-                                        taggedContentTab.currentPage === page,
-                                    }"
-                                    >{{ page + 1 }}</b-button
-                                  >
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                      <Pagination
+                        :entity-count="taggedContentTab.taggedCount"
+                        :page-size="taggedContentTab.pageSize"
+                        @tabSelected="taggedContentTabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
@@ -657,6 +545,7 @@ import EthAmount from "../components/EthAmount";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
 import NftLink from "../components/NftLink";
+import Pagination from "../components/Pagination";
 
 const PAGE_SIZE = 10;
 
@@ -672,6 +561,7 @@ export default {
     Footer,
     Header,
     HelpModal,
+    Pagination,
   },
   data() {
     return {
@@ -691,14 +581,12 @@ export default {
         first: PAGE_SIZE,
         skip: 0,
         hashtagsCount: 0,
-        currentPage: 0,
       },
       taggedContentTab: {
         pageSize: PAGE_SIZE,
         first: PAGE_SIZE,
         skip: 0,
         taggedCount: 0,
-        currentPage: 0,
       },
     };
   },
@@ -757,15 +645,11 @@ export default {
     },
   },
   methods: {
-    nextPage(tab) {
-      this.tabSelected(tab, this[tab].currentPage + 1);
+    hashtagsTabSelected(pageId) {
+      this.hashtagsTab.skip = pageId * PAGE_SIZE;
     },
-    previousPage(tab) {
-      this.tabSelected(tab, this[tab].currentPage - 1);
-    },
-    tabSelected(tab, id) {
-      this[tab].skip = id * PAGE_SIZE;
-      this[tab].currentPage = id;
+    taggedContentTabSelected(pageId) {
+      this.taggedContentTab.skip = pageId * PAGE_SIZE;
     },
   },
 };
