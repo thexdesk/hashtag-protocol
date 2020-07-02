@@ -110,8 +110,14 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Creation price</td>
                           <td>
-                            0.8265 ETH<br />0.57855 to Publisher<br />0.24795 to
-                            Protocol
+                            {{ hashtagsByName[0].totalMintingFee | toEth }}
+                            Ξ<br />{{
+                              hashtagsByName[0].publisherMintingFee | toEth
+                            }}
+                            Ξ to Publisher<br />{{
+                              hashtagsByName[0].platformMintingFee | toEth
+                            }}
+                            Ξ to Protocol
                           </td>
                         </tr>
                         <tr draggable="false" class="">
@@ -123,7 +129,14 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
-                            0.000 Owner<br />0.000 Publisher<br />0.000 Protocol
+                            {{ hashtagsByName[0].ownerRevenue | toEth }} Ξ
+                            Owner<br />{{
+                              hashtagsByName[0].publisherRevenue | toEth
+                            }}
+                            Ξ Publisher<br />{{
+                              hashtagsByName[0].protocolRevenue | toEth
+                            }}
+                            Ξ Protocol
                           </td>
                         </tr>
                       </tbody>
