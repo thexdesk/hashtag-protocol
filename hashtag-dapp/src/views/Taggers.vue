@@ -73,54 +73,11 @@
                 </div>
                 <!---->
               </div>
-              <div class="level">
-                <div class="level-left"></div>
-                <div class="level-right">
-                  <div class="level-item">
-                    <nav class="pagination">
-                      <b-button
-                        role="button"
-                        :disabled="currentPage === 0"
-                        @click="previousPage"
-                        class="pagination-link pagination-previous"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-left mdi-24px"></i></span
-                      ></b-button>
-                      <b-button
-                        role="button"
-                        :disabled="
-                          currentPage === Math.ceil(taggersCount / pageSize) - 1
-                        "
-                        @click="nextPage"
-                        class="pagination-link pagination-next"
-                        ><span class="icon" aria-hidden="true"
-                          ><i class="mdi mdi-chevron-right mdi-24px"></i></span
-                      ></b-button>
-                      <ul class="pagination-list">
-                        <li
-                          v-for="(page, idx) in Array.from(
-                            {
-                              length: Math.ceil(taggersCount / pageSize),
-                            },
-                            (v, k) => k
-                          )"
-                          :key="idx"
-                          @click="tabSelected(page)"
-                        >
-                          <b-button
-                            role="button"
-                            class="pagination-link"
-                            v-bind:class="{
-                              'is-current': currentPage === page,
-                            }"
-                            >{{ page + 1 }}</b-button
-                          >
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              </div>
+              <Pagination
+                :entity-count="taggersCount"
+                :page-size="pageSize"
+                @tabSelected="tabSelected"
+              />
             </article>
           </div>
         </div>
@@ -136,6 +93,7 @@ import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import { PAGED_TAGGERS, ALL_TAGGERS } from "../queries";
 import EthAccount from "../components/EthAccount";
+import Pagination from "../components/Pagination";
 
 const PAGE_SIZE = 10;
 
@@ -146,6 +104,7 @@ export default {
     Footer,
     Header,
     HelpModal,
+    Pagination,
   },
   data() {
     return {
@@ -155,7 +114,6 @@ export default {
       first: PAGE_SIZE,
       skip: 0,
       taggersCount: 0,
-      currentPage: 0,
     };
   },
   apollo: {
@@ -177,15 +135,8 @@ export default {
     },
   },
   methods: {
-    nextPage() {
-      this.tabSelected(this.currentPage + 1);
-    },
-    previousPage() {
-      this.tabSelected(this.currentPage - 1);
-    },
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
-      this.currentPage = id;
     },
   },
 };
