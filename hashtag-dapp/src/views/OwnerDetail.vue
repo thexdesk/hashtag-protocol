@@ -277,67 +277,11 @@
                         </tbody>
                         <!---->
                       </table>
-                      <div class="level">
-                        <div class="level-left"></div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <nav class="pagination">
-                              <b-button
-                                role="button"
-                                :disabled="taggedContentTab.currentPage === 0"
-                                @click="previousPage('taggedContentTab')"
-                                class="pagination-link pagination-previous"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-left mdi-24px"
-                                  ></i></span
-                              ></b-button>
-                              <b-button
-                                role="button"
-                                :disabled="
-                                  taggedContentTab.currentPage ===
-                                  Math.ceil(
-                                    taggedContentTab.taggedCount /
-                                      taggedContentTab.pageSize
-                                  ) -
-                                    1
-                                "
-                                @click="nextPage('taggedContentTab')"
-                                class="pagination-link pagination-next"
-                                ><span class="icon" aria-hidden="true"
-                                  ><i
-                                    class="mdi mdi-chevron-right mdi-24px"
-                                  ></i></span
-                              ></b-button>
-                              <ul class="pagination-list">
-                                <li
-                                  v-for="(page, idx) in Array.from(
-                                    {
-                                      length: Math.ceil(
-                                        taggedContentTab.taggedCount /
-                                          taggedContentTab.pageSize
-                                      ),
-                                    },
-                                    (v, k) => k
-                                  )"
-                                  :key="idx"
-                                  @click="tabSelected('taggedContentTab', page)"
-                                >
-                                  <b-button
-                                    role="button"
-                                    class="pagination-link"
-                                    v-bind:class="{
-                                      'is-current':
-                                        taggedContentTab.currentPage === page,
-                                    }"
-                                    >{{ page + 1 }}</b-button
-                                  >
-                                </li>
-                              </ul>
-                            </nav>
-                          </div>
-                        </div>
-                      </div>
+                      <Pagination
+                        :entity-count="taggedContentTab.taggedCount"
+                        :page-size="taggedContentTab.pageSize"
+                        @tabSelected="taggedContentTabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
