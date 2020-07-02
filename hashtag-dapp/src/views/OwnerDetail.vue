@@ -556,14 +556,12 @@ export default {
         first: PAGE_SIZE,
         skip: 0,
         hashtagsCount: 0,
-        currentPage: 0,
       },
       taggedContentTab: {
         pageSize: PAGE_SIZE,
         first: PAGE_SIZE,
         skip: 0,
         taggedCount: 0,
-        currentPage: 0,
       },
     };
   },
