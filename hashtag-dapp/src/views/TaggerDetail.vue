@@ -158,6 +158,11 @@
                         </tbody>
                         <!---->
                       </table>
+                      <Pagination
+                        :entity-count="tagsCount"
+                        :page-size="pageSize"
+                        @tabSelected="tabSelected"
+                      />
                     </div>
                     <!---->
                   </div>
@@ -304,9 +309,16 @@ import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { TAGGER_BY_ACC, TAGS_BY_TAGGER } from "../queries";
+import Pagination from "../components/Pagination";
+import {
+  TAGGER_BY_ACC,
+  PAGED_TAGS_BY_TAGGER,
+  ALL_TAG_IDS_BY_TAGGER,
+} from "../queries";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
+
+const PAGE_SIZE = 10;
 
 export default {
   name: "TaggerDetail",
@@ -318,6 +330,7 @@ export default {
     Header,
     HelpModal,
     EthAmount,
+    Pagination,
   },
   data() {
     return {
@@ -328,6 +341,10 @@ export default {
       tagger: this.$route.params.address,
       tagsByHashtag: null,
       hashtagsByName: null,
+      pageSize: PAGE_SIZE,
+      first: PAGE_SIZE,
+      skip: 0,
+      tagsCount: 0,
     };
   },
   apollo: {
@@ -340,12 +357,31 @@ export default {
       },
     },
     tagsByTagger: {
-      query: TAGS_BY_TAGGER,
+      query: PAGED_TAGS_BY_TAGGER,
+      variables() {
+        return {
+          tagger: this.tagger,
+          first: this.first,
+          skip: this.skip,
+        };
+      },
+    },
+    tagsByTaggerCount: {
+      query: ALL_TAG_IDS_BY_TAGGER,
+      manual: true,
+      result({ data }) {
+        this.tagsCount = data.allTagIdsByTagger.length;
+      },
       variables() {
         return {
           tagger: this.tagger,
         };
       },
+    },
+  },
+  methods: {
+    tabSelected(id) {
+      this.skip = id * PAGE_SIZE;
     },
   },
 };
