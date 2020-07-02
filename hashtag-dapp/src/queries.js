@@ -197,6 +197,7 @@ query taggerByAcc($id: String!) {
     taggerByAcc: tagger(id: $id){
         id  
         tagCount
+        feesPaid
     }
 }
 `);

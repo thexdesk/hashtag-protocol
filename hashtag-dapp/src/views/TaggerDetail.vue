@@ -60,7 +60,7 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging fees</td>
                           <td>
-                            <code>TODO</code>
+                            <EthAmount :value="taggerByAcc.feesPaid" />
                           </td>
                         </tr>
                       </tbody>
@@ -300,6 +300,7 @@
 
 <script>
 import EthAccount from "../components/EthAccount";
+import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
@@ -316,6 +317,7 @@ export default {
     Footer,
     Header,
     HelpModal,
+    EthAmount,
   },
   data() {
     return {
