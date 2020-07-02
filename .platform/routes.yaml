@@ -12,8 +12,12 @@
   to: "https://{default}/"
 
 "http://{default}/":
-    type: redirect
-    to: "https://{default}/"
+  type: redirect
+  to: "https://{default}/"
+
+"https://docs.{default}/":
+  type: upstream
+  upstream: "hashtag-docs:http"
 
 #http://{default}/:
 #  cache:
