@@ -31,6 +31,12 @@ export function handleMintHashtag(event: MintHashtag): void {
   hashtagEntity.publisher = event.params.publisher;
   hashtagEntity.timestamp = event.block.timestamp;
   hashtagEntity.tagCount = BigInt.fromI32(0);
+  hashtagEntity.ownerRevenue = BigInt.fromI32(0);
+  hashtagEntity.publisherRevenue = BigInt.fromI32(0);
+  hashtagEntity.protocolRevenue = BigInt.fromI32(0);
+  hashtagEntity.publisherMintingFee = event.params.publisherFee;
+  hashtagEntity.platformMintingFee = event.params.platformFee;
+  hashtagEntity.totalMintingFee = hashtagEntity.publisherMintingFee.plus(hashtagEntity.platformMintingFee);
   hashtagEntity.save();
 
   // owner

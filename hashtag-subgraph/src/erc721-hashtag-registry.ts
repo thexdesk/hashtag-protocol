@@ -46,6 +46,9 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   // Update hashtag data
   let hashtag = Hashtag.load(hashtagId.toString());
   hashtag.tagCount = hashtag.tagCount.plus(ONE);
+  hashtag.ownerRevenue = hashtag.ownerRevenue.plus(event.params.hashtagFee);
+  hashtag.publisherRevenue = hashtag.publisherRevenue.plus(event.params.publisherFee);
+  hashtag.protocolRevenue = hashtag.protocolRevenue.plus(event.params.platformFee);
   hashtag.save();
 
   // Store tag information
