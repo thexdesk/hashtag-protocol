@@ -76,6 +76,7 @@ export function safeLoadTagger(id: string): Tagger | null {
     if (entity === null) {
         entity = new Tagger(id);
         entity.tagCount = ZERO;
+        entity.feesPaid = ZERO;
     }
 
     return entity;
