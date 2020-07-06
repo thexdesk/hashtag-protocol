@@ -43,12 +43,17 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
 
   let hashtagId = event.params.hashtagId;
 
+  let hashtagFee = event.params.hashtagFee;
+  let publisherFee = event.params.publisherFee;
+  let platformFee = event.params.platformFee;
+  let totalFee = hashtagFee.plus(publisherFee).plus(platformFee);
+
   // Update hashtag data
   let hashtag = Hashtag.load(hashtagId.toString());
   hashtag.tagCount = hashtag.tagCount.plus(ONE);
-  hashtag.ownerRevenue = hashtag.ownerRevenue.plus(event.params.hashtagFee);
-  hashtag.publisherRevenue = hashtag.publisherRevenue.plus(event.params.publisherFee);
-  hashtag.protocolRevenue = hashtag.protocolRevenue.plus(event.params.platformFee);
+  hashtag.ownerRevenue = hashtag.ownerRevenue.plus(hashtagFee);
+  hashtag.publisherRevenue = hashtag.publisherRevenue.plus(publisherFee);
+  hashtag.protocolRevenue = hashtag.protocolRevenue.plus(platformFee);
   hashtag.save();
 
   // Store tag information
@@ -81,22 +86,23 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   // Update owner counts and fees
   let owner = safeLoadOwner(protocolContract.ownerOf(hashtagId).toHexString());
   owner.tagCount = owner.tagCount.plus(ONE);
-  owner.tagFees = owner.tagFees.plus(event.params.hashtagFee);
+  owner.tagFees = owner.tagFees.plus(hashtagFee);
   owner.save();
 
   // update publisher counts and fees
   let publisherEntity = safeLoadPublisher(event.params.publisher.toHexString());
   publisherEntity.tagCount = publisherEntity.tagCount.plus(ONE);
-  publisherEntity.tagFees = publisherEntity.tagFees.plus(event.params.publisherFee);
+  publisherEntity.tagFees = publisherEntity.tagFees.plus(publisherFee);
   publisherEntity.save();
 
   // update platform fees
   let platform = safeLoadPlatform("platform");
-  platform.tagFees = platform.tagFees.plus(event.params.platformFee);
+  platform.tagFees = platform.tagFees.plus(platformFee);
   platform.save();
 
   // update tagger counts
   let tagger = safeLoadTagger(event.params.tagger.toHexString());
   tagger.tagCount = tagger.tagCount.plus(ONE);
+  tagger.feesPaid = tagger.feesPaid.plus(totalFee);
   tagger.save();
 }

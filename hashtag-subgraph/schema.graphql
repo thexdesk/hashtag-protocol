@@ -50,6 +50,7 @@ type Owner @entity {
 type Tagger @entity {
   id: ID!
   tagCount: BigInt!
+  feesPaid: BigInt!
 }
 
 type Platform @entity {
