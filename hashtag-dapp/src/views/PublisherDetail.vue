@@ -7,9 +7,9 @@
         </div>
       </div>
     </section>
-    <section class="main">
+    <section class="main" v-if="foundPublisher">
       <div class="container">
-        <h1 class="title is-1">Publisher: {{ publisherName }}</h1>
+        <h1 class="title is-1">Publisher: {{ foundPublisher.name }}</h1>
         <h2 class="subtitle">Hashtag Protocol Publisher</h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
@@ -28,8 +28,7 @@
                         <tr>
                           <td class="has-text-weight-bold">Name</td>
                           <td>
-                            {{ publisherName }}
-                            <code>TODO</code>
+                            {{ foundPublisher.name }}
                           </td>
                         </tr>
                         <tr>
@@ -37,14 +36,16 @@
                             Publisher address
                           </td>
                           <td>
-                            <eth-account :value="publisher"></eth-account>
+                            <eth-account
+                              :value="foundPublisher.address"
+                            ></eth-account>
                           </td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Official website</td>
                           <td>
-                            <a v-bind:href="publisherWebsite"
-                              >{{ publisherWebsite }}
+                            <a v-bind:href="foundPublisher.website"
+                              >{{ foundPublisher.website }}
                               <b-icon icon="open-in-new" size="is-small">
                               </b-icon
                             ></a>
@@ -547,6 +548,9 @@ import TimestampFrom from "../components/TimestampFrom";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 
+import { mapGetters } from "vuex";
+import { ethers } from "ethers";
+
 const PAGE_SIZE = 10;
 
 export default {
@@ -650,6 +654,21 @@ export default {
     },
     taggedContentTabSelected(pageId) {
       this.taggedContentTab.skip = pageId * PAGE_SIZE;
+    },
+  },
+  computed: {
+    ...mapGetters(["publisherDirectory"]),
+    foundPublisher() {
+      if (this.publisherDirectory) {
+        const filteredResults = this.publisherDirectory.filter(
+          (publisher) =>
+            ethers.utils.getAddress(publisher.address) ===
+            ethers.utils.getAddress(this.$route.params.address)
+        );
+        return filteredResults.length === 1 ? filteredResults[0] : null;
+      }
+
+      return null;
     },
   },
 };
