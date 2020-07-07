@@ -554,11 +554,6 @@ export default {
       skip: 0,
       tagsCount: 0,
       pageSize: PAGE_SIZE,
-      modalForm: {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      },
     };
   },
   apollo: {
