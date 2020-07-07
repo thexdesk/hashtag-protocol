@@ -1,0 +1,66 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: HashtagProtocol
+    network: rinkeby
+    source:
+      address: "0xf51918EE368c7626d0d07d8a2109CE65b182b678"
+      abi: HashtagProtocol
+      startBlock: 6388327
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - MintHashtag
+      abis:
+        - name: HashtagProtocol
+          file: ./abis/HashtagProtocol.json
+      eventHandlers:
+        - event: MintHashtag(indexed uint256,indexed address,string,string,indexed address,uint256,uint256)
+          handler: handleMintHashtag
+      file: ./src/protocol-mapping.ts
+  - kind: ethereum/contract
+    name: ERC721HashtagRegistry
+    network: rinkeby
+    source:
+      address: "0xd37d76a9f84EC8ec37605AA86023c385155BDb3C"
+      abi: ERC721HashtagRegistry
+      startBlock: 6388331
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - HashtagRegistered
+      abis:
+        - name: ERC721HashtagRegistry
+          file: ./abis/ERC721HashtagRegistry.json
+        - name: HashtagProtocol
+          file: ./abis/HashtagProtocol.json
+      eventHandlers:
+        - event: HashtagRegistered(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleHashtagRegistered
+      file: ./src/erc721-hashtag-registry.ts
+  - kind: ethereum/contract
+    name: HashtagAccessControls
+    network: rinkeby
+    source:
+      address: "0x753ae97F9EF667679429C8424B47948dAFa68236"
+      abi: HashtagAccessControls
+      startBlock: 6388325
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - RoleGranted
+      abis:
+        - name: HashtagAccessControls
+          file: ./abis/HashtagAccessControls.json
+      eventHandlers:
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+      file: ./src/access-control-mapping.ts

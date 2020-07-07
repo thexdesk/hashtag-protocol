@@ -1,17 +1,34 @@
-https://{default}/:
-  to: http://{default}/
-  type: redirect
+# The routes of the project.
+#
+# Each route describes how an incoming URL is going
+# to be processed by Platform.sh.
 
-http://{default}/:
-  cache:
-    cookies:
-      - "*"
-    default_ttl: 0
-    enabled: true
-    headers:
-      - Accept
-      - Accept-Language
-  ssi:
-    enabled: false
+"https://{default}/":
   type: upstream
-  upstream: ui:http
+  upstream: "hashtag-dapp:http"
+
+"https://www.{default}/":
+  type: redirect
+  to: "https://{default}/"
+
+"http://{default}/":
+  type: redirect
+  to: "https://{default}/"
+
+"https://docs.{default}/":
+  type: upstream
+  upstream: "hashtag-docs:http"
+
+#http://{default}/:
+#  cache:
+#    cookies:
+#    - '*'
+#    default_ttl: 0
+#    enabled: true
+##    headers:
+ #   - Accept
+ #   - Accept-Language
+ # ssi:
+ #   enabled: false
+ # type: upstream
+ # upstream: ui:http

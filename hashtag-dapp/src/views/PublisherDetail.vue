@@ -1,0 +1,677 @@
+<template>
+  <div class="body">
+    <section class="hero has-background-grey-dark is-bold">
+      <div class="hero-head">
+        <div class="container">
+          <Header></Header>
+        </div>
+      </div>
+    </section>
+    <section class="main" v-if="foundPublisher">
+      <div class="container">
+        <h1 class="title is-1">Publisher: {{ foundPublisher.name }}</h1>
+        <h2 class="subtitle">Hashtag Protocol Publisher</h2>
+        <div class="tile is-ancestor">
+          <div class="tile is-horizontal">
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <help-modal
+                  modal="isPubInfoModalActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
+                <h2 class="title is-4">Publisher information</h2>
+                <div class="b-table">
+                  <div class="table-wrapper">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td class="has-text-weight-bold">Name</td>
+                          <td>
+                            {{ foundPublisher.name }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="has-text-weight-bold">
+                            Publisher address
+                          </td>
+                          <td>
+                            <eth-account
+                              :value="foundPublisher.address"
+                            ></eth-account>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="has-text-weight-bold">Official website</td>
+                          <td>
+                            <a v-bind:href="foundPublisher.website"
+                              >{{ foundPublisher.website }}
+                              <b-icon icon="open-in-new" size="is-small">
+                              </b-icon
+                            ></a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tile is-parent is-6 is-12-mobile">
+              <div class="tile is-child box">
+                <help-modal
+                  modal="isSummaryModalActive"
+                  @popModalFromChild="popModal"
+                  class="is-pulled-right"
+                ></help-modal>
+                <h2 class="title is-4">
+                  Market summary for KnownOrigin
+                </h2>
+                <div class="b-table" v-if="publisherByAcc">
+                  <div class="table-wrapper">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td class="has-text-weight-bold">Hashtags</td>
+                          <td>
+                            {{ publisherByAcc.mintCount }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="has-text-weight-bold">Hashtag revenue</td>
+                          <td>
+                            <eth-amount
+                              :value="publisherByAcc.mintFees"
+                            ></eth-amount>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="has-text-weight-bold">Tag count</td>
+                          <td>
+                            {{ publisherByAcc.tagCount }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="has-text-weight-bold">Tagging revenue</td>
+                          <td>
+                            <eth-amount
+                              :value="publisherByAcc.tagFees"
+                            ></eth-amount>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="has-text-weight-bold">Total revenue</td>
+                          <td>
+                            <eth-amount-sum
+                              :value1="publisherByAcc.mintFees"
+                              :value2="publisherByAcc.tagFees"
+                            ></eth-amount-sum>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="columns is-tablet is-centered">
+          <div class="column is-12">
+            <article class="is-white box">
+              <help-modal
+                modal="isActivityModalActive"
+                @popModalFromChild="popModal"
+                class="is-pulled-right"
+              ></help-modal>
+              <h2 class="title is-4 is-spaced">
+                Recent activity on KnownOrigin
+              </h2>
+              <b-tabs v-model="activeTab" :animated="false">
+                <b-tab-item label="Hashtags">
+                  <div class="b-table">
+                    <!---->
+                    <!---->
+                    <div class="table-wrapper has-mobile-cards">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <!---->
+                            <!---->
+                            <th class="">
+                              <div class="th-wrap">
+                                Hashtag
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Created
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Owner
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Tag count
+                                <!---->
+                              </div>
+                            </th>
+                          </tr>
+                          <!---->
+                          <!---->
+                        </thead>
+                        <tbody v-if="hashtagsByPublisher">
+                          <tr
+                            v-for="hashtag in hashtagsByPublisher"
+                            v-bind:key="hashtag.id"
+                          >
+                            <!---->
+                            <!---->
+                            <td data-label="Hashtag" class="">
+                              <hashtag :value="hashtag.name"></hashtag>
+                            </td>
+                            <td data-label="Minted" class="">
+                              <timestamp-from
+                                :value="hashtag.timestamp"
+                              ></timestamp-from>
+                            </td>
+                            <td data-label="Owner" class="">
+                              <eth-account
+                                :value="hashtag.owner"
+                                route="owner-detail"
+                              ></eth-account>
+                            </td>
+                            <td data-label="tag-count" class="">
+                              {{ hashtag.tagCount }}
+                            </td>
+                          </tr>
+                          <!---->
+                          <!---->
+                        </tbody>
+                        <!---->
+                      </table>
+                      <Pagination
+                        :entity-count="hashtagsTab.hashtagsCount"
+                        :page-size="hashtagsTab.pageSize"
+                        @tabSelected="hashtagsTabSelected"
+                      />
+                    </div>
+                    <!---->
+                  </div>
+                </b-tab-item>
+                <b-tab-item label="Tag count">
+                  <div class="b-table">
+                    <!---->
+                    <!---->
+                    <div class="table-wrapper has-mobile-cards">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <!---->
+                            <!---->
+                            <th class="" style="width: 75px;">
+                              <div class="th-wrap"><!----></div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Asset Name
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Project
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Hashtag
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Tagged
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Tagger
+                                <!---->
+                              </div>
+                            </th>
+                          </tr>
+                          <!---->
+                          <!---->
+                        </thead>
+                        <tbody v-if="tagsByPublisher">
+                          <tr
+                            v-for="tag in tagsByPublisher"
+                            v-bind:key="tag.id"
+                          >
+                            <td data-label="" class="">
+                              <figure class="image">
+                                <img :src="tag.nftImage" :alt="tag.nftName" />
+                              </figure>
+                            </td>
+                            <td data-label="Asset Name" class="">
+                              <nft-link
+                                type="nft"
+                                :name="tag.nftName"
+                                :contract="tag.nftContract"
+                                :id="tag.nftId"
+                              ></nft-link>
+                            </td>
+                            <td data-label="Asset Name" class="">
+                              {{ tag.nftContractName }}
+                            </td>
+                            <td data-label="Hashtag" class="">
+                              <hashtag :value="tag.hashtagName"></hashtag>
+                            </td>
+                            <td data-label="Tagged" class="">
+                              <timestamp-from
+                                :value="tag.timestamp"
+                              ></timestamp-from>
+                            </td>
+                            <td data-label="Tagger" class="">
+                              <eth-account
+                                :value="tag.tagger"
+                                route="tagger-detail"
+                              ></eth-account>
+                            </td>
+                          </tr>
+                        </tbody>
+                        <!---->
+                      </table>
+                      <Pagination
+                        :entity-count="taggedContentTab.taggedCount"
+                        :page-size="taggedContentTab.pageSize"
+                        @tabSelected="taggedContentTabSelected"
+                      />
+                    </div>
+                    <!---->
+                  </div>
+                </b-tab-item>
+              </b-tabs>
+            </article>
+          </div>
+        </div>
+      </div>
+      <b-modal :active.sync="isPubInfoModalActive" :width="640" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Publisher information</p>
+              </div>
+            </div>
+            <div class="content">
+              <p>
+                <strong>Name</strong> - Name of the participating Publisher.
+              </p>
+              <p>
+                <strong>Publisher address</strong> - Ethereum address of the
+                Publisher.
+              </p>
+              <p>
+                <strong>Official website</strong> - URL and hyperlink to the
+                Publisher's official website.
+              </p>
+              <p>
+                <b-collapse
+                  :open="false"
+                  position="is-top"
+                  aria-id="contentIdForA11y1"
+                  animation="slide"
+                >
+                  <a
+                    slot="trigger"
+                    slot-scope="props"
+                    aria-controls="MarketOverview"
+                    class="has-text-weight-bold"
+                  >
+                    <b-icon
+                      :icon="!props.open ? 'menu-down' : 'menu-up'"
+                    ></b-icon>
+                    {{
+                      !props.open
+                        ? 'What\'s a "Publisher"?'
+                        : 'What\'s a "Publisher"?'
+                    }}
+                  </a>
+                  <p>
+                    <br />
+                    A Publisher is an application, network or platform
+                    implementing the Hashtag Protocol to provide their customers
+                    and/or application content tagging stored to a
+                    decentralized, globally readable database.
+                  </p>
+                  <p>
+                    At the present time, Publishers must be white-listed to use
+                    The Protocol. If you'd like to whitelist your application,
+                    please
+                    <a v-bind:href="publisherRegURL"
+                      >register your application</a
+                    >.
+                  </p>
+                </b-collapse>
+              </p>
+            </div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Market summary</p>
+              </div>
+            </div>
+            <div class="content">
+              <p>
+                <strong>Hashtags</strong> - Number of Hashtags Tokens created
+                through Publisher application.
+              </p>
+              <p>
+                <strong>Hashtag revenue</strong> - Publisher revenue for Hashtag
+                Tokens created on Publisher application.
+              </p>
+              <p>
+                <strong>Tag count</strong> - Number of content items tagged with
+                any hashtag on Publisher application.
+              </p>
+              <p>
+                <strong>Tagging revenue</strong> - Publisher revenue from
+                content tagged on Publisher application.
+              </p>
+              <p>
+                <strong>Total revenue</strong> - Total Hashtag Protocol revenue
+                for this Publisher.
+              </p>
+              <p>
+                <b-collapse
+                  :open="false"
+                  position="is-top"
+                  aria-id="contentIdForA11y1"
+                  animation="slide"
+                >
+                  <a
+                    slot="trigger"
+                    slot-scope="props"
+                    aria-controls="MarketOverview"
+                    class="has-text-weight-bold"
+                  >
+                    <b-icon
+                      :icon="!props.open ? 'menu-down' : 'menu-up'"
+                    ></b-icon>
+                    {{
+                      !props.open
+                        ? 'What is the "Hashtag Market"?'
+                        : 'What is the "Hashtag Market"?'
+                    }}
+                  </a>
+                  <p>
+                    <br />
+                    Hashtag is a protocol on the Ethereum blockchain that
+                    creates a market & incentive economy around the creation and
+                    use of hashtags. The protocol aims to create a virtuous,
+                    financially incentivized system that creates more value to
+                    all participants the more it grows.
+                  </p>
+                  <p>
+                    The system revolves around four participants: Creator,
+                    Owner, Publisher and Tagger. These key market participants
+                    interact directly with the protocol, paying to use and
+                    earning from the system without having to negotiate terms of
+                    use. The data generated by the protocol is immutable
+                    (impervious to censorship) and globally accessible.
+                  </p>
+                  <p>
+                    Hashtag Protocol uses an auction method to determine the
+                    price of a new Hashtag Token. The "creation price" is the
+                    amount the winning bidder pays to acquire the newly created
+                    Hashtag Token. The proceeds of the auction are automatically
+                    divided between the originating Publisher and the Protocol.
+                  </p>
+                  <p>
+                    In addition to creating unique, non-fungible tokens that
+                    both contain and represent a single, natural language
+                    hashtag, the Protocol also provides facilities for linking a
+                    token any online digital artifact, effectively tagging that
+                    content with the hashtag. Tag count quantifies how many
+                    pieces of content have been tagged with this hashtag.
+                  </p>
+                  <p>
+                    In exchange for facilitating an entry to a decentralized,
+                    immutable and globally accessible database, the Protocol
+                    collects a small fee from the Tagger when they tag content.
+                    The Protocol smart contract then automatically distributes
+                    this fee among the token owner, the publisher facilitating
+                    the tagging and the Protocol.
+                  </p>
+                </b-collapse>
+              </p>
+            </div>
+          </div>
+        </div>
+      </b-modal>
+      <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">Publisher activity</p>
+              </div>
+            </div>
+            <div class="content">
+              <p>
+                <strong>Hashtags</strong><br />Listing of Hasthag Protocol
+                tokens created on this Publisher platform.
+              </p>
+              <ul>
+                <li>
+                  <strong>Hashtag</strong> - Name of the Hashtag Token; same as
+                  the hashtag string stored inside the token.
+                </li>
+                <li>
+                  <strong>Created</strong> - Date token was created and added to
+                  Ethereum blockchain.
+                </li>
+                <li>
+                  <strong>Owner</strong> - Ethereum address of token owner.
+                </li>
+                <li>
+                  <strong>Tag count</strong> - Number of content items tagged
+                  with Hashtag Token across all Publisher platforms.
+                </li>
+                <li>
+                  <strong>Tagging revenue</strong> - Total revenue generated for
+                  tagging fees for this token across all Publisher platforms.
+                </li>
+              </ul>
+              <p>
+                <strong>Tag count</strong><br />Listing of content tagged on
+                this Publisher application.
+              </p>
+              <ul>
+                <li>
+                  <strong>Asset name</strong> - Name of the ERC-721 token.
+                </li>
+                <li>
+                  <strong>Hashtag</strong> - Hashtag Token the asset is tagged
+                  with.
+                </li>
+                <li>
+                  <strong>Project</strong> - Name of project producing the
+                  digital assets that Hashtag Tokens are being linked to.
+                </li>
+                <li><strong>Tagged</strong> - Date asset was tagged.</li>
+                <li>
+                  <strong>Tagger</strong> - Ethereum address used to pay tagging
+                  fee.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </b-modal>
+    </section>
+    <Footer></Footer>
+  </div>
+</template>
+
+<script>
+import EthAccount from "../components/EthAccount";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import HelpModal from "../components/HelpModal";
+import {
+  ALL_HASHTAG_IDS_BY_PUBLISHER,
+  PAGED_HASHTAGS_BY_PUBLISHER,
+  PUBLISHER_BY_ACC,
+  ALL_TAG_IDS_BY_PUBLISHER,
+  PAGED_TAGS_BY_PUBLISHER,
+} from "../queries";
+import EthAmountSum from "../components/EthAmountSum";
+import EthAmount from "../components/EthAmount";
+import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
+import NftLink from "../components/NftLink";
+import Pagination from "../components/Pagination";
+
+import { mapGetters } from "vuex";
+import { ethers } from "ethers";
+
+const PAGE_SIZE = 10;
+
+export default {
+  name: "PublisherDetail",
+  components: {
+    NftLink,
+    TimestampFrom,
+    Hashtag,
+    EthAmount,
+    EthAmountSum,
+    EthAccount,
+    Footer,
+    Header,
+    HelpModal,
+    Pagination,
+  },
+  data() {
+    return {
+      activeTab: null,
+      hashtagsByName: null,
+      isPubInfoModalActive: false,
+      isSummaryModalActive: false,
+      isActivityModalActive: false,
+      publisher: this.$route.params.address,
+      publisherName: "KnownOrigin",
+      publisherRegistration: "https://#",
+      publisherWebsite: "https://knownorigin.io",
+      publisherRegURL: null,
+      tagsByHashtag: null,
+      hashtagsTab: {
+        pageSize: PAGE_SIZE,
+        first: PAGE_SIZE,
+        skip: 0,
+        hashtagsCount: 0,
+      },
+      taggedContentTab: {
+        pageSize: PAGE_SIZE,
+        first: PAGE_SIZE,
+        skip: 0,
+        taggedCount: 0,
+      },
+    };
+  },
+  apollo: {
+    publisherByAcc: {
+      query: PUBLISHER_BY_ACC,
+      variables() {
+        return {
+          id: this.publisher,
+        };
+      },
+    },
+    hashtagsByPublisherCount: {
+      query: ALL_HASHTAG_IDS_BY_PUBLISHER,
+      manual: true,
+      variables() {
+        return {
+          publisher: this.publisher,
+        };
+      },
+      result({ data }) {
+        this.hashtagsTab.hashtagsCount = data.hashtagIdsByPublisher.length;
+      },
+    },
+    hashtagsByPublisher: {
+      query: PAGED_HASHTAGS_BY_PUBLISHER,
+      variables() {
+        return {
+          publisher: this.publisher,
+          first: this.hashtagsTab.first,
+          skip: this.hashtagsTab.skip,
+        };
+      },
+    },
+    tagsByPublisherCount: {
+      query: ALL_TAG_IDS_BY_PUBLISHER,
+      manual: true,
+      variables() {
+        return {
+          publisher: this.publisher,
+        };
+      },
+      result({ data }) {
+        this.taggedContentTab.taggedCount = data.allTagIdsByPublisher.length;
+      },
+    },
+    tagsByPublisher: {
+      query: PAGED_TAGS_BY_PUBLISHER,
+      variables() {
+        return {
+          publisher: this.publisher,
+          first: this.taggedContentTab.first,
+          skip: this.taggedContentTab.skip,
+        };
+      },
+    },
+  },
+  methods: {
+    hashtagsTabSelected(pageId) {
+      this.hashtagsTab.skip = pageId * PAGE_SIZE;
+    },
+    taggedContentTabSelected(pageId) {
+      this.taggedContentTab.skip = pageId * PAGE_SIZE;
+    },
+  },
+  computed: {
+    ...mapGetters(["publisherDirectory"]),
+    foundPublisher() {
+      if (this.publisherDirectory) {
+        const filteredResults = this.publisherDirectory.filter(
+          (publisher) =>
+            ethers.utils.getAddress(publisher.address) ===
+            ethers.utils.getAddress(this.$route.params.address)
+        );
+        return filteredResults.length === 1 ? filteredResults[0] : null;
+      }
+
+      return null;
+    },
+  },
+};
+</script>
+
+<style lang="scss"></style>
