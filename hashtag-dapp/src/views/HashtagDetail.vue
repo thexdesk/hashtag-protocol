@@ -595,9 +595,6 @@ export default {
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
     },
-    async tagNft() {
-      await this.$store.dispatch("tag", this.modalForm);
-    },
   },
 };
 </script>
