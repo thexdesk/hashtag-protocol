@@ -143,11 +143,6 @@ const actions = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    // const contractCall = {
-    //   methodName: "mint",
-    //   params: [payload, publisher, account],
-    // };
-
     const sendTransaction = async () => {
       const tx = await hashtagProtocolContract.mint(
         payload,
@@ -161,7 +156,6 @@ const actions = {
 
     notifyInstance.transaction({
       sendTransaction,
-      // contractCall,
     });
   },
 
