@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 export const SNAPSHOT = gql(`
     query {
-        hashtags(first: 10, orderBy: timestamp, orderDirection: desc) {
+        hashtags(first: 1000, orderBy: timestamp, orderDirection: desc) {
             id
             name
             displayHashtag

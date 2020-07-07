@@ -107,7 +107,10 @@
                     class="is-pulled-right"
                   ></help-modal>
                   <h2 class="title is-5">Newest hashtags</h2>
-                  <b-table :data="hashtags || []" focusable>
+                  <b-table
+                    :data="(hashtags ? hashtags.slice(0, 10) : [])"
+                    focusable
+                  >
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
