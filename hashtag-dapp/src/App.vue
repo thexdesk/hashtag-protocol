@@ -22,7 +22,7 @@ export default {
 </script>
 <style lang="scss">
 @import "bulma/sass/utilities/_all";
-@import url("https://fonts.googleapis.com/css2?family=Roboto:400,600,700");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css");
 
 $primary: #24ae60;

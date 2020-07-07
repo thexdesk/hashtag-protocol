@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
+import notify from "bnc-notify";
 
 let provider;
 
@@ -15,6 +16,13 @@ const onboard = Onboard({
       localStorage.setItem("selectedWallet", wallet.name);
     },
   },
+});
+
+const notifyInstance = notify({
+  dappId: "8bf348fd-d9df-4b54-b8b1-1ad14d15e4c3",
+  networkId: 4, // Dapp currently only supports Rinkeby
+  darkMode: true,
+  desktopPosition: "bottomRight",
 });
 
 import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
@@ -135,9 +143,25 @@ const actions = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    // function mint(string memory _hashtag, address payable _publisher, address _recipient) payable public returns (uint256 _tokenId) {
-    await hashtagProtocolContract.mint(payload, publisher, account, {
-      value: ethers.utils.bigNumberify(state.fees.protocol),
+    // const contractCall = {
+    //   methodName: "mint",
+    //   params: [payload, publisher, account],
+    // };
+
+    const sendTransaction = async () => {
+      const tx = await hashtagProtocolContract.mint(
+        payload,
+        publisher,
+        account,
+        { value: ethers.utils.bigNumberify(state.fees.protocol) }
+      );
+
+      return tx.hash;
+    };
+
+    notifyInstance.transaction({
+      sendTransaction,
+      // contractCall,
     });
   },
 
