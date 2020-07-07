@@ -131,7 +131,7 @@ query hashtagsByName($name: String!) {
 
 export const TAGS_BY_DIGITAL_ASSET = gql(`
    query tagsByDigitalAsset($nftContract: String!, $nftId: String!) {
-    tagsByDigitalAsset: tags(where:{nftContract: $nftContract, nftId: $nftId}) {
+    tagsByDigitalAsset: tags(where:{nftContract: $nftContract, nftId: $nftId}, orderBy: timestamp, orderDirection: desc) {
     id
     nftContract
     nftContractName
