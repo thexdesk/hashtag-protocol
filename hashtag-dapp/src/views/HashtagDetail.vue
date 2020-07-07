@@ -554,6 +554,11 @@ export default {
       skip: 0,
       tagsCount: 0,
       pageSize: PAGE_SIZE,
+      modalForm: {
+        hashtag: null,
+        nft: null,
+        nftName: null,
+      },
     };
   },
   apollo: {
@@ -594,6 +599,9 @@ export default {
   methods: {
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
+    },
+    async tagNft() {
+      await this.$store.dispatch("tag", this.modalForm);
     },
   },
 };

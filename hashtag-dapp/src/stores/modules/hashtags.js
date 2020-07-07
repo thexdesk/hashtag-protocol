@@ -167,19 +167,29 @@ const actions = {
     const { web3Objects, fees } = state;
     const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
-    const { hashtag, nft } = payload;
+    const { hashtagId, nftContract, nftId } = payload;
+
+    console.log(`${hashtagId} ${nftContract} ${nftId}`);
 
     // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
-    await erc721HashtagRegistryContract.tag(
-      hashtag[0].id,
-      nft.asset_contract.address,
-      nft.token_id,
-      publisher,
-      account,
-      {
-        value: ethers.utils.bigNumberify(fees.protocol),
-      }
-    );
+    const sendTransaction = async () => {
+      const tx = await erc721HashtagRegistryContract.tag(
+        hashtagId,
+        nftContract,
+        nftId,
+        publisher,
+        account,
+        {
+          value: ethers.utils.bigNumberify(fees.protocol),
+        }
+      );
+
+      return tx.hash;
+    };
+
+    notifyInstance.transaction({
+      sendTransaction,
+    });
   },
 
   async getProtocolFee({ commit }) {

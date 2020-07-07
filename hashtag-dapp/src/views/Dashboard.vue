@@ -715,7 +715,11 @@ export default {
   },
   methods: {
     async tagNft() {
-      await this.$store.dispatch("tag", this.modalForm);
+      await this.$store.dispatch("tag", {
+        hashtagId: this.modalForm.hashtag[0].id,
+        nftContract: this.modalForm.nft.asset_contract.address,
+        nftId: this.modalForm.nft.token_id,
+      });
       this.resetModalForm();
       this.isTagModalActive = false;
     },
