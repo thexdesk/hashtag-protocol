@@ -4,6 +4,7 @@ node_modules
 hashtag-docs/docs/.vuepress/dist/*
 hashtag-docs/docs/tmp
 hashtag-docs/docs/dist/*
+hashtag-dapp/dist
 
 # local env files
 .env.local
