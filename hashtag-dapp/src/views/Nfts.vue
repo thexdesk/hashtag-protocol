@@ -24,7 +24,7 @@
           <div class="column is-12">
             <article class="is-white box">
               <help-modal
-                modal="isRecentlyTaggedModalActive"
+                modal="isTaggedAssetsModalActive"
                 @popModalFromChild="popModal"
                 class="is-pulled-right"
               ></help-modal>
@@ -135,40 +135,86 @@
           </div>
         </div>
       </div>
+      <b-modal
+        :active.sync="isTaggedAssetsModalActive"
+        :width="640"
+        scroll="keep"
+      >
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="tagged-asset-list-overview"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                position="is-top"
+                aria-id="contentIdForA11y1"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content"?'
+                      : 'What is "tagged content"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
+            </div>
+          </div>
+        </div>
+      </b-modal>
     </section>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
+import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
+import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PAGED_TAGS, ALL_TAG_IDS } from "../queries";
-import Hashtag from "../components/Hashtag";
-import TimestampFrom from "../components/TimestampFrom";
-import EthAccount from "../components/EthAccount";
+import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
+import TimestampFrom from "../components/TimestampFrom";
+import { PAGED_TAGS, ALL_TAG_IDS } from "../queries";
 
 const PAGE_SIZE = 10;
 
 export default {
   name: "Nfts",
   components: {
-    NftLink,
     EthAccount,
-    TimestampFrom,
-    Hashtag,
     Footer,
+    Hashtag,
     Header,
     HelpModal,
+    MarkdownDoc,
+    NftLink,
     Pagination,
+    TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      isRecentlyTaggedModalActive: false,
+      isTaggedAssetsModalActive: false,
       pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,
