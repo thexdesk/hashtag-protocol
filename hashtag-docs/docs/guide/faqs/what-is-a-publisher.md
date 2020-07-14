@@ -1,4 +1,4 @@
-### What is a "Publisher"?
+### What's a "Publisher"?
 
 A Publisher is an application, network or platform implementing the Hashtag Protocol to provide their customers and/or application content tagging stored to a decentralized, globally readable database.
 
