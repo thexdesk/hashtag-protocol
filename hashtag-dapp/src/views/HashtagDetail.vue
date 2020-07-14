@@ -10,7 +10,14 @@
     <section class="main" v-if="hashtagsByName && hashtagsByName[0]">
       <div class="container">
         <h1 class="title is-1">#{{ hashtagsByName[0].displayHashtag }}</h1>
-        <h2 class="subtitle">Hashtag Protocol Token</h2>
+        <h2 class="subtitle">
+          Hashtag Protocol Token
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'hashtags' }">Browse hashtags</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
@@ -270,44 +277,16 @@
       <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Token overview</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Token ID</strong> - Numerical Id for this token on the
-                Ethereum blockchain.
-              </p>
-              <p>
-                <strong>Created</strong> - Date this token was created and added
-                to Ethereum blockchain.
-              </p>
-              <p>
-                <strong>Publisher</strong> - Ethereum address of application
-                implementing Hashtag Protocol where this token was created. This
-                address receives a share of token creation fee.
-              </p>
-              <p>
-                <strong>Creator</strong> - Ethereum address that payed the token
-                creation fee.
-              </p>
-              <p>
-                <strong>Owner</strong> - Ethereum address of current token
-                owner. This address receives a share of content tagging fee.
-              </p>
-              <p>
-                <strong>Expires</strong> - Date from which Owner has 30 days to
-                renew token ownership. This is done by sending a transaction to
-                the token contract signed by the current owner address. If token
-                is not renewed within 30 days, ownership is transferred to the
-                Protocol.
-              </p>
+              <markdown-doc
+                doc-type="help"
+                filename="hashtag-detail-token-overview"
+              ></markdown-doc>
               <b-collapse
                 :open="false"
                 aria-id="tokenOverview"
                 animation="slide"
+                class="pt-1 pb-1"
               >
                 <a
                   slot="trigger"
@@ -324,10 +303,11 @@
                       : "What's a Hashtag Token?"
                   }}
                 </a>
-                <p>
-                  <br />
-                  <Faq filename="what-is-hashtag-token"></Faq>
-                </p>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-hashtag-token"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
               </b-collapse>
             </div>
           </div>
@@ -336,28 +316,16 @@
       <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Market summary</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Creation price</strong> - Amount the winning bidder pays
-                to acquire a newly created Hashtag Token.
-              </p>
-              <p>
-                <strong>Tag count</strong> - How many content items have been
-                tagged with this hashtag.
-              </p>
-              <p>
-                <strong>Earnings</strong> - Total tagging revenue distributed by
-                the Protocol for this Hashtag token.
-              </p>
+              <markdown-doc
+                doc-type="help"
+                filename="hashtag-detail-market-summary"
+              ></markdown-doc>
               <b-collapse
                 :open="false"
                 aria-id="MarketOverview"
                 animation="slide"
+                class="pt-1 pb-1"
               >
                 <a
                   slot="trigger"
@@ -374,45 +342,11 @@
                       : 'What is the "Hashtag Market"?'
                   }}
                 </a>
-                <p>
-                  <br />
-                  Hashtag is a protocol on the Ethereum blockchain that creates
-                  a market & incentive economy around the creation and use of
-                  hashtags. The protocol aims to create a virtuous, financially
-                  incentivized system that creates more value to all
-                  participants the more it grows.
-                </p>
-                <p>
-                  The system revolves around four participants: Creator, Owner,
-                  Publisher and Tagger. These key market participants interact
-                  directly with the protocol, paying to use and earning from the
-                  system without having to negotiate terms of use. The data
-                  generated by the protocol is immutable (impervious to
-                  censorship) and globally accessible.
-                </p>
-                <p>
-                  Hashtag Protocol uses an auction method to determine the price
-                  of a new Hashtag Token. The "creation price" is the amount the
-                  winning bidder pays to acquire the newly created Hashtag
-                  Token. The proceeds of the auction are automatically divided
-                  between the originating Publisher and the Protocol.
-                </p>
-                <p>
-                  In addition to creating unique, non-fungible tokens that both
-                  contain and represent a single, natural language hashtag, the
-                  Protocol also provides facilities for linking a token any
-                  online digital artifact, effectively tagging that content with
-                  the hashtag. Tag count quantifies how many pieces of content
-                  have been tagged with this hashtag.
-                </p>
-                <p>
-                  In exchange for facilitating an entry to a decentralized,
-                  immutable and globally accessible database, the Protocol
-                  collects a small fee from the Tagger when they tag content.
-                  The Protocol smart contract then automatically distributes
-                  this fee among the token owner, the publisher facilitating the
-                  tagging and the Protocol.
-                </p>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-the-hashtag-market"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
               </b-collapse>
             </div>
           </div>
@@ -421,41 +355,16 @@
       <b-modal :active.sync="isTaggedModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Tagged content</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>ERC-721 NFTs</strong><br />Listing of ERC-721
-                non-fungible tokens (digital assets) tagged with
-                <strong>#{{ hashtagsByName[0].displayHashtag }}</strong
-                >.
-              </p>
-              <ul>
-                <li>
-                  <strong>Asset name</strong> - Name of the ERC-721 token
-                  tagged.
-                </li>
-                <li>
-                  <strong>Project</strong> - Name of project producing the
-                  digital assets that Hashtag Tokens are being linked to.
-                </li>
-                <li><strong>Tagged</strong> - Date asset was tagged.</li>
-                <li>
-                  <strong>Tagger</strong> - Ethereum address used to pay tagging
-                  fee.
-                </li>
-                <li>
-                  <strong>Publisher</strong> - Ethereum address of the Publisher
-                  platform tagging took place on.
-                </li>
-              </ul>
+              <markdown-doc
+                doc-type="help"
+                filename="hashtag-detail-tagged-content"
+              ></markdown-doc>
               <b-collapse
                 :open="false"
                 aria-id="taggedContent"
                 animation="slide"
+                class="pt-1 pb-1"
               >
                 <a
                   slot="trigger"
@@ -472,18 +381,11 @@
                       : 'What is "tagged content?"'
                   }}
                 </a>
-                <p>
-                  <br />In addition to creating crytographic tokens that both
-                  contain and represent hashtag strings, Hashtag Protocol
-                  provides a facility for linking them to any online digital
-                  artifact, effectively "tagging" that content with the hashtag.
-                  This is facilitated by "linking smart contracts" that support
-                  a many-to-many token-to-content relationship. For example, one
-                  Hashtag Token can be used to tag many pieces of content and
-                  one price of content can be tagged with many hashtags.
-                  Presently, only linking to other ERC-721 NFTs is supported.
-                  The Protocol can be extended to tag other digital assets.
-                </p>
+                <markdown-doc
+                  docType="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
               </b-collapse>
             </div>
           </div>
@@ -496,10 +398,10 @@
 
 <script>
 import EthAccount from "../components/EthAccount";
-import Faq from "../components/Faq";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import MarkdownDoc from "../components/MarkdownDoc";
 import Pagination from "../components/Pagination";
 import {
   PAGED_TAGS_BY_HASHTAG,
@@ -517,7 +419,7 @@ export default {
     TimestampFormatted,
     TimestampFrom,
     EthAccount,
-    Faq,
+    MarkdownDoc,
     Footer,
     Header,
     HelpModal,

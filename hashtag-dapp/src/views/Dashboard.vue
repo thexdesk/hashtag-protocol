@@ -107,7 +107,7 @@
                     class="is-pulled-right"
                   ></help-modal>
                   <h2 class="title is-5">Newest hashtags</h2>
-                  <Faq filename="what-is-a-publisher"></Faq>
+                  <markdown-doc filename="what-is-a-publisher"></markdown-doc>
                   <b-table :data="hashtags || []" focusable>
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
@@ -614,7 +614,7 @@
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
-import Faq from "../components/Faq";
+import MarkdownDoc from "../components/MarkdownDoc";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
@@ -631,7 +631,7 @@ export default {
     EthAccount,
     EthAmount,
     EthAmountSum,
-    Faq,
+    MarkdownDoc,
     Footer,
     Hashtag,
     Header,

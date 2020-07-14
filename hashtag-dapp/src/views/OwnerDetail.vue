@@ -12,13 +12,20 @@
         <h1 class="title is-1">
           Owner: <eth-account :value="owner"></eth-account>
         </h1>
-        <h2 class="subtitle">Hashtag Protocol Token Owner</h2>
+        <h2 class="subtitle">
+          Hashtag Protocol Token Owner
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'owners' }">Browse owners</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <help-modal
-                  modal="isOverviewModalActive"
+                  modal="isOwnerInfoModalActive"
                   @popModalFromChild="popModal"
                   class="is-pulled-right"
                 ></help-modal>
@@ -105,7 +112,7 @@
               >
                 <button
                   class="button is-white"
-                  @click="isTaggedModalActive = true"
+                  @click="isActivityModalActive = true"
                 >
                   <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
                 </button>
@@ -291,64 +298,39 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isOwnerInfoModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Owner information</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Owner address</strong> - An Ethereum address that owns
-                one or more Hasthag Protocol tokens.
-              </p>
+              <markdown-doc
+                doc-type="help"
+                filename="owner-detail-owner-info"
+              ></markdown-doc>
               <b-collapse
                 :open="false"
                 position="is-top"
-                aria-id="ownerOverview"
+                aria-id="contentIdForA11y1"
                 animation="slide"
+                class="pt-1 pb-1"
               >
                 <a
                   slot="trigger"
                   slot-scope="props"
-                  aria-controls="ownerOverview"
+                  aria-controls="MarketOverview"
                   class="has-text-weight-bold"
                 >
                   <b-icon
                     :icon="!props.open ? 'menu-down' : 'menu-up'"
                   ></b-icon>
                   {{
-                    !props.open ? 'What\'s an "Owner?"' : 'What\'s an "Owner"?'
+                    !props.open ? 'What\'s an "Owner"?' : 'What\'s an "Owner"?'
                   }}
                 </a>
-                <p>
-                  <br />
-                  Simply put, an “Owner” is an Ethereum address that owns one or
-                  more Hashtag Tokens. An “Owner” can come to “own” a Hashtag
-                  Token by either creating one on a participating Publisher
-                  platform, or by purchasing one on a secondary market such as
-                  OpenSea.io. As soon as a Hashtag Token is created, the
-                  “Creator” becomes de facto “Owner”. The successful purchaser
-                  of a Hashtag Token on the secondary market becomes the new
-                  “Owner” of that Hashtag Token, and assumes certain benefits
-                  that include but are not limited to:
-                </p>
-                <ol>
-                  <li>
-                    Sole ownership of a unique Hashtag Token containing and
-                    representing a unique hashtag string.
-                  </li>
-                  <li>
-                    Dividends received from The Protocol when a Tagger tags
-                    content with their hashtag.
-                  </li>
-                  <li>
-                    Ability to re-sell their token either peer-to-peer or on a
-                    standard NFT marketplace such as Opensea.
-                  </li>
-                </ol>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-an-owner"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
               </b-collapse>
             </div>
           </div>
@@ -357,41 +339,17 @@
       <b-modal :active.sync="isMarketSummaryActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Market summary</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Hashtags</strong> - Current number of Hasthag Protocol
-                tokens owned by this Owner.
-              </p>
-              <p>
-                <strong>Hashtag revenue</strong> - Total revenue for Hasthag
-                Protocol tokens sold by this Owner.
-              </p>
-              <p>
-                <strong>Tagged content</strong> - Number of content items tagged
-                with this owner's hashtags.
-              </p>
-              <p>
-                <strong>Tagging revenue</strong> - Revenue from content tagged
-                with this owner's hashtags.
-              </p>
-              <p>
-                <strong>Total revenue</strong> - Total Hashtag Protocol revenue
-                for this owner.
-              </p>
-              <p>
-                <strong>Total revenue</strong> - Total Hashtag Protocol revenue
-                for this Publisher.
-              </p>
+              <markdown-doc
+                doc-type="help"
+                filename="owner-detail-market-summary"
+              ></markdown-doc>
               <b-collapse
                 :open="false"
                 position="is-top"
-                aria-id="ownerOverview"
+                aria-id="contentIdForA11y1"
                 animation="slide"
+                class="pt-1 pb-1"
               >
                 <a
                   slot="trigger"
@@ -408,96 +366,24 @@
                       : 'What is the "Hashtag Market"?'
                   }}
                 </a>
-                <p>
-                  <br />
-                  Hashtag is a protocol on the Ethereum blockchain that creates
-                  a market & incentive economy around the creation and use of
-                  hashtags. The protocol aims to create a virtuous, financially
-                  incentivized system that creates more value to all
-                  participants the more it grows.
-                </p>
-                <p>
-                  The system revolves around four participants: Creator, Owner,
-                  Publisher and Tagger. These key market participants interact
-                  directly with the protocol, paying to use and earning from the
-                  system without having to negotiate terms of use. The data
-                  generated by the protocol is immutable (impervious to
-                  censorship) and globally accessible.
-                </p>
-                <p>
-                  Hashtag Protocol uses an auction method to determine the price
-                  of a new Hashtag Token. The "creation price" is the amount the
-                  winning bidder pays to acquire the newly created Hashtag
-                  Token. The proceeds of the auction are automatically divided
-                  between the originating Publisher and the Protocol.
-                </p>
-                <p>
-                  In addition to creating unique, non-fungible tokens that both
-                  contain and represent a single, natural language hashtag, the
-                  Protocol also provides facilities for linking a token any
-                  online digital artifact, effectively tagging that content with
-                  the hashtag. Tag count quantifies how many pieces of content
-                  have been tagged with this hashtag.
-                </p>
-                <p>
-                  In exchange for facilitating an entry to a decentralized,
-                  immutable and globally accessible database, the Protocol
-                  collects a small fee from the Tagger when they tag content.
-                  The Protocol smart contract then automatically distributes
-                  this fee among the token owner, the publisher facilitating the
-                  tagging and the Protocol.
-                </p>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-the-hashtag-market"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
               </b-collapse>
             </div>
           </div>
         </div>
       </b-modal>
-      <b-modal :active.sync="isTaggedModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Owner activity</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Hashtags</strong><br />Listing of Hasthag Protocol
-                tokens owned by this address.
-              </p>
-              <ul>
-                <li>
-                  <strong>Created</strong> - Date token was created and added to
-                  Ethereum blockchain.
-                </li>
-                <li>
-                  <strong>Publisher</strong> - Ethereum address of application
-                  implementing Hashtag Protocol where token was created.
-                </li>
-              </ul>
-              <p>
-                <strong>Tagged content</strong><br />Listing of content tagged
-                with hashtags owned by this address. Protocol currently supports
-                tagging other ERC-721 tokens.
-              </p>
-              <ul>
-                <li>
-                  <strong>Asset name</strong> - Name of the ERC-721 token.
-                </li>
-                <li>
-                  <strong>Project</strong> - Name of project producing the
-                  digital assets that Hashtag Tokens are being linked to.
-                </li>
-                <li>
-                  <strong>Hashtag</strong> - Hashtag Token the asset is tagged
-                  with.
-                </li>
-                <li><strong>Tagged</strong> - Date asset was tagged.</li>
-                <li>
-                  <strong>Tagger</strong> - Ethereum address used to pay tagging
-                  fee.
-                </li>
-              </ul>
+              <markdown-doc
+                doc-type="help"
+                filename="owner-detail-recent-activity"
+              ></markdown-doc>
             </div>
           </div>
         </div>
@@ -523,6 +409,7 @@ import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
+import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 
@@ -531,23 +418,24 @@ const PAGE_SIZE = 10;
 export default {
   name: "OwnerDetail",
   components: {
-    NftLink,
-    TimestampFrom,
-    Hashtag,
     EthAmountSum,
     EthAmount,
     EthAccount,
     Footer,
+    Hashtag,
     Header,
     HelpModal,
+    MarkdownDoc,
+    NftLink,
     Pagination,
+    TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      isOverviewModalActive: false,
+      isOwnerInfoModalActive: false,
       isMarketSummaryActive: false,
-      isTaggedModalActive: false,
+      isActivityModalActive: false,
       owner: this.$route.params.address,
       tagsByHashtag: null,
       hashtagsByName: null,

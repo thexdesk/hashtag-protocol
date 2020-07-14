@@ -10,16 +10,19 @@
     <section class="main" v-if="tagsByDigitalAsset">
       <div class="container">
         <h1 class="title is-1">{{ tagsByDigitalAsset[0].nftName }}</h1>
-        <h2 class="subtitle">ERC-721 Digital asset</h2>
+        <h2 class="subtitle">
+          ERC-721 Digital asset
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'nfts' }"
+              >Browse tagged assets</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isNewHashtagsModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <div class="card">
                   <div class="card-image">
                     <figure class="image">
@@ -65,7 +68,7 @@
               <div class="tile is-child box">
                 <article class="tile is-child box">
                   <help-modal
-                    modal="isTaggingModalActive"
+                    modal="isTagAssetModalActive"
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
@@ -169,16 +172,41 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isTaggingModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isTagAssetModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Tag an asset</p>
-              </div>
-            </div>
             <div class="content">
-              <p>Copy tbd</p>
+              <markdown-doc
+                doc-type="help"
+                filename="tagged-asset-detail-tag-asset"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content"?'
+                      : 'What is "tagged content"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -190,15 +218,38 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Recent tags</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                A listing of Hashtags this asset has been recently tagged with.
-              </p>
+              <markdown-doc
+                doc-type="help"
+                filename="tagged-asset-detail-recent-tags"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content"?'
+                      : 'What is "tagged content"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -212,28 +263,30 @@
 </template>
 
 <script>
+import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import { TAGS_BY_DIGITAL_ASSET } from "../queries";
 import Hashtag from "../components/Hashtag";
-import EthAccount from "../components/EthAccount";
+import HelpModal from "../components/HelpModal";
+import MarkdownDoc from "../components/MarkdownDoc";
 import TimestampFrom from "../components/TimestampFrom";
+import { TAGS_BY_DIGITAL_ASSET } from "../queries";
 
 export default {
   name: "NftDetail",
   components: {
-    TimestampFrom,
     EthAccount,
-    Hashtag,
     Footer,
+    Hashtag,
     Header,
     HelpModal,
+    MarkdownDoc,
+    TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      isTaggingModalActive: false,
+      isTagAssetModalActive: false,
       isRecentTagsModalActive: false,
       name: this.$route.params.name,
       type: this.$route.params.type,

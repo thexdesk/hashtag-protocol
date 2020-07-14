@@ -9,7 +9,17 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">Tagged NFTs</h1>
+        <h1 class="title is-1">
+          Tagged NFTs
+        </h1>
+        <h2 class="subtitle">
+          Content tagged using Hashtag Tokens
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'dashboard' }">Dashboard</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
