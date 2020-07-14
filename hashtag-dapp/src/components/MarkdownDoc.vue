@@ -31,18 +31,18 @@ export default {
      * Fetch the document aq markdown file passed in to the component.
      */
     getDoc: function () {
-      var result;
+      var result = "# markdown-it rulezz!";
       var md = require("markdown-it")();
       // TODO: Figure out how to use vuepress markdown-loader
       // instead of raw-loader.
       switch (this.docType) {
         case "faq":
-          result = require(`raw-loader!../../../hashtag-docs/docs/guide/faqs/${this.filename}.md`)
-            .default;
+          //result = require(`raw-loader!../../../hashtag-docs/docs/guide/faqs/${this.filename}.md`)
+          //  .default;
           break;
         case "help":
-          result = require(`raw-loader!../../../hashtag-docs/docs/help/${this.filename}.md`)
-            .default;
+          //result = require(`raw-loader!../../../hashtag-docs/docs/help/${this.filename}.md`)
+          //  .default;
           break;
         default:
           result = "## markdown document not found.";

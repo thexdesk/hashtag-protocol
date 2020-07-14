@@ -1,1 +1,4 @@
 # Empty file.
+files:
+  type: network-storage:1.0
+  disk: 128
