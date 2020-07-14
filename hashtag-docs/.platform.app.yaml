@@ -46,10 +46,10 @@ mounts:
   '/docs/tmp':
     source: local
     source_path: tmp
-  '/docs':
+  '/network/docs':
     source: service
     service: docs
-    source_path: docs
+    source_path: network/docs
 
 # Build dependencies
 dependencies:

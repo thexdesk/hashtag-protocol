@@ -48,10 +48,10 @@ mounts:
   '/build_platform': 'shared:files/build_platform'
   '/build_platform/test-results': 'shared:files/test-results'
   '/.tmp_platformsh': 'shared:files/tmp_platformsh'
-  '/docs':
+  '/network/docs':
     source: service
     service: docs
-    source_path: docs/guide
+    source_path: network/docs
 
 # Build dependencies
 dependencies:
