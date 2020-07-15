@@ -67,6 +67,5 @@ hooks:
       # If we're building on Platform.sh...
       if [ -d /app/.global ]; then
         # Move raw markdown documents to network drive.
-        # mkdir /app/network/docs/guide
         cp -R /app/docs/guide /app/network/docs
       fi

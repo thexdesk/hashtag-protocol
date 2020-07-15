@@ -31,18 +31,33 @@ export default {
      * Fetch the document aq markdown file passed in to the component.
      */
     getDoc: function () {
-      var result = "# markdown-it rulezz!";
+      // Load up platform.sh variables.
+      // @see https://github.com/platformsh/config-reader-nodejs
+      var config = require("platformsh-config").config();
       var md = require("markdown-it")();
+      var result;
       // TODO: Figure out how to use vuepress markdown-loader
       // instead of raw-loader.
       switch (this.docType) {
         case "faq":
-          //result = require(`raw-loader!../../../hashtag-docs/docs/guide/faqs/${this.filename}.md`)
-          //  .default;
+          if (config.isValidPlatform()) {
+            // We are on Platform, pull from the network drive.
+            result = require(`raw-loader!./../../network/docs/guide/faqs/${this.filename}.md`)
+              .default;
+          } else {
+            // We are local, pull from the hashtag-docs folder in the repo.
+            result = require(`raw-loader!./../../../hashtag-docs/docs/guide/faqs/${this.filename}.md`)
+              .default;
+          }
           break;
         case "help":
-          //result = require(`raw-loader!../../../hashtag-docs/docs/help/${this.filename}.md`)
-          //  .default;
+          if (config.isValidPlatform()) {
+            result = require(`raw-loader!./../../network/docs/guide/help/${this.filename}.md`)
+              .default;
+          } else {
+            result = require(`raw-loader!./../../../hashtag-docs/docs/guide/help/${this.filename}.md`)
+              .default;
+          }
           break;
         default:
           result = "## markdown document not found.";
