@@ -1,4 +1,4 @@
-name: hashtag-docs
+name: 1-hashtag-docs
 
 # The toolstack used to build the application.
 type: nodejs:10
@@ -67,5 +67,5 @@ hooks:
       # If we're building on Platform.sh...
       if [ -d /app/.global ]; then
         # Move raw markdown documents to network drive.
-        cp -R /app/docs/guide /app/network/docs
+        /app/scripts/platformsh/push-docs.sh
       fi

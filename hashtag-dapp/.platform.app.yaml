@@ -1,4 +1,4 @@
-name: hashtag-dapp
+name: 2-hashtag-dapp
 
 # The toolstack used to build the application.
 type: nodejs:10
@@ -81,7 +81,19 @@ hooks:
       set -e
       yarn install
       npm run build
+      # If we're not building on Platform.sh...
+      if ! [ -d /app/.global ]; then
+        # Move raw markdown documents from network drive.
+        ./scripts/pull-docs.sh
+      fi
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
       npm run buildenvvar
+
+    post_deploy: |
+      # If we're building on Platform.sh...
+      if [ -d /app/.global ]; then
+        # Move raw markdown documents from network drive.
+        /app/scripts/pull-docs.sh
+      fi
