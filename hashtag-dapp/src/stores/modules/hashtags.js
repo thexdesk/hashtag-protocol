@@ -1,7 +1,39 @@
 import Vue from "vue";
 import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
-import notify from "bnc-notify";
+import BlocknativeSdk from "bnc-sdk";
+import { ToastProgrammatic as Toast } from "buefy";
+
+const eventMap = {
+  txSent: {
+    msg: "Transaction has been sent to the network",
+    type: "is-dark",
+  },
+  txPool: {
+    msg: "Transaction is in the mempool and is pending",
+    type: "is-dark",
+  },
+  txConfirmed: {
+    msg: "Transaction has been mined",
+    type: "is-success",
+  },
+  txFailed: {
+    msg: "Transaction has failed",
+    type: "is-danger",
+  },
+  txSpeedUp: {
+    msg: "Transaction been speeded up",
+    type: "is-dark",
+  },
+  txCancel: {
+    msg: "Transaction been cancelled",
+    type: "is-warning",
+  },
+  txDropped: {
+    msg: "Transaction been dropped",
+    type: "is-warning",
+  },
+};
 
 let provider;
 
@@ -18,12 +50,15 @@ const onboard = Onboard({
   },
 });
 
-const notifyInstance = notify({
+// create options object
+const options = {
   dappId: "8bf348fd-d9df-4b54-b8b1-1ad14d15e4c3",
   networkId: 4, // Dapp currently only supports Rinkeby
-  darkMode: true,
-  desktopPosition: "bottomRight",
-});
+  transactionHandlers: [(event) => console.log(event.transaction)],
+};
+
+// initialize and connect to the api
+const blocknative = new BlocknativeSdk(options);
 
 import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
 import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
@@ -143,19 +178,20 @@ const actions = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    const sendTransaction = async () => {
-      const tx = await hashtagProtocolContract.mint(
-        payload,
-        publisher,
-        account,
-        { value: ethers.utils.bigNumberify(state.fees.protocol) }
-      );
+    const tx = await hashtagProtocolContract.mint(payload, publisher, account, {
+      value: ethers.utils.bigNumberify(state.fees.protocol),
+    });
 
-      return tx.hash;
-    };
+    const { emitter } = blocknative.transaction(tx.hash);
 
-    notifyInstance.transaction({
-      sendTransaction,
+    // catch every other event that occurs and log it
+    emitter.on("all", (transaction) => {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-bottom",
+        type: eventMap[transaction.eventCode].type,
+      });
     });
   },
 
@@ -172,23 +208,27 @@ const actions = {
     console.log(`${hashtagId} ${nftContract} ${nftId}`);
 
     // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
-    const sendTransaction = async () => {
-      const tx = await erc721HashtagRegistryContract.tag(
-        hashtagId,
-        nftContract,
-        nftId,
-        publisher,
-        account,
-        {
-          value: ethers.utils.bigNumberify(fees.protocol),
-        }
-      );
+    const tx = await erc721HashtagRegistryContract.tag(
+      hashtagId,
+      nftContract,
+      nftId,
+      publisher,
+      account,
+      {
+        value: ethers.utils.bigNumberify(fees.protocol),
+      }
+    );
 
-      return tx.hash;
-    };
+    const { emitter } = blocknative.transaction(tx.hash);
 
-    notifyInstance.transaction({
-      sendTransaction,
+    // catch every other event that occurs and log it
+    emitter.on("all", (transaction) => {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-bottom",
+        type: eventMap[transaction.eventCode].type,
+      });
     });
   },
 

@@ -290,6 +290,7 @@ export default {
           nftId: this.id,
         };
       },
+      pollInterval: 1000, // ms
     },
     hashtags: {
       query: SNAPSHOT,
