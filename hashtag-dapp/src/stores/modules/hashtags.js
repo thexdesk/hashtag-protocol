@@ -184,7 +184,6 @@ const actions = {
 
     const { emitter } = blocknative.transaction(tx.hash);
 
-    // catch every other event that occurs and log it
     emitter.on("all", (transaction) => {
       Toast.open({
         duration: 5000,
@@ -221,7 +220,6 @@ const actions = {
 
     const { emitter } = blocknative.transaction(tx.hash);
 
-    // catch every other event that occurs and log it
     emitter.on("all", (transaction) => {
       Toast.open({
         duration: 5000,
