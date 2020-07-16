@@ -35,3 +35,6 @@ hashtag-dapp/build_platform
 .tmp_platformsh
 
 .grenrc.yaml
+
+# Documentation markdown files
+hashtag-dapp/src/assets/docs/*
