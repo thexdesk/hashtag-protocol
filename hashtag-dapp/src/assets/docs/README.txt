@@ -1,0 +1,1 @@
+This folder reserved for documentation files that are automatically migrated here.
