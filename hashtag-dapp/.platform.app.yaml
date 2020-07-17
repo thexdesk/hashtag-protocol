@@ -52,6 +52,9 @@ mounts:
   '/.tmp_platformsh':
     source: local
     source_path: files/tmp_platformsh
+  '/src/assets/docs':
+    source: local
+    source_path: files/docs
   '/network/docs':
     source: service
     service: docs
