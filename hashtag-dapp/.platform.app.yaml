@@ -39,6 +39,62 @@ web:
                 ^/robots\.txt$:
                     allow: true
 
+        "/docs":
+            # The folder from which to serve static assets, for this location.
+            #
+            # This is a filesystem path, relative to the application root.
+            # Folder name is set in npm run buildenvvar.
+            root: "build_platform/docs"
+            index:
+                - "index.html"
+            passthru: /index.html
+
+            # How long to allow static assets from this location to be cached.
+            #
+            # Can be a time in seconds, or -1 for no caching. Times can be
+            # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+            # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+            # 365 days).
+            
+            expires: 300s
+            scripts: false
+
+            # Deny access to static files in this location.
+            allow: false
+            rules:
+                \.(md|svg?)$:
+                    allow: true
+                ^/robots\.txt$:
+                    allow: false
+
+        "/network/docs":
+            # The folder from which to serve static assets, for this location.
+            #
+            # This is a filesystem path, relative to the application root.
+            # Folder name is set in npm run buildenvvar.
+            root: "network/docs"
+            index:
+                - "index.html"
+            passthru: /index.html
+
+            # How long to allow static assets from this location to be cached.
+            #
+            # Can be a time in seconds, or -1 for no caching. Times can be
+            # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+            # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+            # 365 days).
+            
+            expires: 300s
+            scripts: false
+
+            # Deny access to static files in this location.
+            allow: false
+            rules:
+                \.(md|svg?)$:
+                    allow: true
+                ^/robots\.txt$:
+                    allow: false
+
 disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
