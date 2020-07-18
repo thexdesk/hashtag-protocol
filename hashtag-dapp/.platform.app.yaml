@@ -39,7 +39,7 @@ web:
                 ^/robots\.txt$:
                     allow: true
 
-        "/docs":
+        "docs":
             # The folder from which to serve static assets, for this location.
             #
             # This is a filesystem path, relative to the application root.
@@ -62,38 +62,38 @@ web:
             # Deny access to static files in this location.
             allow: false
             rules:
-                \.(md|svg?)$:
+                \.(md|txt)$:
                     allow: true
                 ^/robots\.txt$:
                     allow: false
 
-        "/network/docs":
-            # The folder from which to serve static assets, for this location.
-            #
-            # This is a filesystem path, relative to the application root.
-            # Folder name is set in npm run buildenvvar.
-            root: "network/docs"
-            index:
-                - "index.html"
-            passthru: /index.html
-
-            # How long to allow static assets from this location to be cached.
-            #
-            # Can be a time in seconds, or -1 for no caching. Times can be
-            # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
-            # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
-            # 365 days).
-            
-            expires: 300s
-            scripts: false
-
-            # Deny access to static files in this location.
-            allow: false
-            rules:
-                \.(md|svg?)$:
-                    allow: true
-                ^/robots\.txt$:
-                    allow: false
+        #"/network/docs":
+        #    # The folder from which to serve static assets, for this location.
+        #    #
+        #    # This is a filesystem path, relative to the application root.
+        #    # Folder name is set in npm run buildenvvar.
+        #    root: "network/docs"
+        #    index:
+        #        - "index.html"
+        #    passthru: /index.html
+#
+        #    # How long to allow static assets from this location to be cached.
+        #    #
+        #    # Can be a time in seconds, or -1 for no caching. Times can be
+        #    # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+        #    # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+        #    # 365 days).
+        #    
+        #    expires: 300s
+        #    scripts: false
+#
+        #    # Deny access to static files in this location.
+        #    allow: false
+        #    rules:
+        #        \.(md|txt)$:
+        #            allow: true
+        #        ^/robots\.txt$:
+        #            allow: false
 
 disk: 512
 
@@ -102,15 +102,15 @@ mounts:
   '/build_platform':
     source: local
     source_path: files/build_platform
+  '/build_platform/docs':
+    source: local
+    source_path: files/docs
   '/build_platform/test-results':
     source: local
     source_path: files/test-results
   '/.tmp_platformsh':
     source: local
     source_path: files/tmp_platformsh
-  '/src/assets/docs':
-    source: local
-    source_path: files/docs
   '/network/docs':
     source: service
     service: docs
