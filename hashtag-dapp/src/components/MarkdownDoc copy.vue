@@ -2,8 +2,6 @@
   <div v-html="docBody"></div>
 </template>
 <script>
-const axios = require("axios");
-const md = require("markdown-it")();
 /**
  * Load up a raw markdown file from the hashtag-docs directory,
  * and return it as HTML.
@@ -25,15 +23,19 @@ export default {
       docBody: null,
     };
   },
-  created() {
+  mounted() {
     this.getDoc();
   },
   methods: {
-    async getDoc() {
-      axios.get(`/docs/${this.filename}.md`).then((response) => {
-        this.docBody = md.render(response.data);
-        console.log(response.data);
-      });
+    /**
+     * Fetch the document aq markdown file passed in to the component.
+     */
+    getDoc: function () {
+      // Load up platform.sh variables.
+      var md = require("markdown-it")();
+      var result = require(`raw-loader!./../assets/docs/${this.filename}.md`)
+        .default;
+      this.docBody = md.render(result);
     },
   },
 };

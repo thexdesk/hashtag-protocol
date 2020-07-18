@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copy markdown documents from hashtag-docs into 
 # hashtag-dapp assets folder so they can be used in that app.
 #
@@ -10,10 +12,10 @@
 # If we are building on platform.sh
 if [ -d /app/.global ]; then
   # Copy documentation files from network drive to assets folder.
-  cp -R /app/network/docs/. /app/src/assets/docs/
-  cp -R /app/network/docs/. /app/src/assets/docs/
+  cp -R /app/network/docs/. /app/public/docs/
+  cp -R /app/network/docs/. /app/public/docs/
 else
   # We are building locally, just copy right from the hashtag-docs folder.
-  cp -R ./../hashtag-docs/docs/guide/faqs/. ./src/assets/docs/
-  cp -R ./../hashtag-docs/docs/guide/help/. ./src/assets/docs/
+  cp -R ./../hashtag-docs/docs/guide/faqs/. ./public/docs/
+  cp -R ./../hashtag-docs/docs/guide/help/. ./public/docs/
 fi

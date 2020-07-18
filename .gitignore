@@ -37,4 +37,4 @@ hashtag-dapp/build_platform
 .grenrc.yaml
 
 # Documentation markdown files
-# hashtag-dapp/src/assets/docs/*.md
+#hashtag-dapp/public/docs/*.md
