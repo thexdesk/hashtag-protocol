@@ -39,7 +39,7 @@ web:
                 ^/robots\.txt$:
                     allow: true
 
-        "docs":
+        "/docs":
             # The folder from which to serve static assets, for this location.
             #
             # This is a filesystem path, relative to the application root.
