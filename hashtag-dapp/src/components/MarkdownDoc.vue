@@ -32,7 +32,6 @@ export default {
     async getDoc() {
       axios.get(`/docs/${this.filename}.md`).then((response) => {
         this.docBody = md.render(response.data);
-        console.log(response.data);
       });
     },
   },
