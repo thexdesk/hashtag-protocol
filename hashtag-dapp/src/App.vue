@@ -135,6 +135,14 @@ section.main {
   padding-bottom: 2rem;
 }
 
+.pt-1 {
+  padding-top: 1rem;
+}
+
+.pb-1 {
+  padding-bottom: 1rem;
+}
+
 @import "@creativebulma/bulma-divider";
 @import "bulma";
 @import "buefy/src/scss/buefy";
