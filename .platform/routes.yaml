@@ -5,7 +5,7 @@
 
 "https://{default}/":
   type: upstream
-  upstream: "hashtag-dapp:http"
+  upstream: "2-hashtag-dapp:http"
 
 "https://www.{default}/":
   type: redirect
@@ -17,7 +17,7 @@
 
 "https://docs.{default}/":
   type: upstream
-  upstream: "hashtag-docs:http"
+  upstream: "1-hashtag-docs:http"
 
 #http://{default}/:
 #  cache:

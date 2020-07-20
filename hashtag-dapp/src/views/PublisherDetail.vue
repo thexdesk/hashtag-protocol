@@ -10,7 +10,15 @@
     <section class="main" v-if="foundPublisher">
       <div class="container">
         <h1 class="title is-1">Publisher: {{ foundPublisher.name }}</h1>
-        <h2 class="subtitle">Hashtag Protocol Publisher</h2>
+        <h2 class="subtitle">
+          Hashtag Protocol Publisher
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'publishers' }"
+              >Browse publishers</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
@@ -205,7 +213,7 @@
                     <!---->
                   </div>
                 </b-tab-item>
-                <b-tab-item label="Tag count">
+                <b-tab-item label="Tagged content">
                   <div class="b-table">
                     <!---->
                     <!---->
@@ -308,62 +316,39 @@
       <b-modal :active.sync="isPubInfoModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Publisher information</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Name</strong> - Name of the participating Publisher.
-              </p>
-              <p>
-                <strong>Publisher address</strong> - Ethereum address of the
-                Publisher.
-              </p>
-              <p>
-                <strong>Official website</strong> - URL and hyperlink to the
-                Publisher's official website.
-              </p>
-              <p>
-                <b-collapse
-                  :open="false"
-                  position="is-top"
-                  aria-id="contentIdForA11y1"
-                  animation="slide"
+              <markdown-doc
+                doc-type="help"
+                filename="publisher-detail-publisher-info"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                position="is-top"
+                aria-id="contentIdForA11y1"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
                 >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="MarketOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? 'What\'s a "Publisher"?'
-                        : 'What\'s a "Publisher"?'
-                    }}
-                  </a>
-                  <p>
-                    <br />
-                    A Publisher is an application, network or platform
-                    implementing the Hashtag Protocol to provide their customers
-                    and/or application content tagging stored to a
-                    decentralized, globally readable database.
-                  </p>
-                  <p>
-                    At the present time, Publishers must be white-listed to use
-                    The Protocol. If you'd like to whitelist your application,
-                    please
-                    <a v-bind:href="publisherRegURL"
-                      >register your application</a
-                    >.
-                  </p>
-                </b-collapse>
-              </p>
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What\'s a "Publisher"?'
+                      : 'What\'s a "Publisher"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-a-publisher"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -371,95 +356,39 @@
       <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Market summary</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Hashtags</strong> - Number of Hashtags Tokens created
-                through Publisher application.
-              </p>
-              <p>
-                <strong>Hashtag revenue</strong> - Publisher revenue for Hashtag
-                Tokens created on Publisher application.
-              </p>
-              <p>
-                <strong>Tag count</strong> - Number of content items tagged with
-                any hashtag on Publisher application.
-              </p>
-              <p>
-                <strong>Tagging revenue</strong> - Publisher revenue from
-                content tagged on Publisher application.
-              </p>
-              <p>
-                <strong>Total revenue</strong> - Total Hashtag Protocol revenue
-                for this Publisher.
-              </p>
-              <p>
-                <b-collapse
-                  :open="false"
-                  position="is-top"
-                  aria-id="contentIdForA11y1"
-                  animation="slide"
+              <markdown-doc
+                doc-type="help"
+                filename="publisher-detail-market-summary"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                position="is-top"
+                aria-id="contentIdForA11y1"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
                 >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="MarketOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? 'What is the "Hashtag Market"?'
-                        : 'What is the "Hashtag Market"?'
-                    }}
-                  </a>
-                  <p>
-                    <br />
-                    Hashtag is a protocol on the Ethereum blockchain that
-                    creates a market & incentive economy around the creation and
-                    use of hashtags. The protocol aims to create a virtuous,
-                    financially incentivized system that creates more value to
-                    all participants the more it grows.
-                  </p>
-                  <p>
-                    The system revolves around four participants: Creator,
-                    Owner, Publisher and Tagger. These key market participants
-                    interact directly with the protocol, paying to use and
-                    earning from the system without having to negotiate terms of
-                    use. The data generated by the protocol is immutable
-                    (impervious to censorship) and globally accessible.
-                  </p>
-                  <p>
-                    Hashtag Protocol uses an auction method to determine the
-                    price of a new Hashtag Token. The "creation price" is the
-                    amount the winning bidder pays to acquire the newly created
-                    Hashtag Token. The proceeds of the auction are automatically
-                    divided between the originating Publisher and the Protocol.
-                  </p>
-                  <p>
-                    In addition to creating unique, non-fungible tokens that
-                    both contain and represent a single, natural language
-                    hashtag, the Protocol also provides facilities for linking a
-                    token any online digital artifact, effectively tagging that
-                    content with the hashtag. Tag count quantifies how many
-                    pieces of content have been tagged with this hashtag.
-                  </p>
-                  <p>
-                    In exchange for facilitating an entry to a decentralized,
-                    immutable and globally accessible database, the Protocol
-                    collects a small fee from the Tagger when they tag content.
-                    The Protocol smart contract then automatically distributes
-                    this fee among the token owner, the publisher facilitating
-                    the tagging and the Protocol.
-                  </p>
-                </b-collapse>
-              </p>
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is the "Hashtag Market"?'
+                      : 'What is the "Hashtag Market"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-the-hashtag-market"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -467,59 +396,11 @@
       <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Publisher activity</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                <strong>Hashtags</strong><br />Listing of Hasthag Protocol
-                tokens created on this Publisher platform.
-              </p>
-              <ul>
-                <li>
-                  <strong>Hashtag</strong> - Name of the Hashtag Token; same as
-                  the hashtag string stored inside the token.
-                </li>
-                <li>
-                  <strong>Created</strong> - Date token was created and added to
-                  Ethereum blockchain.
-                </li>
-                <li>
-                  <strong>Owner</strong> - Ethereum address of token owner.
-                </li>
-                <li>
-                  <strong>Tag count</strong> - Number of content items tagged
-                  with Hashtag Token across all Publisher platforms.
-                </li>
-                <li>
-                  <strong>Tagging revenue</strong> - Total revenue generated for
-                  tagging fees for this token across all Publisher platforms.
-                </li>
-              </ul>
-              <p>
-                <strong>Tag count</strong><br />Listing of content tagged on
-                this Publisher application.
-              </p>
-              <ul>
-                <li>
-                  <strong>Asset name</strong> - Name of the ERC-721 token.
-                </li>
-                <li>
-                  <strong>Hashtag</strong> - Hashtag Token the asset is tagged
-                  with.
-                </li>
-                <li>
-                  <strong>Project</strong> - Name of project producing the
-                  digital assets that Hashtag Tokens are being linked to.
-                </li>
-                <li><strong>Tagged</strong> - Date asset was tagged.</li>
-                <li>
-                  <strong>Tagger</strong> - Ethereum address used to pay tagging
-                  fee.
-                </li>
-              </ul>
+              <markdown-doc
+                doc-type="help"
+                filename="publisher-detail-recent-activity"
+              ></markdown-doc>
             </div>
           </div>
         </div>
@@ -544,10 +425,10 @@ import {
 import EthAmountSum from "../components/EthAmountSum";
 import EthAmount from "../components/EthAmount";
 import Hashtag from "../components/Hashtag";
-import TimestampFrom from "../components/TimestampFrom";
+import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
-
+import TimestampFrom from "../components/TimestampFrom";
 import { mapGetters } from "vuex";
 import { ethers } from "ethers";
 
@@ -565,6 +446,7 @@ export default {
     Footer,
     Header,
     HelpModal,
+    MarkdownDoc,
     Pagination,
   },
   data() {
