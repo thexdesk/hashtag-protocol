@@ -46,6 +46,7 @@ mounts:
   '/docs/tmp':
     source: local
     source_path: tmp
+  # Mount the shared help/documentation drive.
   '/network/docs':
     source: service
     service: docs
@@ -66,6 +67,6 @@ hooks:
     post_deploy: |
       # If we're building on Platform.sh...
       if [ -d /app/.global ]; then
-        # Move raw markdown documents to network drive.
+        # Copy raw markdown documents to network drive (network/docs).
         /app/scripts/platformsh/push-docs.sh
       fi
