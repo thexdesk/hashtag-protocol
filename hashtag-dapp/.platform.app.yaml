@@ -55,7 +55,6 @@ web:
             # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
             # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
             # 365 days).
-            
             expires: 1h
             scripts: false
             rules:

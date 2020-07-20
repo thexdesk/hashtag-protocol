@@ -6,7 +6,7 @@
 # This script is run in platform.sh post-deploy hook.
 
 # First clean out the old docs
-rm -rf /app/network/docs/*
+# rm -rf /app/network/docs/*
 
 # Copy everything over.
 cp -R /app/docs/guide/faqs/. /app/network/docs/
