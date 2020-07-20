@@ -54,7 +54,8 @@ const onboard = Onboard({
 const options = {
   dappId: "8bf348fd-d9df-4b54-b8b1-1ad14d15e4c3",
   networkId: 4, // Dapp currently only supports Rinkeby
-  transactionHandlers: [(event) => console.log(event.transaction)],
+  // Optional. See docs.
+  // transactionHandlers: [(event) => console.log(event.transaction)],
 };
 
 // initialize and connect to the api
@@ -203,8 +204,6 @@ const actions = {
     const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
     const { hashtagId, nftContract, nftId } = payload;
-
-    console.log(`${hashtagId} ${nftContract} ${nftId}`);
 
     // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
     const tx = await erc721HashtagRegistryContract.tag(
