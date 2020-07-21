@@ -65,14 +65,6 @@
                           </td>
                         </tr>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Hashtag revenue</td>
-                          <td>
-                            <eth-amount
-                              :value="ownerByAcc.tagFees"
-                            ></eth-amount>
-                          </td>
-                        </tr>
-                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagged content</td>
                           <td>
                             {{ ownerByAcc.tagCount }}
@@ -81,7 +73,9 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
-                            <code>TODO</code>
+                            <eth-amount
+                              :value="ownerByAcc.tagFees"
+                            ></eth-amount>
                           </td>
                         </tr>
                         <tr draggable="false" class="">

@@ -75,14 +75,44 @@
                   <p class="title is-5">
                     Tag this asset
                   </p>
-                  <b-field>
-                    <b-autocomplete
-                      placeholder="Enter a hashtag"
-                      icon="pound"
-                      field="name"
-                    >
-                    </b-autocomplete>
-                  </b-field>
+                  <form>
+                    <div class="field">
+                      <div class="control">
+                        <b-taginput
+                          v-model="hashtag"
+                          :data="hashtagInputTags"
+                          autocomplete
+                          :allow-new="false"
+                          maxtags="1"
+                          field="name"
+                          icon="pound"
+                          placeholder="Select hashtag"
+                          @typing="getFilteredTags"
+                        >
+                          <template slot-scope="props">
+                            <b-taglist attached>
+                              <b-tag type="is-light"
+                                >#{{ props.option.name }}</b-tag
+                              >
+                              <b-tag type="is-info">{{
+                                props.option.tagCount
+                              }}</b-tag>
+                            </b-taglist>
+                          </template>
+                        </b-taginput>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="control">
+                        <b-button
+                          type="is-primary"
+                          @click="tagNft()"
+                          :disabled="!isTaggable"
+                          >Tag asset</b-button
+                        >
+                      </div>
+                    </div>
+                  </form>
                   <hr />
                   <help-modal
                     modal="isRecentTagsModalActive"
@@ -265,12 +295,12 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
 import Hashtag from "../components/Hashtag";
+import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import TimestampFrom from "../components/TimestampFrom";
-import { TAGS_BY_DIGITAL_ASSET } from "../queries";
+import { SNAPSHOT, TAGS_BY_DIGITAL_ASSET } from "../queries";
 
 export default {
   name: "NftDetail",
@@ -294,7 +324,15 @@ export default {
       id: this.$route.params.id,
       tagsByHashtag: null,
       hashtagsByName: null,
+      hashtag: null,
+      hashtags: null,
+      hashtagInputTags: [],
     };
+  },
+  computed: {
+    isTaggable() {
+      return this.hashtag;
+    },
   },
   apollo: {
     tagsByDigitalAsset: {
@@ -305,6 +343,26 @@ export default {
           nftId: this.id,
         };
       },
+      pollInterval: 1000, // ms
+    },
+    hashtags: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+  },
+  methods: {
+    async tagNft() {
+      await this.$store.dispatch("tag", {
+        hashtagId: this.hashtag[0].id,
+        nftContract: this.tagsByDigitalAsset[0].nftContract,
+        nftId: this.tagsByDigitalAsset[0].nftId,
+      });
+    },
+    // Bulma taginput widget.
+    getFilteredTags: function (text) {
+      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
+        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
+      });
     },
   },
 };

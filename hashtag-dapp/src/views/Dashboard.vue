@@ -107,7 +107,10 @@
                     class="is-pulled-right"
                   ></help-modal>
                   <h2 class="title is-5">Newest hashtags</h2>
-                  <b-table :data="hashtags || []" focusable>
+                  <b-table
+                    :data="(hashtags ? hashtags.slice(0, 10) : [])"
+                    focusable
+                  >
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
@@ -869,7 +872,11 @@ export default {
   },
   methods: {
     async tagNft() {
-      await this.$store.dispatch("tag", this.modalForm);
+      await this.$store.dispatch("tag", {
+        hashtagId: this.modalForm.hashtag[0].id,
+        nftContract: this.modalForm.nft.asset_contract.address,
+        nftId: this.modalForm.nft.token_id,
+      });
       this.resetModalForm();
       this.isTagModalActive = false;
     },
