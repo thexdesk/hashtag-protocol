@@ -400,3 +400,17 @@ query pagedTaggers($first: Int!, $skip: Int!) {
     }
 }
 `);
+
+export const FIRST_THOUSAND_HASHTAGS = gql`
+  query {
+    hashtags(first: 1000, orderBy: timestamp, orderDirection: desc) {
+      id
+      name
+      displayHashtag
+      owner
+      publisher
+      timestamp
+      tagCount
+    }
+  }
+`;

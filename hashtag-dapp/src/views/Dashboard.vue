@@ -558,12 +558,14 @@
                             v-model="modalForm.hashtag"
                             :data="hashtagInputTags"
                             autocomplete
-                            :allow-new="false"
+                            :allow-new="true"
                             maxtags="1"
                             field="name"
                             icon="pound"
-                            placeholder="Select hashtag"
+                            placeholder="Seach for hashtag"
                             @typing="getFilteredTags"
+                            @add="tagAssetValidation"
+                            :before-adding="validateTag"
                           >
                             <template slot-scope="props">
                               <b-taglist attached>
@@ -574,6 +576,9 @@
                                   props.option.tagCount
                                 }}</b-tag>
                               </b-taglist>
+                            </template>
+                            <template slot="empty">
+                              New hashtag! We'll mint it & tag this asset...
                             </template>
                           </b-taginput>
                         </div>
@@ -618,7 +623,7 @@ import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import NftLink from "../components/NftLink";
-import { SNAPSHOT } from "../queries";
+import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
 
@@ -649,6 +654,7 @@ export default {
         hashtag: null,
         nft: null,
         nftName: null,
+        mintAndTag: false,
       },
       hashtagInput: null,
       hashtagInputTags: [],
@@ -685,7 +691,7 @@ export default {
   },
   apollo: {
     hashtags: {
-      query: SNAPSHOT,
+      query: FIRST_THOUSAND_HASHTAGS,
       pollInterval: 1000, // ms
     },
     publishers: {
@@ -715,7 +721,12 @@ export default {
   },
   methods: {
     async tagNft() {
-      await this.$store.dispatch("tag", this.modalForm);
+      if (this.modalForm.mintAndTag) {
+        await this.$store.dispatch("mintAndTag", this.modalForm);
+      } else {
+        await this.$store.dispatch("tag", this.modalForm);
+      }
+
       this.resetModalForm();
       this.isTagModalActive = false;
     },
@@ -769,23 +780,46 @@ export default {
       };
     },
     validateTag(hashtag) {
-      if (hashtag.length < 3) {
+      return this._validateTag(hashtag);
+    },
+    tagAssetValidation(hashtag) {
+      const tagContentValid = this._validateTag(hashtag);
+
+      if (tagContentValid) {
+        const hashtagValue =
+          this.modalForm.hashtag[0] && this.modalForm.hashtag[0].name
+            ? this.modalForm.hashtag[0].name
+            : this.modalForm.hashtag[0];
+
+        const isNewHashtag =
+          (this.hashtagInputTags || []).filter((option) => {
+            return (
+              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
+            );
+          }).length === 0;
+
+        this.modalForm.mintAndTag = isNewHashtag;
+      }
+    },
+    _validateTag(hashtag) {
+      const value = hashtag && hashtag.name ? hashtag.name : hashtag;
+      if (value.length < 3) {
         this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's less than 3 characters long.`
+          `Sorry, but '${value}' is an invalid tag as it's less than 3 characters long.`
         );
         return false;
       }
 
-      if (hashtag.length > 15) {
+      if (value.length > 15) {
         this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's more than 15 characters long.`
+          `Sorry, but '${value}' is an invalid tag as it's more than 15 characters long.`
         );
         return false;
       }
 
-      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(hashtag)) {
+      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(value)) {
         this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's either not alpha numeric or only numeric.`
+          `Sorry, but '${value}' is an invalid tag as it's either not alpha numeric or only numeric.`
         );
         return false;
       }

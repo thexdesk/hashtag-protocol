@@ -30,6 +30,7 @@ const state = {
   fees: {
     protocol: ethers.utils.parseEther("0.01"),
     tagging: ethers.utils.parseEther("0.01"),
+    mintAndTag: ethers.utils.parseEther("0.02"),
   },
   supportedNfts: [
     {
@@ -117,6 +118,7 @@ const actions = {
 
         dispatch("getProtocolFee");
         dispatch("getTaggingFee");
+        dispatch("getMintAndTagFee");
       }
     }
 
@@ -164,6 +166,31 @@ const actions = {
     );
   },
 
+  async mintAndTag({ state, dispatch }, payload) {
+    if (!state.web3Objects.readyToTransact) {
+      await dispatch("bootstrap");
+    }
+
+    const { web3Objects, fees } = state;
+    const { account, contracts, publisher } = web3Objects;
+    const { erc721HashtagRegistryContract } = contracts;
+    const { hashtag, nft } = payload;
+
+    console.log(hashtag);
+
+    await erc721HashtagRegistryContract.mintAndTag(
+      hashtag[0],
+      nft.asset_contract.address,
+      nft.token_id,
+      publisher,
+      account,
+      {
+        value: ethers.utils.bigNumberify(fees.mintAndTag),
+        gasLimit: 5000000,
+      }
+    );
+  },
+
   async getProtocolFee({ commit }) {
     const { hashtagProtocolContract } = state.web3Objects.contracts;
     const fee = (await hashtagProtocolContract.fee()).toString();
@@ -178,6 +205,15 @@ const actions = {
     ).toString();
 
     commit("setTaggingFee", fee);
+  },
+
+  async getMintAndTagFee({ commit }) {
+    const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
+    const fee = (
+      await erc721HashtagRegistryContract.calculateMintAndTagFee()
+    ).toString();
+
+    commit("setMintAndTagFee", fee);
   },
 
   async cacheNFTAssets({ commit }) {
@@ -197,6 +233,10 @@ const mutations = {
 
   async setTaggingFee(state, fee) {
     Vue.set(state, "fees.tagging", fee);
+  },
+
+  async setMintAndTagFee(state, fee) {
+    Vue.set(state, "fees.mintAndTag", fee);
   },
 
   setWeb3Objects(state, payload) {
