@@ -156,7 +156,7 @@ contract ERC721HashtagRegistry is Context {
         taggerToListOfTagIds[_tagger].push(tagId);
 
         // Split the tagging fee paid by the tagger to the relevant entities i.e. publisher, owner and platform
-        (uint256 platformFee, uint256 publisherFee, uint256 hashtagFee) = splitter.handlePayment{value: msg.value.sub(hashtagProtocol.fee())}(_hashtagId, _publisher);
+        (uint256 platformFee, uint256 publisherFee, uint256 hashtagFee) = splitter.handlePayment{value: tagFeeAfterDiscount}(_hashtagId, _publisher);
 
         // Log that an NFT has been tagged
         emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, platformFee, publisherFee, hashtagFee);
