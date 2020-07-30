@@ -241,7 +241,7 @@ const actions = {
     const { erc721HashtagRegistryContract } = contracts;
     const { hashtag, nft } = payload;
 
-    await erc721HashtagRegistryContract.mintAndTag(
+    const tx = await erc721HashtagRegistryContract.mintAndTag(
       hashtag[0],
       nft.asset_contract.address,
       nft.token_id,
@@ -249,9 +249,19 @@ const actions = {
       account,
       {
         value: ethers.utils.bigNumberify(fees.mintAndTag),
-        gasLimit: 5000000,
       }
     );
+
+    const { emitter } = blocknative.transaction(tx.hash);
+
+    emitter.on("all", (transaction) => {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-bottom",
+        type: eventMap[transaction.eventCode].type,
+      });
+    });
   },
 
   async getProtocolFee({ commit }) {

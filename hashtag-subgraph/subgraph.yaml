@@ -6,9 +6,9 @@ dataSources:
     name: HashtagProtocol
     network: rinkeby
     source:
-      address: "0xf51918EE368c7626d0d07d8a2109CE65b182b678"
+      address: "0x1a8A97B7Fe6470112d19B04aD6614b39FbC09E33"
       abi: HashtagProtocol
-      startBlock: 6388327
+      startBlock: 6930886
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -26,9 +26,9 @@ dataSources:
     name: ERC721HashtagRegistry
     network: rinkeby
     source:
-      address: "0xd37d76a9f84EC8ec37605AA86023c385155BDb3C"
+      address: "0xd97F4755bB571A03Edf4A583C5C0cB4cC95EeFd2"
       abi: ERC721HashtagRegistry
-      startBlock: 6388331
+      startBlock: 6930890
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -48,9 +48,9 @@ dataSources:
     name: HashtagAccessControls
     network: rinkeby
     source:
-      address: "0x753ae97F9EF667679429C8424B47948dAFa68236"
+      address: "0x0ECf0F526312919049ddd39f0D1CDDb22A556466"
       abi: HashtagAccessControls
-      startBlock: 6388325
+      startBlock: 6930884
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
