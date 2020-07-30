@@ -241,8 +241,6 @@ const actions = {
     const { erc721HashtagRegistryContract } = contracts;
     const { hashtag, nft } = payload;
 
-    console.log(hashtag);
-
     await erc721HashtagRegistryContract.mintAndTag(
       hashtag[0],
       nft.asset_contract.address,
