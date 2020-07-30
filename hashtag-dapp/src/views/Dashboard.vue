@@ -879,7 +879,11 @@ export default {
   methods: {
     async tagNft() {
       if (this.modalForm.mintAndTag) {
-        await this.$store.dispatch("mintAndTag", this.modalForm);
+        await this.$store.dispatch("mintAndTag", {
+          hashtag: this.modalForm.hashtag[0],
+          nftContract: this.modalForm.nft.asset_contract.address,
+          nftId: this.modalForm.nft.token_id,
+        });
       } else {
         await this.$store.dispatch("tag", {
           hashtagId: this.modalForm.hashtag[0].id,

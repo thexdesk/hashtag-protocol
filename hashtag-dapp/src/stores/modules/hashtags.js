@@ -239,12 +239,12 @@ const actions = {
     const { web3Objects, fees } = state;
     const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
-    const { hashtag, nft } = payload;
+    const { hashtag, nftContract, nftId } = payload;
 
     const tx = await erc721HashtagRegistryContract.mintAndTag(
-      hashtag[0],
-      nft.asset_contract.address,
-      nft.token_id,
+      hashtag,
+      nftContract,
+      nftId,
       publisher,
       account,
       {
