@@ -107,7 +107,10 @@
                     class="is-pulled-right"
                   ></help-modal>
                   <h2 class="title is-5">Newest hashtags</h2>
-                  <b-table :data="hashtags || []" focusable>
+                  <b-table
+                    :data="(hashtags ? hashtags.slice(0, 10) : [])"
+                    focusable
+                  >
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
@@ -258,11 +261,7 @@
                       >
                         {{ props.row.tagCount }}
                       </b-table-column>
-                      <b-table-column
-                        field="earnings"
-                        label="Earnings"
-                        centered
-                      >
+                      <b-table-column field="revenue" label="Revenue" centered>
                         <eth-amount-sum
                           :value1="props.row.tagFees"
                           :value2="props.row.mintFees"
@@ -317,7 +316,7 @@
                       >
                         {{ props.row.tagCount }}
                       </b-table-column>
-                      <b-table-column field="tagFees" label="Earnings" centered>
+                      <b-table-column field="tagFees" label="Revenue" centered>
                         <eth-amount :value="props.row.tagFees"></eth-amount>
                       </b-table-column>
                     </template>
@@ -421,13 +420,38 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Newest hashtags</p>
-              </div>
-            </div>
             <div class="content">
-              <p></p>
+              <markdown-doc
+                doc-type="help"
+                filename="dashboard-newest-hashtags"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? "What's a Hashtag Token?"
+                      : "What's a Hashtag Token?"
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-hashtag-token"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -439,12 +463,39 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Recently tagged content explained</p>
-              </div>
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="dashboard-recently-tagged"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content"?'
+                      : 'What is "tagged content"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
-            <div class="content"></div>
           </div>
         </div>
       </b-modal>
@@ -455,24 +506,76 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Top publishers explained</p>
-              </div>
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="dashboard-top-publishers"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What\'s a "Publisher"?'
+                      : 'What\'s a "Publisher"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-a-publisher"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
-            <div class="content"></div>
           </div>
         </div>
       </b-modal>
       <b-modal :active.sync="isTopOwnersModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Top owners explained</p>
-              </div>
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="dashboard-top-owners"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open ? 'What\'s an "Owner"?' : 'What\'s an "Owner"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-an-owner"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
-            <div class="content"></div>
           </div>
         </div>
       </b-modal>
@@ -483,12 +586,39 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Popular hashtags explained</p>
-              </div>
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="dashboard-popular-hashtags"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? "What's a Hashtag Token?"
+                      : "What's a Hashtag Token?"
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-hashtag-token"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
-            <div class="content"></div>
           </div>
         </div>
       </b-modal>
@@ -499,12 +629,37 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Top taggers explained</p>
-              </div>
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="dashboard-top-taggers"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open ? 'What\'s a "Tagger"?' : 'What\'s a "Tagger"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-hashtag-token"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
-            <div class="content"></div>
           </div>
         </div>
       </b-modal>
@@ -604,7 +759,7 @@
     </section>
     <Footer>
       <span v-if="platform" class="has-text-grey-light">
-        Platform earnings
+        Platform revenue
         <eth-amount-sum
           :value1="platform.mintFees"
           :value2="platform.tagFees"
@@ -622,6 +777,7 @@ import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
+import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 import { mapGetters } from "vuex";
@@ -634,6 +790,7 @@ export default {
     EthAccount,
     EthAmount,
     EthAmountSum,
+    MarkdownDoc,
     Footer,
     Hashtag,
     Header,
@@ -724,7 +881,11 @@ export default {
       if (this.modalForm.mintAndTag) {
         await this.$store.dispatch("mintAndTag", this.modalForm);
       } else {
-        await this.$store.dispatch("tag", this.modalForm);
+        await this.$store.dispatch("tag", {
+          hashtagId: this.modalForm.hashtag[0].id,
+          nftContract: this.modalForm.nft.asset_contract.address,
+          nftId: this.modalForm.nft.token_id,
+        });
       }
 
       this.resetModalForm();

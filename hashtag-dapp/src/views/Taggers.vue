@@ -10,12 +10,19 @@
     <section class="main">
       <div class="container">
         <h1 class="title is-1">Taggers</h1>
-        <h2 class="subtitle">Hashtag Protocol Taggers</h2>
+        <h2 class="subtitle">
+          Hashtag Protocol Taggers
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'dashboard' }">Dashboard</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
               <help-modal
-                modal="isRecentlyTaggedModalActive"
+                modal="isTaggersModalActive"
                 @popModalFromChild="popModal"
                 class="is-pulled-right"
               ></help-modal>
@@ -82,18 +89,57 @@
           </div>
         </div>
       </div>
+      <b-modal :active.sync="isTaggersModalActive" :width="640" scroll="keep">
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <markdown-doc
+                doc-type="help"
+                filename="taggers-list-overview"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                position="is-top"
+                aria-id="contentIdForA11y1"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="MarketOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open ? 'What\'s a "Tagger"?' : 'What\'s a "Tagger"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-a-tagger"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
+            </div>
+          </div>
+        </div>
+      </b-modal>
     </section>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
+import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { PAGED_TAGGERS, ALL_TAGGERS } from "../queries";
-import EthAccount from "../components/EthAccount";
+import MarkdownDoc from "../components/MarkdownDoc";
 import Pagination from "../components/Pagination";
+import { PAGED_TAGGERS, ALL_TAGGERS } from "../queries";
 
 const PAGE_SIZE = 10;
 
@@ -104,12 +150,13 @@ export default {
     Footer,
     Header,
     HelpModal,
+    MarkdownDoc,
     Pagination,
   },
   data() {
     return {
       activeTab: null,
-      isRecentlyTaggedModalActive: false,
+      isTaggersModalActive: false,
       pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,

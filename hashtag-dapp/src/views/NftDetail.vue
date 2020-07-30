@@ -10,16 +10,19 @@
     <section class="main" v-if="tagsByDigitalAsset">
       <div class="container">
         <h1 class="title is-1">{{ tagsByDigitalAsset[0].nftName }}</h1>
-        <h2 class="subtitle">ERC-721 Digital asset</h2>
+        <h2 class="subtitle">
+          ERC-721 Digital asset
+          <span class="is-pulled-right is-size-6 has-text-weight-bold">
+            <router-link :to="{ name: 'nfts' }"
+              >Browse tagged assets</router-link
+            >&nbsp;
+            <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
+          </span>
+        </h2>
         <div class="tile is-ancestor">
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isNewHashtagsModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <div class="card">
                   <div class="card-image">
                     <figure class="image">
@@ -65,21 +68,51 @@
               <div class="tile is-child box">
                 <article class="tile is-child box">
                   <help-modal
-                    modal="isTaggingModalActive"
+                    modal="isTagAssetModalActive"
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
                   <p class="title is-5">
                     Tag this asset
                   </p>
-                  <b-field>
-                    <b-autocomplete
-                      placeholder="Enter a hashtag"
-                      icon="pound"
-                      field="name"
-                    >
-                    </b-autocomplete>
-                  </b-field>
+                  <form>
+                    <div class="field">
+                      <div class="control">
+                        <b-taginput
+                          v-model="hashtag"
+                          :data="hashtagInputTags"
+                          autocomplete
+                          :allow-new="false"
+                          maxtags="1"
+                          field="name"
+                          icon="pound"
+                          placeholder="Select hashtag"
+                          @typing="getFilteredTags"
+                        >
+                          <template slot-scope="props">
+                            <b-taglist attached>
+                              <b-tag type="is-light"
+                                >#{{ props.option.name }}</b-tag
+                              >
+                              <b-tag type="is-info">{{
+                                props.option.tagCount
+                              }}</b-tag>
+                            </b-taglist>
+                          </template>
+                        </b-taginput>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="control">
+                        <b-button
+                          type="is-primary"
+                          @click="tagNft()"
+                          :disabled="!isTaggable"
+                          >Tag asset</b-button
+                        >
+                      </div>
+                    </div>
+                  </form>
                   <hr />
                   <help-modal
                     modal="isRecentTagsModalActive"
@@ -169,16 +202,41 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isTaggingModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isTagAssetModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Tag an asset</p>
-              </div>
-            </div>
             <div class="content">
-              <p>Copy tbd</p>
+              <markdown-doc
+                doc-type="help"
+                filename="tagged-asset-detail-tag-asset"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content"?'
+                      : 'What is "tagged content"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -190,15 +248,38 @@
       >
         <div class="card">
           <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">Recent tags</p>
-              </div>
-            </div>
             <div class="content">
-              <p>
-                A listing of Hashtags this asset has been recently tagged with.
-              </p>
+              <markdown-doc
+                doc-type="help"
+                filename="tagged-asset-detail-recent-tags"
+              ></markdown-doc>
+              <b-collapse
+                :open="false"
+                aria-id="tokenOverview"
+                animation="slide"
+                class="pt-1 pb-1"
+              >
+                <a
+                  slot="trigger"
+                  slot-scope="props"
+                  aria-controls="tokenOverview"
+                  class="has-text-weight-bold"
+                >
+                  <b-icon
+                    :icon="!props.open ? 'menu-down' : 'menu-up'"
+                  ></b-icon>
+                  {{
+                    !props.open
+                      ? 'What is "tagged content"?'
+                      : 'What is "tagged content"?'
+                  }}
+                </a>
+                <markdown-doc
+                  doc-type="faq"
+                  filename="what-is-tagged-content"
+                  class="pt-1 pb-1"
+                ></markdown-doc>
+              </b-collapse>
             </div>
           </div>
         </div>
@@ -212,28 +293,30 @@
 </template>
 
 <script>
+import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
+import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
-import { TAGS_BY_DIGITAL_ASSET } from "../queries";
-import Hashtag from "../components/Hashtag";
-import EthAccount from "../components/EthAccount";
+import MarkdownDoc from "../components/MarkdownDoc";
 import TimestampFrom from "../components/TimestampFrom";
+import { SNAPSHOT, TAGS_BY_DIGITAL_ASSET } from "../queries";
 
 export default {
   name: "NftDetail",
   components: {
-    TimestampFrom,
     EthAccount,
-    Hashtag,
     Footer,
+    Hashtag,
     Header,
     HelpModal,
+    MarkdownDoc,
+    TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      isTaggingModalActive: false,
+      isTagAssetModalActive: false,
       isRecentTagsModalActive: false,
       name: this.$route.params.name,
       type: this.$route.params.type,
@@ -241,7 +324,15 @@ export default {
       id: this.$route.params.id,
       tagsByHashtag: null,
       hashtagsByName: null,
+      hashtag: null,
+      hashtags: null,
+      hashtagInputTags: [],
     };
+  },
+  computed: {
+    isTaggable() {
+      return this.hashtag;
+    },
   },
   apollo: {
     tagsByDigitalAsset: {
@@ -252,6 +343,26 @@ export default {
           nftId: this.id,
         };
       },
+      pollInterval: 1000, // ms
+    },
+    hashtags: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+  },
+  methods: {
+    async tagNft() {
+      await this.$store.dispatch("tag", {
+        hashtagId: this.hashtag[0].id,
+        nftContract: this.tagsByDigitalAsset[0].nftContract,
+        nftId: this.tagsByDigitalAsset[0].nftId,
+      });
+    },
+    // Bulma taginput widget.
+    getFilteredTags: function (text) {
+      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
+        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
+      });
     },
   },
 };

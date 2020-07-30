@@ -1,6 +1,39 @@
 import Vue from "vue";
 import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
+import BlocknativeSdk from "bnc-sdk";
+import { ToastProgrammatic as Toast } from "buefy";
+
+const eventMap = {
+  txSent: {
+    msg: "Transaction has been sent to the network",
+    type: "is-dark",
+  },
+  txPool: {
+    msg: "Transaction is in the mempool and is pending",
+    type: "is-dark",
+  },
+  txConfirmed: {
+    msg: "Transaction has been mined",
+    type: "is-success",
+  },
+  txFailed: {
+    msg: "Transaction has failed",
+    type: "is-danger",
+  },
+  txSpeedUp: {
+    msg: "Transaction been speeded up",
+    type: "is-dark",
+  },
+  txCancel: {
+    msg: "Transaction been cancelled",
+    type: "is-warning",
+  },
+  txDropped: {
+    msg: "Transaction been dropped",
+    type: "is-warning",
+  },
+};
 
 let provider;
 
@@ -16,6 +49,17 @@ const onboard = Onboard({
     },
   },
 });
+
+// create options object
+const options = {
+  dappId: "8bf348fd-d9df-4b54-b8b1-1ad14d15e4c3",
+  networkId: 4, // Dapp currently only supports Rinkeby
+  // Optional. See docs.
+  // transactionHandlers: [(event) => console.log(event.transaction)],
+};
+
+// initialize and connect to the api
+const blocknative = new BlocknativeSdk(options);
 
 import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
 import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
@@ -137,9 +181,19 @@ const actions = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    // function mint(string memory _hashtag, address payable _publisher, address _recipient) payable public returns (uint256 _tokenId) {
-    await hashtagProtocolContract.mint(payload, publisher, account, {
+    const tx = await hashtagProtocolContract.mint(payload, publisher, account, {
       value: ethers.utils.bigNumberify(state.fees.protocol),
+    });
+
+    const { emitter } = blocknative.transaction(tx.hash);
+
+    emitter.on("all", (transaction) => {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-bottom",
+        type: eventMap[transaction.eventCode].type,
+      });
     });
   },
 
@@ -151,19 +205,30 @@ const actions = {
     const { web3Objects, fees } = state;
     const { account, contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
-    const { hashtag, nft } = payload;
+    const { hashtagId, nftContract, nftId } = payload;
 
     // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
-    await erc721HashtagRegistryContract.tag(
-      hashtag[0].id,
-      nft.asset_contract.address,
-      nft.token_id,
+    const tx = await erc721HashtagRegistryContract.tag(
+      hashtagId,
+      nftContract,
+      nftId,
       publisher,
       account,
       {
         value: ethers.utils.bigNumberify(fees.protocol),
       }
     );
+
+    const { emitter } = blocknative.transaction(tx.hash);
+
+    emitter.on("all", (transaction) => {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-bottom",
+        type: eventMap[transaction.eventCode].type,
+      });
+    });
   },
 
   async mintAndTag({ state, dispatch }, payload) {
