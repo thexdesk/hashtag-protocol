@@ -156,10 +156,7 @@ contract ERC721HashtagRegistry is Context {
         taggerToListOfTagIds[_tagger].push(tagId);
 
         // Split the tagging fee paid by the tagger to the relevant entities i.e. publisher, owner and platform
-        (uint256 platformFee, uint256 publisherFee, uint256 hashtagFee) = splitter.handlePayment{value: tagFeeAfterDiscount}(_hashtagId, _publisher);
-
-        // Give the user their change if they've overpaid
-        _refundRemainingBalance();
+        (uint256 platformFee, uint256 publisherFee, uint256 hashtagFee) = splitter.handlePayment{value: msg.value}(_hashtagId, _publisher);
 
         // Log that an NFT has been tagged
         emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, platformFee, publisherFee, hashtagFee);
@@ -284,15 +281,6 @@ contract ERC721HashtagRegistry is Context {
     }
 
     /**
-     * @notice Given a contract balance, sends the value back to the sender - the equivalent of giving a user change
-    */
-    function _refundRemainingBalance() private {
-        address payable self = payable(address(this));
-        (bool refundSuccess, ) = _msgSender().call{value: self.balance}("");
-        require(refundSuccess, "Failed to refund the remaining balance to sender");
-    }
-
-    /**
      * @notice Private method for checking whether a hashtag is already associated with an NFT
      * @param _hashtagId ID of the hashtag
      * @param _nftContract Address of the nft contract
@@ -316,4 +304,6 @@ contract ERC721HashtagRegistry is Context {
 
         return isNewTag;
     }
+
+    // TODO: expose admin drain for excess ETH in the contract
 }
