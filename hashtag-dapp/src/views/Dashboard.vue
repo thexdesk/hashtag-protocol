@@ -782,6 +782,7 @@ import NftLink from "../components/NftLink";
 import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
+import HashtagValidationService from "@/services/HashtagValidationService";
 
 export default {
   name: "Hashtags",
@@ -895,14 +896,6 @@ export default {
       this.resetModalForm();
       this.isTagModalActive = false;
     },
-    dangerToast(message) {
-      this.$buefy.toast.open({
-        duration: 5000,
-        message,
-        position: "is-bottom",
-        type: "is-danger",
-      });
-    },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
       this.hashtagInputTags = (this.hashtags || []).filter((option) => {
@@ -945,7 +938,7 @@ export default {
       };
     },
     validateTag(hashtag) {
-      return this._validateTag(hashtag);
+      return this.hashtagValidationService.validateTag(hashtag);
     },
     tagAssetValidation(hashtag) {
       const tagContentValid = this._validateTag(hashtag);
@@ -966,31 +959,11 @@ export default {
         this.modalForm.mintAndTag = isNewHashtag;
       }
     },
-    _validateTag(hashtag) {
-      const value = hashtag && hashtag.name ? hashtag.name : hashtag;
-      if (value.length < 3) {
-        this.dangerToast(
-          `Sorry, but '${value}' is an invalid tag as it's less than 3 characters long.`
-        );
-        return false;
-      }
-
-      if (value.length > 15) {
-        this.dangerToast(
-          `Sorry, but '${value}' is an invalid tag as it's more than 15 characters long.`
-        );
-        return false;
-      }
-
-      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(value)) {
-        this.dangerToast(
-          `Sorry, but '${value}' is an invalid tag as it's either not alpha numeric or only numeric.`
-        );
-        return false;
-      }
-
-      return true;
-    },
+  },
+  created() {
+    this.hashtagValidationService = new HashtagValidationService(
+      this.$buefy.toast
+    );
   },
 };
 </script>
