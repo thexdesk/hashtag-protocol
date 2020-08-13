@@ -128,12 +128,11 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
         _mint(_recipient, tokenId);
 
-        // As long as the sender is not admin, a fee is required to mint
         uint256 platformFee;
         uint256 publisherFee;
         if (msg.value > 0) {
             // split fee
-            platformFee = fee.div(modulo).mul(platformPercentage);
+            platformFee = msg.value.div(modulo).mul(platformPercentage);
             (bool platformSuccess,) = platform.call{value : platformFee}("");
             require(platformSuccess, "Failed to transfer commission to platform");
 
@@ -141,9 +140,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
             (bool publisherSuccess,) = _publisher.call{value : publisherFee}("");
             require(publisherSuccess, "Failed to transfer commission to publisher");
         }
-
-        // send the user any change / unexpected funds back
-        _refundRemainingBalance();
 
         // log the minting event
         emit MintHashtag(tokenId, _recipient, hashtagKey, _hashtag, _publisher, platformFee, publisherFee);
@@ -262,12 +258,5 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         return string(bLower);
     }
 
-    /**
-     * @notice Given a contract balance, sends the value back to the sender - the equivalent of giving a user change
-    */
-    function _refundRemainingBalance() private {
-        address payable self = payable(address(this));
-        (bool refundSuccess,) = _msgSender().call{value : self.balance}("");
-        require(refundSuccess, "Failed to refund the remaining balance to sender");
-    }
+    // TODO: expose admin drain for excess ETH in the contract
 }

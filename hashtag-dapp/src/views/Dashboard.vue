@@ -713,12 +713,14 @@
                             v-model="modalForm.hashtag"
                             :data="hashtagInputTags"
                             autocomplete
-                            :allow-new="false"
+                            :allow-new="true"
                             maxtags="1"
                             field="name"
                             icon="pound"
-                            placeholder="Select hashtag"
+                            placeholder="Seach for hashtag"
                             @typing="getFilteredTags"
+                            @add="tagAssetValidation"
+                            :before-adding="validateTag"
                           >
                             <template slot-scope="props">
                               <b-taglist attached>
@@ -729,6 +731,9 @@
                                   props.option.tagCount
                                 }}</b-tag>
                               </b-taglist>
+                            </template>
+                            <template slot="empty">
+                              New hashtag! We'll mint it & tag this asset...
                             </template>
                           </b-taginput>
                         </div>
@@ -774,9 +779,10 @@ import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
-import { SNAPSHOT } from "../queries";
+import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
+import HashtagValidationService from "@/services/HashtagValidationService";
 
 export default {
   name: "Hashtags",
@@ -806,6 +812,7 @@ export default {
         hashtag: null,
         nft: null,
         nftName: null,
+        mintAndTag: false,
       },
       hashtagInput: null,
       hashtagInputTags: [],
@@ -842,7 +849,7 @@ export default {
   },
   apollo: {
     hashtags: {
-      query: SNAPSHOT,
+      query: FIRST_THOUSAND_HASHTAGS,
       pollInterval: 1000, // ms
     },
     publishers: {
@@ -872,21 +879,22 @@ export default {
   },
   methods: {
     async tagNft() {
-      await this.$store.dispatch("tag", {
-        hashtagId: this.modalForm.hashtag[0].id,
-        nftContract: this.modalForm.nft.asset_contract.address,
-        nftId: this.modalForm.nft.token_id,
-      });
+      if (this.modalForm.mintAndTag) {
+        await this.$store.dispatch("mintAndTag", {
+          hashtag: this.modalForm.hashtag[0],
+          nftContract: this.modalForm.nft.asset_contract.address,
+          nftId: this.modalForm.nft.token_id,
+        });
+      } else {
+        await this.$store.dispatch("tag", {
+          hashtagId: this.modalForm.hashtag[0].id,
+          nftContract: this.modalForm.nft.asset_contract.address,
+          nftId: this.modalForm.nft.token_id,
+        });
+      }
+
       this.resetModalForm();
       this.isTagModalActive = false;
-    },
-    dangerToast(message) {
-      this.$buefy.toast.open({
-        duration: 5000,
-        message,
-        position: "is-bottom",
-        type: "is-danger",
-      });
     },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
@@ -930,29 +938,32 @@ export default {
       };
     },
     validateTag(hashtag) {
-      if (hashtag.length < 3) {
-        this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's less than 3 characters long.`
-        );
-        return false;
-      }
-
-      if (hashtag.length > 15) {
-        this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's more than 15 characters long.`
-        );
-        return false;
-      }
-
-      if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(hashtag)) {
-        this.dangerToast(
-          `Sorry, but '${hashtag}' is an invalid tag as it's either not alpha numeric or only numeric.`
-        );
-        return false;
-      }
-
-      return true;
+      return this.hashtagValidationService.validateTag(hashtag);
     },
+    tagAssetValidation(hashtag) {
+      const tagContentValid = this._validateTag(hashtag);
+
+      if (tagContentValid) {
+        const hashtagValue =
+          this.modalForm.hashtag[0] && this.modalForm.hashtag[0].name
+            ? this.modalForm.hashtag[0].name
+            : this.modalForm.hashtag[0];
+
+        const isNewHashtag =
+          (this.hashtagInputTags || []).filter((option) => {
+            return (
+              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
+            );
+          }).length === 0;
+
+        this.modalForm.mintAndTag = isNewHashtag;
+      }
+    },
+  },
+  created() {
+    this.hashtagValidationService = new HashtagValidationService(
+      this.$buefy.toast
+    );
   },
 };
 </script>
