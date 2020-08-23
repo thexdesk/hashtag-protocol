@@ -11,5 +11,8 @@
     "stylelint-config-standard": "^20.0.0",
     "stylelint-processor-html": "^1.0.0",
     "stylelint-scss": "^3.18.0"
+  },
+  "dependencies": {
+    "vue-prism-component": "^1.2.0"
   }
 }
