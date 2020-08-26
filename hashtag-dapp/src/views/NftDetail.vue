@@ -82,12 +82,14 @@
                           v-model="hashtag"
                           :data="hashtagInputTags"
                           autocomplete
-                          :allow-new="false"
+                          :allow-new="true"
                           maxtags="1"
                           field="name"
                           icon="pound"
-                          placeholder="Select hashtag"
+                          placeholder="Seach for hashtag"
                           @typing="getFilteredTags"
+                          @add="tagAssetValidation"
+                          :before-adding="validateTag"
                         >
                           <template slot-scope="props">
                             <b-taglist attached>
@@ -98,6 +100,9 @@
                                 props.option.tagCount
                               }}</b-tag>
                             </b-taglist>
+                          </template>
+                          <template slot="empty">
+                            New hashtag! We'll mint it & tag this asset...
                           </template>
                         </b-taginput>
                       </div>
@@ -300,7 +305,9 @@ import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import TimestampFrom from "../components/TimestampFrom";
-import { SNAPSHOT, TAGS_BY_DIGITAL_ASSET } from "../queries";
+import { TAGS_BY_DIGITAL_ASSET, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+
+import HashtagValidationService from "@/services/HashtagValidationService";
 
 export default {
   name: "NftDetail",
@@ -327,6 +334,7 @@ export default {
       hashtag: null,
       hashtags: null,
       hashtagInputTags: [],
+      mintAndTag: false,
     };
   },
   computed: {
@@ -346,17 +354,25 @@ export default {
       pollInterval: 1000, // ms
     },
     hashtags: {
-      query: SNAPSHOT,
+      query: FIRST_THOUSAND_HASHTAGS,
       pollInterval: 1000, // ms
     },
   },
   methods: {
     async tagNft() {
-      await this.$store.dispatch("tag", {
-        hashtagId: this.hashtag[0].id,
-        nftContract: this.tagsByDigitalAsset[0].nftContract,
-        nftId: this.tagsByDigitalAsset[0].nftId,
-      });
+      if (this.mintAndTag) {
+        await this.$store.dispatch("mintAndTag", {
+          hashtag: this.hashtag[0],
+          nftContract: this.tagsByDigitalAsset[0].nftContract,
+          nftId: this.tagsByDigitalAsset[0].nftId,
+        });
+      } else {
+        await this.$store.dispatch("tag", {
+          hashtagId: this.hashtag[0].id,
+          nftContract: this.tagsByDigitalAsset[0].nftContract,
+          nftId: this.tagsByDigitalAsset[0].nftId,
+        });
+      }
     },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
@@ -364,6 +380,31 @@ export default {
         return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
       });
     },
+    validateTag(hashtag) {
+      return this.hashtagValidationService.validateTag(hashtag);
+    },
+    tagAssetValidation(hashtag) {
+      const tagContentValid = this._validateTag(hashtag);
+
+      if (tagContentValid) {
+        const hashtagValue =
+          hashtag[0] && hashtag[0].name ? hashtag[0].name : hashtag[0];
+
+        const isNewHashtag =
+          (this.hashtagInputTags || []).filter((option) => {
+            return (
+              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
+            );
+          }).length === 0;
+
+        this.mintAndTag = isNewHashtag;
+      }
+    },
+  },
+  created() {
+    this.hashtagValidationService = new HashtagValidationService(
+      this.$buefy.toast
+    );
   },
 };
 </script>

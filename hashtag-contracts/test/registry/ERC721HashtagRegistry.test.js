@@ -42,6 +42,50 @@ describe('ERC721HashtagRegistry Tests', function () {
             this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('pussypower');
         });
 
+        it('should be able to mint and tag', async function() {
+            const nftId = new BN('1');
+
+            const macbookHashtagValue = "macbook";
+            const {receipt} = await this.tagger.mintAndTag(
+                macbookHashtagValue,
+                this.nft.address,
+                nftId,
+                publisher,
+                tagger,
+                {from: tagger, value: ether('0.02')}
+            );
+
+            const hashtagId = await this.hashtagProtocol.hashtagToTokenId(macbookHashtagValue);
+
+            await expectEvent(receipt, 'HashtagRegistered', {
+                tagger:  tagger,
+                nftContract: this.nft.address,
+                publisher: publisher,
+                hashtagId,
+                nftId: nftId,
+                platformFee: ether('0.0005'),
+                publisherFee: ether('0.0005'),
+                hashtagFee: ether('0.009'),
+            });
+
+            const {
+                _hashtagId,
+                _nftContract,
+                _nftId,
+                _tagger,
+                _tagstamp,
+                _publisher
+            } = await this.tagger.getTagInfo(tagIdOne);
+
+            expect(_hashtagId).to.be.bignumber.equal(hashtagId);
+            expect(_nftContract).to.be.equal(this.nft.address);
+            expect(_nftId).to.be.bignumber.equal(nftId);
+            expect(_tagger).to.be.equal(tagger);
+            expect(_tagstamp).to.exist;
+            expect(Number(_tagstamp.toString())).to.be.gt(0);
+            expect(_publisher).to.be.equal(publisher);
+        });
+
         it('should be able to tag a cryptokittie with #pussypower', async function () {
             const nftId = new BN('1');
 
