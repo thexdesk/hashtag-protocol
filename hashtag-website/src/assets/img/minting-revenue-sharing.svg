@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="586px" viewBox="0 0 1024 586" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>Token minting</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="231.5" cy="231.5" r="231.5"></circle>
+    </defs>
+    <g id="Token-minting" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(506.500000, 290.500000) rotate(30.000000) translate(-506.500000, -290.500000) translate(275.000000, 59.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Oval" fill="#24AE60" xlink:href="#path-1"></use>
+            <circle id="Oval" fill="#387452" mask="url(#mask-2)" cx="231.5" cy="231.5" r="231.5"></circle>
+            <path d="M230.5,231 C230.5,231 333.166667,264.666667 538.5,332 C524.166667,122.333333 421.5,1 230.5,-32 L230.5,231 Z" id="Path" fill="#24AE60" mask="url(#mask-2)"></path>
+            <circle id="Oval" fill="#FFFFFF" mask="url(#mask-2)" cx="231" cy="232" r="117"></circle>
+        </g>
+        <text id="Protocol-30%" font-family="Roboto-Bold, Roboto" font-size="30" font-weight="bold" line-spacing="46" fill="#363636">
+            <tspan x="773.024902" y="272">Protocol</tspan>
+            <tspan x="801.713867" y="318">30%</tspan>
+        </text>
+        <text id="Publisher-70%" font-family="Roboto-Bold, Roboto" font-size="30" font-weight="bold" line-spacing="46" fill="#363636">
+            <tspan x="109.347168" y="272">Publisher</tspan>
+            <tspan x="145.213867" y="318">70%</tspan>
+        </text>
+    </g>
+</svg>
