@@ -6,7 +6,7 @@
       </div>
     </section>
     <section class="main">
-      <div class="section is-medium has-background-white">
+      <div class="section is-medium has-background-white hero">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column">
@@ -35,15 +35,7 @@
         </div>
       </div>
     </section>
-    <Footer>
-      <span v-if="platform" class="has-text-grey-light">
-        Platform revenue
-        <eth-amount-sum
-          :value1="platform.mintFees"
-          :value2="platform.tagFees"
-        ></eth-amount-sum>
-      </span>
-    </Footer>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -62,3 +54,11 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.main {
+  .hero {
+    padding-bottom: 0;
+  }
+}
+</style>
