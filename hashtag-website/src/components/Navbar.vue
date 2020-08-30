@@ -57,11 +57,11 @@ export default {
 
       if (parts.includes("platformsh")) {
         // We are on a Platform.sh development environment.
-        var docsUrl = baseUrl;
+        var docsUrl = new URL(window.location.origin);
         docsUrl.hostname = "docs." + docsUrl.hostname;
         this.docs = docsUrl;
 
-        var appUrl = baseUrl;
+        var appUrl = new URL(window.location.origin);
         appUrl.hostname = "app." + appUrl.hostname;
         this.app = appUrl;
       }
