@@ -56,7 +56,7 @@ export default {
       var baseUrl = new URL(window.location.origin);
       var parts = baseUrl.hostname.split(".");
 
-      if (parts.includes("platform")) {
+      if (parts.includes("platformsh")) {
         // We are on a Platform.sh development environment.
         var docsUrl = baseUrl;
         docsUrl.hostname = "docs." + docsUrl.hostname;
