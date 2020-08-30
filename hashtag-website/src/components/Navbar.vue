@@ -52,7 +52,6 @@ export default {
      *
      */
     buildDevLinks() {
-      //
       var baseUrl = new URL(window.location.origin);
       var parts = baseUrl.hostname.split(".");
 
@@ -63,7 +62,7 @@ export default {
         this.docs = docsUrl;
 
         var appUrl = baseUrl;
-        appUrl.hostname = "app." + docsUrl.hostname;
+        appUrl.hostname = "app." + appUrl.hostname;
         this.app = appUrl;
       }
     },
