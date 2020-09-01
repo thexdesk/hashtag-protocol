@@ -6185,6 +6185,11 @@ entities@^2.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   integrity sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
 
+entities@~2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.3.tgz#5c487e5742ab93c15abb5da22759b8590ec03b7f"
+  integrity sha512-MyoZ0jgnLvB2X3Lg5HqpFmn1kybDiIfEQmKzTb5apr51Rb+T3KdmMiqa70T+bhGnyv7bQ6WMj2QMHpGMmlrUYQ==
+
 env-ci@3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/env-ci/-/env-ci-3.2.2.tgz#06936f1fcfbc999102a2211fc2539df64062b61f"
@@ -9601,6 +9606,13 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+linkify-it@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/linkify-it/-/linkify-it-3.0.2.tgz#f55eeb8bc1d3ae754049e124ab3bb56d97797fb8"
+  integrity sha512-gDBO4aHNZS6coiZCKVhSNh43F9ioIL4JwRjLZPkoLIY4yZFwg264Y5lu2x6rb1Js42Gh6Yqm2f6L2AJcnkzinQ==
+  dependencies:
+    uc.micro "^1.0.1"
+
 lint-staged@^10.0.9:
   version "10.0.9"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-10.0.9.tgz#185aabb2432e9467c84add306c990f1c20da3cdb"
@@ -9727,6 +9739,15 @@ loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.2.3, loader-utils@^1.4
     big.js "^5.2.2"
     emojis-list "^3.0.0"
     json5 "^1.0.1"
+
+loader-utils@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-2.0.0.tgz#e4cace5b816d425a166b5f097e10cd12b36064b0"
+  integrity sha512-rP4F0h2RaWSvPEkD7BLDFQnvSf+nK+wr3ESUjNTyAGobqrijmW92zc+SO6d4p4B1wh7+B/Jg1mkQe5NYUEHtHQ==
+  dependencies:
+    big.js "^5.2.2"
+    emojis-list "^3.0.0"
+    json5 "^2.1.2"
 
 locate-path@^2.0.0:
   version "2.0.0"
@@ -10043,6 +10064,17 @@ markdown-escapes@^1.0.0:
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.4.tgz#c95415ef451499d7602b91095f3c8e8975f78535"
   integrity sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==
 
+markdown-it@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-11.0.0.tgz#dbfc30363e43d756ebc52c38586b91b90046b876"
+  integrity sha512-+CvOnmbSubmQFSA9dKz1BRiaSMV7rhexl3sngKqFyXSagoA3fBdJQ8oZWtRy2knXdpDXaBw44euz37DeJQ9asg==
+  dependencies:
+    argparse "^1.0.7"
+    entities "~2.0.0"
+    linkify-it "^3.0.1"
+    mdurl "^1.0.1"
+    uc.micro "^1.0.5"
+
 markdown-table@^1.1.0:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-1.1.3.tgz#9fcb69bcfdb8717bfd0398c6ec2d93036ef8de60"
@@ -10083,6 +10115,11 @@ mdn-data@2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.4.tgz#699b3c38ac6f1d728091a64650b65d388502fd5b"
   integrity sha512-iV3XNKw06j5Q7mi6h+9vbx23Tv7JkjEVgKHW4pimwyDGWm0OIQntJJ+u1C6mg6mK1EaTv42XQ7w76yuzH7M2cA==
+
+mdurl@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
+  integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -11549,6 +11586,11 @@ pkg-up@^3.1.0:
   dependencies:
     find-up "^3.0.0"
 
+platformsh-config@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/platformsh-config/-/platformsh-config-2.3.1.tgz#3a9746af7b5105b60a28c7ecc9b881b852cc6638"
+  integrity sha512-b3WOJQ1A7fonAB46PF9aAOKj/0lsHvFSYcvnnPi4gowcs4DiKDjxETLHLs3kq87AyVEZW9WtcdoON/q3vvLMJA==
+
 platformsh_variables@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/platformsh_variables/-/platformsh_variables-1.0.5.tgz#6162b8a4ac403b68bcc882bbb073ba056bbf1d5d"
@@ -12281,6 +12323,14 @@ raw-body@2.4.0:
     http-errors "1.7.2"
     iconv-lite "0.4.24"
     unpipe "1.0.0"
+
+raw-loader@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/raw-loader/-/raw-loader-4.0.1.tgz#14e1f726a359b68437e183d5a5b7d33a3eba6933"
+  integrity sha512-baolhQBSi3iNh1cglJjA0mYzga+wePk7vdEX//1dTFd+v4TsQlQE0jitJSNF1OIP82rdYulH7otaVmdlDaJ64A==
+  dependencies:
+    loader-utils "^2.0.0"
+    schema-utils "^2.6.5"
 
 rc@^1.0.1, rc@^1.1.6:
   version "1.2.8"
@@ -14590,6 +14640,11 @@ u2f-api@0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-0.2.7.tgz#17bf196b242f6bf72353d9858e6a7566cc192720"
   integrity sha512-fqLNg8vpvLOD5J/z4B6wpPg4Lvowz1nJ9xdHcCzdUPKcFE/qNCceV2gNZxSJd5vhAZemHr/K/hbzVA0zxB5mkg==
+
+uc.micro@^1.0.1, uc.micro@^1.0.5:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
+  integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
 
 uglify-js@3.4.x:
   version "3.4.10"

@@ -2,7 +2,7 @@ import { gql } from "apollo-boost";
 
 export const SNAPSHOT = gql(`
     query {
-        hashtags(first: 10, orderBy: timestamp, orderDirection: desc) {
+        hashtags(first: 1000, orderBy: timestamp, orderDirection: desc) {
             id
             name
             displayHashtag
@@ -131,7 +131,7 @@ query hashtagsByName($name: String!) {
 
 export const TAGS_BY_DIGITAL_ASSET = gql(`
    query tagsByDigitalAsset($nftContract: String!, $nftId: String!) {
-    tagsByDigitalAsset: tags(where:{nftContract: $nftContract, nftId: $nftId}) {
+    tagsByDigitalAsset: tags(where:{nftContract: $nftContract, nftId: $nftId}, orderBy: timestamp, orderDirection: desc) {
     id
     nftContract
     nftContractName
@@ -401,3 +401,17 @@ query pagedTaggers($first: Int!, $skip: Int!) {
     }
 }
 `);
+
+export const FIRST_THOUSAND_HASHTAGS = gql`
+  query {
+    hashtags(first: 1000, orderBy: timestamp, orderDirection: desc) {
+      id
+      name
+      displayHashtag
+      owner
+      publisher
+      timestamp
+      tagCount
+    }
+  }
+`;
