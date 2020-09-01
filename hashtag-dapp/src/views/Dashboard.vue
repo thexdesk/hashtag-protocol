@@ -73,15 +73,15 @@
                         <div class="media-left">
                           <img
                             width="32"
-                            :src="props.option.image_preview_url"
+                            :src="props.option.metadataImageURI"
                           />
                         </div>
                         <div class="media-content">
-                          {{ props.option.name }}
+                          {{ props.option.metadataName }}
                           <br />
                           <small
-                            >{{ props.option.asset_contract.name }}
-                            <b>#{{ props.option.token_id }}</b>
+                            >{{ props.option.contractName }}
+                            <b>#{{ props.option.tokenId }}</b>
                           </small>
                         </div>
                       </div>
@@ -779,7 +779,11 @@ import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
-import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+import {
+  SNAPSHOT,
+  FIRST_THOUSAND_HASHTAGS,
+  NFTS_ASSETS_NAME_CONTAINS,
+} from "@/queries";
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
 import HashtagValidationService from "@/services/HashtagValidationService";
@@ -816,6 +820,7 @@ export default {
       },
       hashtagInput: null,
       hashtagInputTags: [],
+      nameContains: [],
       tagForm: {
         hashtag: null,
         nft: null,
@@ -826,17 +831,19 @@ export default {
   computed: {
     ...mapGetters(["supportedNfts", "nftAssetCache"]),
     getFilteredNFTs() {
-      if (!this.tagForm.nftName || !this.nftAssetCache) return [];
+      if (!this.tagForm.nftName || !this.nameContains) return [];
 
-      return this.nftAssetCache.assets.filter((option) => {
-        if (!option.name) return false;
+      const filtered = this.nameContains.filter((option) => {
+        if (!option.metadataName) return false;
 
         return (
-          option.name
+          option.metadataName
             .toLowerCase()
             .indexOf(this.tagForm.nftName.toLowerCase()) === 0
         );
       });
+
+      return filtered;
     },
     isTaggable() {
       return (
@@ -875,6 +882,10 @@ export default {
     taggers: {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
+    },
+    nameContains: {
+      query: NFTS_ASSETS_NAME_CONTAINS,
+      client: "nftsClient",
     },
   },
   methods: {

@@ -18,12 +18,22 @@ Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bulma");
 
 // Connection for GraphQL.
-const client = new ApolloClient({
+const hashtagClient = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
 });
 
+const nftsClient = new ApolloClient({
+  uri:
+    "https://api.thegraph.com/subgraphs/id/QmRt9WNKvSDA4ZmE3mC49niX3biyyNVAZnFf3vYuhtCY1H",
+});
+
 const apolloProvider = new VueApollo({
-  defaultClient: client,
+  clients: {
+    hashtagClient,
+    nftsClient,
+  },
+
+  defaultClient: hashtagClient,
 });
 
 Vue.use(VueApollo);
