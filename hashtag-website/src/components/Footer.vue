@@ -22,7 +22,7 @@
       <!-- Right side -->
       <div class="level-right">
         <a
-          href="https://github.com/hashtag-protocol"
+          href="/build"
           target="_blank"
           title="Github"
           class="navbar-item is-hidden-mobile"
@@ -32,7 +32,7 @@
           ></span>
         </a>
         <a
-          href="https://discord.gg/bSEdd4n"
+          href="/build"
           target="_blank"
           title="Discord"
           class="navbar-item is-hidden-mobile"

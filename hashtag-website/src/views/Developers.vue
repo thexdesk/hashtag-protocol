@@ -139,7 +139,7 @@
         <div class="columns">
           <div class="column is-half">
             <h2 class="title is-spaced has-text-white-ter">
-              Surface and display Hashtag data
+              Surface and display Hashtag data in new and meaningful ways.
             </h2>
             <div class="content is-medium has-text-white-ter">
               <p>
@@ -301,7 +301,7 @@ export default {
   data() {
     // prettier-ignore
     return {
-      query: `
+      query: `// Blah blah
 query {
   hashtags(first: 1, orderBy: timestamp, orderDirection: desc) {
     id

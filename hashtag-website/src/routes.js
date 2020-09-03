@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
+import Build from "./views/Build";
 import Home from "./views/Home";
 import Developers from "./views/Developers";
 
@@ -18,6 +19,11 @@ export const router = new VueRouter({
       path: "/developers",
       name: "developers",
       component: Developers,
+    },
+    {
+      path: "/build",
+      name: "build",
+      component: Build,
     },
   ],
 });
