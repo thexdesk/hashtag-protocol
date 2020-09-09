@@ -30,11 +30,11 @@
                         <template slot-scope="props">
                           <b-taglist attached>
                             <b-tag type="is-light"
-                              >#{{ props.option.name }}</b-tag
-                            >
-                            <b-tag type="is-info">{{
-                              props.option.tagCount
-                            }}</b-tag>
+                              >#{{ props.option.name }}
+                            </b-tag>
+                            <b-tag type="is-info"
+                              >{{ props.option.tagCount }}
+                            </b-tag>
                           </b-taglist>
                         </template>
                         <template slot="empty">
@@ -47,8 +47,8 @@
                         type="is-primary"
                         @click="mintHashtag()"
                         :disabled="!isNewTag()"
-                        >Mint it</b-button
-                      >
+                        >Mint it
+                      </b-button>
                     </div>
                   </section>
                 </template>
@@ -60,13 +60,16 @@
               <article class="tile is-child">
                 <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
                 <b-field>
+                  <!--                  <pre>{{ nameContains }}</pre>-->
                   <b-autocomplete
                     v-model="tagForm.nftName"
                     placeholder="Select NFT"
                     icon="pound"
                     field="name"
+                    :loading="isFetching"
                     @select="onNftSelected"
-                    :data="getFilteredNFTs"
+                    @typing="getAsyncData"
+                    :data="nameContains"
                   >
                     <template slot-scope="props">
                       <div class="media">
@@ -114,7 +117,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags</router-link
+                          >Browse hashtags </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -173,7 +176,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'nfts' }"
-                          >Browse tagged assets</router-link
+                          >Browse tagged assets </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -230,7 +233,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'publishers' }"
-                          >Browse publishers</router-link
+                          >Browse publishers </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -285,7 +288,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'owners' }"
-                          >Browse owners</router-link
+                          >Browse owners </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -341,7 +344,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags</router-link
+                          >Browse hashtags </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -380,7 +383,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'taggers' }"
-                          >Browse taggers</router-link
+                          >Browse taggers </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -725,11 +728,11 @@
                             <template slot-scope="props">
                               <b-taglist attached>
                                 <b-tag type="is-light"
-                                  >#{{ props.option.name }}</b-tag
-                                >
-                                <b-tag type="is-info">{{
-                                  props.option.tagCount
-                                }}</b-tag>
+                                  >#{{ props.option.name }}
+                                </b-tag>
+                                <b-tag type="is-info"
+                                  >{{ props.option.tagCount }}
+                                </b-tag>
                               </b-taglist>
                             </template>
                             <template slot="empty">
@@ -744,8 +747,8 @@
                             type="is-primary"
                             @click="tagNft()"
                             :disabled="!isTaggable"
-                            >Tag asset</b-button
-                          >
+                            >Tag asset
+                          </b-button>
                         </div>
                       </div>
                     </form>
@@ -787,6 +790,7 @@ import {
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
 import HashtagValidationService from "@/services/HashtagValidationService";
+// import debounce from "lodash/debounce";
 
 export default {
   name: "Hashtags",
@@ -821,6 +825,7 @@ export default {
       hashtagInput: null,
       hashtagInputTags: [],
       nameContains: [],
+      isFetching: false,
       tagForm: {
         hashtag: null,
         nft: null,
@@ -830,21 +835,6 @@ export default {
   },
   computed: {
     ...mapGetters(["supportedNfts", "nftAssetCache"]),
-    getFilteredNFTs() {
-      if (!this.tagForm.nftName || !this.nameContains) return [];
-
-      const filtered = this.nameContains.filter((option) => {
-        if (!option.metadataName) return false;
-
-        return (
-          option.metadataName
-            .toLowerCase()
-            .indexOf(this.tagForm.nftName.toLowerCase()) === 0
-        );
-      });
-
-      return filtered;
-    },
     isTaggable() {
       return (
         this.modalForm.nftName &&
@@ -883,12 +873,46 @@ export default {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
     },
-    nameContains: {
-      query: NFTS_ASSETS_NAME_CONTAINS,
-      client: "nftsClient",
-    },
   },
   methods: {
+    // getAsyncData: debounce((name) => {
+    //   if (!name.length) {
+    //     this.nameContains = [];
+    //     return;
+    //   }
+    //   this.isFetching = true;
+    //
+    //   this.$apollo
+    //     .query({
+    //       query: NFTS_ASSETS_NAME_CONTAINS,
+    //       client: "nftsClient",
+    //     })
+    //     .then((data) => {
+    //       // console.log(data);
+    //       this.nameContains = data.nameContains;
+    //     })
+    //     .finally(() => {
+    //       this.isFetching = false;
+    //     });
+    //
+    //   console.log(name);
+    //   console.log(this.nameContains);
+    // }, 500),
+
+    async getAsyncData(name) {
+      if (!name.length) {
+        this.nameContains = [];
+        return;
+      }
+
+      const { data } = await this.$apollo.query({
+        query: NFTS_ASSETS_NAME_CONTAINS,
+        client: "nftsClient",
+      });
+
+      this.nameContains = data.nameContains;
+      console.log(this.nameContains);
+    },
     async tagNft() {
       if (this.modalForm.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
