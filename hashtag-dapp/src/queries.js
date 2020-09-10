@@ -417,15 +417,15 @@ export const FIRST_THOUSAND_HASHTAGS = gql(`
 `);
 
 export const NFTS_ASSETS_NAME_CONTAINS = gql(`
-  query {
-  nameContains: tokens(first: 1000) {
-    id
-    contractAddress
-    contractName
-    contractSymbol
-    tokenId
-    metadataName
-    metadataImageURI
+  query nameContains($first: Int!, $name: String!) {
+    nameContains: tokens(first: $first, where: {metadataName_contains: $name}) {
+      id
+      contractAddress
+      contractName
+      contractSymbol
+      tokenId
+      metadataName
+      metadataImageURI
   }
 }
 `);

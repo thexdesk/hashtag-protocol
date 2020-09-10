@@ -60,7 +60,6 @@
               <article class="tile is-child">
                 <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
                 <b-field>
-                  <!--                  <pre>{{ nameContains }}</pre>-->
                   <b-autocomplete
                     v-model="tagForm.nftName"
                     placeholder="Select NFT"
@@ -790,7 +789,7 @@ import {
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
 import HashtagValidationService from "@/services/HashtagValidationService";
-// import debounce from "lodash/debounce";
+import debounce from "lodash/debounce";
 
 export default {
   name: "Hashtags",
@@ -875,31 +874,7 @@ export default {
     },
   },
   methods: {
-    // getAsyncData: debounce((name) => {
-    //   if (!name.length) {
-    //     this.nameContains = [];
-    //     return;
-    //   }
-    //   this.isFetching = true;
-    //
-    //   this.$apollo
-    //     .query({
-    //       query: NFTS_ASSETS_NAME_CONTAINS,
-    //       client: "nftsClient",
-    //     })
-    //     .then((data) => {
-    //       // console.log(data);
-    //       this.nameContains = data.nameContains;
-    //     })
-    //     .finally(() => {
-    //       this.isFetching = false;
-    //     });
-    //
-    //   console.log(name);
-    //   console.log(this.nameContains);
-    // }, 500),
-
-    async getAsyncData(name) {
+    getAsyncData: debounce(async function (name) {
       if (!name.length) {
         this.nameContains = [];
         return;
@@ -908,11 +883,14 @@ export default {
       const { data } = await this.$apollo.query({
         query: NFTS_ASSETS_NAME_CONTAINS,
         client: "nftsClient",
+        variables: {
+          first: 100,
+          name: name,
+        },
       });
 
       this.nameContains = data.nameContains;
-      console.log(this.nameContains);
-    },
+    }, 300),
     async tagNft() {
       if (this.modalForm.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
