@@ -74,8 +74,8 @@
                       <div class="media">
                         <div class="media-left">
                           <img
-                            width="32"
                             :src="props.option.metadataImageURI"
+                            width="32"
                           />
                         </div>
                         <div class="media-content">
@@ -681,7 +681,7 @@
                     <figure class="image">
                       <img
                         v-if="modalForm.nft"
-                        :src="modalForm.nft.image_original_url"
+                        :src="modalForm.nft.metadataImageURI"
                         alt="Image"
                       />
                     </figure>
@@ -690,7 +690,7 @@
                     <span
                       class="has-text-weight-bold is-size-6 is-block"
                       v-if="modalForm.nft"
-                      >{{ modalForm.nft.name }}</span
+                      >{{ modalForm.nft.metadataName }}</span
                     >
                     <Span class="is-size-7 is-block">Known Origin</Span>
                   </div>
@@ -895,21 +895,20 @@ export default {
       if (this.modalForm.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
           hashtag: this.modalForm.hashtag[0],
-          nftContract: this.modalForm.nft.asset_contract.address,
-          nftId: this.modalForm.nft.token_id,
+          nftContract: this.modalForm.nft.contractAddress,
+          nftId: this.modalForm.nft.tokenId,
         });
       } else {
         await this.$store.dispatch("tag", {
           hashtagId: this.modalForm.hashtag[0].id,
-          nftContract: this.modalForm.nft.asset_contract.address,
-          nftId: this.modalForm.nft.token_id,
+          nftContract: this.modalForm.nft.contractAddress,
+          nftId: this.modalForm.nft.tokenId,
         });
       }
 
       this.resetModalForm();
       this.isTagModalActive = false;
     },
-    // Bulma taginput widget.
     getFilteredTags: function (text) {
       this.hashtagInputTags = (this.hashtags || []).filter((option) => {
         return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
@@ -940,7 +939,7 @@ export default {
     },
     onNftSelected(nft) {
       this.modalForm.nft = nft;
-      this.modalForm.nftName = nft.name;
+      this.modalForm.nftName = nft.metadataName;
       this.isTagModalActive = true;
     },
     resetModalForm() {
@@ -954,7 +953,7 @@ export default {
       return this.hashtagValidationService.validateTag(hashtag);
     },
     tagAssetValidation(hashtag) {
-      const tagContentValid = this._validateTag(hashtag);
+      const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
         const hashtagValue =

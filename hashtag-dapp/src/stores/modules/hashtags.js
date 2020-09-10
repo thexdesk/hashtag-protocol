@@ -198,6 +198,8 @@ const actions = {
   },
 
   async tag({ state, dispatch }, payload) {
+    console.log(payload);
+
     if (!state.web3Objects.readyToTransact) {
       await dispatch("bootstrap");
     }

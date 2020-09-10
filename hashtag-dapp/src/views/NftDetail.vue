@@ -384,7 +384,7 @@ export default {
       return this.hashtagValidationService.validateTag(hashtag);
     },
     tagAssetValidation(hashtag) {
-      const tagContentValid = this._validateTag(hashtag);
+      const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
         const hashtagValue =
@@ -393,7 +393,9 @@ export default {
         const isNewHashtag =
           (this.hashtagInputTags || []).filter((option) => {
             return (
-              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
+              (option.name || "")
+                .toLowerCase()
+                .indexOf((hashtagValue || "").toLowerCase()) >= 0
             );
           }).length === 0;
 
