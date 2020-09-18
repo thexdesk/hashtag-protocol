@@ -97,9 +97,7 @@
       <div class="container">
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <h2 class="title is-spaced">
-              Tag content with Hashtag Tokens
-            </h2>
+            <h2 class="title is-spaced">Tag content with Hashtag Tokens</h2>
             <div class="content is-medium">
               <p>
                 Hashtag provides smart contracts for linking a Hashtag Token to
@@ -145,7 +143,7 @@
         </div>
       </div>
     </div>
-    <div class="section is-medium has-background-dark">
+    <div class="section is-medium has-background-dark subgraph">
       <div class="container">
         <div class="columns">
           <div class="column is-5">
@@ -161,9 +159,7 @@
                 Utilize our Hashtag Subgraph to rapidly query Protocol
                 transaction data and present in your own way.
               </p>
-              <p>
-                See our documentation site for the full set of data lenses.
-              </p>
+              <p>See our documentation site for the full set of data lenses.</p>
             </div>
           </div>
           <div class="column is-offset-1">
@@ -179,14 +175,11 @@
                     {{ queryReturn }}
                   </prism>
                 </b-tab-item>
-                <b-tab-item label="Display">
+                <b-tab-item label="Display" class="nftDisplay">
                   <b-table :data="tags || []" focusable>
                     <template slot-scope="props">
                       <b-table-column field="nftId" label="" width="75">
-                        <img
-                          :src="props.row.nftImage"
-                          style="max-width: 75px; max-height: 75px;"
-                        />
+                        <img :src="props.row.nftImage" />
                       </b-table-column>
                       <b-table-column field="nftName" label="Asset Name">
                         <nft-link
@@ -228,9 +221,7 @@
                 Hashtag Protocol seeks to incentivise all participants of the
                 system.
               </p>
-              <h4>
-                Application developer / content publisher
-              </h4>
+              <h4>Application developer / content publisher</h4>
               <ul>
                 <li>
                   Enable social & machine tagging of digital assets & artifacts
@@ -256,9 +247,7 @@
                 </li>
               </ul>
 
-              <h4>
-                Hashtag Token creator & owner
-              </h4>
+              <h4>Hashtag Token creator & owner</h4>
               <ul>
                 <li>
                   Users can create (“mint”) Hashtag tokens on any participating
@@ -299,18 +288,14 @@
           </div>
           <div class="column">
             <div class="content has-text-centered is-size-5">
-              <h4>
-                Token minting revenue
-              </h4>
+              <h4>Token minting revenue</h4>
               <span class="image">
                 <img
                   :src="require(`../assets/img/minting-revenue-sharing.svg`)"
                 />
               </span>
               <hr />
-              <h4>
-                Content tagging revenue
-              </h4>
+              <h4>Content tagging revenue</h4>
               <span class="image">
                 <img
                   :src="require(`../assets/img/tagging-revenue-sharing.svg`)"
@@ -603,6 +588,15 @@ code {
       height: 400px;
       overflow-y: scroll;
       margin: 0;
+    }
+  }
+}
+
+.subgraph {
+  .nftDisplay {
+    img {
+      max-width: 75px;
+      max-height: 75px;
     }
   }
 }
