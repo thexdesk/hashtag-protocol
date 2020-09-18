@@ -12,9 +12,7 @@
                 position="is-top-right"
                 class="has-text-left"
               >
-                <a slot="trigger" role="button">
-                  Michael Paler
-                </a>
+                <a slot="trigger" role="button">Michael Paler</a>
                 <b-dropdown-item aria-role="listitem" custom>
                   <b-button
                     tag="a"

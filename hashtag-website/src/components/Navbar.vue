@@ -14,14 +14,10 @@
       <b-navbar-item tag="router-link" :to="{ name: 'developers' }">
         Developers
       </b-navbar-item>
-      <b-navbar-item :href="this.docs">
-        Docs
-      </b-navbar-item>
+      <b-navbar-item :href="this.docs"> Docs </b-navbar-item>
       <b-navbar-item tag="div">
         <div class="buttons">
-          <a :href="this.app" class="button is-primary">
-            App
-          </a>
+          <a :href="this.app" class="button is-primary"> App </a>
         </div>
       </b-navbar-item>
     </template>
