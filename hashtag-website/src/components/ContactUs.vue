@@ -114,8 +114,26 @@ export default {
     choices: [],
   }),
   methods: {
-    submit() {
+    login() {
       console.log("Form submitted yay!");
+    },
+    submit() {
+      console.log("Form submitted hooryay!");
+      const options = {
+        url: "https://hook.integromat.com/6awmxwriipm4ed8uv2jkmiqanp9u6c2c",
+        method: "POST",
+        data: {
+          email: "user@example.com",
+          password: "pasw0rd",
+        },
+      };
+      this.$axios(options)
+        .then((res) => {
+          console.log("Login suceeded!" + res);
+        })
+        .catch((err) => {
+          console.error("Login failed." + err);
+        });
     },
     resetForm() {
       this.email = "";

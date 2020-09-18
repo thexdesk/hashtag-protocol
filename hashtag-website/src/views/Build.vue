@@ -9,20 +9,19 @@
       <div class="container">
         <div class="columns is-vcentered">
           <div class="column is-5">
-            <h1 class="is-size-1 title is-spaced">
-              Build with us.
-            </h1>
+            <h1 class="is-size-1 title is-spaced">Build with us.</h1>
             <div class="content is-size-5">
               <p>
                 Hashtag Protocol is an experimental, pre-product-market fit
-                project that needs your help! We have a working,
-                proof-of-concept demo, and a small team of developers who
-                continue to develop the project.
+                project that needs your help! We have a
+                <a href="https://app.hashtag-protocol.org" target="_blank"
+                  >proof-of-concept demo</a
+                >
+                and a small team who continue to develop the project.
               </p>
               <p>
-                Besides general inquiries, harsh critiques and glowing
-                complements, we would especially love to hear from you if you
-                are one of the following:
+                Besides questions, suggestions or critiques, we are especially
+                interested in hearing from the following:
               </p>
               <ul>
                 <li>
@@ -41,20 +40,20 @@
                   involved “early on”.
                 </li>
                 <li>
-                  Seed stage/pre-product-market fit venture capitalists who want
-                  to disrupt the vast social, informational and financial equity
-                  of hashtags stored in centralized social networks.
+                  Seed stage/pre-product-market fit VCs who want to disrupt the
+                  centralized social networks' strangle hold on the vast social,
+                  informational and financial equity of stored in hashtags.
                 </li>
               </ul>
               <p>
-                If you are interested in getting involved or learning more,
-                please contact us today.
+                To get in touch, please email
+                <a href="mailto:contact@hashtag-protocol.org"
+                  >contact@hashtag-protocol.org</a
+                >
               </p>
             </div>
           </div>
-          <div class="column is-offset-1 is-4">
-            <ContactUs />
-          </div>
+          <div class="column is-offset-1 is-4"></div>
         </div>
       </div>
     </div>
@@ -63,7 +62,6 @@
 </template>
 
 <script>
-import ContactUs from "../components/ContactUs";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
@@ -72,7 +70,6 @@ export default {
   components: {
     Footer,
     Navbar,
-    ContactUs,
   },
 };
 </script>
