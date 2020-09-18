@@ -7,7 +7,7 @@
     </section>
     <div class="section is-medium has-background-white">
       <div class="container">
-        <div class="columns">
+        <div class="columns is-vcentered">
           <div class="column">
             <h1 class="is-size-1 title is-spaced">
               Provide your users rich, decentralized content tagging stored to a
@@ -24,12 +24,23 @@
               </p>
             </div>
           </div>
-          <div class="column">
-            <span class="image">
-              <img
-                :src="require(`../assets/img/tagging-contracts-roadmap.png`)"
-              />
-            </span>
+          <div class="column is-5 is-offset-1">
+            <div class="content has-text-centered is-size-5 is-spaced box">
+              <strong>Demo:</strong>&nbsp;
+              <a href="https://app.hashtag-protocol.org">Hashtag dApp</a>
+              <hr />
+              <strong>Technical:</strong>&nbsp;
+              <a href="https://docs.hashtag-protocol.org">Docs</a>,
+              <a
+                href="docs/hashtag-protocol.pdf"
+                download="hashtag-protocol.pdf"
+                >Design notes</a
+              >,
+              <a href="/build">Github repo</a>
+              <hr />
+              <strong>Social:</strong>&nbsp; <a href="/build">Discord</a>,
+              <a href="https://hashtagprotocol.substack.com">Substack</a>
+            </div>
           </div>
         </div>
       </div>
@@ -37,7 +48,7 @@
     <div class="section is-medium has-background-dark">
       <div class="container">
         <div class="columns">
-          <div class="column is-one-third">
+          <div class="column is-4">
             <h2 class="title is-spaced has-text-white-ter">
               Create Hashtag Tokens
             </h2>
@@ -48,13 +59,13 @@
                 <a href="http://erc721.org/">Ethereum ERC-721</a> specification
                 for Hashtag Tokens. Tokens are created by executing the
                 <span class="is-family-code has-text-primary">mint()</span>
-                method or
+                or
                 <span class="is-family-code has-text-primary"
                   >mintAndTag()</span
                 >
-                in the ERC-721 smart contract on a participating publisher
-                application. At the present time, only whitelisted publisher
-                addresses may mint Hashtag Tokens.
+                methods in the ERC-721 smart contract on a participating
+                publisher application. At the present time, only whitelisted
+                publisher addresses may mint Hashtag Tokens.
               </p>
               <p>
                 Minting fees, paid for by the Ethereum address minting the
@@ -63,7 +74,7 @@
               </p>
             </div>
           </div>
-          <div class="column is-two-thirds">
+          <div class="column is-offset-1 is-7">
             <div class="is-size-6 create-tokens line-numbers">
               <b-tabs type="is-boxed" :animated="false">
                 <b-tab-item label="mint()">
@@ -84,22 +95,22 @@
     </div>
     <div class="section is-medium has-background-white">
       <div class="container">
-        <div class="columns">
-          <div class="column">
+        <div class="columns is-vcentered">
+          <div class="column is-5">
             <h2 class="title is-spaced">
               Tag content with Hashtag Tokens
             </h2>
             <div class="content is-medium">
               <p>
-                Hashtag provides smart contracts for linking a Hashtag token to
+                Hashtag provides smart contracts for linking a Hashtag Token to
                 any online digital artifact, effectively “tagging” that content
                 with a hashtag string. Tagging contract design allows for a
-                digital asset to be tagged with any number of hashtag tokens and
-                conversely, any single hashtag token to tag many digital assets.
+                digital asset to be tagged with any number of Hashtag Tokens and
+                conversely, any single Hashtag Token to tag many digital assets.
               </p>
               <p>
-                Tagging contracts require a micro-fee paid for by the user or
-                platform executing the tagging contract; the proceeds are shared
+                Tagging contracts collect a micro-fee paid for by the user or
+                platform executing the contract. Tagging proceeds are shared
                 among the Hashtag Token owner, the publisher facilitating the
                 tagging event, and the Protocol.
               </p>
@@ -111,7 +122,7 @@
               </p>
             </div>
           </div>
-          <div class="column">
+          <div class="column is-offset-1">
             <div class="content">
               <template>
                 <b-carousel
@@ -137,7 +148,7 @@
     <div class="section is-medium has-background-dark">
       <div class="container">
         <div class="columns">
-          <div class="column is-half">
+          <div class="column is-5">
             <h2 class="title is-spaced has-text-white-ter">
               Surface and display Hashtag data in new and meaningful ways.
             </h2>
@@ -150,9 +161,12 @@
                 Utilize our Hashtag Subgraph to rapidly query Protocol
                 transaction data and present in your own way.
               </p>
+              <p>
+                See our documentation site for the full set of data lenses.
+              </p>
             </div>
           </div>
-          <div class="column is-half">
+          <div class="column is-offset-1">
             <div class="is-size-6 create-tokens line-numbers">
               <b-tabs type="is-boxed" :animated="false">
                 <b-tab-item label="Query">
@@ -164,6 +178,36 @@
                   <prism language="javascript">
                     {{ queryReturn }}
                   </prism>
+                </b-tab-item>
+                <b-tab-item label="Display">
+                  <b-table :data="tags || []" focusable>
+                    <template slot-scope="props">
+                      <b-table-column field="nftId" label="" width="75">
+                        <img
+                          :src="props.row.nftImage"
+                          style="max-width: 75px; max-height: 75px;"
+                        />
+                      </b-table-column>
+                      <b-table-column field="nftName" label="Asset Name">
+                        <nft-link
+                          type="nft"
+                          :name="props.row.nftName"
+                          :contract="props.row.nftContract"
+                          :id="props.row.nftId"
+                        ></nft-link>
+                      </b-table-column>
+                      <b-table-column
+                        field="projectName"
+                        label="Project"
+                        :visible="$screen.widescreen"
+                      >
+                        {{ props.row.nftContractName }}
+                      </b-table-column>
+                      <b-table-column field="hashtagName" label="Hashtag">
+                        <hashtag :value="props.row.hashtagName"></hashtag>
+                      </b-table-column>
+                    </template>
+                  </b-table>
                 </b-tab-item>
               </b-tabs>
             </div>
@@ -181,7 +225,8 @@
             </h2>
             <div class="content is-size-5">
               <p>
-                Hashtag Protocol seeks to reward all participants of the system.
+                Hashtag Protocol seeks to incentivise all participants of the
+                system.
               </p>
               <h4>
                 Application developer / content publisher
@@ -276,51 +321,112 @@
         </div>
       </div>
     </div>
-    <Footer>
-      <span v-if="platform" class="has-text-grey-light">
-        Platform revenue
-        <eth-amount-sum
-          :value1="platform.mintFees"
-          :value2="platform.tagFees"
-        ></eth-amount-sum>
-      </span>
-    </Footer>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Footer from "../components/Footer";
+import Hashtag from "../components/Hashtag";
 import Navbar from "../components/Navbar";
+import NftLink from "../components/NftLink";
+import { SNAPSHOT } from "@/queries";
 
 export default {
   name: "Developers",
   components: {
     Footer,
+    Hashtag,
     Navbar,
+    NftLink,
   },
   data() {
     // prettier-ignore
     return {
-      query: `// Blah blah
+      query: `// Fetch recently tagged NFTs
 query {
-  hashtags(first: 1, orderBy: timestamp, orderDirection: desc) {
+  tags(first: 5, orderBy: timestamp, orderDirection: desc) {
     id
-    name
-    owner
-    publisher
+    hashtagId
+    hashtagName
+    nftContract
+    nftContractName
+    nftImage
+    nftName
+    nftId
+    tagger
     timestamp
+    publisher
   }
 }`,
-      queryReturn: `
+      queryReturn: `// json returned from graph query
 {
   "data": {
-    "hashtags": [
+    "tags": [
       {
-        "id": "10",
-        "name": "mountains",
-        "owner": "0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e",
+        "hashtagId": "5",
+        "hashtagName": "bob",
+        "id": "0x749819150d62630594d3b600699fdabb87c47c0997ace7e8da00c91f54e4ad59",
+        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "nftContractName": "KnownOriginDigitalAsset",
+        "nftId": "50401",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmUhQxQPi1XbzRzJ8T9PDCWZugsoG29ytEkq7bpWbuWcUC",
+        "nftName": "Bonsai code",
         "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "timestamp": "1599750144"
+      },
+      {
+        "hashtagId": "11",
+        "hashtagName": "jenkins",
+        "id": "0x4720dcac73ae6adcc0280206413f5665d362c9e908385b69fa223ac0bcd8e9f0",
+        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "nftContractName": "KnownOriginDigitalAsset",
+        "nftId": "41101",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmSas9z2iudgDFfZc5fJzpzMYEbv5hy6LyroYQCGLtT9GW",
+        "nftName": "Dreaming Big Color Dreams",
+        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "timestamp": "1599749949"
+      },
+      {
+        "hashtagId": "10",
+        "hashtagName": "mountains",
+        "id": "0x7a13da22d607297d7ef1cc05bce61a44ce7710591af0e5247129f83ae0af1d2c",
+        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "nftContractName": "KnownOriginDigitalAsset",
+        "nftId": "51201",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmY4XQ2qvrRwEZWr918BCjbW35Q7WJ7rsYZsDB1f8fhk7K",
+        "nftName": "webp",
+        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "tagger": "0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e",
         "timestamp": "1596246628"
+      },
+      {
+        "hashtagId": "9",
+        "hashtagName": "blue",
+        "id": "0x7e1c2541271d253f00beeaf2f8c73b67fdf3b4d21e4a8cb8a188ef3f6aae1d6c",
+        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "nftContractName": "KnownOriginDigitalAsset",
+        "nftId": "41101",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmSas9z2iudgDFfZc5fJzpzMYEbv5hy6LyroYQCGLtT9GW",
+        "nftName": "Dreaming Big Color Dreams",
+        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "timestamp": "1596124648"
+      },
+      {
+        "hashtagId": "8",
+        "hashtagName": "noeyes",
+        "id": "0x81eda4e8a6d7bf435e62fc32ad7607e20c09bebd1ab33926687c44d831d58698",
+        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "nftContractName": "KnownOriginDigitalAsset",
+        "nftId": "50401",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmUhQxQPi1XbzRzJ8T9PDCWZugsoG29ytEkq7bpWbuWcUC",
+        "nftName": "Bonsai code",
+        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "timestamp": "1596124528"
       }
     ]
   }
@@ -442,6 +548,12 @@ query {
       ],
     };
   },
+  apollo: {
+    tags: {
+      query: SNAPSHOT,
+      pollInterval: 1000, // ms
+    },
+  },
 };
 </script>
 
@@ -452,7 +564,8 @@ query {
 
 code {
   .token.number {
-    color: #fff;
+    color: $dark;
+    height: auto;
   }
 
   .number {
@@ -474,7 +587,7 @@ code {
 
     li:not(.is-active) {
       a {
-        color: #fff;
+        color: $white;
       }
 
       a:hover {

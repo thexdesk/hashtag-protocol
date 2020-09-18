@@ -29,44 +29,9 @@
 </template>
 
 <script>
+// this.app & this.docs base urls set in /mixins/global.js
 export default {
   name: "External",
-
-  data() {
-    return {
-      app: "https://app.hashtag-protocol.org",
-      docs: "https://docs.hashtag-protocol.org",
-    };
-  },
-  created() {
-    this.buildDevLinks();
-  },
-  methods: {
-    /**
-     * Build nav links for Platform.sh that adapt to environment.
-     *
-     * Sample platform development instance urls
-     * https://app.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site/ is served by application `2-hashtag-dapp`
-     * https://docs.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site/ is served by application `1-hashtag-docs`
-     * https://pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site/ is served by application `3-hashtag-website`
-     *
-     */
-    buildDevLinks() {
-      var baseUrl = new URL(window.location.origin);
-      var parts = baseUrl.hostname.split(".");
-
-      if (parts.includes("platformsh")) {
-        // We are on a Platform.sh development environment.
-        var docsUrl = new URL(window.location.origin);
-        docsUrl.hostname = "docs." + docsUrl.hostname;
-        this.docs = docsUrl;
-
-        var appUrl = new URL(window.location.origin);
-        appUrl.hostname = "app." + appUrl.hostname;
-        this.app = appUrl;
-      }
-    },
-  },
 };
 </script>
 

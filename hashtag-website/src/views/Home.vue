@@ -22,7 +22,7 @@
                   applications.
                 </p>
                 <p>
-                  Start building with Hashtag Protocol.
+                  <a class="button is-primary" href="/developers">Learn more</a>
                 </p>
               </div>
             </div>
