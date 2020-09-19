@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style lang="scss">
-.navbar.is-fixed-top {
+.navbar {
   padding: 0.75rem 0;
 }
 </style>

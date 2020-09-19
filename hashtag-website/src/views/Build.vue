@@ -74,8 +74,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.nav {
-  padding: 0.75rem 0;
-}
-</style>
+<style lang="scss"></style>

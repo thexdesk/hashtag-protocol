@@ -27,13 +27,10 @@
           <div class="column is-5 is-offset-1">
             <div class="content has-text-centered is-size-5 is-spaced box">
               <strong>Demo:</strong>&nbsp;
-              <a href="https://app.hashtag-protocol.org">Hashtag dApp</a>
+              <a :href="this.app">Hashtag dApp</a>
               <hr />
-              <strong>Technical:</strong>&nbsp;
-              <a href="https://docs.hashtag-protocol.org">Docs</a>,
-              <a
-                href="docs/hashtag-protocol.pdf"
-                download="hashtag-protocol.pdf"
+              <strong>Technical:</strong>&nbsp; <a :href="this.docs">Docs</a>,
+              <a :href="designNotes" download="hashtag-protocol.pdf"
                 >Design notes</a
               >,
               <a href="/build">Github repo</a>
@@ -543,10 +540,6 @@ query {
 </script>
 
 <style lang="scss">
-.nav {
-  padding: 0.75rem 0;
-}
-
 code {
   .token.number {
     color: $dark;
