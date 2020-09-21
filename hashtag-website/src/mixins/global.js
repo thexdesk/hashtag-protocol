@@ -3,9 +3,11 @@ import Vue from "vue";
 Vue.mixin({
   data: function () {
     return {
-      designNotes: require("@/assets/docs/hashtag-protocol.pdf"),
-      // App and Docs base urls. Values set here are overridden
-      // below via devBaseUrls() when on platform.sh dev environments.
+      designNotes: "/docs/hashtag-protocol.pdf",
+      // App and Docs base urls. Values set here are for
+      // production environment. Note values are overridden
+      // via devBaseUrls() when on platform.sh dev environments.
+      website: "https://hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
     };

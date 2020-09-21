@@ -1,7 +1,7 @@
 <template>
   <b-navbar>
     <template slot="brand">
-      <b-navbar-item tag="router-link" :to="{ path: '/' }">
+      <b-navbar-item :href="this.website">
         <img
           src="../assets/logo-white.svg"
           alt="Content tagging for the decentralized web"

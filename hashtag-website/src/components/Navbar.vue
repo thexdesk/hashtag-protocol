@@ -25,7 +25,6 @@
 </template>
 
 <script>
-// this.app & this.docs base urls set in /mixins/global.js
 export default {
   name: "External",
 };
