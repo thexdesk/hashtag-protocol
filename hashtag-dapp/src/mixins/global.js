@@ -10,10 +10,23 @@ Vue.mixin({
       website: "https://hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
+
+      // Section(s) is ued by dropdown menu in header component.
+      sections: [
+        "dashboard",
+        "hashtags",
+        "owners",
+        "publishers",
+        "taggers",
+        "nfts",
+      ],
+      // Active section.
+      section: "dashboard",
     };
   },
   created() {
-    this.devBaseUrls();
+    this.setDevBaseUrls();
+    this.setSection();
   },
   methods: {
     /**
@@ -30,6 +43,33 @@ Vue.mixin({
     },
 
     /**
+     * Sets a path and section global variable for
+     * use by the global nav dropdown menu.
+     */
+    setSection() {
+      var baseUrl = new URL(window.location);
+      // Set section set based on the detail
+      // page. For example, if user is on
+      // /owner/id we want to set the section as "owners".
+      var path_parts = baseUrl.pathname.split("/");
+      if (path_parts[1] === "") {
+        this.section = "dashboard";
+      } else {
+        // Get the first part of the path.
+        var path = path_parts[1];
+        // See if the path is in one of the sections.
+        // eg. "hashtag" or "hashtags" and set the global
+        // section accordingly.
+        for (var i = 0; i < this.sections.length; i++) {
+          if (this.sections[i].includes(path)) {
+            this.section = this.sections[i];
+            break;
+          }
+        }
+      }
+    },
+
+    /**
      * Sets BaseUrls for Platform.sh that adapt to environment.
      *
      * Sample platform development instance urls
@@ -38,10 +78,9 @@ Vue.mixin({
      * Hashtag Website https://pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
      *
      */
-    devBaseUrls() {
-      var baseUrl = new URL(window.location.origin);
+    setDevBaseUrls() {
+      var baseUrl = new URL(window.location);
       var parts = baseUrl.hostname.split(".");
-
       if (parts.includes("platformsh") && parts.includes("app")) {
         // We are on a Platform.sh development environment under
         // the app subdomain.

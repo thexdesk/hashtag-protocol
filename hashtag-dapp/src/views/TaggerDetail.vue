@@ -100,7 +100,7 @@
                           <tr>
                             <!---->
                             <!---->
-                            <th class="" style="width: 75px;">
+                            <th>
                               <div class="th-wrap"><!----></div>
                             </th>
                             <th class="">
@@ -139,13 +139,31 @@
                         </thead>
                         <tbody>
                           <tr v-for="tag in tagsByTagger" v-bind:key="tag.id">
-                            <td data-label="" class="">
-                              <figure class="image">
-                                <img :src="tag.nftImage" :alt="tag.nftName" />
-                              </figure>
+                            <td class="has-text-centered">
+                              <router-link
+                                :to="{
+                                  name: 'nft-detail',
+                                  params: {
+                                    type: 'nft',
+                                    contract: tag.nftContract,
+                                    id: tag.nftId,
+                                  },
+                                }"
+                              >
+                                <img
+                                  :src="tag.nftImage"
+                                  :alt="tag.nftName"
+                                  class="nft-thumb"
+                                />
+                              </router-link>
                             </td>
                             <td data-label="Asset Name" class="">
-                              {{ tag.nftName }}
+                              <nft-link
+                                type="nft"
+                                :name="tag.nftName"
+                                :contract="tag.nftContract"
+                                :id="tag.nftId"
+                              ></nft-link>
                             </td>
                             <td data-label="Asset Name" class="">
                               {{ tag.nftContractName }}
@@ -314,6 +332,7 @@ import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
+import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import {
   TAGGER_BY_ACC,
@@ -334,6 +353,7 @@ export default {
     Header,
     HelpModal,
     MarkdownDoc,
+    NftLink,
     Pagination,
     TimestampFrom,
   },

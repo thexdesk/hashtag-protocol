@@ -1,5 +1,5 @@
 <template>
-  <b-navbar>
+  <b-navbar :transparent="true">
     <template slot="brand">
       <b-navbar-item :href="this.website">
         <img
@@ -10,17 +10,34 @@
       </b-navbar-item>
     </template>
     <template slot="end">
-      <b-navbar-item tag="div">
-        <div>
-          <b-field>
-            <b-select placeholder="ETH" expanded>
-              <option value="eth">ETH</option>
-              <option value="usd">USD</option>
-              <option value="eur">EUR</option>
-              <option value="gbp">GBP</option>
-            </b-select>
-          </b-field>
-        </div>
+      <b-navbar-item>
+        <b-dropdown
+          :triggers="['hover']"
+          v-model="currentMenu"
+          aria-role="menu"
+          :hoverable="true"
+        >
+          <button
+            class="button is-primary"
+            type="button"
+            slot="trigger"
+            role="button"
+          >
+            <template>
+              <span>{{ currentMenu }}</span>
+            </template>
+          </button>
+
+          <b-dropdown-item
+            v-for="(value, key) in menusArr"
+            :key="key"
+            :value="value.text"
+            aria-role="menuitem"
+            :href="value.path"
+          >
+            {{ value.text }}
+          </b-dropdown-item>
+        </b-dropdown>
       </b-navbar-item>
       <b-navbar-item tag="div">
         <div class="buttons">
@@ -45,6 +62,40 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Header",
+  data() {
+    return {
+      currentMenu: "Dashboard",
+      menusArr: {
+        dashboard: {
+          text: "Dashboard",
+          path: "/",
+        },
+        hashtags: {
+          text: "Hashtags",
+          path: "/hashtags",
+        },
+        publishers: {
+          text: "Publishers",
+          path: "/publishers",
+        },
+        owners: {
+          text: "Owners",
+          path: "/owners",
+        },
+        taggers: {
+          text: "Taggers",
+          path: "/taggers",
+        },
+        nfts: {
+          text: "Tagged assets",
+          path: "/nfts",
+        },
+      },
+    };
+  },
+  created() {
+    this.setCurrentMenu();
+  },
   computed: mapGetters(["account"]),
   methods: {
     connect() {
@@ -52,6 +103,9 @@ export default {
     },
     changeWallet() {
       this.$store.dispatch("changeWallet");
+    },
+    setCurrentMenu() {
+      this.currentMenu = this.$data.menusArr[this.section].text;
     },
   },
 };

@@ -51,6 +51,11 @@ $family-sans-serif: "Roboto", sans-serif;
 $body-family: $family-sans-serif;
 $body-background-color: $grey-lighter;
 $link: $primary;
+$navbar-item-color: $link;
+$navbar-item-active-color: $white;
+$navbar-burger-color: $link;
+$navbar-item-hover-background-color: transparent;
+$dropdown-item-active-color: $white;
 
 //$title-color: $black-ter;
 //$subtitle-color: $black-ter;
@@ -59,21 +64,21 @@ $divider-background-color: $grey;
 $footer-padding: 3rem 1.5rem 6rem;
 
 // Removes hamburger in global nav.
-$navbar-breakpoint: 414px;
+//$navbar-breakpoint: 414px;
 
 $section-padding: 0.25rem 0.8rem;
 
-@mixin my-touch {
-  @media screen and (max-width: $navbar-breakpoint - 1px) {
-    @content;
-  }
-}
+//@mixin my-touch {
+//  @media screen and (max-width: $navbar-breakpoint - 1px) {
+//    @content;
+//  }
+//}
 
-@mixin my-desktop {
-  @media screen and (min-width: $navbar-breakpoint) {
-    @content;
-  }
-}
+//@mixin my-desktop {
+//  @media screen and (min-width: $navbar-breakpoint) {
+//    @content;
+//  }
+//}
 
 .container {
   @include until($desktop) {
@@ -98,6 +103,10 @@ $section-padding: 0.25rem 0.8rem;
   }
 }
 
+.navbar-burger:hover {
+  color: $white;
+}
+
 section.hero {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -119,6 +128,19 @@ section.main {
 
 .pb-1 {
   padding-bottom: 1rem;
+}
+
+img.nft-thumb {
+  max-width: 95px;
+  max-height: 95px;
+}
+
+.b-table {
+  .table {
+    td {
+      vertical-align: middle;
+    }
+  }
 }
 
 @import "@creativebulma/bulma-divider";

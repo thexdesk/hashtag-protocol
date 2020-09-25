@@ -30,51 +30,39 @@
               ></help-modal>
               <h2 class="title is-4 is-spaced"></h2>
               <div class="b-table">
-                <!---->
-                <!---->
                 <div class="table-wrapper has-mobile-cards">
                   <table tabindex="0" class="table is-hoverable">
                     <thead>
                       <tr>
-                        <!---->
-                        <!---->
-                        <th class="" style="width: 75px;">
-                          <div class="th-wrap"><!----></div>
+                        <th class="">
+                          <div class="th-wrap"></div>
                         </th>
                         <th class="">
                           <div class="th-wrap">
                             Asset Name
-                            <!---->
                           </div>
                         </th>
                         <th class="">
                           <div class="th-wrap">
                             Project
-                            <!---->
                           </div>
                         </th>
                         <th class="">
                           <div class="th-wrap">
                             Hashtag
-                            <!---->
                           </div>
                         </th>
                         <th class="">
                           <div class="th-wrap">
                             Tagged
-                            <!---->
                           </div>
                         </th>
                         <th class="">
                           <div class="th-wrap">
                             Publisher
-                            <!---->
                           </div>
                         </th>
-                        <!---->
                       </tr>
-                      <!---->
-                      <!---->
                     </thead>
                     <tbody v-if="pagedTags">
                       <tr
@@ -83,13 +71,23 @@
                         v-for="tag in pagedTags"
                         v-bind:key="tag.id"
                       >
-                        <!---->
-                        <!---->
-                        <td data-label="" class="">
-                          <img
-                            :src="tag.nftImage"
-                            style="max-width: 75px; max-height: 75px;"
-                          />
+                        <td class="has-text-centered">
+                          <router-link
+                            :to="{
+                              name: 'nft-detail',
+                              params: {
+                                type: 'nft',
+                                contract: tag.nftContract,
+                                id: tag.nftId,
+                              },
+                            }"
+                          >
+                            <img
+                              :src="tag.nftImage"
+                              :alt="tag.nftName"
+                              class="nft-thumb"
+                            />
+                          </router-link>
                         </td>
                         <td data-label="Asset Name" class="">
                           <nft-link
@@ -116,15 +114,10 @@
                             route="publisher-detail"
                           ></eth-account>
                         </td>
-                        <!---->
                       </tr>
-                      <!---->
-                      <!---->
                     </tbody>
-                    <!---->
                   </table>
                 </div>
-                <!---->
               </div>
               <Pagination
                 :entity-count="tagsCount"
