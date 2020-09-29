@@ -92,7 +92,9 @@
                           <td class="has-text-weight-bold">Expires</td>
                           <td>
                             <timestamp-formatted
-                              :value="(parseInt(hashtagsByName[0].timestamp) + 63113904)"
+                              :value="
+                                parseInt(hashtagsByName[0].timestamp) + 63113904
+                              "
                             ></timestamp-formatted>
                           </td>
                         </tr>

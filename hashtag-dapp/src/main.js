@@ -23,8 +23,7 @@ const hashtagClient = new ApolloClient({
 });
 
 const nftsClient = new ApolloClient({
-  uri:
-    "https://api.thegraph.com/subgraphs/id/QmRt9WNKvSDA4ZmE3mC49niX3biyyNVAZnFf3vYuhtCY1H",
+  uri: "https://api.thegraph.com/subgraphs/name/blockrockettech/nft-tokens",
 });
 
 const apolloProvider = new VueApollo({

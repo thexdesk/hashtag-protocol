@@ -72,9 +72,7 @@
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
-                  <p class="title is-5">
-                    Tag this asset
-                  </p>
+                  <p class="title is-5">Tag this asset</p>
                   <form>
                     <div class="field">
                       <div class="control">
@@ -290,9 +288,7 @@
         </div>
       </b-modal>
     </section>
-    <section v-else>
-      Loading...
-    </section>
+    <section v-else>Loading...</section>
     <Footer></Footer>
   </div>
 </template>
