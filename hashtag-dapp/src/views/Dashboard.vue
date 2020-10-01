@@ -184,11 +184,23 @@
                       </div>
                     </template>
                     <template slot-scope="props">
-                      <b-table-column field="nftId" label="" width="75">
-                        <img
-                          :src="props.row.nftImage"
-                          style="max-width: 75px; max-height: 75px;"
-                        />
+                      <b-table-column field="nftId" centered>
+                        <router-link
+                          :to="{
+                            name: 'nft-detail',
+                            params: {
+                              type: 'nft',
+                              contract: props.row.nftContract,
+                              id: props.row.nftId,
+                            },
+                          }"
+                        >
+                          <img
+                            :src="props.row.nftImage"
+                            :alt="props.row.nftName"
+                            class="nft-thumb"
+                          />
+                        </router-link>
                       </b-table-column>
                       <b-table-column field="nftName" label="Asset Name">
                         <nft-link

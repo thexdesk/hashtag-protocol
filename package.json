@@ -11,5 +11,6 @@
     "stylelint-config-standard": "^20.0.0",
     "stylelint-processor-html": "^1.0.0",
     "stylelint-scss": "^3.18.0"
-  }
+  },
+  "dependencies": {}
 }

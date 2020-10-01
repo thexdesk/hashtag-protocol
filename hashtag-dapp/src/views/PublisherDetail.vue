@@ -263,10 +263,23 @@
                             v-for="tag in tagsByPublisher"
                             v-bind:key="tag.id"
                           >
-                            <td data-label="" class="">
-                              <figure class="image">
-                                <img :src="tag.nftImage" :alt="tag.nftName" />
-                              </figure>
+                            <td class="has-text-centered">
+                              <router-link
+                                :to="{
+                                  name: 'nft-detail',
+                                  params: {
+                                    type: 'nft',
+                                    contract: tag.nftContract,
+                                    id: tag.nftId,
+                                  },
+                                }"
+                              >
+                                <img
+                                  :src="tag.nftImage"
+                                  :alt="tag.nftName"
+                                  class="nft-thumb"
+                                />
+                              </router-link>
                             </td>
                             <td data-label="Asset Name" class="">
                               <nft-link
