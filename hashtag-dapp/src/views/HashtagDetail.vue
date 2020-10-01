@@ -92,7 +92,9 @@
                           <td class="has-text-weight-bold">Expires</td>
                           <td>
                             <timestamp-formatted
-                              :value="(parseInt(hashtagsByName[0].timestamp) + 63113904)"
+                              :value="
+                                parseInt(hashtagsByName[0].timestamp) + 63113904
+                              "
                             ></timestamp-formatted>
                           </td>
                         </tr>
@@ -175,30 +177,20 @@
                             <th>
                               <div class="th-wrap"></div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Asset Name
-                              </div>
+                            <th>
+                              <div class="th-wrap">Asset Name</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Project
-                              </div>
+                            <th>
+                              <div class="th-wrap">Project</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagged
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagged</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagger
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagger</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Publisher
-                              </div>
+                            <th>
+                              <div class="th-wrap">Publisher</div>
                             </th>
                           </tr>
                         </thead>

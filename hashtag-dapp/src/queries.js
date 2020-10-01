@@ -402,7 +402,7 @@ query pagedTaggers($first: Int!, $skip: Int!) {
 }
 `);
 
-export const FIRST_THOUSAND_HASHTAGS = gql`
+export const FIRST_THOUSAND_HASHTAGS = gql(`
   query {
     hashtags(first: 1000, orderBy: timestamp, orderDirection: desc) {
       id
@@ -414,4 +414,18 @@ export const FIRST_THOUSAND_HASHTAGS = gql`
       tagCount
     }
   }
-`;
+`);
+
+export const NFTS_ASSETS_NAME_CONTAINS = gql(`
+  query nameContains($first: Int!, $name: String!) {
+    nameContains: tokens(first: $first, where: {metadataName_contains: $name}) {
+      id
+      contractAddress
+      contractName
+      contractSymbol
+      tokenId
+      metadataName
+      metadataImageURI
+  }
+}
+`);

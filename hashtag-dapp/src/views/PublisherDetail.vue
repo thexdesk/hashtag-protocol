@@ -72,9 +72,7 @@
                   @popModalFromChild="popModal"
                   class="is-pulled-right"
                 ></help-modal>
-                <h2 class="title is-4">
-                  Market summary for KnownOrigin
-                </h2>
+                <h2 class="title is-4">Market summary for KnownOrigin</h2>
                 <div class="b-table" v-if="publisherByAcc">
                   <div class="table-wrapper">
                     <table class="table">
@@ -223,7 +221,7 @@
                           <tr>
                             <!---->
                             <!---->
-                            <th class="" style="width: 75px;">
+                            <th>
                               <div class="th-wrap"><!----></div>
                             </th>
                             <th class="">

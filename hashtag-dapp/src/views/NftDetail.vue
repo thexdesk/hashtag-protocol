@@ -72,9 +72,7 @@
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
-                  <p class="title is-5">
-                    Tag this asset
-                  </p>
+                  <p class="title is-5">Tag this asset</p>
                   <form>
                     <div class="field">
                       <div class="control">
@@ -290,9 +288,7 @@
         </div>
       </b-modal>
     </section>
-    <section v-else>
-      Loading...
-    </section>
+    <section v-else>Loading...</section>
     <Footer></Footer>
   </div>
 </template>
@@ -384,7 +380,7 @@ export default {
       return this.hashtagValidationService.validateTag(hashtag);
     },
     tagAssetValidation(hashtag) {
-      const tagContentValid = this._validateTag(hashtag);
+      const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
         const hashtagValue =
@@ -393,7 +389,9 @@ export default {
         const isNewHashtag =
           (this.hashtagInputTags || []).filter((option) => {
             return (
-              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
+              (option.name || "")
+                .toLowerCase()
+                .indexOf((hashtagValue || "").toLowerCase()) >= 0
             );
           }).length === 0;
 

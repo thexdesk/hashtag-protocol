@@ -121,25 +121,17 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th class="">
-                              <div class="th-wrap">
-                                Hashtag
-                              </div>
+                            <th>
+                              <div class="th-wrap">Hashtag</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Created
-                              </div>
+                            <th>
+                              <div class="th-wrap">Created</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Creator
-                              </div>
+                            <th>
+                              <div class="th-wrap">Creator</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Publisher
-                              </div>
+                            <th>
+                              <div class="th-wrap">Publisher</div>
                             </th>
                           </tr>
                         </thead>
@@ -190,30 +182,20 @@
                             <th>
                               <div class="th-wrap"></div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Asset Name
-                              </div>
+                            <th>
+                              <div class="th-wrap">Asset Name</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Project
-                              </div>
+                            <th>
+                              <div class="th-wrap">Project</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Hashtag
-                              </div>
+                            <th>
+                              <div class="th-wrap">Hashtag</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagged
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagged</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagger
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagger</div>
                             </th>
                           </tr>
                         </thead>

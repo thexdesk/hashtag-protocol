@@ -30,11 +30,11 @@
                         <template slot-scope="props">
                           <b-taglist attached>
                             <b-tag type="is-light"
-                              >#{{ props.option.name }}</b-tag
-                            >
-                            <b-tag type="is-info">{{
-                              props.option.tagCount
-                            }}</b-tag>
+                              >#{{ props.option.name }}
+                            </b-tag>
+                            <b-tag type="is-info"
+                              >{{ props.option.tagCount }}
+                            </b-tag>
                           </b-taglist>
                         </template>
                         <template slot="empty">
@@ -47,8 +47,8 @@
                         type="is-primary"
                         @click="mintHashtag()"
                         :disabled="!isNewTag()"
-                        >Mint it</b-button
-                      >
+                        >Mint it
+                      </b-button>
                     </div>
                   </section>
                 </template>
@@ -65,23 +65,25 @@
                     placeholder="Select NFT"
                     icon="pound"
                     field="name"
+                    :loading="isFetching"
                     @select="onNftSelected"
-                    :data="getFilteredNFTs"
+                    @typing="getAsyncData"
+                    :data="nameContains"
                   >
                     <template slot-scope="props">
                       <div class="media">
                         <div class="media-left">
                           <img
+                            :src="props.option.metadataImageURI"
                             width="32"
-                            :src="props.option.image_preview_url"
                           />
                         </div>
                         <div class="media-content">
-                          {{ props.option.name }}
+                          {{ props.option.metadataName }}
                           <br />
                           <small
-                            >{{ props.option.asset_contract.name }}
-                            <b>#{{ props.option.token_id }}</b>
+                            >{{ props.option.contractName }}
+                            <b>#{{ props.option.tokenId }}</b>
                           </small>
                         </div>
                       </div>
@@ -108,13 +110,13 @@
                   ></help-modal>
                   <h2 class="title is-5">Newest hashtags</h2>
                   <b-table
-                    :data="(hashtags ? hashtags.slice(0, 10) : [])"
+                    :data="hashtags ? hashtags.slice(0, 10) : []"
                     focusable
                   >
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags</router-link
+                          >Browse hashtags </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -166,14 +168,12 @@
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
-                  <h2 class="title is-5">
-                    Recently tagged content
-                  </h2>
+                  <h2 class="title is-5">Recently tagged content</h2>
                   <b-table :data="tags || []" focusable>
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'nfts' }"
-                          >Browse tagged assets</router-link
+                          >Browse tagged assets </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -242,7 +242,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'publishers' }"
-                          >Browse publishers</router-link
+                          >Browse publishers </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -297,7 +297,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'owners' }"
-                          >Browse owners</router-link
+                          >Browse owners </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -353,7 +353,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags</router-link
+                          >Browse hashtags </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -392,7 +392,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'taggers' }"
-                          >Browse taggers</router-link
+                          >Browse taggers </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -691,7 +691,7 @@
                     <figure class="image">
                       <img
                         v-if="modalForm.nft"
-                        :src="modalForm.nft.image_original_url"
+                        :src="modalForm.nft.metadataImageURI"
                         alt="Image"
                       />
                     </figure>
@@ -700,14 +700,14 @@
                     <span
                       class="has-text-weight-bold is-size-6 is-block"
                       v-if="modalForm.nft"
-                      >{{ modalForm.nft.name }}</span
+                      >{{ modalForm.nft.metadataName }}</span
                     >
                     <Span class="is-size-7 is-block">Known Origin</Span>
                   </div>
                 </div>
               </div>
               <div class="tile">
-                <section class="section" style="width: 100%;">
+                <section class="section">
                   <div class="container">
                     <div class="content">
                       <span class="has-text-weight-bold is-size-4 is-block"
@@ -737,11 +737,11 @@
                             <template slot-scope="props">
                               <b-taglist attached>
                                 <b-tag type="is-light"
-                                  >#{{ props.option.name }}</b-tag
-                                >
-                                <b-tag type="is-info">{{
-                                  props.option.tagCount
-                                }}</b-tag>
+                                  >#{{ props.option.name }}
+                                </b-tag>
+                                <b-tag type="is-info"
+                                  >{{ props.option.tagCount }}
+                                </b-tag>
                               </b-taglist>
                             </template>
                             <template slot="empty">
@@ -756,8 +756,8 @@
                             type="is-primary"
                             @click="tagNft()"
                             :disabled="!isTaggable"
-                            >Tag asset</b-button
-                          >
+                            >Tag asset
+                          </b-button>
                         </div>
                       </div>
                     </form>
@@ -791,10 +791,15 @@ import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
-import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+import {
+  SNAPSHOT,
+  FIRST_THOUSAND_HASHTAGS,
+  NFTS_ASSETS_NAME_CONTAINS,
+} from "@/queries";
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
 import HashtagValidationService from "@/services/HashtagValidationService";
+import debounce from "lodash/debounce";
 
 export default {
   name: "Hashtags",
@@ -828,6 +833,8 @@ export default {
       },
       hashtagInput: null,
       hashtagInputTags: [],
+      nameContains: [],
+      isFetching: false,
       tagForm: {
         hashtag: null,
         nft: null,
@@ -837,19 +844,6 @@ export default {
   },
   computed: {
     ...mapGetters(["supportedNfts", "nftAssetCache"]),
-    getFilteredNFTs() {
-      if (!this.tagForm.nftName || !this.nftAssetCache) return [];
-
-      return this.nftAssetCache.assets.filter((option) => {
-        if (!option.name) return false;
-
-        return (
-          option.name
-            .toLowerCase()
-            .indexOf(this.tagForm.nftName.toLowerCase()) === 0
-        );
-      });
-    },
     isTaggable() {
       return (
         this.modalForm.nftName &&
@@ -890,25 +884,41 @@ export default {
     },
   },
   methods: {
+    getAsyncData: debounce(async function (name) {
+      if (!name.length) {
+        this.nameContains = [];
+        return;
+      }
+
+      const { data } = await this.$apollo.query({
+        query: NFTS_ASSETS_NAME_CONTAINS,
+        client: "nftsClient",
+        variables: {
+          first: 100,
+          name: name,
+        },
+      });
+
+      this.nameContains = data.nameContains;
+    }, 300),
     async tagNft() {
       if (this.modalForm.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
           hashtag: this.modalForm.hashtag[0],
-          nftContract: this.modalForm.nft.asset_contract.address,
-          nftId: this.modalForm.nft.token_id,
+          nftContract: this.modalForm.nft.contractAddress,
+          nftId: this.modalForm.nft.tokenId,
         });
       } else {
         await this.$store.dispatch("tag", {
           hashtagId: this.modalForm.hashtag[0].id,
-          nftContract: this.modalForm.nft.asset_contract.address,
-          nftId: this.modalForm.nft.token_id,
+          nftContract: this.modalForm.nft.contractAddress,
+          nftId: this.modalForm.nft.tokenId,
         });
       }
 
       this.resetModalForm();
       this.isTagModalActive = false;
     },
-    // Bulma taginput widget.
     getFilteredTags: function (text) {
       this.hashtagInputTags = (this.hashtags || []).filter((option) => {
         return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
@@ -939,7 +949,7 @@ export default {
     },
     onNftSelected(nft) {
       this.modalForm.nft = nft;
-      this.modalForm.nftName = nft.name;
+      this.modalForm.nftName = nft.metadataName;
       this.isTagModalActive = true;
     },
     resetModalForm() {
@@ -953,7 +963,7 @@ export default {
       return this.hashtagValidationService.validateTag(hashtag);
     },
     tagAssetValidation(hashtag) {
-      const tagContentValid = this._validateTag(hashtag);
+      const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
         const hashtagValue =
