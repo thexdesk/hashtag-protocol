@@ -6,7 +6,7 @@
       </div>
     </section>
     <section class="main">
-      <div class="section is-medium has-background-white hero">
+      <div class="section has-background-white hero">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column">
@@ -58,6 +58,7 @@ export default {
 <style lang="scss">
 .main {
   .hero {
+    padding-top: 4rem;
     padding-bottom: 0;
   }
 }

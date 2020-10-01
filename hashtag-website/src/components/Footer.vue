@@ -26,16 +26,6 @@
                 <b-dropdown-item aria-role="listitem" custom>
                   <b-button
                     tag="a"
-                    icon-left="phone"
-                    href="tel:+14159021851"
-                    target="_blank"
-                  >
-                    +1 (415) 902-1851
-                  </b-button>
-                </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem" custom>
-                  <b-button
-                    tag="a"
                     icon-left="linkedin"
                     href="https://www.linkedin.com/in/michael-paler"
                     target="_blank"
