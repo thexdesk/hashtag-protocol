@@ -32,40 +32,29 @@
                   <table tabindex="0" class="table is-hoverable">
                     <thead>
                       <tr>
-                        <th class="">
+                        <th>
                           <div class="th-wrap"></div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Asset Name
-                          </div>
+                        <th>
+                          <div class="th-wrap">Asset Name</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Project
-                          </div>
+                        <th>
+                          <div class="th-wrap">Project</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Hashtag
-                          </div>
+                        <th>
+                          <div class="th-wrap">Hashtag</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Tagged
-                          </div>
+                        <th>
+                          <div class="th-wrap">Tagged</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Publisher
-                          </div>
+                        <th>
+                          <div class="th-wrap">Publisher</div>
                         </th>
                       </tr>
                     </thead>
                     <tbody v-if="pagedTags">
                       <tr
                         draggable="false"
-                        class=""
                         v-for="tag in pagedTags"
                         v-bind:key="tag.id"
                       >
@@ -87,7 +76,7 @@
                             />
                           </router-link>
                         </td>
-                        <td data-label="Asset Name" class="">
+                        <td data-label="Asset Name">
                           <nft-link
                             type="nft"
                             :name="tag.nftName"
@@ -95,10 +84,10 @@
                             :id="tag.nftId"
                           ></nft-link>
                         </td>
-                        <td data-label="Project" class="">
+                        <td data-label="Project">
                           {{ tag.nftContractName }}
                         </td>
-                        <td data-label="Hashtag" class="">
+                        <td data-label="Hashtag">
                           <hashtag :value="tag.hashtagName"></hashtag>
                         </td>
                         <td>

@@ -707,7 +707,7 @@
                 </div>
               </div>
               <div class="tile">
-                <section class="section" style="width: 100%;">
+                <section class="section">
                   <div class="container">
                     <div class="content">
                       <span class="has-text-weight-bold is-size-4 is-block"

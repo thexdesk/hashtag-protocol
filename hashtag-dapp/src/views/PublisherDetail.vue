@@ -221,7 +221,7 @@
                           <tr>
                             <!---->
                             <!---->
-                            <th class="" style="width: 75px;">
+                            <th>
                               <div class="th-wrap"><!----></div>
                             </th>
                             <th class="">

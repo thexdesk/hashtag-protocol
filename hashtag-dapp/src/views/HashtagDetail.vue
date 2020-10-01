@@ -177,30 +177,20 @@
                             <th>
                               <div class="th-wrap"></div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Asset Name
-                              </div>
+                            <th>
+                              <div class="th-wrap">Asset Name</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Project
-                              </div>
+                            <th>
+                              <div class="th-wrap">Project</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagged
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagged</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagger
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagger</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Publisher
-                              </div>
+                            <th>
+                              <div class="th-wrap">Publisher</div>
                             </th>
                           </tr>
                         </thead>
