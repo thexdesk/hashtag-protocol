@@ -117,41 +117,31 @@
               <b-tabs v-model="activeTab" :animated="false">
                 <b-tab-item label="Hashtags">
                   <div class="b-table">
-                    <!---->
-                    <!---->
                     <div class="table-wrapper has-mobile-cards">
                       <table class="table">
                         <thead>
                           <tr>
-                            <!---->
-                            <!---->
                             <th class="">
                               <div class="th-wrap">
                                 Hashtag
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Created
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Creator
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Publisher
-                                <!---->
                               </div>
                             </th>
                           </tr>
-                          <!---->
-                          <!---->
                         </thead>
                         <tbody>
                           <tr
@@ -160,8 +150,6 @@
                             v-for="hashtag in hashtagsByOwner"
                             v-bind:key="hashtag.id"
                           >
-                            <!---->
-                            <!---->
                             <td data-label="Hashtag" class="">
                               <hashtag :value="hashtag.name"></hashtag>
                             </td>
@@ -184,7 +172,6 @@
                             </td>
                           </tr>
                         </tbody>
-                        <!---->
                       </table>
                       <Pagination
                         :entity-count="hashtagsTab.hashtagsCount"
@@ -192,62 +179,63 @@
                         @tabSelected="hashtagsTabSelected"
                       />
                     </div>
-                    <!---->
                   </div>
                 </b-tab-item>
                 <b-tab-item label="Tagged content">
                   <div class="b-table">
-                    <!---->
-                    <!---->
                     <div class="table-wrapper has-mobile-cards">
                       <table class="table">
                         <thead>
                           <tr>
-                            <!---->
-                            <!---->
-                            <th class="" style="width: 75px;">
-                              <div class="th-wrap"><!----></div>
+                            <th>
+                              <div class="th-wrap"></div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Asset Name
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Project
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Hashtag
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Tagged
-                                <!---->
                               </div>
                             </th>
                             <th class="">
                               <div class="th-wrap">
                                 Tagger
-                                <!---->
                               </div>
                             </th>
                           </tr>
-                          <!---->
-                          <!---->
                         </thead>
                         <tbody>
                           <tr v-for="tag in tagsByTagger" v-bind:key="tag.id">
-                            <td data-label="" class="">
-                              <figure class="image">
-                                <img :src="tag.nftImage" :alt="tag.nftName" />
-                              </figure>
+                            <td class="has-text-centered">
+                              <router-link
+                                :to="{
+                                  name: 'nft-detail',
+                                  params: {
+                                    type: 'nft',
+                                    contract: tag.nftContract,
+                                    id: tag.nftId,
+                                  },
+                                }"
+                              >
+                                <img
+                                  :src="tag.nftImage"
+                                  :alt="tag.nftName"
+                                  class="nft-thumb"
+                                />
+                              </router-link>
                             </td>
                             <td data-label="Asset Name" class="">
                               <nft-link
@@ -276,7 +264,6 @@
                             </td>
                           </tr>
                         </tbody>
-                        <!---->
                       </table>
                       <Pagination
                         :entity-count="taggedContentTab.taggedCount"
@@ -284,7 +271,6 @@
                         @tabSelected="taggedContentTabSelected"
                       />
                     </div>
-                    <!---->
                   </div>
                 </b-tab-item>
               </b-tabs>

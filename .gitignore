@@ -1,10 +1,6 @@
 .DS_Store
 node_modules
-/dist
-hashtag-docs/docs/.vuepress/dist/*
-hashtag-docs/docs/tmp
-hashtag-docs/docs/dist/*
-hashtag-dapp/dist
+.grenrc.yaml
 
 # local env files
 .env.local
@@ -29,12 +25,15 @@ yarn-error.log*
 # Ignore package-lock
 package-lock.json
 
-# Platform build directories
-build_platform
-hashtag-dapp/build_platform
-.tmp_platformsh
+# Common directories for sub-projects
+*/_www
+*/.tmp_platformsh
+*/build_platform
+*/build
+*/dist
+*/node_modules
+*/public/docs
 
-.grenrc.yaml
-
-# Documentation markdown files
-hashtag-dapp/public/docs
+hashtag-docs/docs/.vuepress/dist/*
+hashtag-docs/docs/tmp
+hashtag-docs/docs/dist/*
