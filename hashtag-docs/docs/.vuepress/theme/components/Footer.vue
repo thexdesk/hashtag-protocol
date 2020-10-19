@@ -2,7 +2,7 @@
   <footer class="footer">
     <nav class="level container">
       <!-- Left side -->
-      <div class="level-item has-text-centered">
+      <div class="level-item level-left">
         <p>
           <strong>Hashtag Protocol</strong> by
           <b-dropdown
@@ -41,7 +41,7 @@
       </div>
 
       <!-- Right side -->
-      <div class="level-item has-text-centered">
+      <div class="level-item level-right">
         <a :href="this.build" title="Github" class="navbar-item">
           <span class="icon"
             ><i class="mdi mdi-github-circle mdi-24px"></i

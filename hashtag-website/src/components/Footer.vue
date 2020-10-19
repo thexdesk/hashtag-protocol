@@ -2,62 +2,59 @@
   <footer class="footer">
     <nav class="level container">
       <!-- Left side -->
-      <div class="level-left">
-        <div class="level-item">
-          <div class="content has-text-centered">
-            <p>
-              <strong>Hashtag Protocol</strong> by
-              <b-dropdown
-                :triggers="['hover', 'click']"
-                position="is-top-right"
-                class="has-text-left"
-              >
-                <a slot="trigger" role="button">Michael Paler</a>
-                <b-dropdown-item aria-role="listitem" custom>
-                  <b-button
-                    tag="a"
-                    icon-left="email"
-                    href="mailto:michael@hashtag-protocol.org"
-                    target="_blank"
-                  >
-                    michael@hashtag-protocol.org
-                  </b-button>
-                </b-dropdown-item>
-                <b-dropdown-item aria-role="listitem" custom>
-                  <b-button
-                    tag="a"
-                    icon-left="linkedin"
-                    href="https://www.linkedin.com/in/michael-paler"
-                    target="_blank"
-                  >
-                    LinkedIn
-                  </b-button>
-                </b-dropdown-item> </b-dropdown
-              >. The source code will be licensed
-              <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
-              The website content is licensed
-              <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
-                >CC BY NC SA 4.0</a
-              >.
-            </p>
-          </div>
+      <div class="level-item">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Hashtag Protocol</strong> by
+            <b-dropdown
+              :triggers="['hover', 'click']"
+              position="is-top-right"
+              class="has-text-left"
+            >
+              <a slot="trigger" role="button">Michael Paler</a>
+              <b-dropdown-item aria-role="listitem" custom>
+                <b-button
+                  tag="a"
+                  icon-left="email"
+                  href="mailto:michael@hashtag-protocol.org"
+                  target="_blank"
+                >
+                  michael@hashtag-protocol.org
+                </b-button>
+              </b-dropdown-item>
+              <b-dropdown-item aria-role="listitem" custom>
+                <b-button
+                  tag="a"
+                  icon-left="linkedin"
+                  href="https://www.linkedin.com/in/michael-paler"
+                  target="_blank"
+                >
+                  LinkedIn
+                </b-button>
+              </b-dropdown-item> </b-dropdown
+            >. The source code will be licensed
+            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+            The website content is licensed
+            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+              >CC BY NC SA 4.0</a
+            >.
+          </p>
         </div>
       </div>
-
       <!-- Right side -->
-      <div class="level-right">
-        <a href="/build" title="Github" class="navbar-item is-hidden-mobile">
+      <div class="level-item">
+        <a href="/build" title="Github" class="navbar-item">
           <span class="icon"
             ><i class="mdi mdi-github-circle mdi-24px"></i
           ></span>
         </a>
-        <a href="/build" title="Discord" class="navbar-item is-hidden-mobile">
+        <a href="/build" title="Discord" class="navbar-item">
           <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
         </a>
         <a
           href="https://hashtagprotocol.substack.com"
           title="Substack"
-          class="navbar-item is-hidden-mobile"
+          class="navbar-item"
         >
           <span class="icon substack"><i></i></span>
         </a>

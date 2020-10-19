@@ -60,4 +60,12 @@ body.has-navbar-fixed-top {
   position: sticky;
   top: 84px;
 }
+
+.main {
+  .column {
+    .content {
+      padding-bottom: 3.5rem;
+    }
+  }
+}
 </style>
