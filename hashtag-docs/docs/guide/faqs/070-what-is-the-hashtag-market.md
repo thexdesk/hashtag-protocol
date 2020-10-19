@@ -1,4 +1,5 @@
 ## What is the "Hashtag Market"?
+
 Hashtag is a protocol on the Ethereum blockchain that creates
 a market & incentive economy around the creation and use of
 hashtags. The protocol aims to create a virtuous, financially

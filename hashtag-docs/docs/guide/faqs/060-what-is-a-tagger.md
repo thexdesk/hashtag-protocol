@@ -1,4 +1,4 @@
-### What's a "Tagger" in Hashtag Protocol
+## What is a "Tagger"?
 
 In addition to creating cryptographic tokens that both contain
 and represent hashtag strings, the Hashtag Protocol provides a
