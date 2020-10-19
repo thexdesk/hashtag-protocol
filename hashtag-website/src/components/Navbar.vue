@@ -42,4 +42,8 @@ export default {
     }
   }
 }
+
+.button.is-primary.is-outlined {
+  transition: all 0.3s ease;
+}
 </style>

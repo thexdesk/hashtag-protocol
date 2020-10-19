@@ -11,7 +11,9 @@
     </template>
     <template slot="start"></template>
     <template slot="end">
-      <b-navbar-item tag="a" :href="this.website"> Developers </b-navbar-item>
+      <b-navbar-item tag="a" :href="this.developers">
+        Developers
+      </b-navbar-item>
       <b-navbar-item tag="router-link" to="/"> Docs </b-navbar-item>
       <b-navbar-item tag="div">
         <div class="buttons">
@@ -24,12 +26,24 @@
 
 <script>
 export default {
-  name: "External",
+  name: "Navbar",
+  data() {
+    return {
+      developers: "",
+    };
+  },
+  mounted() {
+    this.developers = this.website + "/developers";
+  },
 };
 </script>
 
 <style lang="scss">
 .navbar {
   padding: 0.75rem 0;
+}
+
+.button.is-primary.is-outlined {
+  transition: all 0.3s ease;
 }
 </style>
