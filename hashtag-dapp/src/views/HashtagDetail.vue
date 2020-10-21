@@ -300,7 +300,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -339,7 +339,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-the-hashtag-market"
+                  filename="070-what-is-the-hashtag-market"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -378,7 +378,7 @@
                 </a>
                 <markdown-doc
                   docType="faq"
-                  filename="what-is-tagged-content"
+                  filename="030-what-is-tagged-content"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

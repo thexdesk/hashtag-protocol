@@ -151,7 +151,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-tagged-content"
+                  filename="030-what-is-tagged-content"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

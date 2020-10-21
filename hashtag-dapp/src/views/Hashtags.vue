@@ -144,7 +144,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

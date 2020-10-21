@@ -141,7 +141,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-a-publisher"
+                  filename="040-what-is-a-publisher"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
