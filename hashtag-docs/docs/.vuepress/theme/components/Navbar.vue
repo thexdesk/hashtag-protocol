@@ -1,20 +1,20 @@
 <template>
-  <b-navbar>
+  <b-navbar :fixed-top="true" class="container">
     <template slot="brand">
-      <b-navbar-item tag="router-link" :to="{ name: 'home' }">
+      <b-navbar-item tag="a" :href="this.website">
         <img
-          src="../assets/logo.svg"
+          src="@theme/assets/logo.svg"
           alt="Content tagging for the decentralized web"
         />
-        <h1>Hashtag</h1>
+        <span>Hashtag</span>
       </b-navbar-item>
     </template>
     <template slot="start"></template>
     <template slot="end">
-      <b-navbar-item tag="router-link" :to="{ name: 'developers' }">
+      <b-navbar-item tag="a" :href="this.developers">
         Developers
       </b-navbar-item>
-      <b-navbar-item :href="this.docs"> Docs </b-navbar-item>
+      <b-navbar-item tag="router-link" to="/"> Docs </b-navbar-item>
       <b-navbar-item tag="div">
         <div class="buttons">
           <a :href="this.app" class="button is-primary is-outlined"> App </a>
@@ -26,21 +26,21 @@
 
 <script>
 export default {
-  name: "External",
+  name: "Navbar",
+  data() {
+    return {
+      developers: "",
+    };
+  },
+  mounted() {
+    this.developers = this.website + "/developers";
+  },
 };
 </script>
 
 <style lang="scss">
 .navbar {
   padding: 0.75rem 0;
-}
-
-.navbar-menu {
-  a {
-    &.button {
-      text-decoration: none;
-    }
-  }
 }
 
 .button.is-primary.is-outlined {

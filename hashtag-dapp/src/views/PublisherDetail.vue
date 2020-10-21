@@ -356,7 +356,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-a-publisher"
+                  filename="040-what-is-a-publisher"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -396,7 +396,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-the-hashtag-market"
+                  filename="070-what-is-the-hashtag-market"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

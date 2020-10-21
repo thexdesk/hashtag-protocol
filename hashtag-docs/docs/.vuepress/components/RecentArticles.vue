@@ -20,7 +20,7 @@ function test(postPath) {
 const media = test('guide/faqs/faq1');
 
 export default {
-  data: function() {
+  data: function()  {
     return {
       faqs: null,
     }

@@ -2,7 +2,7 @@
 
 # Copy markdown documents from hashtag-docs into 
 # hashtag-dapp public/docs folder so they can be
-# used in that app during development.
+# used in that app during local development.
 #
 # Run this script locally from the hashtag-dapp root.
 #

@@ -460,7 +460,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -503,7 +503,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-tagged-content"
+                  filename="030-what-is-tagged-content"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -546,7 +546,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-a-publisher"
+                  filename="040-what-is-a-publisher"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -583,7 +583,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-an-owner"
+                  filename="050-what-is-an-owner"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -626,7 +626,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -667,7 +667,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="060-what-is-a-tagger"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

@@ -290,7 +290,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-an-owner"
+                  filename="050-what-is-an-owner"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -330,7 +330,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-the-hashtag-market"
+                  filename="070-what-is-the-hashtag-market"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
