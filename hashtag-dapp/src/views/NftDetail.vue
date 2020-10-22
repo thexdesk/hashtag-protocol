@@ -82,6 +82,7 @@
                           autocomplete
                           :allow-new="true"
                           maxtags="1"
+                          :has-counter="false"
                           field="name"
                           icon="pound"
                           placeholder="Seach for hashtag"
@@ -92,7 +93,7 @@
                           <template slot-scope="props">
                             <b-taglist attached>
                               <b-tag type="is-light"
-                                >#{{ props.option.name }}</b-tag
+                                >#{{ props.option.displayHashtag }}</b-tag
                               >
                               <b-tag type="is-info">{{
                                 props.option.tagCount
@@ -171,7 +172,9 @@
                             <!---->
                             <td data-label="Hashtag" class="">
                               <span class="has-text-weight-bold">
-                                <hashtag :value="tag.hashtagName"></hashtag>
+                                <hashtag
+                                  :value="tag.hashtagDisplayHashtag"
+                                ></hashtag>
                               </span>
                             </td>
                             <td data-label="Minted" class="">

@@ -143,7 +143,9 @@
                             v-bind:key="hashtag.id"
                           >
                             <td data-label="Hashtag" class="">
-                              <hashtag :value="hashtag.name"></hashtag>
+                              <hashtag
+                                :value="hashtag.displayHashtag"
+                              ></hashtag>
                             </td>
                             <td data-label="Created" class="">
                               <timestamp-from
@@ -231,7 +233,9 @@
                               {{ tag.nftContractName }}
                             </td>
                             <td data-label="Hashtag" class="">
-                              <hashtag :value="tag.hashtagName"></hashtag>
+                              <hashtag
+                                :value="tag.hashtagDisplayHashtag"
+                              ></hashtag>
                             </td>
                             <td data-label="Tagged" class="">
                               <timestamp-from

@@ -11,18 +11,21 @@
           <div class="columns is-tablet is-centered">
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
-                <p class="subtitle is-5 has-text-white">Mint a new hashtag</p>
+                <p class="title is-5 has-text-white">Create a hashtag</p>
                 <template>
                   <section>
                     <b-field v-if="hashtags">
                       <b-taginput
                         v-model="hashtagInput"
                         :data="hashtagInputTags"
+                        attached
                         autocomplete
                         :allow-new="true"
                         maxtags="1"
                         field="name"
                         icon="pound"
+                        size="is-medium"
+                        :has-counter="false"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
                         :before-adding="validateTag"
@@ -30,7 +33,7 @@
                         <template slot-scope="props">
                           <b-taglist attached>
                             <b-tag type="is-light"
-                              >#{{ props.option.name }}
+                              >#{{ props.option.displayHashtag }}
                             </b-tag>
                             <b-tag type="is-info"
                               >{{ props.option.tagCount }}
@@ -42,14 +45,13 @@
                         </template>
                       </b-taginput>
                     </b-field>
-                    <div>
-                      <b-button
-                        type="is-primary"
-                        @click="mintHashtag()"
-                        :disabled="!isNewTag()"
-                        >Mint it
-                      </b-button>
-                    </div>
+                    <b-button
+                      type="is-primary"
+                      @click="mintHashtag()"
+                      :disabled="!isNewTag()"
+                      v-bind:class="{ 'is-hidden': !isNewTag() }"
+                      >Mint it
+                    </b-button>
                   </section>
                 </template>
               </article>
@@ -58,13 +60,14 @@
             <div class="divider is-hidden-tablet">OR</div>
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
-                <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
+                <p class="title is-5 has-text-white">Tag some content</p>
                 <b-field>
                   <b-autocomplete
                     v-model="tagForm.nftName"
-                    placeholder="Select NFT"
-                    icon="pound"
+                    placeholder='Search NFTs by name; eg "Dog"'
+                    icon="magnify"
                     field="name"
+                    size="is-medium"
                     :loading="isFetching"
                     @select="onNftSelected"
                     @typing="getAsyncData"
@@ -218,7 +221,9 @@
                         {{ props.row.nftContractName }}
                       </b-table-column>
                       <b-table-column field="hashtagName" label="Hashtag">
-                        <hashtag :value="props.row.hashtagName"></hashtag>
+                        <hashtag
+                          :value="props.row.hashtagDisplayHashtag"
+                        ></hashtag>
                       </b-table-column>
                     </template>
                   </b-table>
@@ -365,7 +370,7 @@
                     </template>
                     <template slot-scope="props">
                       <b-table-column field="name" label="Hashtag">
-                        <hashtag :value="props.row.name"></hashtag>
+                        <hashtag :value="props.row.displayHashtag"></hashtag>
                       </b-table-column>
                       <b-table-column
                         field="tagCount"
@@ -727,6 +732,7 @@
                             autocomplete
                             :allow-new="true"
                             maxtags="1"
+                            :has-counter="false"
                             field="name"
                             icon="pound"
                             placeholder="Seach for hashtag"
@@ -737,7 +743,7 @@
                             <template slot-scope="props">
                               <b-taglist attached>
                                 <b-tag type="is-light"
-                                  >#{{ props.option.name }}
+                                  >#{{ props.option.displayHashtag }}
                                 </b-tag>
                                 <b-tag type="is-info"
                                   >{{ props.option.tagCount }}
@@ -990,4 +996,20 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+//.taginput {
+//  .tag {
+//    span {
+//      &::before {
+//        content: "\F423";
+//        display: inline-block;
+//        font-family: "Material Design Icons";
+//        font-size: inherit;
+//        text-rendering: auto;
+//        line-height: inherit;
+//        margin-right: -4px;
+//      }
+//    }
+//  }
+//}
+</style>

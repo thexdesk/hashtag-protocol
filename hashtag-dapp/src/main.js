@@ -19,7 +19,8 @@ Vue.use(VueScreen, "bulma");
 
 // Connection for GraphQL.
 const hashtagClient = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
+  uri:
+    "https://api.thegraph.com/subgraphs/name/hashtag-protocol/hashtag-rinkby",
 });
 
 const nftsClient = new ApolloClient({
