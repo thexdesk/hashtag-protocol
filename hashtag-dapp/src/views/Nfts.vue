@@ -88,7 +88,7 @@
                           {{ tag.nftContractName }}
                         </td>
                         <td data-label="Hashtag">
-                          <hashtag :value="tag.hashtagName"></hashtag>
+                          <hashtag :value="tag.hashtagDisplayHashtag"></hashtag>
                         </td>
                         <td>
                           <timestamp-from

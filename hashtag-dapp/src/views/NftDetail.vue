@@ -82,7 +82,9 @@
                           autocomplete
                           :allow-new="true"
                           maxtags="1"
+                          :has-counter="false"
                           field="name"
+                          ref="tagginginput"
                           icon="pound"
                           placeholder="Seach for hashtag"
                           @typing="getFilteredTags"
@@ -91,28 +93,55 @@
                         >
                           <template slot-scope="props">
                             <b-taglist attached>
-                              <b-tag type="is-light"
-                                >#{{ props.option.name }}</b-tag
+                              <b-tag type="is-primary" size="is-medium"
+                                >#{{ props.option.displayHashtag }}</b-tag
                               >
-                              <b-tag type="is-info">{{
+                              <b-tag type="is-dark" size="is-medium">{{
                                 props.option.tagCount
                               }}</b-tag>
                             </b-taglist>
                           </template>
                           <template slot="empty">
-                            New hashtag! We'll mint it & tag this asset...
+                            New hashtag! Press enter to continue...
+                          </template>
+                          <template slot="selected" slot-scope="props">
+                            <div v-bind:class="{ box: isTaggable }">
+                              <b-tag
+                                v-for="(tag, index) in props.tags"
+                                :key="index"
+                                :tabstop="false"
+                                ellipsis
+                                attached
+                                type="is-primary"
+                                size="is-medium"
+                                closable
+                                close-type="is-dark"
+                                @close="
+                                  $refs.tagginginput.removeTag(index, $event)
+                                "
+                              >
+                                <div v-if="tag.displayHashtag">
+                                  #{{ tag.displayHashtag }}
+                                </div>
+                                <div v-else>#{{ tag }}</div>
+                              </b-tag>
+                              <div class="field">
+                                <div class="control">
+                                  <b-button
+                                    type="is-primary"
+                                    class="is-outlined"
+                                    @click="tagNft()"
+                                    :disabled="!isTaggable"
+                                    v-bind:class="{
+                                      'is-hidden': !isTaggable,
+                                    }"
+                                    >Tag asset
+                                  </b-button>
+                                </div>
+                              </div>
+                            </div>
                           </template>
                         </b-taginput>
-                      </div>
-                    </div>
-                    <div class="field">
-                      <div class="control">
-                        <b-button
-                          type="is-primary"
-                          @click="tagNft()"
-                          :disabled="!isTaggable"
-                          >Tag asset</b-button
-                        >
                       </div>
                     </div>
                   </form>
@@ -124,42 +153,23 @@
                   ></help-modal>
                   <h2 class="title is-5">Recent tags</h2>
                   <div class="b-table">
-                    <!---->
-                    <!---->
                     <div class="table-wrapper has-mobile-cards">
                       <table tabindex="0" class="table is-hoverable">
                         <thead>
                           <tr>
-                            <!---->
-                            <!---->
                             <th class="">
-                              <div class="th-wrap">
-                                Hashtag
-                                <!---->
-                              </div>
+                              <div class="th-wrap">Hashtag</div>
                             </th>
                             <th class="">
-                              <div class="th-wrap">
-                                Tagged
-                                <!---->
-                              </div>
+                              <div class="th-wrap">Tagged</div>
                             </th>
                             <th class="">
-                              <div class="th-wrap">
-                                Tagger
-                                <!---->
-                              </div>
+                              <div class="th-wrap">Tagger</div>
                             </th>
                             <th class="">
-                              <div class="th-wrap">
-                                Publisher
-                                <!---->
-                              </div>
+                              <div class="th-wrap">Publisher</div>
                             </th>
-                            <!---->
                           </tr>
-                          <!---->
-                          <!---->
                         </thead>
                         <tbody>
                           <tr
@@ -167,11 +177,11 @@
                             v-for="tag in tagsByDigitalAsset"
                             v-bind:key="tag.id"
                           >
-                            <!---->
-                            <!---->
                             <td data-label="Hashtag" class="">
                               <span class="has-text-weight-bold">
-                                <hashtag :value="tag.hashtagName"></hashtag>
+                                <hashtag
+                                  :value="tag.hashtagDisplayHashtag"
+                                ></hashtag>
                               </span>
                             </td>
                             <td data-label="Minted" class="">
@@ -191,13 +201,10 @@
                                 route="owner-detail"
                               ></eth-account>
                             </td>
-                            <!---->
                           </tr>
                         </tbody>
-                        <!---->
                       </table>
                     </div>
-                    <!---->
                   </div>
                 </article>
               </div>

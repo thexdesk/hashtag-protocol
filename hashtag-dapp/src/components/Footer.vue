@@ -46,12 +46,20 @@
 
       <!-- Right side -->
       <div class="level-right">
-        <a href="/build" title="Github" class="navbar-item is-hidden-mobile">
+        <a
+          :href="this.build"
+          title="Github"
+          class="navbar-item is-hidden-mobile"
+        >
           <span class="icon"
             ><i class="mdi mdi-github-circle mdi-24px"></i
           ></span>
         </a>
-        <a href="/build" title="Discord" class="navbar-item is-hidden-mobile">
+        <a
+          :href="this.build"
+          title="Discord"
+          class="navbar-item is-hidden-mobile"
+        >
           <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
         </a>
         <a
@@ -68,6 +76,20 @@
     </p>
   </footer>
 </template>
+
+<script>
+export default {
+  name: "Footer",
+  data() {
+    return {
+      build: "",
+    };
+  },
+  mounted() {
+    this.build = this.website + "/build";
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .substack {
