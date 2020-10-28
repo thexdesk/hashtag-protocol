@@ -1,11 +1,11 @@
 // vue.config.js
 module.exports = {
-  // Make variables available in SASS for every components
+  // Make variables available in SASS for all components.
   css: {
     loaderOptions: {
       sass: {
         prependData: `
-            @import '@/assets/scss/variables.scss';
+            @import '@/assets/scss/theme.scss';
           `,
       },
     },

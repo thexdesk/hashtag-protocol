@@ -1,0 +1,63 @@
+.container {
+  @include until($desktop) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.navbar-brand {
+  img {
+    margin-right: 0.4rem;
+  }
+
+  a.navbar-item,
+  a.navbar-item:hover {
+    color: $white;
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.navbar-burger:hover {
+  color: $white;
+}
+
+section.main {
+  padding-bottom: 2rem;
+}
+
+.pt-1 {
+  padding-top: 1rem;
+}
+
+.pb-1 {
+  padding-bottom: 1rem;
+}
+
+img.nft-thumb {
+  max-width: 95px;
+  max-height: 95px;
+}
+
+.b-table {
+  .table {
+    td {
+      vertical-align: middle;
+    }
+  }
+}
+
+.button {
+  font-weight: bold;
+
+  &.is-primary.is-outlined {
+    transition: all 0.3s ease;
+  }
+}
+
+.bn-onboard-modal {
+  z-index: 50;
+}
