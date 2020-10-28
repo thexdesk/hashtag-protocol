@@ -1,0 +1,42 @@
+{
+  "name": "hashtag-docs",
+  "version": "1.0.0",
+  "description": "Hashtag Protocol documentation",
+  "main": "index.js",
+  "repository": "https://github.com/hashtag-protocol/hashtag-protocol/hashtag-docs",
+  "author": "Michael Paler",
+  "license": "MIT",
+  "devDependencies": {
+    "@vuepress/plugin-active-header-links": "^1.7.0",
+    "@vuepress/theme-default": "^1.5.1",
+    "@vuepress/theme-vue": "^1.5.1",
+    "add": "^2.0.6",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-vue": "^7.0.0",
+    "prettier": "^2.1.2",
+    "stylelint": "^13.7.2",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-recommended-scss": "^4.2.0",
+    "stylelint-config-standard": "^20.0.0",
+    "stylelint-plugin-stylus": "^0.9.0",
+    "stylelint-processor-html": "^1.0.0",
+    "stylelint-scss": "^3.18.0",
+    "vuepress": "^1.5.1",
+    "vuepress-plugin-merge-pages": "^1.3.0",
+    "vuepress-plugin-table-of-contents": "^1.1.7",
+    "yarn": "^1.22.10"
+  },
+  "scripts": {
+    "serve": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "dependencies": {
+    "buefy": "^0.9.3",
+    "node-sass": "^4.14.1",
+    "sass-loader": "8.0.2",
+    "vue": "2.6.11"
+  }
+}

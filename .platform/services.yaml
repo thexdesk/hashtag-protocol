@@ -1,1 +1,4 @@
-# Empty file.
+# Network file mount to store Markdown documents from hashtag-docs
+docs:
+  type: network-storage:1.0
+  disk: 128
