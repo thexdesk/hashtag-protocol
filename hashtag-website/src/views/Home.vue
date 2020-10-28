@@ -17,9 +17,9 @@
               <div class="is-size-4 content has-text-white-invert">
                 <p>
                   Hashtag is a simple, decentralized protocol built for
-                  developers to tokenize hashtag strings, link them with online
-                  media and surface this data for use in networks, platforms and
-                  applications.
+                  developers to tokenize hashtag strings as non-fungible tokens
+                  (NFTs), link them with online media and surface this data for
+                  use in networks, platforms and applications.
                 </p>
                 <p>
                   <a class="button is-primary" href="/developers">Learn more</a>

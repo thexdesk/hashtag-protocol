@@ -17,7 +17,7 @@ Vue.use(VueMoment);
 Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bulma");
 
-// Connection for GraphQL.
+// Connections for GraphQL.
 const hashtagClient = new ApolloClient({
   uri:
     "https://api.thegraph.com/subgraphs/name/hashtag-protocol/hashtag-rinkby",

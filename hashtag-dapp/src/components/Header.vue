@@ -110,16 +110,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-.navbar {
-  .navbar-end {
-    .button {
-      font-weight: bold;
-
-      &.is-primary.is-outlined {
-        transition: all 0.3s ease;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>
