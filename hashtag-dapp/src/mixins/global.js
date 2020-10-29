@@ -7,7 +7,7 @@ Vue.mixin({
       // App and Docs base urls. Values set here are for
       // production environment. Note values are overridden
       // via devBaseUrls() when on platform.sh dev environments.
-      website: "https://hashtag-protocol.org",
+      website: "https://www.hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
 
