@@ -3,7 +3,6 @@ const path = require("path");
 module.exports = {
   title: "Hashtag Documentation",
   description: "Hashtag Documentation",
-  theme: "theme",
   dest: "docs/dist",
   temp: "docs/tmp",
   themeConfig: {
