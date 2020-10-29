@@ -7,6 +7,10 @@
   type: upstream
   upstream: "3-hashtag-website:http"
 
+"https://{default}/":
+  type: redirect
+  to: "https://www.{default}/"
+
 "http://www.{default}/":
   type: redirect
   to: "https://www.{default}/"
