@@ -11,6 +11,10 @@
   type: redirect
   to: "https://www.{default}/"
 
+"http://{default}/":
+  type: redirect
+  to: "https://www.{default}/"
+
 "https://docs.{default}/":
   type: upstream
   upstream: "1-hashtag-docs:http"
