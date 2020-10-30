@@ -29,7 +29,9 @@
             </div>
           </div>
           <div class="column is-5 is-offset-1">
-            <div class="content has-text-centered is-size-5 is-spaced box">
+            <div
+              class="content has-text-centered is-size-5 is-spaced box has-background-grey-lighter"
+            >
               <strong>Demo:</strong>&nbsp;
               <a :href="this.app">Hashtag dApp</a>
               <hr />
