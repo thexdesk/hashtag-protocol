@@ -17,10 +17,14 @@
               <p>
                 At its core, Hashtag Protocol is conceptually simple: it’s a set
                 of Ethereum smart contracts that enables the tokenization of
-                hashtag strings into ERC-721 non-fungible tokens; the “tagging”
-                of other digital assets with those tokens; and APIs for
-                surfacing this data for use in networks, platforms and
+                hashtag strings into ERC-721 non-fungible tokens (NFTs); the
+                “tagging” of other digital assets with those tokens; and APIs
+                for surfacing this data for use in networks, platforms and
                 applications.
+              </p>
+              <p>
+                Stitched into this functionality are mechanisms to incentivise
+                all participants of the system.
               </p>
             </div>
           </div>
@@ -52,7 +56,8 @@
             <div class="content is-medium has-text-white-ter">
               <p>
                 Hashtag Tokens are digital representations of hashtag text
-                strings stored on the Ethereum blockchain. Hashtag uses the
+                strings stored as non-fungible tokens (NFTs) on the Ethereum
+                blockchain. Hashtag uses the
                 <a href="http://erc721.org/">Ethereum ERC-721</a> specification
                 for Hashtag Tokens. Tokens are created by executing the
                 <span class="is-family-code has-text-primary">mint()</span>
@@ -150,13 +155,20 @@
             <div class="content is-medium has-text-white-ter">
               <p>
                 Minting and tagging events are captured by the Hashtag Protocol
-                Subgraph.
+                Subgraph hosted on
+                <a href="https://thegraph.com/">The Graph</a>.
               </p>
               <p>
                 Utilize our Hashtag Subgraph to rapidly query Protocol
                 transaction data and present in your own way.
               </p>
-              <p>See our documentation site for the full set of data lenses.</p>
+              <p>
+                See our
+                <a href="https://docs.hashtag-protocol.org"
+                  >documentation site</a
+                >
+                for the full set of data lenses.
+              </p>
             </div>
           </div>
           <div class="column is-offset-1">
@@ -215,8 +227,8 @@
             </h2>
             <div class="content is-size-5">
               <p>
-                Hashtag Protocol seeks to incentivise all participants of the
-                system.
+                Hashtag Protocol is committed to incentivising all participants
+                of the system.
               </p>
               <h4>Application developer / content publisher</h4>
               <ul>
