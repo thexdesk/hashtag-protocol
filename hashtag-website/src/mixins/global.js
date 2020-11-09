@@ -7,7 +7,7 @@ Vue.mixin({
       // App and Docs base urls. Values set here are for
       // production environment. Note values are overridden
       // via devBaseUrls() when on platform.sh dev environments.
-      website: "https://hashtag-protocol.org",
+      website: "https://www.hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
     };
@@ -35,20 +35,26 @@ Vue.mixin({
      * Sample platform development instance urls
      * Hashtag Dapp https://app.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
      * Hashtag Docs https://docs.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
-     * Hashtag Website https://pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
+     * Hashtag Website https://www.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
      *
      */
     devBaseUrls() {
       var baseUrl = new URL(window.location.origin);
       var parts = baseUrl.hostname.split(".");
 
-      if (parts.includes("platformsh")) {
-        // We are on a Platform.sh development environment.
-        var docsUrl = new URL(window.location.origin);
+      if (parts.includes("platformsh") && parts.includes("www")) {
+        // We are on a Platform.sh development environment under
+        // the app subdomain. Let's strip out the www subdomain.
+        parts.shift();
+        baseUrl = "https://" + parts.join(".");
+
+        // Create docs url.
+        let docsUrl = new URL(baseUrl);
         docsUrl.hostname = "docs." + docsUrl.hostname;
         this.docs = docsUrl;
 
-        var appUrl = new URL(window.location.origin);
+        // Create app url.
+        let appUrl = new URL(baseUrl);
         appUrl.hostname = "app." + appUrl.hostname;
         this.app = appUrl;
       }
