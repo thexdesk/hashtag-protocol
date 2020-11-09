@@ -10,6 +10,8 @@ Vue.mixin({
       website: "https://www.hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
+      etherscanRinkby: "https://rinkeby.etherscan.io",
+      contractRinkby: "0x1a8a97b7fe6470112d19b04ad6614b39fbc09e33",
 
       // Section(s) is ued by dropdown menu in header component.
       sections: [
