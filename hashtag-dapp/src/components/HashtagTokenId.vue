@@ -6,6 +6,7 @@
       position="is-bottom"
       type="is-dark"
       size="is-small"
+      :animated="true"
     >
       <a :href="this.tokenUrl" target="_blank">
         <b-icon icon="ethereum" type="is-primary" size="is-small"> </b-icon>

@@ -110,4 +110,14 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.hero-head {
+  .navbar-end {
+    .dropdown-menu {
+      .dropdown-item {
+        font-weight: bold;
+      }
+    }
+  }
+}
+</style>
