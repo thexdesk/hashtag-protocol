@@ -7,9 +7,11 @@ Vue.mixin({
       // App and Docs base urls. Values set here are for
       // production environment. Note values are overridden
       // via devBaseUrls() when on platform.sh dev environments.
-      website: "https://hashtag-protocol.org",
+      website: "https://www.hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
+      etherscanRinkby: "https://rinkeby.etherscan.io",
+      contractRinkby: "0x1a8a97b7fe6470112d19b04ad6614b39fbc09e33",
 
       // Section(s) is ued by dropdown menu in header component.
       sections: [
@@ -75,7 +77,7 @@ Vue.mixin({
      * Sample platform development instance urls
      * Hashtag Dapp https://app.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
      * Hashtag Docs https://docs.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
-     * Hashtag Website https://pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
+     * Hashtag Website https://www.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
      *
      */
     setDevBaseUrls() {
