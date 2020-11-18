@@ -1,12 +1,12 @@
-import { BigInt, Bytes, ipfs, json, JSONValue } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes, ipfs, json, JSONValue } from "@graphprotocol/graph-ts";
 
 import {
   HashtagRegistered,
-  ERC721HashtagRegistry
+  ERC721HashtagRegistry,
 } from "../generated/ERC721HashtagRegistry/ERC721HashtagRegistry";
 
-import {HashtagProtocol} from "../generated/HashtagProtocol/HashtagProtocol"
-import {Tag, Hashtag} from "../generated/schema"
+import { HashtagProtocol } from "../generated/HashtagProtocol/HashtagProtocol";
+import { Tag, Hashtag } from "../generated/schema";
 
 import {
   safeLoadPublisher,
@@ -60,6 +60,7 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   let tagEntity = new Tag(event.transaction.hash.toHexString());
   tagEntity.hashtagId = hashtagId.toString();
   tagEntity.hashtagName = protocolContract.tokenIdToHashtag(hashtagId).value3;
+  tagEntity.hashtagDisplayHashtag = hashtag.displayHashtag;
   tagEntity.nftContract = event.params.nftContract;
   tagEntity.nftId = event.params.nftId.toString();
 
@@ -67,7 +68,9 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   tagEntity.nftContractName = erc721Contract.name();
 
   let tokenUriCallResult = erc721Contract.try_tokenURI(event.params.nftId);
-  tagEntity.nftTokenUri = tokenUriCallResult.reverted ? null : tokenUriCallResult.value;
+  tagEntity.nftTokenUri = tokenUriCallResult.reverted
+    ? null
+    : tokenUriCallResult.value;
 
   if (!tokenUriCallResult.reverted) {
     let nftMetadata = extractNftIPFSMetadata(tagEntity.nftTokenUri);

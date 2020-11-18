@@ -3,21 +3,29 @@
 # Each route describes how an incoming URL is going
 # to be processed by Platform.sh.
 
-"https://{default}/":
-  type: upstream
-  upstream: "2-hashtag-dapp:http"
-
 "https://www.{default}/":
+  type: upstream
+  upstream: "3-hashtag-website:http"
+
+"https://{default}/":
   type: redirect
-  to: "https://{default}/"
+  to: "https://www.{default}/"
+
+"http://www.{default}/":
+  type: redirect
+  to: "https://www.{default}/"
 
 "http://{default}/":
   type: redirect
-  to: "https://{default}/"
+  to: "https://www.{default}/"
 
 "https://docs.{default}/":
   type: upstream
   upstream: "1-hashtag-docs:http"
+
+"https://app.{default}/":
+  type: upstream
+  upstream: "2-hashtag-dapp:http"
 
 #http://{default}/:
 #  cache:

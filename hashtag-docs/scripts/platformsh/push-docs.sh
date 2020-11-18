@@ -1,13 +1,28 @@
 #!/bin/bash
 
-# Copy markdown documents from hashtag-docs into a mounted
-# network drive so they can be used in hashtag-dapp.
+# Copy documents from hashtag-docs into a mounted
+# network drive so they can be used in hashtag-dapp
+# and hashtag-website.
+# 
+# NOTE: This script is ONLY run on platform.sh during
+# post-deploy hook. @see .platform.app.yml
 #
-# This script is run in platform.sh post-deploy hook.
+# For local development, we mimic the mounted network
+# drive using .gitignored local directories.
+#
+# @see /hashtag-dapp/scripts/pull-docs.sh
+# @see /hashtag-website/scripts/pull-docs.sh
+#
 
-# First clean out the old docs
-rm -rf /app/network/docs/*
+# If we are building on platform.sh
+if [ -d /app/.global ]; then
 
-# Copy everything over.
-cp -R /app/docs/guide/faqs/. /app/network/docs/
-cp -R /app/docs/guide/help/. /app/network/docs/
+    # First clean out the old docs
+    rm -rf /app/network/docs/*
+
+    # Copy everything over.
+    cp -R /app/docs/guide/faqs/. /app/network/docs/
+    cp -R /app/docs/guide/help/. /app/network/docs/
+    cp -R /app/docs/guide/pdfs/. /app/network/docs/
+
+fi

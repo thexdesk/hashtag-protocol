@@ -1,7 +1,7 @@
 <template>
   <b-tooltip label="Help" position="is-bottom" type="is-dark">
     <button class="button is-white" @click="popModal">
-      <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
+      <b-icon icon="help-circle-outline" type="is-primary"> </b-icon>
     </button>
   </b-tooltip>
 </template>

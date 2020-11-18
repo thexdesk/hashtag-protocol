@@ -9,9 +9,7 @@
     </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">
-          Tagged NFTs
-        </h1>
+        <h1 class="title is-1">Tagged NFTs</h1>
         <h2 class="subtitle">
           Content tagged using Hashtag Tokens
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
@@ -30,68 +28,55 @@
               ></help-modal>
               <h2 class="title is-4 is-spaced"></h2>
               <div class="b-table">
-                <!---->
-                <!---->
                 <div class="table-wrapper has-mobile-cards">
                   <table tabindex="0" class="table is-hoverable">
                     <thead>
                       <tr>
-                        <!---->
-                        <!---->
-                        <th class="" style="width: 75px;">
-                          <div class="th-wrap"><!----></div>
+                        <th>
+                          <div class="th-wrap"></div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Asset Name
-                            <!---->
-                          </div>
+                        <th>
+                          <div class="th-wrap">Asset Name</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Project
-                            <!---->
-                          </div>
+                        <th>
+                          <div class="th-wrap">Project</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Hashtag
-                            <!---->
-                          </div>
+                        <th>
+                          <div class="th-wrap">Hashtag</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Tagged
-                            <!---->
-                          </div>
+                        <th>
+                          <div class="th-wrap">Tagged</div>
                         </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Publisher
-                            <!---->
-                          </div>
+                        <th>
+                          <div class="th-wrap">Publisher</div>
                         </th>
-                        <!---->
                       </tr>
-                      <!---->
-                      <!---->
                     </thead>
                     <tbody v-if="pagedTags">
                       <tr
                         draggable="false"
-                        class=""
                         v-for="tag in pagedTags"
                         v-bind:key="tag.id"
                       >
-                        <!---->
-                        <!---->
-                        <td data-label="" class="">
-                          <img
-                            :src="tag.nftImage"
-                            style="max-width: 75px; max-height: 75px;"
-                          />
+                        <td class="has-text-centered">
+                          <router-link
+                            :to="{
+                              name: 'nft-detail',
+                              params: {
+                                type: 'nft',
+                                contract: tag.nftContract,
+                                id: tag.nftId,
+                              },
+                            }"
+                          >
+                            <img
+                              :src="tag.nftImage"
+                              :alt="tag.nftName"
+                              class="nft-thumb"
+                            />
+                          </router-link>
                         </td>
-                        <td data-label="Asset Name" class="">
+                        <td data-label="Asset Name">
                           <nft-link
                             type="nft"
                             :name="tag.nftName"
@@ -99,11 +84,11 @@
                             :id="tag.nftId"
                           ></nft-link>
                         </td>
-                        <td data-label="Project" class="">
+                        <td data-label="Project">
                           {{ tag.nftContractName }}
                         </td>
-                        <td data-label="Hashtag" class="">
-                          <hashtag :value="tag.hashtagName"></hashtag>
+                        <td data-label="Hashtag">
+                          <hashtag :value="tag.hashtagDisplayHashtag"></hashtag>
                         </td>
                         <td>
                           <timestamp-from
@@ -116,15 +101,10 @@
                             route="publisher-detail"
                           ></eth-account>
                         </td>
-                        <!---->
                       </tr>
-                      <!---->
-                      <!---->
                     </tbody>
-                    <!---->
                   </table>
                 </div>
-                <!---->
               </div>
               <Pagination
                 :entity-count="tagsCount"
@@ -171,7 +151,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-tagged-content"
+                  filename="030-what-is-tagged-content"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

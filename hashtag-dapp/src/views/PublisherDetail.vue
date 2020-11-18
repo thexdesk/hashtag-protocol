@@ -72,9 +72,7 @@
                   @popModalFromChild="popModal"
                   class="is-pulled-right"
                 ></help-modal>
-                <h2 class="title is-4">
-                  Market summary for KnownOrigin
-                </h2>
+                <h2 class="title is-4">Market summary for KnownOrigin</h2>
                 <div class="b-table" v-if="publisherByAcc">
                   <div class="table-wrapper">
                     <table class="table">
@@ -182,7 +180,9 @@
                             <!---->
                             <!---->
                             <td data-label="Hashtag" class="">
-                              <hashtag :value="hashtag.name"></hashtag>
+                              <hashtag
+                                :value="hashtag.displayHashtag"
+                              ></hashtag>
                             </td>
                             <td data-label="Minted" class="">
                               <timestamp-from
@@ -223,7 +223,7 @@
                           <tr>
                             <!---->
                             <!---->
-                            <th class="" style="width: 75px;">
+                            <th>
                               <div class="th-wrap"><!----></div>
                             </th>
                             <th class="">
@@ -265,10 +265,23 @@
                             v-for="tag in tagsByPublisher"
                             v-bind:key="tag.id"
                           >
-                            <td data-label="" class="">
-                              <figure class="image">
-                                <img :src="tag.nftImage" :alt="tag.nftName" />
-                              </figure>
+                            <td class="has-text-centered">
+                              <router-link
+                                :to="{
+                                  name: 'nft-detail',
+                                  params: {
+                                    type: 'nft',
+                                    contract: tag.nftContract,
+                                    id: tag.nftId,
+                                  },
+                                }"
+                              >
+                                <img
+                                  :src="tag.nftImage"
+                                  :alt="tag.nftName"
+                                  class="nft-thumb"
+                                />
+                              </router-link>
                             </td>
                             <td data-label="Asset Name" class="">
                               <nft-link
@@ -282,7 +295,9 @@
                               {{ tag.nftContractName }}
                             </td>
                             <td data-label="Hashtag" class="">
-                              <hashtag :value="tag.hashtagName"></hashtag>
+                              <hashtag
+                                :value="tag.hashtagDisplayHashtag"
+                              ></hashtag>
                             </td>
                             <td data-label="Tagged" class="">
                               <timestamp-from
@@ -345,7 +360,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-a-publisher"
+                  filename="040-what-is-a-publisher"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -385,7 +400,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-the-hashtag-market"
+                  filename="070-what-is-the-hashtag-market"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>

@@ -20,6 +20,7 @@ type Tag @entity {
   id: ID!
   hashtagId: String!
   hashtagName: String!
+  hashtagDisplayHashtag: String!
   nftContract: Bytes!
   nftId: String!
   nftContractName: String!

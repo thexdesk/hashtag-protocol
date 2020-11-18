@@ -28,6 +28,7 @@ export const SNAPSHOT = gql(`
             id
             hashtagId
             hashtagName
+            hashtagDisplayHashtag
             nftContract
             nftContractName
             nftImage
@@ -41,6 +42,7 @@ export const SNAPSHOT = gql(`
         popular: hashtags(first: 10, orderBy: tagCount, orderDirection: desc) {
             id
             name
+            displayHashtag
             owner
             publisher
             tagCount
@@ -96,6 +98,7 @@ query tagsByHashtag($hashtag: String!) {
       id
       hashtagId
       hashtagName
+      hashtagDisplayHashtag
       nftContract
       nftContractName
       nftImage
@@ -145,6 +148,7 @@ export const TAGS_BY_DIGITAL_ASSET = gql(`
     publisher
     hashtagId
     hashtagName
+    hashtagDisplayHashtag
   }
 }`);
 
@@ -217,6 +221,7 @@ export const PAGED_TAGS_BY_TAGGER = gql`
       id
       hashtagId
       hashtagName
+      hashtagDisplayHashtag
       nftContract
       nftId
       nftContractName
@@ -236,6 +241,7 @@ query tagsByTagger($tagger: String!) {
     id
     hashtagId
     hashtagName
+    hashtagDisplayHashtag
     nftContract
     nftId
     nftContractName
@@ -263,6 +269,7 @@ query tagsByPublisher($publisher: String!, $first: Int!, $skip: Int!) {
     id
     hashtagId
     hashtagName
+    hashtagDisplayHashtag
     nftContract
     nftId
     nftContractName
@@ -334,6 +341,7 @@ query pagedTags($first: Int!, $skip: Int!) {
             id
             hashtagId
             hashtagName
+            hashtagDisplayHashtag
             nftContract
             nftContractName
             nftImage
@@ -402,7 +410,7 @@ query pagedTaggers($first: Int!, $skip: Int!) {
 }
 `);
 
-export const FIRST_THOUSAND_HASHTAGS = gql`
+export const FIRST_THOUSAND_HASHTAGS = gql(`
   query {
     hashtags(first: 1000, orderBy: timestamp, orderDirection: desc) {
       id
@@ -414,4 +422,18 @@ export const FIRST_THOUSAND_HASHTAGS = gql`
       tagCount
     }
   }
-`;
+`);
+
+export const NFTS_ASSETS_NAME_CONTAINS = gql(`
+  query nameContains($first: Int!, $name: String!) {
+    nameContains: tokens(first: $first, where: {metadataName_contains: $name}) {
+      id
+      contractAddress
+      contractName
+      contractSymbol
+      tokenId
+      metadataName
+      metadataImageURI
+  }
+}
+`);

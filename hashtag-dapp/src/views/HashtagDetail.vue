@@ -35,22 +35,9 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Token ID</td>
                           <td>
-                            {{ hashtagsByName[0].id }}
-                            <b-tooltip
-                              label="view on Etherscan"
-                              position="is-bottom"
-                              type="is-dark"
-                              size="is-small"
-                            >
-                              <a v-bind:href="hashtagsByName[0].id">
-                                <b-icon
-                                  icon="ethereum"
-                                  type="is-dark"
-                                  size="is-small"
-                                >
-                                </b-icon>
-                              </a>
-                            </b-tooltip>
+                            <HashtagTokenId
+                              :value="hashtagsByName[0].id"
+                            ></HashtagTokenId>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
@@ -92,7 +79,9 @@
                           <td class="has-text-weight-bold">Expires</td>
                           <td>
                             <timestamp-formatted
-                              :value="(parseInt(hashtagsByName[0].timestamp) + 63113904)"
+                              :value="
+                                parseInt(hashtagsByName[0].timestamp) + 63113904
+                              "
                             ></timestamp-formatted>
                           </td>
                         </tr>
@@ -168,51 +157,29 @@
               <b-tabs v-model="activeTab" :animated="true">
                 <b-tab-item label="ERC-721 NFTs">
                   <div class="b-table">
-                    <!---->
-                    <!---->
                     <div class="table-wrapper has-mobile-cards">
                       <table class="table">
                         <thead>
                           <tr>
-                            <!---->
-                            <!---->
-                            <th class="" style="width: 75px;">
-                              <div class="th-wrap"><!----></div>
+                            <th>
+                              <div class="th-wrap"></div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Asset Name
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Asset Name</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Project
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Project</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagged
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagged</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagger
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagger</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Publisher
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Publisher</div>
                             </th>
-                            <!---->
                           </tr>
-                          <!---->
-                          <!---->
                         </thead>
                         <tbody v-if="tagsByHashtag">
                           <tr
@@ -221,14 +188,31 @@
                             draggable="false"
                             class=""
                           >
-                            <td data-label="" class="">
-                              <img
-                                :src="tag.nftImage"
-                                style="max-width: 75px; max-height: 75px;"
-                              />
+                            <td class="has-text-centered">
+                              <router-link
+                                :to="{
+                                  name: 'nft-detail',
+                                  params: {
+                                    type: 'nft',
+                                    contract: tag.nftContract,
+                                    id: tag.nftId,
+                                  },
+                                }"
+                              >
+                                <img
+                                  :src="tag.nftImage"
+                                  :alt="tag.nftName"
+                                  class="nft-thumb"
+                                />
+                              </router-link>
                             </td>
-                            <td data-label="Asset Name" class="">
-                              {{ tag.nftName }}
+                            <td data-label="Asset Name">
+                              <nft-link
+                                type="nft"
+                                :name="tag.nftName"
+                                :contract="tag.nftContract"
+                                :id="tag.nftId"
+                              ></nft-link>
                             </td>
                             <td data-label="Project" class="">
                               {{ tag.nftContractName }}
@@ -252,7 +236,6 @@
                             </td>
                           </tr>
                         </tbody>
-                        <!---->
                       </table>
                       <Pagination
                         :entity-count="tagsCount"
@@ -260,7 +243,6 @@
                         @tabSelected="tabSelected"
                       />
                     </div>
-                    <!---->
                   </div>
                 </b-tab-item>
                 <b-tab-item label="IPFS" :disabled="true">
@@ -305,7 +287,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -344,7 +326,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-the-hashtag-market"
+                  filename="070-what-is-the-hashtag-market"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -383,7 +365,7 @@
                 </a>
                 <markdown-doc
                   docType="faq"
-                  filename="what-is-tagged-content"
+                  filename="030-what-is-tagged-content"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -399,9 +381,11 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
+import HashtagTokenId from "../components/HashtagTokenId";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
+import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import {
   PAGED_TAGS_BY_HASHTAG,
@@ -420,7 +404,9 @@ export default {
     TimestampFrom,
     EthAccount,
     MarkdownDoc,
+    NftLink,
     Footer,
+    HashtagTokenId,
     Header,
     HelpModal,
     Pagination,

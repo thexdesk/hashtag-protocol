@@ -11,45 +11,76 @@
           <div class="columns is-tablet is-centered">
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
-                <p class="subtitle is-5 has-text-white">Mint a new hashtag</p>
+                <p class="title is-4 has-text-white">Create a hashtag</p>
                 <template>
                   <section>
                     <b-field v-if="hashtags">
                       <b-taginput
                         v-model="hashtagInput"
                         :data="hashtagInputTags"
+                        attached
                         autocomplete
                         :allow-new="true"
                         maxtags="1"
                         field="name"
+                        ref="taginput"
                         icon="pound"
+                        size="is-medium"
+                        :has-counter="false"
                         placeholder="Enter hashtag"
                         @typing="getFilteredTags"
                         :before-adding="validateTag"
                       >
                         <template slot-scope="props">
                           <b-taglist attached>
-                            <b-tag type="is-light"
-                              >#{{ props.option.name }}</b-tag
-                            >
-                            <b-tag type="is-info">{{
-                              props.option.tagCount
-                            }}</b-tag>
+                            <b-tag type="is-primary" size="is-medium"
+                              >#{{ props.option.displayHashtag }}
+                            </b-tag>
+                            <b-tag type="is-dark" size="is-medium"
+                              >{{ props.option.tagCount }}
+                            </b-tag>
                           </b-taglist>
                         </template>
                         <template slot="empty">
-                          Unique hashtag! Press enter to begin minting.
+                          <span class="new-hashtag"
+                            >Unique hashtag! Press enter to continue...</span
+                          >
+                        </template>
+                        <template slot="selected" slot-scope="props">
+                          <div v-bind:class="{ box: isNewTag() }">
+                            <b-tag
+                              v-for="(tag, index) in props.tags"
+                              :key="index"
+                              :tabstop="false"
+                              ellipsis
+                              attached
+                              type="is-primary"
+                              size="is-medium"
+                              closable
+                              close-type="is-dark"
+                              @close="$refs.taginput.removeTag(index, $event)"
+                            >
+                              <div v-if="tag.displayHashtag">
+                                #{{ tag.displayHashtag }}
+                              </div>
+                              <div v-else>#{{ tag }}</div>
+                            </b-tag>
+                            <div class="field">
+                              <div class="control">
+                                <b-button
+                                  type="is-primary"
+                                  class="is-outlined"
+                                  @click="mintHashtag()"
+                                  :disabled="!isNewTag()"
+                                  v-bind:class="{ 'is-hidden': !isNewTag() }"
+                                  >Mint token
+                                </b-button>
+                              </div>
+                            </div>
+                          </div>
                         </template>
                       </b-taginput>
                     </b-field>
-                    <div>
-                      <b-button
-                        type="is-primary"
-                        @click="mintHashtag()"
-                        :disabled="!isNewTag()"
-                        >Mint it</b-button
-                      >
-                    </div>
                   </section>
                 </template>
               </article>
@@ -58,30 +89,33 @@
             <div class="divider is-hidden-tablet">OR</div>
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
-                <p class="subtitle is-5 has-text-white">Tag a digital asset</p>
+                <p class="title is-4 has-text-white">Tag some content</p>
                 <b-field>
                   <b-autocomplete
                     v-model="tagForm.nftName"
-                    placeholder="Select NFT"
-                    icon="pound"
+                    placeholder='Search NFTs by name; eg "Dog"'
+                    icon="magnify"
                     field="name"
+                    size="is-medium"
+                    :loading="isFetching"
                     @select="onNftSelected"
-                    :data="getFilteredNFTs"
+                    @typing="getAsyncData"
+                    :data="nameContains"
                   >
                     <template slot-scope="props">
                       <div class="media">
                         <div class="media-left">
                           <img
+                            :src="props.option.metadataImageURI"
                             width="32"
-                            :src="props.option.image_preview_url"
                           />
                         </div>
                         <div class="media-content">
-                          {{ props.option.name }}
+                          {{ props.option.metadataName }}
                           <br />
                           <small
-                            >{{ props.option.asset_contract.name }}
-                            <b>#{{ props.option.token_id }}</b>
+                            >{{ props.option.contractName }}
+                            <b>#{{ props.option.tokenId }}</b>
                           </small>
                         </div>
                       </div>
@@ -108,13 +142,13 @@
                   ></help-modal>
                   <h2 class="title is-5">Newest hashtags</h2>
                   <b-table
-                    :data="(hashtags ? hashtags.slice(0, 10) : [])"
+                    :data="hashtags ? hashtags.slice(0, 10) : []"
                     focusable
                   >
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags</router-link
+                          >Browse hashtags </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -166,14 +200,12 @@
                     @popModalFromChild="popModal"
                     class="is-pulled-right"
                   ></help-modal>
-                  <h2 class="title is-5">
-                    Recently tagged content
-                  </h2>
+                  <h2 class="title is-5">Recently tagged content</h2>
                   <b-table :data="tags || []" focusable>
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'nfts' }"
-                          >Browse tagged assets</router-link
+                          >Browse tagged assets </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -184,11 +216,23 @@
                       </div>
                     </template>
                     <template slot-scope="props">
-                      <b-table-column field="nftId" label="" width="75">
-                        <img
-                          :src="props.row.nftImage"
-                          style="max-width: 75px; max-height: 75px;"
-                        />
+                      <b-table-column field="nftId" centered>
+                        <router-link
+                          :to="{
+                            name: 'nft-detail',
+                            params: {
+                              type: 'nft',
+                              contract: props.row.nftContract,
+                              id: props.row.nftId,
+                            },
+                          }"
+                        >
+                          <img
+                            :src="props.row.nftImage"
+                            :alt="props.row.nftName"
+                            class="nft-thumb"
+                          />
+                        </router-link>
                       </b-table-column>
                       <b-table-column field="nftName" label="Asset Name">
                         <nft-link
@@ -206,7 +250,9 @@
                         {{ props.row.nftContractName }}
                       </b-table-column>
                       <b-table-column field="hashtagName" label="Hashtag">
-                        <hashtag :value="props.row.hashtagName"></hashtag>
+                        <hashtag
+                          :value="props.row.hashtagDisplayHashtag"
+                        ></hashtag>
                       </b-table-column>
                     </template>
                   </b-table>
@@ -230,7 +276,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'publishers' }"
-                          >Browse publishers</router-link
+                          >Browse publishers </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -285,7 +331,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'owners' }"
-                          >Browse owners</router-link
+                          >Browse owners </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -341,7 +387,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags</router-link
+                          >Browse hashtags </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -353,7 +399,7 @@
                     </template>
                     <template slot-scope="props">
                       <b-table-column field="name" label="Hashtag">
-                        <hashtag :value="props.row.name"></hashtag>
+                        <hashtag :value="props.row.displayHashtag"></hashtag>
                       </b-table-column>
                       <b-table-column
                         field="tagCount"
@@ -380,7 +426,7 @@
                     <template slot="footer" v-if="!isCustom">
                       <div class="has-text-right">
                         <router-link :to="{ name: 'taggers' }"
-                          >Browse taggers</router-link
+                          >Browse taggers </router-link
                         >&nbsp;
                         <b-icon
                           icon="arrow-right"
@@ -448,7 +494,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -491,7 +537,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-tagged-content"
+                  filename="030-what-is-tagged-content"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -534,7 +580,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-a-publisher"
+                  filename="040-what-is-a-publisher"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -571,7 +617,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-an-owner"
+                  filename="050-what-is-an-owner"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -614,7 +660,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="020-what-is-hashtag-token"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -655,7 +701,7 @@
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="what-is-hashtag-token"
+                  filename="060-what-is-a-tagger"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -679,7 +725,7 @@
                     <figure class="image">
                       <img
                         v-if="modalForm.nft"
-                        :src="modalForm.nft.image_original_url"
+                        :src="modalForm.nft.metadataImageURI"
                         alt="Image"
                       />
                     </figure>
@@ -688,69 +734,96 @@
                     <span
                       class="has-text-weight-bold is-size-6 is-block"
                       v-if="modalForm.nft"
-                      >{{ modalForm.nft.name }}</span
+                      >{{ modalForm.nft.metadataName }}</span
                     >
                     <Span class="is-size-7 is-block">Known Origin</Span>
                   </div>
                 </div>
               </div>
               <div class="tile">
-                <section class="section" style="width: 100%;">
-                  <div class="container">
-                    <div class="content">
-                      <span class="has-text-weight-bold is-size-4 is-block"
-                        >Tag this asset</span
-                      >
-                      <span class="is-block is-size-7"
-                        >Choose a hashtag to describe this digital asset.</span
-                      >
-                    </div>
-
-                    <form>
-                      <div class="field">
-                        <div class="control">
-                          <b-taginput
-                            v-model="modalForm.hashtag"
-                            :data="hashtagInputTags"
-                            autocomplete
-                            :allow-new="true"
-                            maxtags="1"
-                            field="name"
-                            icon="pound"
-                            placeholder="Seach for hashtag"
-                            @typing="getFilteredTags"
-                            @add="tagAssetValidation"
-                            :before-adding="validateTag"
-                          >
-                            <template slot-scope="props">
-                              <b-taglist attached>
-                                <b-tag type="is-light"
-                                  >#{{ props.option.name }}</b-tag
-                                >
-                                <b-tag type="is-info">{{
-                                  props.option.tagCount
-                                }}</b-tag>
-                              </b-taglist>
-                            </template>
-                            <template slot="empty">
-                              New hashtag! We'll mint it & tag this asset...
-                            </template>
-                          </b-taginput>
-                        </div>
-                      </div>
-                      <div class="field">
-                        <div class="control">
-                          <b-button
-                            type="is-primary"
-                            @click="tagNft()"
-                            :disabled="!isTaggable"
-                            >Tag asset</b-button
-                          >
-                        </div>
-                      </div>
-                    </form>
+                <div class="tile is-child modal-tag">
+                  <div class="content">
+                    <span class="has-text-weight-bold is-size-4 is-block"
+                      >Tag this asset</span
+                    >
+                    <span class="is-block is-size-6"
+                      >Choose a hashtag to describe this digital asset.</span
+                    >
                   </div>
-                </section>
+
+                  <form>
+                    <div class="field">
+                      <div class="control">
+                        <b-taginput
+                          v-model="modalForm.hashtag"
+                          :data="hashtagInputTags"
+                          autocomplete
+                          :allow-new="true"
+                          maxtags="1"
+                          :has-counter="false"
+                          field="name"
+                          ref="tagginginput"
+                          icon="pound"
+                          placeholder="Enter a hashtag"
+                          @typing="getFilteredTags"
+                          @add="tagAssetValidation"
+                          :before-adding="validateTag"
+                        >
+                          <template slot-scope="props">
+                            <b-taglist attached>
+                              <b-tag type="is-primary" size="is-medium"
+                                >#{{ props.option.displayHashtag }}
+                              </b-tag>
+                              <b-tag type="is-dark" size="is-medium"
+                                >{{ props.option.tagCount }}
+                              </b-tag>
+                            </b-taglist>
+                          </template>
+                          <template slot="empty">
+                            New hashtag! Press enter to continue...
+                          </template>
+                          <template slot="selected" slot-scope="props">
+                            <div v-bind:class="{ box: isTaggable }">
+                              <b-tag
+                                v-for="(tag, index) in props.tags"
+                                :key="index"
+                                :tabstop="false"
+                                ellipsis
+                                attached
+                                type="is-primary"
+                                size="is-medium"
+                                closable
+                                close-type="is-dark"
+                                @close="
+                                  $refs.tagginginput.removeTag(index, $event)
+                                "
+                              >
+                                <div v-if="tag.displayHashtag">
+                                  #{{ tag.displayHashtag }}
+                                </div>
+                                <div v-else>#{{ tag }}</div>
+                              </b-tag>
+                              <div class="field">
+                                <div class="control">
+                                  <b-button
+                                    type="is-primary"
+                                    class="is-outlined"
+                                    @click="tagNft()"
+                                    :disabled="!isTaggable"
+                                    v-bind:class="{
+                                      'is-hidden': !isTaggable,
+                                    }"
+                                    >Tag asset
+                                  </b-button>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+                        </b-taginput>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -779,10 +852,15 @@ import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
-import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+import {
+  SNAPSHOT,
+  FIRST_THOUSAND_HASHTAGS,
+  NFTS_ASSETS_NAME_CONTAINS,
+} from "@/queries";
 import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
 import HashtagValidationService from "@/services/HashtagValidationService";
+import debounce from "lodash/debounce";
 
 export default {
   name: "Hashtags",
@@ -816,6 +894,8 @@ export default {
       },
       hashtagInput: null,
       hashtagInputTags: [],
+      nameContains: [],
+      isFetching: false,
       tagForm: {
         hashtag: null,
         nft: null,
@@ -825,19 +905,6 @@ export default {
   },
   computed: {
     ...mapGetters(["supportedNfts", "nftAssetCache"]),
-    getFilteredNFTs() {
-      if (!this.tagForm.nftName || !this.nftAssetCache) return [];
-
-      return this.nftAssetCache.assets.filter((option) => {
-        if (!option.name) return false;
-
-        return (
-          option.name
-            .toLowerCase()
-            .indexOf(this.tagForm.nftName.toLowerCase()) === 0
-        );
-      });
-    },
     isTaggable() {
       return (
         this.modalForm.nftName &&
@@ -878,25 +945,41 @@ export default {
     },
   },
   methods: {
+    getAsyncData: debounce(async function (name) {
+      if (!name.length) {
+        this.nameContains = [];
+        return;
+      }
+
+      const { data } = await this.$apollo.query({
+        query: NFTS_ASSETS_NAME_CONTAINS,
+        client: "nftsClient",
+        variables: {
+          first: 100,
+          name: name,
+        },
+      });
+
+      this.nameContains = data.nameContains;
+    }, 300),
     async tagNft() {
       if (this.modalForm.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
           hashtag: this.modalForm.hashtag[0],
-          nftContract: this.modalForm.nft.asset_contract.address,
-          nftId: this.modalForm.nft.token_id,
+          nftContract: this.modalForm.nft.contractAddress,
+          nftId: this.modalForm.nft.tokenId,
         });
       } else {
         await this.$store.dispatch("tag", {
           hashtagId: this.modalForm.hashtag[0].id,
-          nftContract: this.modalForm.nft.asset_contract.address,
-          nftId: this.modalForm.nft.token_id,
+          nftContract: this.modalForm.nft.contractAddress,
+          nftId: this.modalForm.nft.tokenId,
         });
       }
 
       this.resetModalForm();
       this.isTagModalActive = false;
     },
-    // Bulma taginput widget.
     getFilteredTags: function (text) {
       this.hashtagInputTags = (this.hashtags || []).filter((option) => {
         return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
@@ -919,7 +1002,6 @@ export default {
           }).length === 0
         );
       }
-
       return false;
     },
     mintHashtag() {
@@ -927,7 +1009,7 @@ export default {
     },
     onNftSelected(nft) {
       this.modalForm.nft = nft;
-      this.modalForm.nftName = nft.name;
+      this.modalForm.nftName = nft.metadataName;
       this.isTagModalActive = true;
     },
     resetModalForm() {
@@ -941,8 +1023,7 @@ export default {
       return this.hashtagValidationService.validateTag(hashtag);
     },
     tagAssetValidation(hashtag) {
-      const tagContentValid = this._validateTag(hashtag);
-
+      const tagContentValid = this.validateTag(hashtag);
       if (tagContentValid) {
         const hashtagValue =
           this.modalForm.hashtag[0] && this.modalForm.hashtag[0].name
@@ -968,4 +1049,19 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.modal-tag {
+  padding: 1rem;
+}
+
+section.hero {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 2rem;
+
+  &.dash {
+    padding-bottom: 5rem;
+    margin-bottom: -4rem;
+  }
+}
+</style>
