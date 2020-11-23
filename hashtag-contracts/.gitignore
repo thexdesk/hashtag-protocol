@@ -101,3 +101,6 @@ modules.xml
 # End of https://www.gitignore.io/api/intellij+all
 
 node_modules
+
+artifacts
+cache
