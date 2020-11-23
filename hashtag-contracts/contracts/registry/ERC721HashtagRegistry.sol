@@ -106,7 +106,6 @@ contract ERC721HashtagRegistry is Context {
      * @param _nftId ID of the nft to link from the above nft contract
      * @param _tagger the ethereum account that made the original tagging request
     */
-    // FIXME do we whitelist the NFT contracts you can tag?
     function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
         require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
         require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");

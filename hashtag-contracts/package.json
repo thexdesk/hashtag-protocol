@@ -15,16 +15,21 @@
   "devDependencies": {
     "@blockrocket/utils": "^1.0.8",
     "@openzeppelin/contracts": "3.0.0",
-    "@openzeppelin/test-environment": "^0.1.3",
-    "@openzeppelin/test-helpers": "^0.5.5",
-    "@truffle/hdwallet-provider": "^1.0.18",
     "chai": "^4.2.0",
     "husky": "^4.2.3",
     "lodash": "^4.17.15",
     "mocha": "^7.1.0",
-    "solidity-coverage": "^0.7.5",
-    "truffle": "^5.1.15",
-    "truffle-flattener": "1.4.2",
-    "truffle-plugin-verify": "^0.3.5"
+    "@nomiclabs/buidler": "^1.4.7",
+    "@nomiclabs/buidler-ethers": "^2.0.0",
+    "@nomiclabs/buidler-solhint": "^1.3.3",
+    "@nomiclabs/buidler-waffle": "^2.1.0",
+    "@nomiclabs/buidler-web3": "^1.3.4",
+    "@nomiclabs/buidler-etherscan": "^2.0.0",
+    "buidler-gas-reporter": "^0.1.3",
+    "dotenv": "^8.2.0",
+    "ethereum-waffle": "^3.1.0",
+    "solidity-coverage": "^0.7.10",
+    "ethers": "^5.0.15",
+    "prompt-sync": "^4.2.0"
   }
 }
