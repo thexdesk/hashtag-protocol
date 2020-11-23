@@ -34,7 +34,9 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     }
 
     uint256 public tokenPointer = 0;
-    uint256 public fee = 0.01 ether;
+
+    // initially free
+    uint256 public fee = 0.00 ether;
 
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
     mapping(string => uint256) public hashtagToTokenId;
@@ -99,10 +101,9 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @dev A fee is required unless the caller has an admin role
      * @param _hashtag String version of the hashtag to mint
      * @param _publisher Address of the publisher through which the hashtag is being created
-     * @param _recipient Address that will receive the hashtag
      * @return _tokenId ID of the new hashtag
     */
-    function mint(string memory _hashtag, address payable _publisher, address _recipient) payable public returns (uint256 _tokenId) {
+    function mint(string memory _hashtag, address payable _publisher) payable public returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
         require(accessControls.isAdmin(_msgSender()) || msg.value >= fee, "Mint: Must send the platform fee");
 
@@ -126,13 +127,13 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         hashtagToTokenId[hashtagKey] = tokenId;
         displayHashtagToTokenId[_hashtag] = tokenId;
 
-        _mint(_recipient, tokenId);
+        _mint(platform, tokenId);
 
         uint256 platformFee;
         uint256 publisherFee;
         if (msg.value > 0) {
             // split fee
-            platformFee = msg.value.div(modulo).mul(platformPercentage);
+            platformFee = msg.value.mul(platformPercentage).div(modulo);
             (bool platformSuccess,) = platform.call{value : platformFee}("");
             require(platformSuccess, "Failed to transfer commission to platform");
 
@@ -142,7 +143,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         }
 
         // log the minting event
-        emit MintHashtag(tokenId, _recipient, hashtagKey, _hashtag, _publisher, platformFee, publisherFee);
+        emit MintHashtag(tokenId, platform, hashtagKey, _hashtag, _publisher, platformFee, publisherFee);
 
         return tokenId;
     }

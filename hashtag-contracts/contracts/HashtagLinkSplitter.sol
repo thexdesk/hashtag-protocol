@@ -26,8 +26,7 @@ contract HashtagLinkSplitter is Context {
      * @dev When applied to a method, only allows execution when the sender has the admin role
     */
     modifier onlyAdmin() {
-        bytes32 adminRole = 0x00;
-        require(accessControls.hasRole(adminRole, _msgSender()), "Caller must be admin");
+        require(accessControls.isAdmin(_msgSender()), "Caller must be admin");
         _;
     }
 
@@ -42,8 +41,7 @@ contract HashtagLinkSplitter is Context {
      * @param _publisher Address of the publisher that handled the linking / tagging
     */
     function handlePayment(uint256 _tokenId, address _publisher) external payable returns (uint256 _platformFee, uint256 _publisherFee, uint256 _hashtagFee) {
-        (address payable platform,
-        address payable owner) = hashtagProtocol.getPaymentAddresses(_tokenId);
+        (address payable platform, address payable owner) = hashtagProtocol.getPaymentAddresses(_tokenId);
 
         uint256 platformFee = msg.value.div(modulo).mul(platformPercentage);
         (bool platformSuccess,) = platform.call{value: platformFee}("");
