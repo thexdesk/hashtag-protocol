@@ -122,21 +122,21 @@ contract ERC721HashtagRegistry is Context {
 
         // Ensure that we are dealing with an ERC721 compliant _nftContract
         try IERC721(_nftContract).supportsInterface(_INTERFACE_ID_ERC721) returns (bool result) {
-    require(result == true, "Contract does not implement the ERC721 interface");
-    } catch Error(string memory reason) {
-    require(false, reason);
-    } catch {
-    require(false, "Invalid NFT contract");
-    }
+            require(result == true, "Contract does not implement the ERC721 interface");
+        } catch Error(string memory reason) {
+            require(false, reason);
+        } catch {
+            require(false, "Invalid NFT contract");
+        }
 
-    // NFT existence checks - revert if NFT does not exist
-    try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
-    require(owner != address(0), "Token does not exist or is owned by the zero address");
-    } catch Error(string memory reason) {
-    require(false, reason);
-    } catch {
-    require(false, "Token does not exist");
-    }
+        // NFT existence checks - revert if NFT does not exist
+        try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
+            require(owner != address(0), "Token does not exist or is owned by the zero address");
+        } catch Error(string memory reason) {
+            require(false, reason);
+        } catch {
+            require(false, "Token does not exist");
+        }
 
         // Generate a new tag ID
         totalTags = totalTags.add(1);
@@ -290,9 +290,9 @@ contract ERC721HashtagRegistry is Context {
      * @notice Admin functionality for updating the commission splitter
      * @param _splitter Address of the splitting contract
     */
-//    function updateSplitter(HashtagLinkSplitter _splitter) onlyAdmin external {
-//        splitter = _splitter;
-//    }
+    //    function updateSplitter(HashtagLinkSplitter _splitter) onlyAdmin external {
+    //        splitter = _splitter;
+    //    }
 
     /**
      * @notice Admin functionality for updating the access controls
