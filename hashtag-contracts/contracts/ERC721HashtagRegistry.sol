@@ -3,7 +3,7 @@ pragma solidity 0.6.6;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/GSN/Context.sol";
-import "./HashtagLinkSplitter.sol";
+//import "./HashtagLinkSplitter.sol";
 import "./HashtagProtocol.sol";
 
 /**
@@ -16,14 +16,19 @@ contract ERC721HashtagRegistry is Context {
 
     HashtagAccessControls public accessControls;
     HashtagProtocol public hashtagProtocol;
-    HashtagLinkSplitter public splitter;
+
+    uint256 constant public modulo = 100;
+    uint256 public platformPercentage = 20; // 20%
+    uint256 public publisherPercentage = 40; // 40%
+
+    mapping(address => uint256) public accrued;
+    mapping(address => uint256) public paid;
 
     uint256 public totalTags = 0;
 
     uint256 public tagFee = 0.01 ether;
 
-    uint256 public modulo = 10000;
-    uint256 public mintAndTagDiscount = 0;
+    //    uint256 public mintAndTagDiscount = 0;
 
     // Used to log that an NFT has been tagged
     event HashtagRegistered(
@@ -48,17 +53,17 @@ contract ERC721HashtagRegistry is Context {
     // tag id (will come from the totalTags pointer) -> tag
     mapping(uint256 => Tag) public tagIdToTag;
 
-//    // hashtag id -> list of tag ids (can use .length for count)
-//    mapping(uint256 => uint256[]) public hashtagIdToListOfTagIds;
-//
-//    // nft contract -> nft id -> list of tag ids (can use .length for count)
-//    mapping(address => mapping(uint256 => uint256[])) public nftToListOfTagIds;
-//
-//    // publisher -> list of tag ids tagged through publisher (can use .length for count)
-//    mapping(address => uint256[]) public publisherToListOfTagIds;
-//
-//    // tagger -> list of tag ids tagged by tagger (can use .length for count)
-//    mapping(address => uint256[]) public taggerToListOfTagIds;
+    //    // hashtag id -> list of tag ids (can use .length for count)
+    //    mapping(uint256 => uint256[]) public hashtagIdToListOfTagIds;
+    //
+    //    // nft contract -> nft id -> list of tag ids (can use .length for count)
+    //    mapping(address => mapping(uint256 => uint256[])) public nftToListOfTagIds;
+    //
+    //    // publisher -> list of tag ids tagged through publisher (can use .length for count)
+    //    mapping(address => uint256[]) public publisherToListOfTagIds;
+    //
+    //    // tagger -> list of tag ids tagged by tagger (can use .length for count)
+    //    mapping(address => uint256[]) public taggerToListOfTagIds;
 
     bytes4 private constant _INTERFACE_ID_ERC721 = 0x5b5e139f;
 
@@ -71,10 +76,9 @@ contract ERC721HashtagRegistry is Context {
         _;
     }
 
-    constructor (HashtagAccessControls _accessControls, HashtagProtocol _hashtagProtocol, HashtagLinkSplitter _splitter) public {
+    constructor (HashtagAccessControls _accessControls, HashtagProtocol _hashtagProtocol) public {
         accessControls = _accessControls;
         hashtagProtocol = _hashtagProtocol;
-        splitter = _splitter;
     }
 
     /**
@@ -91,7 +95,7 @@ contract ERC721HashtagRegistry is Context {
 
         require(msg.value >= (hashtagProtocol.fee().add(tagFee)), "Mint and tag: You must send the fee");
 
-        uint256 hashtagId = hashtagProtocol.mint{value: hashtagProtocol.fee()}(_hashtag, _publisher);
+        uint256 hashtagId = hashtagProtocol.mint{value : hashtagProtocol.fee()}(_hashtag, _publisher);
         tag(hashtagId, _nftContract, _nftId, _publisher, _tagger);
     }
 
@@ -114,48 +118,68 @@ contract ERC721HashtagRegistry is Context {
         require(_nftContract != address(hashtagProtocol), "Tag: Invalid tag - you are attempting to tag another hashtag");
 
         // FIXME better solution for this required
-//        require(_isNewTagForNft(_hashtagId, _nftContract, _nftId), "Tag: NFT has already been tagged");
+        //        require(_isNewTagForNft(_hashtagId, _nftContract, _nftId), "Tag: NFT has already been tagged");
 
         // Ensure that we are dealing with an ERC721 compliant _nftContract
         try IERC721(_nftContract).supportsInterface(_INTERFACE_ID_ERC721) returns (bool result) {
-            require(result == true, "Contract does not implement the ERC721 interface");
-        } catch Error(string memory reason) {
-            require(false, reason);
-        } catch {
-            require(false, "Invalid NFT contract");
-        }
+    require(result == true, "Contract does not implement the ERC721 interface");
+    } catch Error(string memory reason) {
+    require(false, reason);
+    } catch {
+    require(false, "Invalid NFT contract");
+    }
 
-        // NFT existence checks - revert if NFT does not exist
-        try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
-            require(owner != address(0), "Token does not exist or is owned by the zero address");
-        } catch Error(string memory reason) {
-            require(false, reason);
-        } catch {
-            require(false, "Token does not exist");
-        }
+    // NFT existence checks - revert if NFT does not exist
+    try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
+    require(owner != address(0), "Token does not exist or is owned by the zero address");
+    } catch Error(string memory reason) {
+    require(false, reason);
+    } catch {
+    require(false, "Token does not exist");
+    }
 
         // Generate a new tag ID
         totalTags = totalTags.add(1);
         uint256 tagId = totalTags;
 
         tagIdToTag[tagId] = Tag({
-            hashtagId: _hashtagId,
-            nftContract: _nftContract,
-            nftId: _nftId,
-            tagger: _tagger,
-            tagstamp: now,
-            publisher: _publisher
-        });
+            hashtagId : _hashtagId,
+            nftContract : _nftContract,
+            nftId : _nftId,
+            tagger : _tagger,
+            tagstamp : now,
+            publisher : _publisher
+            });
 
         // FIXME move to subgraph
         // Create the links between the tagging event and the hashtag, nft, publisher and tagger
-//        hashtagIdToListOfTagIds[_hashtagId].push(tagId);
-//        nftToListOfTagIds[_nftContract][_nftId].push(tagId);
-//        publisherToListOfTagIds[_publisher].push(tagId);
-//        taggerToListOfTagIds[_tagger].push(tagId);
+        //        hashtagIdToListOfTagIds[_hashtagId].push(tagId);
+        //        nftToListOfTagIds[_nftContract][_nftId].push(tagId);
+        //        publisherToListOfTagIds[_publisher].push(tagId);
+        //        taggerToListOfTagIds[_tagger].push(tagId);
 
         // Split the tagging fee paid by the tagger to the relevant entities i.e. publisher, owner and platform
-//        (uint256 platformFee, uint256 publisherFee, uint256 hashtagFee) = splitter.handlePayment{value: tagFeeAfterDiscount}(_hashtagId, _publisher);
+        //        (uint256 platformFee, uint256 publisherFee, uint256 hashtagFee) = splitter.handlePayment{value: tagFeeAfterDiscount}(_hashtagId, _publisher);
+
+
+        (address _platform, address _owner) = hashtagProtocol.getPaymentAddresses(_hashtagId);
+        uint256 remainingPercentage = modulo.sub(platformPercentage).sub(publisherPercentage);
+
+        // pre-auction
+        if (hashtagProtocol.ownerOf(_hashtagId) == _platform) {
+            accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
+            accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
+
+            address creator = hashtagProtocol.getCreatorAddress(_hashtagId);
+            accrued[creator] = accrued[creator].add(msg.value.mul(remainingPercentage).div(modulo));
+        }
+        // post-auction
+        else {
+            accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
+            accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
+
+            accrued[_owner] = accrued[_owner].add(msg.value.mul(remainingPercentage).div(modulo));
+        }
 
         // Log that an NFT has been tagged
         emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, tagFee);
@@ -181,12 +205,12 @@ contract ERC721HashtagRegistry is Context {
     ) {
         Tag storage tagInfo = tagIdToTag[_tagId];
         return (
-            tagInfo.hashtagId,
-            tagInfo.nftContract,
-            tagInfo.nftId,
-            tagInfo.tagger,
-            tagInfo.tagstamp,
-            tagInfo.publisher
+        tagInfo.hashtagId,
+        tagInfo.nftContract,
+        tagInfo.nftId,
+        tagInfo.tagger,
+        tagInfo.tagstamp,
+        tagInfo.publisher
         );
     }
 
@@ -195,9 +219,9 @@ contract ERC721HashtagRegistry is Context {
      * @param _hashtagId ID of the hashtag
      * @return uint256[] List of tag IDs relating to tag events
     */
-//    function getAllTagIdsForAGivenHashtag(uint256 _hashtagId) external view returns (uint256[] memory) {
-//        return hashtagIdToListOfTagIds[_hashtagId];
-//    }
+    //    function getAllTagIdsForAGivenHashtag(uint256 _hashtagId) external view returns (uint256[] memory) {
+    //        return hashtagIdToListOfTagIds[_hashtagId];
+    //    }
 
     /**
      * @notice Gets the IDs of all tag events related to an NFT
@@ -205,27 +229,27 @@ contract ERC721HashtagRegistry is Context {
      * @param _nftId ID of the nft
      * @return uint256[] List of tag IDs relating to tag events
     */
-//    function getAllTagIdsForAGivenNft(address _nftContract, uint256 _nftId) external view returns (uint256[] memory) {
-//        return nftToListOfTagIds[_nftContract][_nftId];
-//    }
+    //    function getAllTagIdsForAGivenNft(address _nftContract, uint256 _nftId) external view returns (uint256[] memory) {
+    //        return nftToListOfTagIds[_nftContract][_nftId];
+    //    }
 
     /**
      * @notice Gets the IDs of all tag events that took place through a publisher
      * @param _publisher Address of the publisher
      * @return uint256[] List of tag IDs relating to tag events
     */
-//    function getAllTagIdsForAGivenPublisher(address _publisher) external view returns (uint256[] memory) {
-//        return publisherToListOfTagIds[_publisher];
-//    }
+    //    function getAllTagIdsForAGivenPublisher(address _publisher) external view returns (uint256[] memory) {
+    //        return publisherToListOfTagIds[_publisher];
+    //    }
 
     /**
      * @notice Gets the IDs of all tag events that were triggered by a given address
      * @param _tagger Address of the tagger
      * @return uint256[] List of tag IDs relating to tag events
     */
-//    function getAllTagIdsForAGivenTagger(address _tagger) external view returns (uint256[] memory) {
-//        return taggerToListOfTagIds[_tagger];
-//    }
+    //    function getAllTagIdsForAGivenTagger(address _tagger) external view returns (uint256[] memory) {
+    //        return taggerToListOfTagIds[_tagger];
+    //    }
 
     /**
      * @notice Sets the fee required to tag an NFT asset
@@ -240,35 +264,35 @@ contract ERC721HashtagRegistry is Context {
      * @dev The percentage defined must be to 2 decimal places. For example: For a discount of 12.55%, multiply this by 100 to get 1255
      * @param _mintAndTagDiscount Discount percentage
     */
-//    function setMintAndTagDiscount(uint256 _mintAndTagDiscount) onlyAdmin external {
-//        mintAndTagDiscount = _mintAndTagDiscount;
-//    }
+    //    function setMintAndTagDiscount(uint256 _mintAndTagDiscount) onlyAdmin external {
+    //        mintAndTagDiscount = _mintAndTagDiscount;
+    //    }
 
-//    /**
-//     * @notice Calculates the tagging fee after the discount is applied
-//     * @return uint256 Tag fee after discount
-//    */
-//    function calculateTagFeeAfterDiscount() public view returns (uint256) {
-//        uint256 tagFeeDiscount = tagFee.div(modulo).mul(mintAndTagDiscount);
-//        return tagFee.sub(tagFeeDiscount);
-//    }
+    //    /**
+    //     * @notice Calculates the tagging fee after the discount is applied
+    //     * @return uint256 Tag fee after discount
+    //    */
+    //    function calculateTagFeeAfterDiscount() public view returns (uint256) {
+    //        uint256 tagFeeDiscount = tagFee.div(modulo).mul(mintAndTagDiscount);
+    //        return tagFee.sub(tagFeeDiscount);
+    //    }
 
     /**
      * @notice Calculates the fee that would be required to create a hashtag and tag an NFT asset in the same transaction
      * @return uint256 Fee for minting and tagging
     */
-//    function calculateMintAndTagFee() public view returns (uint256) {
-//        uint256 protocolFee = hashtagProtocol.fee();
-//        return protocolFee.add(tagFee);
-//    }
+    //    function calculateMintAndTagFee() public view returns (uint256) {
+    //        uint256 protocolFee = hashtagProtocol.fee();
+    //        return protocolFee.add(tagFee);
+    //    }
 
     /**
      * @notice Admin functionality for updating the commission splitter
      * @param _splitter Address of the splitting contract
     */
-    function updateSplitter(HashtagLinkSplitter _splitter) onlyAdmin external {
-        splitter = _splitter;
-    }
+//    function updateSplitter(HashtagLinkSplitter _splitter) onlyAdmin external {
+//        splitter = _splitter;
+//    }
 
     /**
      * @notice Admin functionality for updating the access controls
@@ -286,22 +310,22 @@ contract ERC721HashtagRegistry is Context {
      * @return bool True if the hashtag has never been associated with the nft, false if there is an existing link
     */
     // FIXME loops are bad...might need another data structure to help with this
-//    function _isNewTagForNft(uint256 _hashtagId, address _nftContract, uint256 _nftId) private view returns (bool) {
-//        uint256[] memory tagIds = nftToListOfTagIds[_nftContract][_nftId];
-//
-//        bool isNewTag = true;
-//        for(uint256 i = 0; i < tagIds.length; i++) {
-//            uint256 tagId = tagIds[i];
-//            Tag memory aTag = tagIdToTag[tagId];
-//
-//            if (aTag.nftContract == _nftContract && aTag.nftId == _nftId && aTag.hashtagId == _hashtagId) {
-//                isNewTag = false;
-//                break;
-//            }
-//        }
-//
-//        return isNewTag;
-//    }
+    //    function _isNewTagForNft(uint256 _hashtagId, address _nftContract, uint256 _nftId) private view returns (bool) {
+    //        uint256[] memory tagIds = nftToListOfTagIds[_nftContract][_nftId];
+    //
+    //        bool isNewTag = true;
+    //        for(uint256 i = 0; i < tagIds.length; i++) {
+    //            uint256 tagId = tagIds[i];
+    //            Tag memory aTag = tagIdToTag[tagId];
+    //
+    //            if (aTag.nftContract == _nftContract && aTag.nftId == _nftId && aTag.hashtagId == _hashtagId) {
+    //                isNewTag = false;
+    //                break;
+    //            }
+    //        }
+    //
+    //        return isNewTag;
+    //    }
 
     // TODO: expose admin drain for excess ETH in the contract
 }

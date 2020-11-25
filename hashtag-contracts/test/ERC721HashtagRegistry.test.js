@@ -26,7 +26,7 @@ describe('ERC721HashtagRegistry Tests', function () {
 
     const HashtagAccessControls = await ethers.getContractFactory('HashtagAccessControls');
     const HashtagProtocol = await ethers.getContractFactory('HashtagProtocol');
-    const HashtagLinkSplitter = await ethers.getContractFactory('HashtagLinkSplitter');
+    // const HashtagLinkSplitter = await ethers.getContractFactory('HashtagLinkSplitter');
     const ERC721HashtagRegistry = await ethers.getContractFactory('ERC721HashtagRegistry');
     const ERC721BurnableMock = await ethers.getContractFactory('ERC721BurnableMock');
 
@@ -36,8 +36,8 @@ describe('ERC721HashtagRegistry Tests', function () {
     // add a publisher to the protocol
     await this.accessControls.grantRole(web3.utils.sha3('PUBLISHER'), publisherAddress);
 
-    this.splitter = await HashtagLinkSplitter.deploy(this.accessControls.address, this.hashtagProtocol.address);
-    this.tagger = await ERC721HashtagRegistry.deploy(this.accessControls.address, this.hashtagProtocol.address, this.splitter.address);
+    // this.splitter = await HashtagLinkSplitter.deploy(this.accessControls.address, this.hashtagProtocol.address);
+    this.tagger = await ERC721HashtagRegistry.deploy(this.accessControls.address, this.hashtagProtocol.address);
 
     this.nft = await ERC721BurnableMock.deploy('NFT', 'NFT');
     await this.nft.mint();
@@ -57,12 +57,12 @@ describe('ERC721HashtagRegistry Tests', function () {
       await expect(this.tagger.connect(random).setTagFee(utils.parseEther('1'))).to.be.reverted;
     });
 
-    it('should update splitter', async function () {
-      this.tagger.connect(creator).updateSplitter(randomAddress);
-      expect(await this.tagger.splitter()).to.be.equal(randomAddress);
-
-      await expect(this.tagger.connect(random).updateSplitter(randomAddress)).to.be.reverted;
-    });
+    // it('should update splitter', async function () {
+    //   this.tagger.connect(creator).updateSplitter(randomAddress);
+    //   expect(await this.tagger.splitter()).to.be.equal(randomAddress);
+    //
+    //   await expect(this.tagger.connect(random).updateSplitter(randomAddress)).to.be.reverted;
+    // });
 
     it('should update access controls', async function () {
       this.tagger.connect(creator).updateAccessControls(randomAddress);

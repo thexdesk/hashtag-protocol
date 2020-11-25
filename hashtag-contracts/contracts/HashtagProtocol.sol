@@ -74,7 +74,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     function exists(uint256 _tokenId) public view returns (bool) {
         return _exists(_tokenId);
     }
-    
+
     /**
      * @notice Admin method for updating the token URI of a hashtag
      * @param _tokenId ID of the hashtag
@@ -190,6 +190,17 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     }
 
     /**
+     * @notice Returns creator of a token
+     * @param _tokenId ID of a hashtag
+     * @return _creator creator of the hashtag
+    */
+    function getCreatorAddress(uint256 _tokenId) public view returns (
+        address _creator
+    ) {
+        return tokenIdToHashtag[_tokenId].creator;
+    }
+
+    /**
      * @notice Private method used for validating a hashtag before minting
      * @dev A series of assertions are performed reverting the transaction for any validation violations
      * @param _hashtag Proposed hashtag string
@@ -223,9 +234,9 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
             // Generally ensure that the character is alpha numeric
             bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
-                                     !(char >= 0x41 && char <= 0x5A) && //A-Z
-                                     !(char >= 0x61 && char <= 0x7A) && //a-z
-                                     !(char == 0x2E);
+            !(char >= 0x41 && char <= 0x5A) && //A-Z
+            !(char >= 0x61 && char <= 0x7A) && //a-z
+            !(char == 0x2E);
 
             require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9");
 
