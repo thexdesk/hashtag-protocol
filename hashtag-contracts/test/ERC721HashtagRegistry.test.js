@@ -3,16 +3,16 @@ const {expect} = require('chai');
 
 const {utils, BigNumber, constants} = ethers;
 
-describe('ERC721HashtagRegistry Tests', function () {
+describe.only('ERC721HashtagRegistry Tests', function () {
 
-  let creator, creatorAddress, publisher, publisherAddress, buyer, buyerAddress, anotherAddress, random, randomAddress,
-    tagger, taggerAddress, minter, minterAddress;
+  let platform, platformAddress, publisher, publisherAddress;
+  let buyer, buyerAddress, anotherAddress, random, randomAddress, tagger, taggerAddress;
 
   beforeEach(async function () {
     const accounts = await ethers.getSigners();
 
-    creator = accounts[0];
-    creatorAddress = await accounts[0].getAddress();
+    platform = accounts[0];
+    platformAddress = await accounts[0].getAddress();
     publisher = accounts[1];
     publisherAddress = await accounts[1].getAddress();
     buyer = accounts[4];
@@ -23,8 +23,6 @@ describe('ERC721HashtagRegistry Tests', function () {
     randomAddress = await accounts[6].getAddress();
     tagger = accounts[7];
     taggerAddress = await accounts[7].getAddress();
-    minter = accounts[8];
-    minterAddress = await accounts[8].getAddress();
 
     const HashtagAccessControls = await ethers.getContractFactory('HashtagAccessControls');
     const HashtagProtocol = await ethers.getContractFactory('HashtagProtocol');
@@ -33,12 +31,11 @@ describe('ERC721HashtagRegistry Tests', function () {
     const ERC721BurnableMock = await ethers.getContractFactory('ERC721BurnableMock');
 
     this.accessControls = await HashtagAccessControls.deploy();
-    this.hashtagProtocol = await HashtagProtocol.deploy(this.accessControls.address, creatorAddress);
+    this.hashtagProtocol = await HashtagProtocol.deploy(this.accessControls.address, platformAddress);
 
     // add a publisher to the protocol
     await this.accessControls.grantRole(web3.utils.sha3('PUBLISHER'), publisherAddress);
 
-    // this.splitter = await HashtagLinkSplitter.deploy(this.accessControls.address, this.hashtagProtocol.address);
     this.registry = await ERC721HashtagRegistry.deploy(this.accessControls.address, this.hashtagProtocol.address);
 
     this.nft = await ERC721BurnableMock.deploy('NFT', 'NFT');
@@ -53,21 +50,15 @@ describe('ERC721HashtagRegistry Tests', function () {
 
   describe('admin access', async function () {
     it('should set tag fee', async function () {
-      this.registry.connect(creator).setTagFee(utils.parseEther('1'));
+      this.registry.connect(platform).setTagFee(utils.parseEther('1'));
       expect(await this.registry.tagFee()).to.be.equal(utils.parseEther('1'));
 
       await expect(this.registry.connect(random).setTagFee(utils.parseEther('1'))).to.be.reverted;
     });
 
-    // it('should update splitter', async function () {
-    //   this.registry.connect(creator).updateSplitter(randomAddress);
-    //   expect(await this.registry.splitter()).to.be.equal(randomAddress);
-    //
-    //   await expect(this.registry.connect(random).updateSplitter(randomAddress)).to.be.reverted;
-    // });
 
     it('should update access controls', async function () {
-      this.registry.connect(creator).updateAccessControls(randomAddress);
+      this.registry.connect(platform).updateAccessControls(randomAddress);
       expect(await this.registry.accessControls()).to.be.equal(randomAddress);
 
       await expect(this.registry.connect(random).updateAccessControls(randomAddress)).to.be.reverted;
@@ -76,7 +67,7 @@ describe('ERC721HashtagRegistry Tests', function () {
 
   describe('Add hashtag link', async function () {
     beforeEach(async function () {
-      await this.hashtagProtocol.connect(minter).mint('pussypower', publisherAddress, {value: utils.parseEther('1')});
+      await this.hashtagProtocol.connect(tagger).mint('pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('pussypower');
     });
 
@@ -120,10 +111,8 @@ describe('ERC721HashtagRegistry Tests', function () {
 
       // check accrued values
       expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
-      expect(await this.registry.accrued(creatorAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
-
-      // FIXME the creator should not be the registry
-      expect(await this.registry.accrued(this.registry.address)).to.be.equal(utils.parseEther('0.004')); // 40%
+      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
+      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
     });
 
     it('should be able to tag a cryptokittie with #pussypower', async function () {
@@ -167,8 +156,8 @@ describe('ERC721HashtagRegistry Tests', function () {
 
       // check accrued values
       expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
-      expect(await this.registry.accrued(creatorAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
-      expect(await this.registry.accrued(minterAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
+      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
+      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
     });
 
     it('Reverts when hashtag does not exist', async function () {

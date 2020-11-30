@@ -19,7 +19,8 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         address indexed owner,
         string hashtag,
         string displayHashtag,
-        address indexed publisher
+        address indexed publisher,
+        address creator
     );
 
     // Definition of a Hashtag which bundles associated metadata
@@ -96,9 +97,10 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @dev A fee is required unless the caller has an admin role
      * @param _hashtag String version of the hashtag to mint
      * @param _publisher Address of the publisher through which the hashtag is being created
+     * @param _creator Address of the account to be attributed with creation
      * @return _tokenId ID of the new hashtag
     */
-    function mint(string memory _hashtag, address payable _publisher) payable public returns (uint256 _tokenId) {
+    function mint(string memory _hashtag, address payable _publisher, address _creator) payable public returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
 
         _assertHashtagIsValid(_hashtag);
@@ -114,7 +116,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
             displayVersion : _hashtag,
             created : now,
             originalPublisher : _publisher,
-            creator : _msgSender()
+            creator : _creator
             });
 
         // store a reverse lookup and mint the tag
@@ -124,7 +126,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         _mint(platform, tokenId);
 
         // log the minting event
-        emit MintHashtag(tokenId, platform, hashtagKey, _hashtag, _publisher);
+        emit MintHashtag(tokenId, platform, hashtagKey, _hashtag, _publisher, _creator);
 
         return tokenId;
     }
