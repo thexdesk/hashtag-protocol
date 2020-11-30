@@ -19,9 +19,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         address indexed owner,
         string hashtag,
         string displayHashtag,
-        address indexed publisher,
-        uint256 platformFee,
-        uint256 publisherFee
+        address indexed publisher
     );
 
     // Definition of a Hashtag which bundles associated metadata
@@ -34,9 +32,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     }
 
     uint256 public tokenPointer = 0;
-
-    // initially free
-    uint256 public fee = 0.00 ether;
 
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
     mapping(string => uint256) public hashtagToTokenId;
@@ -105,7 +100,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     */
     function mint(string memory _hashtag, address payable _publisher) payable public returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
-        require(accessControls.isAdmin(_msgSender()) || msg.value >= fee, "Mint: Must send the platform fee");
 
         _assertHashtagIsValid(_hashtag);
 
@@ -129,45 +123,15 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
         _mint(platform, tokenId);
 
-        uint256 platformFee;
-        uint256 publisherFee;
-        if (msg.value > 0) {
-            // split fee
-            platformFee = msg.value.mul(platformPercentage).div(modulo);
-            (bool platformSuccess,) = platform.call{value : platformFee}("");
-            require(platformSuccess, "Failed to transfer commission to platform");
-
-            publisherFee = msg.value.sub(platformFee);
-            (bool publisherSuccess,) = _publisher.call{value : publisherFee}("");
-            require(publisherSuccess, "Failed to transfer commission to publisher");
-        }
-
         // log the minting event
-        emit MintHashtag(tokenId, platform, hashtagKey, _hashtag, _publisher, platformFee, publisherFee);
+        emit MintHashtag(tokenId, platform, hashtagKey, _hashtag, _publisher);
 
         return tokenId;
     }
 
     /**
-     * @notice Admin functionality for setting the fee required in order to create and mint a hashtag
-     * @param _fee Value that the fee will be set to in WEI
-    */
-    function setFee(uint256 _fee) onlyAdmin external {
-        fee = _fee;
-    }
-
-    /**
-     * @notice Admin functionality for updating the percentage of the minting fee that the platform receives
-     * @dev The percentage defined must be to 2 decimal places. For example: For a percentage of 12.55%, multiply this by 100 to get 1255
-     * @param _platformPercentage Percentage of the minting fee that the Hashtag Protocol receives
-    */
-    function setPlatformPercentage(uint256 _platformPercentage) onlyAdmin external {
-        platformPercentage = _platformPercentage;
-    }
-
-    /**
      * @notice Admin functionality for updating the address that receives the commission on behalf of the platform
-     * @param _platform Address that receives platform fees
+     * @param _platform Address that receives minted NFTs
     */
     function setPlatform(address payable _platform) onlyAdmin external {
         platform = _platform;
@@ -194,9 +158,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @param _tokenId ID of a hashtag
      * @return _creator creator of the hashtag
     */
-    function getCreatorAddress(uint256 _tokenId) public view returns (
-        address _creator
-    ) {
+    function getCreatorAddress(uint256 _tokenId) public view returns (address _creator) {
         return tokenIdToHashtag[_tokenId].creator;
     }
 

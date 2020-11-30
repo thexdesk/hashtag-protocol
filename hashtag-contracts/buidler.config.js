@@ -21,7 +21,7 @@ module.exports = {
   },
   networks: {
     buidlerevm: {
-      gasPrice: 0, // 0 gwei
+      gasPrice: 60000000000, // 60 gwei
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,

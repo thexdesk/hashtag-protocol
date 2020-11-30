@@ -93,9 +93,9 @@ contract ERC721HashtagRegistry is Context {
     function mintAndTag(string calldata _hashtag, address _nftContract, uint256 _nftId, address payable _publisher, address _tagger) payable external {
         require(accessControls.isPublisher(_publisher), "Mint and tag: The publisher must be whitelisted");
 
-        require(msg.value >= (hashtagProtocol.fee().add(tagFee)), "Mint and tag: You must send the fee");
+        require(msg.value >= tagFee, "Mint and tag: You must send the tag fee");
 
-        uint256 hashtagId = hashtagProtocol.mint{value : hashtagProtocol.fee()}(_hashtag, _publisher);
+        uint256 hashtagId = hashtagProtocol.mint(_hashtag, _publisher);
         tag(hashtagId, _nftContract, _nftId, _publisher, _tagger);
     }
 
