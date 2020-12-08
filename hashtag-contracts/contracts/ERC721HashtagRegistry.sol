@@ -112,7 +112,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
      * @param _nftId ID of the nft to link from the above nft contract
      * @param _tagger the ethereum account that made the original tagging request
     */
-    function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
+    function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable nonReentrant public {
         require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");
 
         require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
