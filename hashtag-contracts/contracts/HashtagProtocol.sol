@@ -36,7 +36,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
     mapping(string => uint256) public hashtagToTokenId;
-    mapping(string => uint256) public displayHashtagToTokenId;
 
     address payable public platform;
     uint256 public platformPercentage = 9000;
@@ -103,30 +102,47 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     function mint(string memory _hashtag, address payable _publisher, address _creator) payable public returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
 
+        // Perform basic hashtag validation
         _assertHashtagIsValid(_hashtag);
+
+        // Check the first character of the hashtag being minted
+        // If it doesn't contain the hashtag character, then pre-pend it to the hashtag being minted
+        bool isFirstCharacterOfStringHashtagCharacter = _isFirstCharacterOfStringHashtagCharacter(_hashtag);
+        string memory lowerHashtagToMint = _lower(_hashtag);
+        string memory hashtagToMint = _hashtag;
+
+        if (isFirstCharacterOfStringHashtagCharacter == false) {
+            // pre-pend the hashtag character
+            hashtagToMint = string(
+                abi.encodePacked(
+                    "#",
+                    _hashtag
+                )
+            );
+
+            lowerHashtagToMint = _lower(hashtagToMint);
+        }
 
         // generate the new hashtag token id
         tokenPointer = tokenPointer.add(1);
         uint256 tokenId = tokenPointer;
 
         // create the hashtag
-        string memory hashtagKey = _lower(_hashtag);
         tokenIdToHashtag[tokenId] = Hashtag({
-            value : hashtagKey,
-            displayVersion : _hashtag,
+            value : lowerHashtagToMint,
+            displayVersion : hashtagToMint,
             created : now,
             originalPublisher : _publisher,
             creator : _creator
-            });
+        });
 
         // store a reverse lookup and mint the tag
-        hashtagToTokenId[hashtagKey] = tokenId;
-        displayHashtagToTokenId[_hashtag] = tokenId;
+        hashtagToTokenId[lowerHashtagToMint] = tokenId;
 
         _mint(platform, tokenId);
 
         // log the minting event
-        emit MintHashtag(tokenId, platform, hashtagKey, _hashtag, _publisher, _creator);
+        emit MintHashtag(tokenId, platform, lowerHashtagToMint, hashtagToMint, _publisher, _creator);
 
         return tokenId;
     }
@@ -200,9 +216,9 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
             bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
             !(char >= 0x41 && char <= 0x5A) && //A-Z
             !(char >= 0x61 && char <= 0x7A) && //a-z
-            !(char == 0x2E);
+            !(char == 0x23); // hashtag symbol
 
-            require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9");
+            require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #");
 
             // Should the char be alphabetic, increment alphabetCharCount
             if ((char >= 0x41 && char <= 0x5A) || (char >= 0x61 && char <= 0x7A)) {
@@ -211,7 +227,23 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         }
 
         // Ensure alphabetCharCount is at least 1
-        require(alphabetCharCount > 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
+        require(alphabetCharCount >= 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
+    }
+
+    /**
+     * @notice Private method used for checking whether the first character of a
+     * @dev Will return false for empty strings
+     * @param _str String being tested
+     * @return True if the first character matches the Ascii code for the hashtag character
+    */
+    function _isFirstCharacterOfStringHashtagCharacter(string memory _str) private pure returns (bool) {
+        bytes memory strBytes = bytes(_str);
+
+        if (strBytes.length == 0) {
+            return false;
+        }
+
+        return strBytes[0] == 0x23;
     }
 
     /**
@@ -219,7 +251,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @param _base String to convert
      * @return string Lowercase version of string supplied
     */
-    function _lower(string memory _base) internal pure returns (string memory) {
+    function _lower(string memory _base) private pure returns (string memory) {
         bytes memory bStr = bytes(_base);
         bytes memory bLower = new bytes(bStr.length);
         for (uint i = 0; i < bStr.length; i++) {

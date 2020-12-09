@@ -69,7 +69,7 @@ describe.only('ERC721HashtagRegistry Tests', function () {
   describe('Add hashtag link', async function () {
     beforeEach(async function () {
       await this.hashtagProtocol.connect(tagger).mint('pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
-      this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('pussypower');
+      this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
     });
 
     it('should be able to mint and tag', async function () {
@@ -261,7 +261,7 @@ describe.only('ERC721HashtagRegistry Tests', function () {
   describe('Drawing down', async function () {
     beforeEach(async function() {
       await this.hashtagProtocol.connect(tagger).mint('pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
-      this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('pussypower');
+      this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
 
       const nftOneId = constants.One;
       await this.registry.connect(tagger).tag(
