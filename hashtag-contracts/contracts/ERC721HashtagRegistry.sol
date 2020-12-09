@@ -28,8 +28,6 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
 
     uint256 public tagFee = 0.01 ether;
 
-    //    uint256 public mintAndTagDiscount = 0;
-
     // Used to log that an NFT has been tagged
     event HashtagRegistered(
         address indexed tagger,
@@ -167,8 +165,6 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
 
             emit DrawDown(_account, totalDue);
         }
-
-        //TODO: what happens when total due is more than the account balance?
     }
 
     /**

@@ -34,24 +34,19 @@ export function handleMintHashtag(event: MintHashtag): void {
   hashtagEntity.ownerRevenue = BigInt.fromI32(0);
   hashtagEntity.publisherRevenue = BigInt.fromI32(0);
   hashtagEntity.protocolRevenue = BigInt.fromI32(0);
-  hashtagEntity.publisherMintingFee = event.params.publisherFee;
-  hashtagEntity.platformMintingFee = event.params.platformFee;
-  hashtagEntity.totalMintingFee = hashtagEntity.publisherMintingFee.plus(hashtagEntity.platformMintingFee);
+  hashtagEntity.creatorRevenue = BigInt.fromI32(0);
   hashtagEntity.save();
 
-  // owner
-  let owner = safeLoadOwner(event.params.owner.toHexString());
+  let owner = safeLoadOwner(event.params.creator.toHexString());
   owner.mintCount = owner.mintCount.plus(ONE);
   owner.save();
 
   // publisher
   let publisher = safeLoadPublisher(event.params.publisher.toHexString());
   publisher.mintCount = publisher.mintCount.plus(ONE);
-  publisher.mintFees = publisher.mintFees.plus(event.params.publisherFee);
   publisher.save();
 
   // platform
   let platform = safeLoadPlatform("platform");
-  platform.mintFees = platform.mintFees.plus(event.params.platformFee);
   platform.save();
 }
