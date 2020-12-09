@@ -90,6 +90,7 @@ describe.only('ERC721HashtagRegistry Tests', function () {
           publisherAddress,
           constants.Two,
           nftId,
+          constants.One,
           utils.parseEther('0.01'),
         );
 
@@ -133,6 +134,7 @@ describe.only('ERC721HashtagRegistry Tests', function () {
           publisherAddress,
           this.hashtagId,
           nftId,
+          constants.One,
           utils.parseEther('0.01'),
         );
 
@@ -274,12 +276,34 @@ describe.only('ERC721HashtagRegistry Tests', function () {
       );
     });
 
-    it('Can draw down as platform', async function () {
+    it('Can draw down on behalf of the platform', async function () {
       const platformBalanceBefore = (await platform.getBalance());
       await this.registry.connect(tagger).drawDown(platformAddress);
       const platformBalanceAfter = (await platform.getBalance());
 
       expect(platformBalanceAfter.sub(platformBalanceBefore)).to.be.equal(utils.parseEther('0.002'));
+    });
+
+    it.skip('Can draw down as the platform', async function () {
+      const platformBalanceBefore = (await platform.getBalance());
+      await this.registry.connect(platform).drawDown(platformAddress);
+      const platformBalanceAfter = (await platform.getBalance());
+
+      expect(platformBalanceAfter.sub(platformBalanceBefore)).to.be.equal(utils.parseEther('0.002'));
+    });
+
+    it('Does nothing after a double draw down', async function () {
+      const platformBalanceBefore = (await platform.getBalance());
+      await this.registry.connect(tagger).drawDown(platformAddress);
+      const platformBalanceAfter = (await platform.getBalance());
+
+      expect(platformBalanceAfter.sub(platformBalanceBefore)).to.be.equal(utils.parseEther('0.002'));
+
+      const balanceBeforeSecondDraw = (await platform.getBalance());
+      await this.registry.connect(tagger).drawDown(platformAddress);
+      const balanceAfterSecondDraw = (await platform.getBalance());
+
+      expect(balanceAfterSecondDraw.sub(balanceBeforeSecondDraw)).to.be.equal('0');
     });
   });
 });

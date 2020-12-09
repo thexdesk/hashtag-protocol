@@ -37,6 +37,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         address indexed publisher,
         uint256 hashtagId,
         uint256 nftId,
+        uint256 tagId,
         uint256 tagFee
     );
 
@@ -58,18 +59,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     // tag id (will come from the totalTags pointer) -> tag
     mapping(uint256 => Tag) public tagIdToTag;
 
-    // hashtag id -> list of tag ids (can use .length for count)
-    mapping(uint256 => uint256[]) public hashtagIdToListOfTagIds;
-
-    // nft contract -> nft id -> list of tag ids (can use .length for count)
-    mapping(address => mapping(uint256 => uint256[])) public nftToListOfTagIds;
-
-    // publisher -> list of tag ids tagged through publisher (can use .length for count)
-    mapping(address => uint256[]) public publisherToListOfTagIds;
-
-    // tagger -> list of tag ids tagged by tagger (can use .length for count)
-    mapping(address => uint256[]) public taggerToListOfTagIds;
-
+    // ERC721 interface identifier for checking ERC721 contract is valid
     bytes4 private constant _INTERFACE_ID_ERC721 = 0x5b5e139f;
 
     /**
@@ -114,9 +104,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     */
     function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable nonReentrant public {
         require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");
-
         require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
-
         require(msg.value >= tagFee, "Tag: You must send the fee");
 
         require(_nftContract != address(0), "Tag: Invalid nft contract address");
@@ -153,18 +141,11 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
             publisher : _publisher
             });
 
-        // FIXME move to subgraph - saves 200k-ish gas
-        // Create the links between the tagging event and the hashtag, nft, publisher and tagger
-        hashtagIdToListOfTagIds[_hashtagId].push(tagId);
-        nftToListOfTagIds[_nftContract][_nftId].push(tagId);
-        publisherToListOfTagIds[_publisher].push(tagId);
-        taggerToListOfTagIds[_tagger].push(tagId);
-
         (address _platform, address _owner) = hashtagProtocol.getPaymentAddresses(_hashtagId);
         uint256 remainingPercentage = modulo.sub(platformPercentage).sub(publisherPercentage);
 
         // pre-auction
-        if (hashtagProtocol.ownerOf(_hashtagId) == _platform) {
+        if (_owner == _platform) {
             accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
             accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
 
@@ -180,9 +161,15 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         }
 
         // Log that an NFT has been tagged
-        emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, tagFee);
+        emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, tagId, tagFee);
     }
 
+    /**
+     * @notice Enables anyone to send ETH accrued by an account
+     * @dev Can be called by the account owner or on behalf of someone
+     * @dev Does nothing when there is nothing due to the account
+     * @param _account Target address that has had accrued ETH and which will receive the ETH
+    */
     function drawDown(address payable _account) nonReentrant external {
         uint256 totalDue = accrued[_account].sub(paid[_account]);
         if (totalDue > 0 && totalDue <= address(this).balance) {
@@ -191,8 +178,15 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
 
             emit DrawDown(_account, totalDue);
         }
+
+        //TODO: what happens when total due is more than the account balance?
     }
 
+    /**
+     * @notice Used to check how much ETH has been accrued by an address factoring in amount paid out
+     * @param _account Address of the account being queried
+     * @return _due Amount of WEI in ETH due to account
+    */
     function totalDue(address _account) external view returns (uint256 _due) {
         return accrued[_account].sub(paid[_account]);
     }
@@ -227,43 +221,6 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     }
 
     /**
-     * @notice Gets the IDs of all tag events related to a hashtag
-     * @param _hashtagId ID of the hashtag
-     * @return uint256[] List of tag IDs relating to tag events
-    */
-    function getAllTagIdsForAGivenHashtag(uint256 _hashtagId) external view returns (uint256[] memory) {
-        return hashtagIdToListOfTagIds[_hashtagId];
-    }
-
-    /**
-     * @notice Gets the IDs of all tag events related to an NFT
-     * @param _nftContract address of the nft contract
-     * @param _nftId ID of the nft
-     * @return uint256[] List of tag IDs relating to tag events
-    */
-    function getAllTagIdsForAGivenNft(address _nftContract, uint256 _nftId) external view returns (uint256[] memory) {
-        return nftToListOfTagIds[_nftContract][_nftId];
-    }
-
-    /**
-     * @notice Gets the IDs of all tag events that took place through a publisher
-     * @param _publisher Address of the publisher
-     * @return uint256[] List of tag IDs relating to tag events
-    */
-    function getAllTagIdsForAGivenPublisher(address _publisher) external view returns (uint256[] memory) {
-        return publisherToListOfTagIds[_publisher];
-    }
-
-    /**
-     * @notice Gets the IDs of all tag events that were triggered by a given address
-     * @param _tagger Address of the tagger
-     * @return uint256[] List of tag IDs relating to tag events
-    */
-    function getAllTagIdsForAGivenTagger(address _tagger) external view returns (uint256[] memory) {
-        return taggerToListOfTagIds[_tagger];
-    }
-
-    /**
      * @notice Sets the fee required to tag an NFT asset
      * @param _fee Value of the fee in WEI
     */
@@ -271,12 +228,12 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         tagFee = _fee;
     }
 
-
     /**
      * @notice Admin functionality for updating the access controls
      * @param _accessControls Address of the access controls contract
     */
     function updateAccessControls(HashtagAccessControls _accessControls) onlyAdmin external {
+        require(address(_accessControls) != address(0), "ERC721HashtagRegistry.updateAccessControls: Cannot be zero");
         accessControls = _accessControls;
     }
 
