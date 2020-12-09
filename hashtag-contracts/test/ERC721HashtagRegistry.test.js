@@ -72,6 +72,12 @@ describe.only('ERC721HashtagRegistry Tests', function () {
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
     });
 
+    describe('Validation', function() {
+      it('Fails to tag when target NFT contract does not implement expected interface', async function() {
+
+      });
+    });
+
     it('should be able to mint and tag', async function () {
       const nftId = constants.One;
 

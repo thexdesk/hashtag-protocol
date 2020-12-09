@@ -60,7 +60,8 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     mapping(uint256 => Tag) public tagIdToTag;
 
     // ERC721 interface identifier for checking ERC721 contract is valid
-    bytes4 private constant _INTERFACE_ID_ERC721 = 0x5b5e139f;
+    bytes4 private constant _INTERFACE_ID_ERC721 = 0x80ac58cd;
+    bytes4 private constant _INTERFACE_ID_ERC721_CryptoKitties = 0x9a20483d;
 
     /**
      * @notice Admin only execution guard
@@ -111,22 +112,10 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         require(_nftContract != address(hashtagProtocol), "Tag: Invalid tag - you are attempting to tag another hashtag");
 
         // Ensure that we are dealing with an ERC721 compliant _nftContract
-        try IERC721(_nftContract).supportsInterface(_INTERFACE_ID_ERC721) returns (bool result) {
-    require(result == true, "Contract does not implement the ERC721 interface");
-    } catch Error(string memory reason) {
-    require(false, reason);
-    } catch {
-    require(false, "Invalid NFT contract");
-    }
+        _assertContractSupportsERC721Interface(_nftContract);
 
-    // NFT existence checks - revert if NFT does not exist
-    try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
-    require(owner != address(0), "Token does not exist or is owned by the zero address");
-    } catch Error(string memory reason) {
-    require(false, reason);
-    } catch {
-    require(false, "Token does not exist");
-    }
+        // NFT existence checks - revert if NFT does not exist
+        _assertNftExists(_nftContract, _nftId);
 
         // Generate a new tag ID
         totalTags = totalTags.add(1);
@@ -235,6 +224,40 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     function updateAccessControls(HashtagAccessControls _accessControls) onlyAdmin external {
         require(address(_accessControls) != address(0), "ERC721HashtagRegistry.updateAccessControls: Cannot be zero");
         accessControls = _accessControls;
+    }
+
+    /**
+     * @notice Queries a deployed contract to check if it supports known ERC721 interfaces
+     * @dev Supports the interface ID of the crypto kitties contract
+     * @param _contract Address of the contract being queried
+     */
+    function _assertContractSupportsERC721Interface(address _contract) private {
+        try IERC721(_contract).supportsInterface(_INTERFACE_ID_ERC721) returns (bool result) {
+            // We might be dealing with the CryptoKitties contract if result is false
+            if (result == false) {
+                try IERC721(_contract).supportsInterface(_INTERFACE_ID_ERC721_CryptoKitties) returns (bool result) {
+                    require(result == true, "Contract does not implement the ERC721 interface");
+                } catch Error(string memory reason) {
+                    revert(reason);
+                } catch {
+                    revert("Invalid NFT contract");
+                }
+            }
+        } catch Error(string memory reason) {
+            revert(reason);
+        } catch {
+            revert("Invalid NFT contract");
+        }
+    }
+
+    function _assertNftExists(address _nftContract, uint256 _nftId) private {
+        try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
+            require(owner != address(0), "Token does not exist or is owned by the zero address");
+        } catch Error(string memory reason) {
+            revert(reason);
+        } catch {
+            revert("Token does not exist");
+        }
     }
 
     // TODO: expose admin drain for excess ETH in the contract
