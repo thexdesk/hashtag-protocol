@@ -14,13 +14,11 @@ module.exports = async function (deployer, network, accounts) {
 
     const hashtagProtocol = await HashtagProtocol.deployed();
 
-    const fee = await hashtagProtocol.fee();
-
     await hashtagProtocol.mint("blockrocket", creator, creator, {from: creator});
-    await hashtagProtocol.mint("manchester", creator, alice, {from: alice, value: fee});
-    await hashtagProtocol.mint("alice", creator, alice, {from: alice, value: fee});
-    await hashtagProtocol.mint("blockchain", creator, bob, {from: creator, value: fee});
-    await hashtagProtocol.mint("bob", creator, bob, {from: creator, value: fee});
+    await hashtagProtocol.mint("manchester", creator, alice, {from: alice});
+    await hashtagProtocol.mint("alice", creator, alice, {from: alice});
+    await hashtagProtocol.mint("blockchain", creator, bob, {from: creator});
+    await hashtagProtocol.mint("bob", creator, bob, {from: creator});
 
     console.log('successful!');
 };
