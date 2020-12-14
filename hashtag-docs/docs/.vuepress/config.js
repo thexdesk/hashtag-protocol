@@ -21,6 +21,7 @@ module.exports = {
           ["/protocol-overview.html", "Protocol Overview"],
           ["/participants.html", "Key Participants"],
           ["/roadmap.html", "Project Roadmap"],
+          ["/hashtag-council.html", "Hashtag Council"],
           ["/faqs.html", "FAQs"],
         ],
       },

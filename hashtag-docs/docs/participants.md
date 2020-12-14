@@ -1,11 +1,13 @@
 # Key Participants
 
-Stitched into the Protocol are game-theory incentive mechanisms that
+Stitched into Hashtag Protocol are game-theory incentive mechanisms that
 harnesses the self-interest of at least six key market participants to drive positive
 network growth.
 
-<br /><br /> <img src="/assets/img/participants.png" alt="drawing"
-width="500"/> <br /><br />
+<br /><br />
+<p align="center"><img src="/assets/img/participants.png" alt="drawing"
+width="500"/></p>
+<br /><br />
 
 For details on how key participants interact with the Protocol, please see the [Protocol
 Overview](/protocol-overview.html).  

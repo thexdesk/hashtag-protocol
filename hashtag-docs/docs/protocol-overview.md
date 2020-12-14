@@ -63,11 +63,16 @@ Ethereum ERC-721 non-fungible token. HASHTAG has the following features:
 
 ## Tagging Digital Content 
 
-HASHTAG Tokens utility is extended to by smart contracts for linking a HASHTAG to
-any online artifact, effectively “tagging” that content with a hashtag string.
-Tagging data is saved on-chain.
+HASHTAG Tokens utility is extended to by smart contracts (Fig. 1) for linking
+a HASHTAG to any online artifact, effectively “tagging” that content with a
+hashtag string. Tagging data is saved on-chain.
+
+<br />
 
 ![HASHTAG Tokens utility is extended to by tagging smart contracts](/assets/img/tagging-contracts-roadmap.png)
+_Figure 1: HASHTAG utility is extended by tagging contracts._
+
+<br />
 
 This design pattern permits great flexibility in how HASHTAG utility
 can be extended by the **_Protocol_** and third-party developers. We envision
@@ -98,7 +103,12 @@ following features:
 8. Accrued tagging funds may be pulled down to the participant wallet at any
    time. Transaction gas fees apply.
 
+<br />
+
 ![Many-to-many HASHTAG-to-NFT asset relationship](/assets/img/tagging-schema-many-many.png)
+_Figure 2: Hashtag Protocol NFT tagging contract entity relationships._
+
+<br />
 
 ## Surfacing Tagging & Market Data
 

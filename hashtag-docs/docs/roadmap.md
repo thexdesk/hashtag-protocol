@@ -33,11 +33,11 @@ following phases:
    protocol.
 4. Promote the Protocol to all appropriate social channels.
 5. Improve & expand documentation.
-6. Recruit [Hashtag Protocol Council](#).
+6. Recruit [Hashtag Protocol Council](/hashtag-council.html).
 7. Develop the Hashtag Auction functionality and UI.
 
 
-## Phase 3: Enable public Hashtag Token auction
+## Phase 3: Launch public HASHTAG auction
 
 1. Launch the [Public Hashtag Token Auction](/protocol-overview.html#hashtag-auction).
 2. Continue to develop auction so third parties may run auctions (ie. Become
