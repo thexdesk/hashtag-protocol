@@ -59,7 +59,7 @@ module.exports = {
             mergePages: (pages) => {
               // optional
               const pageBreak = '<hr class="page-break" />\n\n';
-              const initialValue = `# FAQs\n${pageBreak}`;
+              const initialValue = `# FAQs\n${pageBreak}[[TOC]]`;
               return pages.reduce((acc, current) => {
                 return `${acc}${current.content}\n\n${pageBreak}`;
               }, initialValue);
