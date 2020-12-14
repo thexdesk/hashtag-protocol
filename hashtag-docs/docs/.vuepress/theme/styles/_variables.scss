@@ -58,7 +58,7 @@ $divider-background-color: $grey;
 $footer-padding: 3rem 1.5rem 6rem;
 
 // Removes hamburger in global nav.
-$navbar-breakpoint: 414px;
+$navbar-breakpoint: $tablet;
 $navbar-item-hover-background-color: $white;
 
 $menu-item-active-color: $primary;
