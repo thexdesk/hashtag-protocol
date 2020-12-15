@@ -1,5 +1,14 @@
 # Protocol Overview
 
+Hashtag Protocol is an experimental protocol consisting of a set of Ethereum
+smart contracts that enables the tokenization of hashtag strings into ERC-721
+non-fungible tokens (NFTs); the “tagging” of other digital assets with those
+tokens; and APIs for surfacing this data for use in networks, platforms and
+applications.
+
+Stitched into the Protocol are game-theory incentive mechanisms that harnesses
+the self-interest of participants to drive positive network growth.
+
 | Conventions used in documentation |  |
 | ------------- | ------------- |
 | **_bold italic_**  | References [key participants](/participants.html) |
