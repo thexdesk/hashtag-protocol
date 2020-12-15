@@ -18,8 +18,8 @@ if ! [ -d /app/.global ]; then
   rm -rf ./public/docs/*
 
   # Copy shared assets right from the hashtag-docs folder.
-  cp -R ./../hashtag-docs/docs/guide/faqs/. ./public/docs/
-  cp -R ./../hashtag-docs/docs/guide/help/. ./public/docs/
-  cp -R ./../hashtag-docs/docs/guide/pdfs/. ./public/docs/
+  cp -R ./../hashtag-docs/docs/shared/faqs/. ./public/docs/
+  cp -R ./../hashtag-docs/docs/shared/help/. ./public/docs/
+  cp -R ./../hashtag-docs/docs/shared/pdfs/. ./public/docs/
 
 fi

@@ -35,22 +35,9 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Token ID</td>
                           <td>
-                            {{ hashtagsByName[0].id }}
-                            <b-tooltip
-                              label="view on Etherscan"
-                              position="is-bottom"
-                              type="is-dark"
-                              size="is-small"
-                            >
-                              <a v-bind:href="hashtagsByName[0].id">
-                                <b-icon
-                                  icon="ethereum"
-                                  type="is-dark"
-                                  size="is-small"
-                                >
-                                </b-icon>
-                              </a>
-                            </b-tooltip>
+                            <HashtagTokenId
+                              :value="hashtagsByName[0].id"
+                            ></HashtagTokenId>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
@@ -394,6 +381,7 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
+import HashtagTokenId from "../components/HashtagTokenId";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
@@ -418,6 +406,7 @@ export default {
     MarkdownDoc,
     NftLink,
     Footer,
+    HashtagTokenId,
     Header,
     HelpModal,
     Pagination,

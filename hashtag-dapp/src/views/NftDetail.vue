@@ -184,7 +184,7 @@
                                 ></hashtag>
                               </span>
                             </td>
-                            <td data-label="Minted" class="">
+                            <td data-label="Tagged" class="">
                               <timestamp-from
                                 :value="tag.timestamp"
                               ></timestamp-from>
@@ -192,13 +192,13 @@
                             <td data-label="Owner" class="">
                               <eth-account
                                 :value="tag.tagger"
-                                route="owner-detail"
+                                route="tagger-detail"
                               ></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
                               <eth-account
                                 :value="tag.publisher"
-                                route="owner-detail"
+                                route="publisher-detail"
                               ></eth-account>
                             </td>
                           </tr>
