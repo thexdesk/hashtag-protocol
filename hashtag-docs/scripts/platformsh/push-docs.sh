@@ -21,8 +21,8 @@ if [ -d /app/.global ]; then
     rm -rf /app/network/docs/*
 
     # Copy everything over.
-    cp -R /app/docs/guide/faqs/. /app/network/docs/
-    cp -R /app/docs/guide/help/. /app/network/docs/
-    cp -R /app/docs/guide/pdfs/. /app/network/docs/
+    cp -R /app/docs/shared/faqs/. /app/network/docs/
+    cp -R /app/docs/shared/help/. /app/network/docs/
+    cp -R /app/docs/shared/pdfs/. /app/network/docs/
 
 fi

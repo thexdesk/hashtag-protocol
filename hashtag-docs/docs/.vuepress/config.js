@@ -8,14 +8,20 @@ module.exports = {
   themeConfig: {
     smoothScroll: true,
     repo: "hashtag-protocol/hashtag-protocol",
-    editLinks: true,
     docsDir: "hashtag-docs/docs",
+    repoLabel: "Edit on Github",
+    editLinks: true,
+    editLinkText: "Edit on Github",
     sidebar: [
       {
         title: "Essentials",
         collapsable: false,
         children: [
           ["/", "Introduction"],
+          ["/protocol-overview.html", "Protocol Overview"],
+          ["/participants.html", "Key Participants"],
+          ["/roadmap.html", "Project Roadmap"],
+          ["/hashtag-council.html", "Hashtag Council"],
           ["/faqs.html", "FAQs"],
         ],
       },
@@ -38,6 +44,7 @@ module.exports = {
   },
   plugins: [
     ["@vuepress/active-header-links"],
+    ["@vuepress/last-updated"],
     [
       "vuepress-plugin-merge-pages",
       {
@@ -52,7 +59,7 @@ module.exports = {
             mergePages: (pages) => {
               // optional
               const pageBreak = '<hr class="page-break" />\n\n';
-              const initialValue = `# FAQs\n${pageBreak}`;
+              const initialValue = `# FAQs\n${pageBreak}[[TOC]]`;
               return pages.reduce((acc, current) => {
                 return `${acc}${current.content}\n\n${pageBreak}`;
               }, initialValue);
