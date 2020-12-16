@@ -273,6 +273,4 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
             revert("Token does not exist");
         }
     }
-
-    // TODO: expose admin drain for excess ETH in the contract
 }
