@@ -20,6 +20,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     uint256 constant public modulo = 100;
     uint256 public platformPercentage = 20; // 20%
     uint256 public publisherPercentage = 40; // 40%
+    uint256 public remainingPercentage = 40;
 
     mapping(address => uint256) public accrued;
     mapping(address => uint256) public paid;
@@ -129,7 +130,6 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
             });
 
         (address _platform, address _owner) = hashtagProtocol.getPaymentAddresses(_hashtagId);
-        uint256 remainingPercentage = modulo.sub(platformPercentage).sub(publisherPercentage);
 
         // pre-auction
         if (_owner == _platform) {

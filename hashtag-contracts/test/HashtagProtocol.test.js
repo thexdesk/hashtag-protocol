@@ -47,16 +47,16 @@ describe('HashtagProtocol Tests', function () {
       const randomHashtag = 'asupersupersupersupersuperlonghashtag';
 
       it('should revert if exists (case-insensitive)', async function () {
-        await this.hashtagProtocol.connect(publisher).mint('blockrocket', publisherAddress, creatorAddress);
+        await this.hashtagProtocol.connect(publisher).mint('#blockrocket', publisherAddress, creatorAddress);
 
-        await expect(this.hashtagProtocol.connect(publisher).mint('BlockRocket', publisherAddress, creatorAddress))
+        await expect(this.hashtagProtocol.connect(publisher).mint('#BlockRocket', publisherAddress, creatorAddress))
           .to.be.revertedWith('Hashtag validation: Hashtag already owned.');
       });
 
       it('should revert if hashtag does not meet min length requirements', async function () {
         const hashtagMinStringLength = await this.hashtagProtocol.hashtagMinStringLength();
 
-        const shortHashtag = randomHashtag.substring(0, hashtagMinStringLength - 1);
+        const shortHashtag = '#' + randomHashtag.substring(0, hashtagMinStringLength - 2);
         await expect(this.hashtagProtocol.connect(publisher).mint(shortHashtag, publisherAddress, creatorAddress))
           .to.be.revertedWith(`Invalid format: Hashtag must be at least ${hashtagMinStringLength} characters long`);
       });
@@ -64,35 +64,35 @@ describe('HashtagProtocol Tests', function () {
       it('should revert if hashtag does not meet max length requirements', async function () {
         const hashtagMaxStringLength = await this.hashtagProtocol.hashtagMaxStringLength();
 
-        const longHashtag = randomHashtag.substring(0, hashtagMaxStringLength + 1);
+        const longHashtag = '#' + randomHashtag.substring(0, hashtagMaxStringLength);
         await expect(this.hashtagProtocol.connect(publisher).mint(longHashtag, publisherAddress, creatorAddress))
           .to.be.revertedWith(`Invalid format: Hashtag must not exceed ${hashtagMaxStringLength} characters.`);
       });
 
       it('should revert if hashtag has an invalid character', async function () {
-        const invalidHashtag = 'x_art';
+        const invalidHashtag = '#x_art';
         await expect(
           this.hashtagProtocol.connect(publisher).mint(invalidHashtag, publisherAddress, creatorAddress))
-          .to.be.revertedWith('Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9');
+          .to.be.revertedWith('Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #');
       });
 
       it('should revert if the hashtag does not have a single alpha char', async function () {
-        const invalidHashtag = '420';
+        const invalidHashtag = '#420';
         await expect(
           this.hashtagProtocol.connect(publisher).mint(invalidHashtag, publisherAddress, creatorAddress))
           .to.be.revertedWith('Invalid format: Hashtag must contain at least 1 alphabetic character.');
       });
 
       it('should allow a mix of upper and lowercase characters', async function () {
-        await this.hashtagProtocol.connect(publisher).mint('Awesome123', publisherAddress, creatorAddress);
+        await this.hashtagProtocol.connect(publisher).mint('#Awesome123', publisherAddress, creatorAddress);
       });
     });
 
     it('should mint', async function () {
       expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
 
-      const hashtag = 'BlockRocket';
-      const lowerHashtag = 'blockrocket';
+      const hashtag = '#BlockRocket';
+      const lowerHashtag = '#blockrocket';
 
       await expect(this.hashtagProtocol.connect(random).mint(hashtag, publisherAddress, creatorAddress))
         .to.emit(this.hashtagProtocol, 'MintHashtag')
@@ -107,7 +107,6 @@ describe('HashtagProtocol Tests', function () {
 
       expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId(lowerHashtag)).to.be.equal('1');
-      expect(await this.hashtagProtocol.displayHashtagToTokenId(hashtag)).to.be.equal('1');
       expect(await this.hashtagProtocol.exists(BigNumber.from('1'))).to.be.true;
 
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
@@ -123,19 +122,19 @@ describe('HashtagProtocol Tests', function () {
 
       expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
 
-      await this.hashtagProtocol.mint('blockrocket', publisherAddress, creatorAddress);
+      await this.hashtagProtocol.mint('#blockrocket', publisherAddress, creatorAddress);
 
       expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
-      expect(await this.hashtagProtocol.hashtagToTokenId('blockrocket')).to.be.equal('1');
+      expect(await this.hashtagProtocol.hashtagToTokenId('#blockrocket')).to.be.equal('1');
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
 
-      expect(hashtagData.value).to.be.equal('blockrocket');
+      expect(hashtagData.value).to.be.equal('#blockrocket');
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
       expect(hashtagData.created).to.be.gt('0');
     });
 
     it('should revert if the publisher is not whitelisted', async function () {
-      await expect(this.hashtagProtocol.connect(platform).mint('blockrocket', randomAddress, creatorAddress))
+      await expect(this.hashtagProtocol.connect(platform).mint('#blockrocket', randomAddress, creatorAddress))
         .to.be.revertedWith('Mint: The publisher must be whitelisted');
     });
   });
@@ -157,7 +156,7 @@ describe('HashtagProtocol Tests', function () {
   describe('Metadata', async function () {
     it('should return tokenUri', async function () {
       const tokenId = constants.One;
-      await this.hashtagProtocol.connect(random).mint('BlockRocket', publisherAddress, creatorAddress);
+      await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
 
       expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('');
 

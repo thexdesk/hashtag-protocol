@@ -3,7 +3,7 @@ const {expect} = require('chai');
 
 const {utils, BigNumber, constants} = ethers;
 
-describe.only('ERC721HashtagRegistry Tests', function () {
+describe('ERC721HashtagRegistry Tests', function () {
 
   let platform, platformAddress, publisher, publisherAddress;
   let buyer, buyerAddress, anotherAddress, random, randomAddress, tagger, taggerAddress;
@@ -68,11 +68,11 @@ describe.only('ERC721HashtagRegistry Tests', function () {
 
   describe('Add hashtag link', async function () {
     beforeEach(async function () {
-      await this.hashtagProtocol.connect(tagger).mint('pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
+      await this.hashtagProtocol.connect(tagger).mint('#pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
     });
 
-    describe('Validation', function() {
+    describe.skip('Validation', function() {
       it('Fails to tag when target NFT contract does not implement expected interface', async function() {
 
       });
@@ -81,7 +81,7 @@ describe.only('ERC721HashtagRegistry Tests', function () {
     it('should be able to mint and tag', async function () {
       const nftId = constants.One;
 
-      const macbookHashtagValue = "macbook";
+      const macbookHashtagValue = "#macbook";
       await expect(this.registry.connect(tagger).mintAndTag(
         macbookHashtagValue,
         this.nft.address,
@@ -268,7 +268,7 @@ describe.only('ERC721HashtagRegistry Tests', function () {
 
   describe('Drawing down', async function () {
     beforeEach(async function() {
-      await this.hashtagProtocol.connect(tagger).mint('pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
+      await this.hashtagProtocol.connect(tagger).mint('#pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
 
       const nftOneId = constants.One;

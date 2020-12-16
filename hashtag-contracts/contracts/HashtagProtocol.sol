@@ -105,23 +105,10 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         // Perform basic hashtag validation
         _assertHashtagIsValid(_hashtag);
 
-        // Check the first character of the hashtag being minted
-        // If it doesn't contain the hashtag character, then pre-pend it to the hashtag being minted
-        bool isFirstCharacterOfStringHashtagCharacter = _isFirstCharacterOfStringHashtagCharacter(_hashtag);
         string memory lowerHashtagToMint = _lower(_hashtag);
         string memory hashtagToMint = _hashtag;
 
-        if (isFirstCharacterOfStringHashtagCharacter == false) {
-            // pre-pend the hashtag character
-            hashtagToMint = string(
-                abi.encodePacked(
-                    "#",
-                    _hashtag
-                )
-            );
 
-            lowerHashtagToMint = _lower(hashtagToMint);
-        }
 
         // generate the new hashtag token id
         tokenPointer = tokenPointer.add(1);
@@ -187,6 +174,8 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     */
     function _assertHashtagIsValid(string memory _hashtag) private view {
         string memory hashtagKey = _lower(_hashtag);
+
+        require(_isFirstCharacterOfStringHashtagCharacter(_hashtag), "Must start with #");
         require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
 
         bytes memory hashtagStringBytes = bytes(_hashtag);
