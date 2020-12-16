@@ -45,7 +45,7 @@ export default {
     };
   },
   mounted() {
-    this.developers = this.website + "/developers";
+    this.developers = this.website + "developers";
   },
   computed: {
     sidebarItems() {
