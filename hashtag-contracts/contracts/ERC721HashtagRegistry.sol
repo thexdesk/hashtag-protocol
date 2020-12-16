@@ -223,6 +223,18 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     }
 
     /**
+     * @notice Admin functionality for updating the percentages
+     * @param _platformPercentage percentage for platform
+     * @param _publisherPercentage percentage for publisher
+    */
+    function updatePercentages(uint256 _platformPercentage, uint256 _publisherPercentage) onlyAdmin external {
+        require(_platformPercentage.add(_publisherPercentage) <= 100, "ERC721HashtagRegistry.updatePercentages: percentages must not be over 100");
+        platformPercentage = _platformPercentage;
+        publisherPercentage = _publisherPercentage;
+        remainingPercentage = modulo.sub(platformPercentage).sub(publisherPercentage);
+    }
+
+    /**
      * @notice Queries a deployed contract to check if it supports known ERC721 interfaces
      * @dev Supports the interface ID of the crypto kitties contract
      * @param _contract Address of the contract being queried
