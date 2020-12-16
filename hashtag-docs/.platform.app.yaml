@@ -63,7 +63,7 @@ hooks:
       set -e
       yarn install
     deploy: |
-      npm run build
+      yarn build
     post_deploy: |
       # If we're building on Platform.sh...
       if [ -d /app/.global ]; then
