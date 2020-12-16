@@ -6,7 +6,7 @@ dataSources:
     name: HashtagProtocol
     network: rinkeby
     source:
-      address: "0x19827BF1ed34b8fE018011eb2b29Bb5ebEb000D9"
+      address: "0x8E0c170C5E2DB55C036be1ed5EF517838F6f94eE"
       abi: HashtagProtocol
       startBlock: 7690444
     mapping:
@@ -26,7 +26,7 @@ dataSources:
     name: ERC721HashtagRegistry
     network: rinkeby
     source:
-      address: "0xA724e04d463e5094a1D9D6E368B111aE9034da2F"
+      address: "0x169973633Ba0E71c881b3C5CB08F51de23aA49Ab"
       abi: ERC721HashtagRegistry
       startBlock: 7690446
     mapping:
@@ -48,7 +48,7 @@ dataSources:
     name: HashtagAccessControls
     network: rinkeby
     source:
-      address: "0x723855dC38F102220472944DFd3c325409850C75"
+      address: "0x9Dec867346cBF62a2A321D7A9994959fc71C7502"
       abi: HashtagAccessControls
       startBlock: 7690442
     mapping:
