@@ -87,11 +87,10 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     */
     function mintAndTag(string calldata _hashtag, address _nftContract, uint256 _nftId, address payable _publisher, address _tagger) payable external {
         require(accessControls.isPublisher(_publisher), "Mint and tag: The publisher must be whitelisted");
-
         require(msg.value >= tagFee, "Mint and tag: You must send the tag fee");
 
         uint256 hashtagId = hashtagProtocol.mint(_hashtag, _publisher, _tagger);
-        tag(hashtagId, _nftContract, _nftId, _publisher, _tagger);
+        _tag(hashtagId, _nftContract, _nftId, _publisher, _tagger);
     }
 
     /**
@@ -104,51 +103,9 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     */
     function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable nonReentrant public {
         require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");
-        require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
         require(msg.value >= tagFee, "Tag: You must send the fee");
 
-//        require(_nftContract != address(0), "Tag: Invalid nft contract address");
-        require(_nftContract != address(hashtagProtocol), "Tag: Invalid tag - you are attempting to tag another hashtag");
-
-        // Ensure that we are dealing with an ERC721 compliant _nftContract
-        _assertContractSupportsERC721Interface(_nftContract);
-
-        // NFT existence checks - revert if NFT does not exist
-        _assertNftExists(_nftContract, _nftId);
-
-        // Generate a new tag ID
-        totalTags = totalTags.add(1);
-        uint256 tagId = totalTags;
-
-        tagIdToTag[tagId] = Tag({
-            hashtagId : _hashtagId,
-            nftContract : _nftContract,
-            nftId : _nftId,
-            tagger : _tagger,
-            tagstamp : now,
-            publisher : _publisher
-            });
-
-        (address _platform, address _owner) = hashtagProtocol.getPaymentAddresses(_hashtagId);
-
-        // pre-auction
-        if (_owner == _platform) {
-            accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
-            accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
-
-            address creator = hashtagProtocol.getCreatorAddress(_hashtagId);
-            accrued[creator] = accrued[creator].add(msg.value.mul(remainingPercentage).div(modulo));
-        }
-        // post-auction
-        else {
-            accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
-            accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
-
-            accrued[_owner] = accrued[_owner].add(msg.value.mul(remainingPercentage).div(modulo));
-        }
-
-        // Log that an NFT has been tagged
-        emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, tagId, tagFee);
+        _tag(_hashtagId, _nftContract, _nftId, _publisher, _tagger);
     }
 
     /**
@@ -232,6 +189,55 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         platformPercentage = _platformPercentage;
         publisherPercentage = _publisherPercentage;
         remainingPercentage = modulo.sub(platformPercentage).sub(publisherPercentage);
+    }
+
+    function _tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger)  private {
+        require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");
+        require(msg.value >= tagFee, "Tag: You must send the fee");
+
+        require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
+
+        require(_nftContract != address(hashtagProtocol), "Tag: Invalid tag - you are attempting to tag another hashtag");
+
+        // Ensure that we are dealing with an ERC721 compliant _nftContract
+        _assertContractSupportsERC721Interface(_nftContract);
+
+        // NFT existence checks - revert if NFT does not exist
+        _assertNftExists(_nftContract, _nftId);
+
+        // Generate a new tag ID
+        totalTags = totalTags.add(1);
+        uint256 tagId = totalTags;
+
+        tagIdToTag[tagId] = Tag({
+            hashtagId : _hashtagId,
+            nftContract : _nftContract,
+            nftId : _nftId,
+            tagger : _tagger,
+            tagstamp : now,
+            publisher : _publisher
+            });
+
+        (address _platform, address _owner) = hashtagProtocol.getPaymentAddresses(_hashtagId);
+
+        // pre-auction
+        if (_owner == _platform) {
+            accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
+            accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
+
+            address creator = hashtagProtocol.getCreatorAddress(_hashtagId);
+            accrued[creator] = accrued[creator].add(msg.value.mul(remainingPercentage).div(modulo));
+        }
+        // post-auction
+        else {
+            accrued[_platform] = accrued[_platform].add(msg.value.mul(platformPercentage).div(modulo));
+            accrued[_publisher] = accrued[_publisher].add(msg.value.mul(publisherPercentage).div(modulo));
+
+            accrued[_owner] = accrued[_owner].add(msg.value.mul(remainingPercentage).div(modulo));
+        }
+
+        // Log that an NFT has been tagged
+        emit HashtagRegistered(_tagger, _nftContract, _publisher, _hashtagId, _nftId, tagId, tagFee);
     }
 
     /**
