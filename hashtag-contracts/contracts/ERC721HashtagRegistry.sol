@@ -104,6 +104,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable nonReentrant public {
         require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");
         require(msg.value >= tagFee, "Tag: You must send the fee");
+        require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
 
         _tag(_hashtagId, _nftContract, _nftId, _publisher, _tagger);
     }
@@ -192,11 +193,6 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     }
 
     function _tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger)  private {
-        require(accessControls.isPublisher(_publisher), "Tag: The publisher must be whitelisted");
-        require(msg.value >= tagFee, "Tag: You must send the fee");
-
-        require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
-
         require(_nftContract != address(hashtagProtocol), "Tag: Invalid tag - you are attempting to tag another hashtag");
 
         // Ensure that we are dealing with an ERC721 compliant _nftContract

@@ -38,8 +38,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     mapping(string => uint256) public hashtagToTokenId;
 
     address payable public platform;
-    uint256 public platformPercentage = 9000;
-    uint256 modulo = 10000;
 
     uint256 public hashtagMinStringLength = 3;
     uint256 public hashtagMaxStringLength = 32;
@@ -157,6 +155,15 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     }
 
     /**
+     * @notice Admin functionality for updating the access controls
+     * @param _accessControls Address of the access controls contract
+    */
+    function updateAccessControls(HashtagAccessControls _accessControls) onlyAdmin external {
+        require(address(_accessControls) != address(0), "HashtagProtocol.updateAccessControls: Cannot be zero");
+        accessControls = _accessControls;
+    }
+
+    /**
      * @notice Returns creator of a token
      * @param _tokenId ID of a hashtag
      * @return _creator creator of the hashtag
@@ -171,11 +178,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @param _hashtag Proposed hashtag string
     */
     function _assertHashtagIsValid(string memory _hashtag) private view {
-        string memory hashtagKey = _lower(_hashtag);
-
-        require(_isFirstCharacterOfStringHashtagCharacter(_hashtag), "Must start with #");
-        require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
-
         bytes memory hashtagStringBytes = bytes(_hashtag);
         require(
             hashtagStringBytes.length >= hashtagMinStringLength,
@@ -195,15 +197,20 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
             ))
         );
 
+        require(hashtagStringBytes[0] == 0x23, "Must start with #");
+
+        string memory hashtagKey = _lower(_hashtag);
+        require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
+
         uint256 alphabetCharCount = 0;
-        for (uint256 i; i < hashtagStringBytes.length; i++) {
+        // start from first char after #
+        for (uint256 i = 1; i < hashtagStringBytes.length; i++) {
             bytes1 char = hashtagStringBytes[i];
 
             // Generally ensure that the character is alpha numeric
             bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
             !(char >= 0x41 && char <= 0x5A) && //A-Z
-            !(char >= 0x61 && char <= 0x7A) && //a-z
-            !(char == 0x23); // hashtag symbol
+            !(char >= 0x61 && char <= 0x7A); //a-z
 
             require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #");
 
@@ -215,22 +222,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
         // Ensure alphabetCharCount is at least 1
         require(alphabetCharCount >= 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
-    }
-
-    /**
-     * @notice Private method used for checking whether the first character of a
-     * @dev Will return false for empty strings
-     * @param _str String being tested
-     * @return True if the first character matches the Ascii code for the hashtag character
-    */
-    function _isFirstCharacterOfStringHashtagCharacter(string memory _str) private pure returns (bool) {
-        bytes memory strBytes = bytes(_str);
-
-        if (strBytes.length == 0) {
-            return false;
-        }
-
-        return strBytes[0] == 0x23;
     }
 
     /**
@@ -252,6 +243,4 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         }
         return string(bLower);
     }
-
-    // TODO: expose admin drain for excess ETH in the contract
 }

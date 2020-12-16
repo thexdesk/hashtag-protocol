@@ -63,16 +63,21 @@ describe('ERC721HashtagRegistry Tests', function () {
 
       await expect(this.registry.connect(random).updateAccessControls(randomAddress)).to.be.reverted;
     });
+
+    it('should revert when updating access controls to zero address', async function () {
+      await expect(this.registry.connect(platform).updateAccessControls(constants.AddressZero))
+        .to.be.revertedWith("ERC721HashtagRegistry.updateAccessControls: Cannot be zero");
+    });
   });
 
-  describe('Add hashtag link', async function () {
+  describe('Tag', async function () {
     beforeEach(async function () {
       await this.hashtagProtocol.connect(tagger).mint('#pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
     });
 
-    describe.skip('Validation', function() {
-      it('Fails to tag when target NFT contract does not implement expected interface', async function() {
+    describe.skip('Validation', function () {
+      it('Fails to tag when target NFT contract does not implement expected interface', async function () {
 
       });
     });
@@ -241,7 +246,18 @@ describe('ERC721HashtagRegistry Tests', function () {
         )).to.be.revertedWith("Invalid tag - you are attempting to tag another hashtag");
     });
 
-    it('Reverts when sending zero value', async function () {
+    it('Reverts when sending zero value when mint and tagging', async function () {
+      await expect(
+        this.registry.mintAndTag(
+          "#hullo",
+          this.nft.address,
+          this.hashtagId,
+          publisherAddress,
+          taggerAddress,
+        )).to.be.revertedWith("Mint and tag: You must send the tag fee");
+    });
+
+    it('Reverts when sending zero value when tagging', async function () {
       await expect(
         this.registry.tag(
           this.hashtagId,
@@ -263,10 +279,34 @@ describe('ERC721HashtagRegistry Tests', function () {
           {value: utils.parseEther('1')}
         )).to.be.revertedWith("ERC721: owner query for nonexistent token");
     });
+
+    it('Reverts when unwhitelisted publisher when mint and tagging', async function () {
+      await expect(
+        this.registry.mintAndTag(
+          "#hullo",
+          this.nft.address,
+          this.hashtagId,
+          constants.AddressZero,
+          taggerAddress,
+          {value: utils.parseEther('1')}
+        )).to.be.revertedWith("Mint and tag: The publisher must be whitelisted");
+    });
+
+    it('Reverts when unwhitelisted publisher when tagging', async function () {
+      await expect(
+        this.registry.tag(
+          this.hashtagId,
+          this.nft.address,
+          this.hashtagId,
+          constants.AddressZero,
+          taggerAddress,
+          {value: utils.parseEther('1')}
+        )).to.be.revertedWith("Tag: The publisher must be whitelisted");
+    });
   });
 
   describe('Drawing down', async function () {
-    beforeEach(async function() {
+    beforeEach(async function () {
       await this.hashtagProtocol.connect(tagger).mint('#pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
 

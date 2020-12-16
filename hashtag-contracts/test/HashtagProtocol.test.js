@@ -76,6 +76,20 @@ describe('HashtagProtocol Tests', function () {
           .to.be.revertedWith('Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #');
       });
 
+      it('should revert if does not start with #', async function () {
+        const invalidHashtag = 'ART';
+        await expect(
+          this.hashtagProtocol.connect(publisher).mint(invalidHashtag, publisherAddress, creatorAddress))
+          .to.be.revertedWith('Must start with #');
+      });
+
+      it('should revert if hashtag after first char', async function () {
+        const invalidHashtag = '#Hash#';
+        await expect(
+          this.hashtagProtocol.connect(publisher).mint(invalidHashtag, publisherAddress, creatorAddress))
+          .to.be.revertedWith('Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #');
+      });
+
       it('should revert if the hashtag does not have a single alpha char', async function () {
         const invalidHashtag = '#420';
         await expect(
@@ -150,6 +164,18 @@ describe('HashtagProtocol Tests', function () {
 
     it('should revert if not owner', async function () {
       await expect(this.hashtagProtocol.connect(buyer).setPlatform(anotherAddress)).to.be.revertedWith('Caller must be admin');
+    });
+
+    it('should update access controls', async function () {
+      await this.hashtagProtocol.connect(platform).updateAccessControls(randomAddress);
+      expect(await this.hashtagProtocol.accessControls()).to.be.equal(randomAddress);
+
+      await expect(this.hashtagProtocol.connect(random).updateAccessControls(randomAddress)).to.be.reverted;
+    });
+
+    it('should revert when updating access controls to zero address', async function () {
+      await expect(this.hashtagProtocol.connect(platform).updateAccessControls(constants.AddressZero))
+        .to.be.revertedWith("HashtagProtocol.updateAccessControls: Cannot be zero");
     });
   });
 
