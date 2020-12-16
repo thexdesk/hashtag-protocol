@@ -45,28 +45,28 @@ module.exports = {
   plugins: [
     ["@vuepress/active-header-links"],
     ["@vuepress/last-updated"],
-    //[
-    //  "vuepress-plugin-merge-pages",
-    //  {
-    //    bundles: [
-    //      {
-    //        // Merge faq.md files in /guide/faqs into a single page.
-    //        path: "/faqs.html",
-    //        filter: (pages) => {
-    //          // optional
-    //          return pages.filter(({ path }) => path.includes("/faqs/"));
-    //        },
-    //        mergePages: (pages) => {
-    //          // optional
-    //          const pageBreak = '<hr class="page-break" />\n\n';
-    //          const initialValue = `# FAQs\n${pageBreak}[[TOC]]`;
-    //          return pages.reduce((acc, current) => {
-    //            return `${acc}${current.content}\n\n${pageBreak}`;
-    //          }, initialValue);
-    //        },
-    //      },
-    //    ],
-    //  },
-    //],
+    [
+      "vuepress-plugin-merge-pages",
+      {
+        bundles: [
+          {
+            // Merge faq.md files in /guide/faqs into a single page.
+            path: "/faqs.html",
+            filter: (pages) => {
+              // optional
+              return pages.filter(({ path }) => path.includes("/faqs/"));
+            },
+            mergePages: (pages) => {
+              // optional
+              const pageBreak = '<hr class="page-break" />\n\n';
+              const initialValue = `# FAQs\n${pageBreak}[[TOC]]`;
+              return pages.reduce((acc, current) => {
+                return `${acc}${current.content}\n\n${pageBreak}`;
+              }, initialValue);
+            },
+          },
+        ],
+      },
+    ],
   ],
 };
