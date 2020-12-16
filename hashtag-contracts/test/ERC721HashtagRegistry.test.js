@@ -311,4 +311,27 @@ describe('ERC721HashtagRegistry Tests', function () {
       expect(balanceAfterSecondDraw.sub(balanceBeforeSecondDraw)).to.be.equal('0');
     });
   });
+
+  describe('Updating percentages', async function () {
+
+    it('Reverts if not admin', async function () {
+      await expect(
+        this.registry.connect(tagger).updatePercentages(10, 10)
+      ).to.be.revertedWith("Caller must be admin");
+    });
+
+    it('Reverts if greater than 100', async function () {
+      await expect(
+        this.registry.connect(platform).updatePercentages(90, 11)
+      ).to.be.revertedWith("ERC721HashtagRegistry.updatePercentages: percentages must not be over 100");
+    });
+
+    it('With correct credentials can update percentages', async function () {
+      await this.registry.connect(platform).updatePercentages(30, 20);
+
+      expect(await this.registry.platformPercentage()).to.be.equal(30);
+      expect(await this.registry.publisherPercentage()).to.be.equal(20);
+      expect(await this.registry.remainingPercentage()).to.be.equal(50);
+    });
+  });
 });
