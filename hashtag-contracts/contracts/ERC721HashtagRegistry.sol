@@ -107,7 +107,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         require(hashtagProtocol.exists(_hashtagId), "Tag: The hashtag ID supplied is invalid - non-existent token!");
         require(msg.value >= tagFee, "Tag: You must send the fee");
 
-        require(_nftContract != address(0), "Tag: Invalid nft contract address");
+//        require(_nftContract != address(0), "Tag: Invalid nft contract address");
         require(_nftContract != address(hashtagProtocol), "Tag: Invalid tag - you are attempting to tag another hashtag");
 
         // Ensure that we are dealing with an ERC721 compliant _nftContract

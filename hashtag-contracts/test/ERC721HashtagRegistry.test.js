@@ -26,7 +26,6 @@ describe('ERC721HashtagRegistry Tests', function () {
 
     const HashtagAccessControls = await ethers.getContractFactory('HashtagAccessControls');
     const HashtagProtocol = await ethers.getContractFactory('HashtagProtocol');
-    // const HashtagLinkSplitter = await ethers.getContractFactory('HashtagLinkSplitter');
     const ERC721HashtagRegistry = await ethers.getContractFactory('ERC721HashtagRegistry');
     const ERC721BurnableMock = await ethers.getContractFactory('ERC721BurnableMock');
 
@@ -227,7 +226,7 @@ describe('ERC721HashtagRegistry Tests', function () {
           publisherAddress,
           taggerAddress,
           {value: utils.parseEther('1')}
-        )).to.be.revertedWith("Invalid nft contract address");
+        )).to.be.revertedWith("function call to a non-contract account");
     });
 
     it('Reverts when hashtag nft contract address supplied for tag', async function () {
@@ -290,7 +289,7 @@ describe('ERC721HashtagRegistry Tests', function () {
       expect(platformBalanceAfter.sub(platformBalanceBefore)).to.be.equal(utils.parseEther('0.002'));
     });
 
-    it.skip('Can draw down as the platform', async function () {
+    it('Can draw down as the platform', async function () {
       const platformBalanceBefore = (await platform.getBalance());
       await this.registry.connect(platform).drawDown(platformAddress);
       const platformBalanceAfter = (await platform.getBalance());

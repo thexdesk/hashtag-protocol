@@ -108,8 +108,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         string memory lowerHashtagToMint = _lower(_hashtag);
         string memory hashtagToMint = _hashtag;
 
-
-
         // generate the new hashtag token id
         tokenPointer = tokenPointer.add(1);
         uint256 tokenId = tokenPointer;
