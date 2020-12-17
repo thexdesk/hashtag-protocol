@@ -372,7 +372,7 @@ export default {
       } else {
         const hashtag = this.hashtag[0];
         let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
-        console.log("hashtagValue", hashtagValue);
+
         if (hashtagValue.charAt(0) !== "#") {
           hashtagValue = `#${hashtagValue}`;
         }
@@ -380,8 +380,6 @@ export default {
         const findExistingHashtagResult = hashtags.filter(
           (option) => option.name.toLowerCase() === hashtagValue.toLowerCase()
         );
-
-        console.log("findExistingHashtagResult", findExistingHashtagResult);
 
         await this.$store.dispatch("tag", {
           hashtagId: findExistingHashtagResult[0].id,
@@ -414,12 +412,7 @@ export default {
           (option) => option.name.toLowerCase() === hashtagValue.toLowerCase()
         );
 
-        console.log("findExistingHashtagResult", findExistingHashtagResult);
-
         const isNewHashtag = findExistingHashtagResult.length !== 1;
-
-        console.log("hashtagValue", hashtagValue);
-        console.log("isNewHashtag", isNewHashtag);
 
         this.mintAndTag = isNewHashtag;
       }

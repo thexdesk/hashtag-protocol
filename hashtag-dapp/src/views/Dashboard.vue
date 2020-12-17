@@ -962,8 +962,19 @@ export default {
           nftId: this.modalForm.nft.tokenId,
         });
       } else {
+        const hashtag = this.modalForm.hashtag[0];
+        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
+        if (hashtagValue.charAt(0) !== "#") {
+          hashtagValue = `#${hashtagValue}`;
+        }
+
+        const hashtags = this.hashtags || [];
+        const findExistingHashtagResult = hashtags.filter(
+          (tag) => tag.name.toLowerCase() === hashtagValue.toLowerCase()
+        );
+
         await this.$store.dispatch("tag", {
-          hashtagId: this.modalForm.hashtag[0].id,
+          hashtagId: findExistingHashtagResult[0].id,
           nftContract: this.modalForm.nft.contractAddress,
           nftId: this.modalForm.nft.tokenId,
         });
