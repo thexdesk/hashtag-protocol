@@ -93,9 +93,9 @@
                         >
                           <template slot-scope="props">
                             <b-taglist attached>
-                              <b-tag type="is-primary" size="is-medium"
-                                >#{{ props.option.displayHashtag }}</b-tag
-                              >
+                              <b-tag type="is-primary" size="is-medium">{{
+                                props.option.displayHashtag
+                              }}</b-tag>
                               <b-tag type="is-dark" size="is-medium">{{
                                 props.option.tagCount
                               }}</b-tag>
@@ -121,7 +121,7 @@
                                 "
                               >
                                 <div v-if="tag.displayHashtag">
-                                  #{{ tag.displayHashtag }}
+                                  {{ tag.displayHashtag }}
                                 </div>
                                 <div v-else>#{{ tag }}</div>
                               </b-tag>
@@ -365,13 +365,13 @@ export default {
     async tagNft() {
       if (this.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
-          hashtag: this.hashtag[0],
+          hashtag: `#${this.hashtag[0]}`,
           nftContract: this.tagsByDigitalAsset[0].nftContract,
           nftId: this.tagsByDigitalAsset[0].nftId,
         });
       } else {
         await this.$store.dispatch("tag", {
-          hashtagId: this.hashtag[0].id,
+          hashtagId: `#${this.hashtag[0].id}`,
           nftContract: this.tagsByDigitalAsset[0].nftContract,
           nftId: this.tagsByDigitalAsset[0].nftId,
         });
@@ -379,9 +379,10 @@ export default {
     },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
-      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
-      });
+      const hashtags = this.hashtags || [];
+      this.hashtagInputTags = hashtags.filter(
+        (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
+      );
     },
     validateTag(hashtag) {
       return this.hashtagValidationService.validateTag(hashtag);
@@ -390,16 +391,11 @@ export default {
       const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
-        const hashtagValue =
-          hashtag[0] && hashtag[0].name ? hashtag[0].name : hashtag[0];
+        const hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
 
         const isNewHashtag =
           (this.hashtagInputTags || []).filter((option) => {
-            return (
-              (option.name || "")
-                .toLowerCase()
-                .indexOf((hashtagValue || "").toLowerCase()) >= 0
-            );
+            return option.name.toLowerCase() === hashtagValue.toLowerCase();
           }).length === 0;
 
         this.mintAndTag = isNewHashtag;
