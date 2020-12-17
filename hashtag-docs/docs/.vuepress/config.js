@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   title: "Hashtag Documentation",
   description: "Hashtag Documentation",
-  dest: "docs/dist",
+  dest: "docs/tmp/dist",
   temp: "docs/tmp",
   themeConfig: {
     smoothScroll: true,
