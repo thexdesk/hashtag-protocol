@@ -63,7 +63,7 @@
                               <div v-if="tag.displayHashtag">
                                 {{ tag.displayHashtag }}
                               </div>
-                              <div v-else>{{ tag }}</div>
+                              <div v-else>#{{ tag }}</div>
                             </b-tag>
                             <div class="field">
                               <div class="control">
@@ -798,7 +798,7 @@
                                 <div v-if="tag.displayHashtag">
                                   {{ tag.displayHashtag }}
                                 </div>
-                                <div v-else>{{ tag }}</div>
+                                <div v-else>#{{ tag }}</div>
                               </b-tag>
                               <div class="field">
                                 <div class="control">
@@ -973,9 +973,10 @@ export default {
       this.isTagModalActive = false;
     },
     getFilteredTags: function (text) {
-      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
-      });
+      const hashtags = this.hashtags || [];
+      this.hashtagInputTags = hashtags.filter(
+        (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
+      );
     },
     isNewTag: function () {
       if (
@@ -989,7 +990,7 @@ export default {
             return (
               option.name
                 .toLowerCase()
-                .indexOf(this.hashtagInput[0].toLowerCase()) >= 0
+                .indexOf("#" + this.hashtagInput[0].toLowerCase()) >= 0
             );
           }).length === 0
         );
@@ -997,7 +998,7 @@ export default {
       return false;
     },
     mintHashtag() {
-      this.$store.dispatch("mint", this.hashtagInput[0]);
+      this.$store.dispatch("mint", `#${this.hashtagInput[0]}`);
     },
     onNftSelected(nft) {
       this.modalForm.nft = nft;
