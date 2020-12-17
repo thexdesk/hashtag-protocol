@@ -265,10 +265,7 @@ const actions = {
   },
 
   async getProtocolFee({ commit }) {
-    const { hashtagProtocolContract } = state.web3Objects.contracts;
-    const fee = (await hashtagProtocolContract.fee()).toString();
-
-    commit("setProtocolFee", fee);
+    commit("setProtocolFee", "0");
   },
 
   async getTaggingFee({ commit }) {

@@ -34,7 +34,7 @@
                         <template slot-scope="props">
                           <b-taglist attached>
                             <b-tag type="is-primary" size="is-medium"
-                              >#{{ props.option.displayHashtag }}
+                              >{{ props.option.displayHashtag }}
                             </b-tag>
                             <b-tag type="is-dark" size="is-medium"
                               >{{ props.option.tagCount }}
@@ -61,9 +61,9 @@
                               @close="$refs.taginput.removeTag(index, $event)"
                             >
                               <div v-if="tag.displayHashtag">
-                                #{{ tag.displayHashtag }}
+                                {{ tag.displayHashtag }}
                               </div>
-                              <div v-else>#{{ tag }}</div>
+                              <div v-else>{{ tag }}</div>
                             </b-tag>
                             <div class="field">
                               <div class="control">
@@ -115,7 +115,7 @@
                           <br />
                           <small
                             >{{ props.option.contractName }}
-                            <b>#{{ props.option.tokenId }}</b>
+                            <b>{{ props.option.tokenId }}</b>
                           </small>
                         </div>
                       </div>
@@ -308,10 +308,7 @@
                         {{ props.row.tagCount }}
                       </b-table-column>
                       <b-table-column field="revenue" label="Revenue" centered>
-                        <eth-amount-sum
-                          :value1="props.row.tagFees"
-                          :value2="props.row.mintFees"
-                        ></eth-amount-sum>
+                        <eth-amount :value="props.row.tagFees"></eth-amount>
                       </b-table-column>
                     </template>
                   </b-table>
@@ -772,7 +769,7 @@
                           <template slot-scope="props">
                             <b-taglist attached>
                               <b-tag type="is-primary" size="is-medium"
-                                >#{{ props.option.displayHashtag }}
+                                >{{ props.option.displayHashtag }}
                               </b-tag>
                               <b-tag type="is-dark" size="is-medium"
                                 >{{ props.option.tagCount }}
@@ -799,9 +796,9 @@
                                 "
                               >
                                 <div v-if="tag.displayHashtag">
-                                  #{{ tag.displayHashtag }}
+                                  {{ tag.displayHashtag }}
                                 </div>
-                                <div v-else>#{{ tag }}</div>
+                                <div v-else>{{ tag }}</div>
                               </b-tag>
                               <div class="field">
                                 <div class="control">
@@ -833,10 +830,7 @@
     <Footer>
       <span v-if="platform" class="has-text-grey-light">
         Platform revenue
-        <eth-amount-sum
-          :value1="platform.mintFees"
-          :value2="platform.tagFees"
-        ></eth-amount-sum>
+        <eth-amount :value="platform.tagFees"></eth-amount>
       </span>
     </Footer>
   </div>
@@ -845,7 +839,6 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
-import EthAmountSum from "../components/EthAmountSum";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
@@ -868,7 +861,6 @@ export default {
     TimestampFrom,
     EthAccount,
     EthAmount,
-    EthAmountSum,
     MarkdownDoc,
     Footer,
     Hashtag,
