@@ -6723,6 +6723,11 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
+platformsh-config@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/platformsh-config/-/platformsh-config-2.3.1.tgz#3a9746af7b5105b60a28c7ecc9b881b852cc6638"
+  integrity sha512-b3WOJQ1A7fonAB46PF9aAOKj/0lsHvFSYcvnnPi4gowcs4DiKDjxETLHLs3kq87AyVEZW9WtcdoON/q3vvLMJA==
+
 portfinder@^1.0.13, portfinder@^1.0.26:
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.28.tgz#67c4622852bd5374dd1dd900f779f53462fac778"

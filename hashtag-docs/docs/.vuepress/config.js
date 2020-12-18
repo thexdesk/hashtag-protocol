@@ -1,9 +1,18 @@
 const path = require("path");
+const config = require("platformsh-config").config();
+
+// If we are on Platform.sh, build into the /tmp directory.
+// Move static files out of there during Platform deploy hook.
+let buildDir = "/tmp/hashtag-docs";
+if (!config.isValidPlatform()) {
+  // Not on Platform, use our local directory.
+  buildDir = "docs/dist";
+}
 
 module.exports = {
   title: "Hashtag Documentation",
   description: "Hashtag Documentation",
-  dest: "docs/tmp/dist",
+  dest: buildDir,
   temp: "docs/tmp",
   themeConfig: {
     smoothScroll: true,
