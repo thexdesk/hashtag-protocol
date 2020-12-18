@@ -43,9 +43,9 @@ mounts:
   '/deploy':
     source: local
     source_path: deploy
-  '/docs/tmp':
-    source: local
-    source_path: tmp
+  #'/tmp':
+  #  source: local
+  #  source_path: tmp
   # Mount the shared help/documentation drive.
   '/network/docs':
     source: service
@@ -63,13 +63,13 @@ hooks:
       set -e
       yarn install
       mkdir build
+      mkdir tmp
       npm run build
-    deploy: |
-#      npm run build
     post_deploy: |
       # If we're building on Platform.sh...
       if [ -d /app/.global ]; then
         # Copy raw markdown documents to network drive (network/docs).
         /app/scripts/platformsh/push-docs.sh
+        # Move static build files to deploy/web folder.
         cp -R build/* deploy/
       fi

@@ -31,9 +31,8 @@ package-lock.json
 */build_platform
 */build
 */dist
+*/tmp
 */node_modules
 */public/docs
 
 hashtag-docs/docs/.vuepress/dist/*
-hashtag-docs/docs/tmp
-hashtag-docs/docs/dist/*

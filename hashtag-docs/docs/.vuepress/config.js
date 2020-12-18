@@ -3,17 +3,19 @@ const config = require("platformsh-config").config();
 
 // If we are on Platform.sh, build into the /tmp directory.
 // Move static files out of there during Platform deploy hook.
-let buildDir = "build";
+//let buildDir = "build";
+//let tmpDir = "tmp";
 if (!config.isValidPlatform()) {
   // Not on Platform, use our local directory.
-  buildDir = "docs/dist";
+  //buildDir = "docs/dist";
+  //buildDir = "docs/dist";
 }
 
 module.exports = {
   title: "Hashtag Documentation",
   description: "Hashtag Documentation",
-  dest: buildDir,
-  temp: "docs/tmp",
+  dest: "build",
+  temp: "tmp",
   themeConfig: {
     smoothScroll: true,
     repo: "hashtag-protocol/hashtag-protocol",
