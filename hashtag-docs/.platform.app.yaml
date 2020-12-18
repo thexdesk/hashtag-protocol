@@ -18,7 +18,7 @@ web:
             # The folder from which to serve static assets, for this location.
             #
             # This is a filesystem path, relative to the application root.
-            root: "docs/dist"
+            root: "deploy"
             index:
                 - "index.html"
             # How long to allow static assets from this location to be cached.
@@ -40,9 +40,9 @@ disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
-  '/docs/dist':
+  '/deploy':
     source: local
-    source_path: dist
+    source_path: deploy
   '/docs/tmp':
     source: local
     source_path: tmp
@@ -61,9 +61,9 @@ dependencies:
 hooks:
     build: |
       set -e
-      mkdir foo
-      touch foo/bar
       yarn install
+      mkdir build
+      npm run build
     deploy: |
 #      npm run build
     post_deploy: |
@@ -71,6 +71,5 @@ hooks:
       if [ -d /app/.global ]; then
         # Copy raw markdown documents to network drive (network/docs).
         /app/scripts/platformsh/push-docs.sh
-        cp foo/* docs/dist
-        #npm run build
+        cp -R build/* deploy/
       fi
