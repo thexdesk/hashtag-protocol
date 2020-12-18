@@ -3,7 +3,7 @@ const config = require("platformsh-config").config();
 
 // If we are on Platform.sh, build into the /tmp directory.
 // Move static files out of there during Platform deploy hook.
-let buildDir = "/tmp/hashtag-docs";
+let buildDir = "/tmp";
 if (!config.isValidPlatform()) {
   // Not on Platform, use our local directory.
   buildDir = "docs/dist";
