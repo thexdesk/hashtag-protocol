@@ -62,8 +62,6 @@ hooks:
     build: |
       set -e
       yarn install
-      cd /tmp
-      mkdir hashtag-docs
       npm run build
     deploy: |
 #      npm run build
