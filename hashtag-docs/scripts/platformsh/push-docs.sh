@@ -18,11 +18,12 @@
 if [ -d /app/.global ]; then
 
     # First clean out the old docs
-    rm -rf /app/network/docs/*
+    rm -rf /app/shared/docs
+    mkdir /app/shared/docs
 
     # Copy everything over.
-    cp -R /app/docs/shared/faqs/. /app/network/docs/
-    cp -R /app/docs/shared/help/. /app/network/docs/
-    cp -R /app/docs/shared/pdfs/. /app/network/docs/
+    cp -R /app/docs/shared/faqs/. /app/shared/docs/
+    cp -R /app/docs/shared/help/. /app/shared/docs/
+    cp -R /app/docs/shared/pdfs/. /app/shared/docs/
 
 fi
