@@ -99,7 +99,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @param _creator Address of the account to be attributed with creation
      * @return _tokenId ID of the new hashtag
     */
-    function mint(string memory _hashtag, address payable _publisher, address _creator) payable public returns (uint256 _tokenId) {
+    function mint(string calldata _hashtag, address payable _publisher, address _creator) payable external returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
 
         // Perform basic hashtag validation
