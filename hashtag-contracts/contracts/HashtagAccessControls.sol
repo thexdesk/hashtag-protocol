@@ -16,17 +16,6 @@ contract HashtagAccessControls is AccessControl {
     }
 
     /**
-     * @notice Allows the DEFAULT_ADMIN_ROLE that controls all roles to be overridden thereby creating hierarchies
-     * @param _role keccak256 hash of the role name
-     * @param _adminRole keccak256 hash of the role that can control the base role
-    */
-    function setRoleAdmin(bytes32 _role, bytes32 _adminRole) external {
-        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "AccessControl: sender must be an admin to set role admin");
-
-        _setRoleAdmin(_role, _adminRole);
-    }
-
-    /**
      * @notice Checks whether an address has an admin role
      * @param _addr Address being checked
      * @return bool True if the address has the role, false if not
