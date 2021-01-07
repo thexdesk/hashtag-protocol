@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Burnable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./HashtagAccessControls.sol";
+import { HashtagAccessControls } from "./HashtagAccessControls.sol";
 
 /**
  * @title HashtagProtocol contract
@@ -25,7 +25,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         address creator
     );
 
-    // Definition of a Hashtag which bundles associated metadata
+    /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
         uint256 created;
         address originalPublisher;
@@ -34,14 +34,11 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         string displayVersion;
     }
 
-    uint256 public tokenPointer = 0;
-
+    uint256 tokenPointer;
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
     mapping(string => uint256) public hashtagToTokenId;
 
     address payable public platform;
-    uint256 public platformPercentage = 9000;
-    uint256 modulo = 10000;
 
     uint256 public hashtagMinStringLength = 3;
     uint256 public hashtagMaxStringLength = 32;
@@ -254,6 +251,4 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         }
         return string(bLower);
     }
-
-    // TODO: expose admin drain for excess ETH in the contract
 }

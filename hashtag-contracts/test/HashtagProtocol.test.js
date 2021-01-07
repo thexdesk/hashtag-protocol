@@ -89,7 +89,7 @@ describe('HashtagProtocol Tests', function () {
     });
 
     it('should mint', async function () {
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
 
       const hashtag = '#BlockRocket';
       const lowerHashtag = '#blockrocket';
@@ -105,7 +105,7 @@ describe('HashtagProtocol Tests', function () {
           creatorAddress,
         );
 
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId(lowerHashtag)).to.be.equal('1');
       expect(await this.hashtagProtocol.exists(BigNumber.from('1'))).to.be.true;
 
@@ -120,11 +120,11 @@ describe('HashtagProtocol Tests', function () {
     it('should mint from owner without fee', async function () {
       await this.hashtagProtocol.connect(platform);
 
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
 
       await this.hashtagProtocol.mint('#blockrocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId('#blockrocket')).to.be.equal('1');
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
 
