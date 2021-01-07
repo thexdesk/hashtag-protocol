@@ -19,11 +19,15 @@ Vue.use(VueScreen, "bulma");
 
 // Connections for GraphQL.
 const hashtagClient = new ApolloClient({
-  uri: process.env.VUE_APP_HASHTAG_SUBGRAPH_URL,
+  uri:
+    process.env.VUE_APP_HASHTAG_SUBGRAPH_URL ||
+    "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
 });
 
 const nftsClient = new ApolloClient({
-  uri: process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL,
+  uri:
+    process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL ||
+    "https://api.thegraph.com/subgraphs/name/blockrockettech/nft-tokens",
 });
 
 const apolloProvider = new VueApollo({
