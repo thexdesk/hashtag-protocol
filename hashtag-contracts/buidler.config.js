@@ -10,7 +10,7 @@ const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 module.exports = {
   solc: {
-    version: '0.6.6',
+    version: '0.6.12',
     optimizer: {
       enabled: true,
       runs: 200
