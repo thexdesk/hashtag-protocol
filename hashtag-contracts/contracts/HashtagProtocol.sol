@@ -27,10 +27,8 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
     /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
-        uint256 created;
         address originalPublisher;
         address creator;
-        string value;
         string displayVersion;
     }
 
@@ -105,7 +103,6 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         _assertHashtagIsValid(_hashtag);
 
         string memory lowerHashtagToMint = _lower(_hashtag);
-        string memory hashtagToMint = _hashtag;
 
         // generate the new hashtag token id
         tokenPointer = tokenPointer.add(1);
@@ -113,9 +110,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
         // create the hashtag
         tokenIdToHashtag[tokenId] = Hashtag({
-            value : lowerHashtagToMint,
-            displayVersion : hashtagToMint,
-            created : now,
+            displayVersion : _hashtag,
             originalPublisher : _publisher,
             creator : _creator
         });
@@ -126,7 +121,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         _mint(platform, tokenId);
 
         // log the minting event
-        emit MintHashtag(tokenId, platform, lowerHashtagToMint, hashtagToMint, _publisher, _creator);
+        emit MintHashtag(tokenId, platform, lowerHashtagToMint, _hashtag, _publisher, _creator);
 
         return tokenId;
     }

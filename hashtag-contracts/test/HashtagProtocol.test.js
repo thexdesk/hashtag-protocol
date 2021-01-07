@@ -110,11 +110,10 @@ describe('HashtagProtocol Tests', function () {
       expect(await this.hashtagProtocol.exists(BigNumber.from('1'))).to.be.true;
 
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
-      expect(hashtagData.value).to.be.equal(lowerHashtag);
+      expect(hashtagData.displayVersion.toLowerCase()).to.be.equal(lowerHashtag);
       expect(hashtagData.displayVersion).to.be.equal(hashtag);
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
       expect(hashtagData.creator).to.be.equal(creatorAddress);
-      expect(hashtagData.created).to.be.gt('0');
     });
 
     it('should mint from owner without fee', async function () {
@@ -128,9 +127,8 @@ describe('HashtagProtocol Tests', function () {
       expect(await this.hashtagProtocol.hashtagToTokenId('#blockrocket')).to.be.equal('1');
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
 
-      expect(hashtagData.value).to.be.equal('#blockrocket');
+      expect(hashtagData.displayVersion.toLowerCase()).to.be.equal('#blockrocket');
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
-      expect(hashtagData.created).to.be.gt('0');
     });
 
     it('should revert if the publisher is not whitelisted', async function () {
