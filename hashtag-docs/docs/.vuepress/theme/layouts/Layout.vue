@@ -6,7 +6,7 @@
     <section class="main">
       <div class="container">
         <div class="columns">
-          <div class="column is-one-third-tablet is-one-quarter-desktop">
+          <div class="column is-hidden-mobile is-one-quarter-tablet">
             <div class="sticky">
               <Sidebar :items="sidebarItems"></Sidebar>
             </div>
@@ -14,6 +14,11 @@
           <div class="column">
             <div class="content">
               <Content />
+            </div>
+          </div>
+          <div class="column is-hidden-touch is-hidden-desktop-only is-2">
+            <div class="sticky">
+              <PageEdit />
             </div>
           </div>
         </div>
@@ -26,6 +31,7 @@
 <script>
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import PageEdit from "../components/PageEdit";
 import Sidebar from "../components/Sidebar";
 import { resolveSidebarItems } from "../util";
 
@@ -34,8 +40,9 @@ export default {
 
   components: {
     Footer,
-    Sidebar,
     Navbar,
+    PageEdit,
+    Sidebar,
   },
 
   computed: {
@@ -53,12 +60,16 @@ export default {
 
 <style lang="scss">
 body.has-navbar-fixed-top {
-  padding-top: 5.25rem;
+  padding-top: 6.25rem;
+}
+
+.navbar.is-fixed-top {
+  padding: 0.75rem 0;
 }
 
 .sticky {
   position: sticky;
-  top: 84px;
+  top: 100px;
 }
 
 .main {

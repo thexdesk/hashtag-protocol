@@ -103,7 +103,7 @@ describe('HashtagProtocol Tests', function () {
     });
 
     it('should mint', async function () {
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
 
       const hashtag = '#BlockRocket';
       const lowerHashtag = '#blockrocket';
@@ -119,32 +119,30 @@ describe('HashtagProtocol Tests', function () {
           creatorAddress,
         );
 
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId(lowerHashtag)).to.be.equal('1');
       expect(await this.hashtagProtocol.exists(BigNumber.from('1'))).to.be.true;
 
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
-      expect(hashtagData.value).to.be.equal(lowerHashtag);
+      expect(hashtagData.displayVersion.toLowerCase()).to.be.equal(lowerHashtag);
       expect(hashtagData.displayVersion).to.be.equal(hashtag);
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
       expect(hashtagData.creator).to.be.equal(creatorAddress);
-      expect(hashtagData.created).to.be.gt('0');
     });
 
     it('should mint from owner without fee', async function () {
       await this.hashtagProtocol.connect(platform);
 
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
 
       await this.hashtagProtocol.mint('#blockrocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
+      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId('#blockrocket')).to.be.equal('1');
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
 
-      expect(hashtagData.value).to.be.equal('#blockrocket');
+      expect(hashtagData.displayVersion.toLowerCase()).to.be.equal('#blockrocket');
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
-      expect(hashtagData.created).to.be.gt('0');
     });
 
     it('should revert if the publisher is not whitelisted', async function () {

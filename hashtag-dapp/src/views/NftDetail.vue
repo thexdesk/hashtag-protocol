@@ -93,9 +93,9 @@
                         >
                           <template slot-scope="props">
                             <b-taglist attached>
-                              <b-tag type="is-primary" size="is-medium"
-                                >#{{ props.option.displayHashtag }}</b-tag
-                              >
+                              <b-tag type="is-primary" size="is-medium">{{
+                                props.option.displayHashtag
+                              }}</b-tag>
                               <b-tag type="is-dark" size="is-medium">{{
                                 props.option.tagCount
                               }}</b-tag>
@@ -121,7 +121,7 @@
                                 "
                               >
                                 <div v-if="tag.displayHashtag">
-                                  #{{ tag.displayHashtag }}
+                                  {{ tag.displayHashtag }}
                                 </div>
                                 <div v-else>#{{ tag }}</div>
                               </b-tag>
@@ -365,13 +365,24 @@ export default {
     async tagNft() {
       if (this.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
-          hashtag: this.hashtag[0],
+          hashtag: `#${this.hashtag[0]}`,
           nftContract: this.tagsByDigitalAsset[0].nftContract,
           nftId: this.tagsByDigitalAsset[0].nftId,
         });
       } else {
+        const hashtag = this.hashtag[0];
+        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
+
+        if (hashtagValue.charAt(0) !== "#") {
+          hashtagValue = `#${hashtagValue}`;
+        }
+        const hashtags = this.hashtagInputTags || [];
+        const findExistingHashtagResult = hashtags.filter(
+          (option) => option.name.toLowerCase() === hashtagValue.toLowerCase()
+        );
+
         await this.$store.dispatch("tag", {
-          hashtagId: this.hashtag[0].id,
+          hashtagId: findExistingHashtagResult[0].id,
           nftContract: this.tagsByDigitalAsset[0].nftContract,
           nftId: this.tagsByDigitalAsset[0].nftId,
         });
@@ -379,9 +390,10 @@ export default {
     },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
-      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
-      });
+      const hashtags = this.hashtags || [];
+      this.hashtagInputTags = hashtags.filter(
+        (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
+      );
     },
     validateTag(hashtag) {
       return this.hashtagValidationService.validateTag(hashtag);
@@ -390,17 +402,17 @@ export default {
       const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
-        const hashtagValue =
-          hashtag[0] && hashtag[0].name ? hashtag[0].name : hashtag[0];
+        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
+        if (hashtagValue.charAt(0) !== "#") {
+          hashtagValue = `#${hashtagValue}`;
+        }
 
-        const isNewHashtag =
-          (this.hashtagInputTags || []).filter((option) => {
-            return (
-              (option.name || "")
-                .toLowerCase()
-                .indexOf((hashtagValue || "").toLowerCase()) >= 0
-            );
-          }).length === 0;
+        const hashtags = this.hashtagInputTags || [];
+        const findExistingHashtagResult = hashtags.filter(
+          (option) => option.name.toLowerCase() === hashtagValue.toLowerCase()
+        );
+
+        const isNewHashtag = findExistingHashtagResult.length !== 1;
 
         this.mintAndTag = isNewHashtag;
       }

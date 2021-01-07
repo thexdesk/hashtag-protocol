@@ -52,13 +52,15 @@ $body-family: $family-sans-serif;
 $link: $primary;
 $link-hover: $primary;
 
+$code: $grey-darker;
+
 $footer-background-color: $grey-lighter;
 
 $divider-background-color: $grey;
 $footer-padding: 3rem 1.5rem 6rem;
 
 // Removes hamburger in global nav.
-$navbar-breakpoint: 414px;
+$navbar-breakpoint: $tablet;
 $navbar-item-hover-background-color: $white;
 
 $menu-item-active-color: $primary;

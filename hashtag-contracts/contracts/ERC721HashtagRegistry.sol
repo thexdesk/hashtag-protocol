@@ -1,4 +1,6 @@
-pragma solidity 0.6.6;
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -241,10 +243,10 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
      * @dev Supports the interface ID of the crypto kitties contract
      * @param _contract Address of the contract being queried
      */
-    function _assertContractSupportsERC721Interface(address _contract) private {
-        try IERC721(_contract).supportsInterface(_INTERFACE_ID_ERC721) returns (bool result) {
+    function _assertContractSupportsERC721Interface(address _contract) private view {
+        try IERC721(_contract).supportsInterface(_INTERFACE_ID_ERC721) returns (bool mainResult) {
             // We might be dealing with the CryptoKitties contract if result is false
-            if (result == false) {
+            if (mainResult == false) {
                 try IERC721(_contract).supportsInterface(_INTERFACE_ID_ERC721_CryptoKitties) returns (bool result) {
                     require(result == true, "Contract does not implement the ERC721 interface");
                 } catch Error(string memory reason) {
@@ -260,7 +262,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
         }
     }
 
-    function _assertNftExists(address _nftContract, uint256 _nftId) private {
+    function _assertNftExists(address _nftContract, uint256 _nftId) private view {
         try IERC721(_nftContract).ownerOf(_nftId) returns (address owner) {
             require(owner != address(0), "Token does not exist or is owned by the zero address");
         } catch Error(string memory reason) {

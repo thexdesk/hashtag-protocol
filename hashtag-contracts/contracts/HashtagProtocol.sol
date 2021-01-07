@@ -1,10 +1,12 @@
-pragma solidity 0.6.6;
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Burnable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./HashtagAccessControls.sol";
+import { HashtagAccessControls } from "./HashtagAccessControls.sol";
 
 /**
  * @title HashtagProtocol contract
@@ -23,17 +25,14 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         address creator
     );
 
-    // Definition of a Hashtag which bundles associated metadata
+    /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
-        uint256 created;
         address originalPublisher;
         address creator;
-        string value;
         string displayVersion;
     }
 
-    uint256 public tokenPointer = 0;
-
+    uint256 tokenPointer;
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
     mapping(string => uint256) public hashtagToTokenId;
 
@@ -97,14 +96,13 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @param _creator Address of the account to be attributed with creation
      * @return _tokenId ID of the new hashtag
     */
-    function mint(string memory _hashtag, address payable _publisher, address _creator) payable public returns (uint256 _tokenId) {
+    function mint(string calldata _hashtag, address payable _publisher, address _creator) payable external returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
 
         // Perform basic hashtag validation
         _assertHashtagIsValid(_hashtag);
 
         string memory lowerHashtagToMint = _lower(_hashtag);
-        string memory hashtagToMint = _hashtag;
 
         // generate the new hashtag token id
         tokenPointer = tokenPointer.add(1);
@@ -112,9 +110,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
 
         // create the hashtag
         tokenIdToHashtag[tokenId] = Hashtag({
-            value : lowerHashtagToMint,
-            displayVersion : hashtagToMint,
-            created : now,
+            displayVersion : _hashtag,
             originalPublisher : _publisher,
             creator : _creator
         });
@@ -125,7 +121,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         _mint(platform, tokenId);
 
         // log the minting event
-        emit MintHashtag(tokenId, platform, lowerHashtagToMint, hashtagToMint, _publisher, _creator);
+        emit MintHashtag(tokenId, platform, lowerHashtagToMint, _hashtag, _publisher, _creator);
 
         return tokenId;
     }

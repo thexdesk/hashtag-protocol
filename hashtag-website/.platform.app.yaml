@@ -44,7 +44,7 @@ web:
             #
             # This is a filesystem path, relative to the application root.
             # Folder name is set in npm run buildenvvar.
-            root: "network/docs"
+            root: "shared/docs"
             index:
                 - "index.html"
             passthru: /index.html
@@ -80,10 +80,10 @@ mounts:
   '/.tmp_platformsh':
     source: local
     source_path: files/tmp_platformsh
-  '/network/docs':
+  '/shared':
     source: service
-    service: docs
-    source_path: network/docs
+    service: shared
+    source_path: shared
 
 # Build dependencies
 dependencies:

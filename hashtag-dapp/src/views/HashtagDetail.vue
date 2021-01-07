@@ -9,7 +9,7 @@
     </section>
     <section class="main" v-if="hashtagsByName && hashtagsByName[0]">
       <div class="container">
-        <h1 class="title is-1">#{{ hashtagsByName[0].displayHashtag }}</h1>
+        <h1 class="title is-1">{{ hashtagsByName[0].displayHashtag }}</h1>
         <h2 class="subtitle">
           Hashtag Protocol Token
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
@@ -152,7 +152,7 @@
                 class="is-pulled-right"
               ></help-modal>
               <h2 class="title is-4 is-spaced">
-                Content tagged with #{{ hashtag }}
+                Content tagged with {{ hashtag }}
               </h2>
               <b-tabs v-model="activeTab" :animated="true">
                 <b-tab-item label="ERC-721 NFTs">

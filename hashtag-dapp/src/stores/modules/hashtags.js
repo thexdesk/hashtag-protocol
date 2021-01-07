@@ -72,9 +72,9 @@ import nftCache from "../../data/nfts";
 const state = {
   web3Objects: {},
   fees: {
-    protocol: ethers.utils.parseEther("0.01"),
+    protocol: 0,
     tagging: ethers.utils.parseEther("0.01"),
-    mintAndTag: ethers.utils.parseEther("0.02"),
+    mintAndTag: ethers.utils.parseEther("0.01"),
   },
   supportedNfts: [
     {
@@ -160,7 +160,6 @@ const actions = {
           readyToTransact,
         });
 
-        dispatch("getProtocolFee");
         dispatch("getTaggingFee");
         dispatch("getMintAndTagFee");
       }
@@ -181,9 +180,7 @@ const actions = {
     const { contracts, account, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    const tx = await hashtagProtocolContract.mint(payload, publisher, account, {
-      value: ethers.utils.bigNumberify(state.fees.protocol),
-    });
+    const tx = await hashtagProtocolContract.mint(payload, publisher, account);
 
     const { emitter } = blocknative.transaction(tx.hash);
 
@@ -215,7 +212,7 @@ const actions = {
       publisher,
       account,
       {
-        value: ethers.utils.bigNumberify(fees.protocol),
+        value: ethers.utils.bigNumberify(fees.tagging),
       }
     );
 
@@ -248,7 +245,7 @@ const actions = {
       publisher,
       account,
       {
-        value: ethers.utils.bigNumberify(fees.mintAndTag),
+        value: ethers.utils.bigNumberify(fees.tagging),
       }
     );
 
@@ -265,26 +262,19 @@ const actions = {
   },
 
   async getProtocolFee({ commit }) {
-    const { hashtagProtocolContract } = state.web3Objects.contracts;
-    const fee = (await hashtagProtocolContract.fee()).toString();
-
-    commit("setProtocolFee", fee);
+    commit("setProtocolFee", "0");
   },
 
   async getTaggingFee({ commit }) {
     const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
-    const fee = (
-      await erc721HashtagRegistryContract.calculateTagFeeAfterDiscount()
-    ).toString();
+    const fee = (await erc721HashtagRegistryContract.tagFee()).toString();
 
     commit("setTaggingFee", fee);
   },
 
   async getMintAndTagFee({ commit }) {
     const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
-    const fee = (
-      await erc721HashtagRegistryContract.calculateMintAndTagFee()
-    ).toString();
+    const fee = (await erc721HashtagRegistryContract.tagFee()).toString();
 
     commit("setMintAndTagFee", fee);
   },
