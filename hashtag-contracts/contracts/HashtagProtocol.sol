@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/GSN/Context.sol";
 
 /**
- * @title HashtagProtocol contract
+ * @title Hashtag Protocol contract
  * @notice Core smart contract of the protocol that governs the creation of hashtag tokens
  * @author Hashtag Protocol
 */
@@ -58,7 +58,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     mapping(address => mapping(address => bool)) internal operatorApprovals;
 
     // @notice baseURI for looking up up tokenURI for a token
-    string public baseURI;
+    string public baseURI = "https://api.com/v1/";
 
     /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
