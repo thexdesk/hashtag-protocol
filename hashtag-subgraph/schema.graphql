@@ -6,14 +6,12 @@ type Hashtag @entity {
   publisher: Bytes!
   timestamp: BigInt!
   tagCount: BigInt!
-  totalMintingFee: BigInt!
-  publisherMintingFee: BigInt!
-  platformMintingFee: BigInt!
 
   #tagging revenue
   ownerRevenue: BigInt!
   publisherRevenue: BigInt!
   protocolRevenue: BigInt!
+  creatorRevenue: BigInt!
 }
 
 type Tag @entity {
@@ -37,7 +35,6 @@ type Publisher @entity {
   id: ID!
   mintCount: BigInt!
   tagCount: BigInt!
-  mintFees: BigInt!
   tagFees: BigInt!
 }
 
@@ -56,6 +53,5 @@ type Tagger @entity {
 
 type Platform @entity {
   id: ID!
-  mintFees: BigInt!
   tagFees: BigInt!
 }

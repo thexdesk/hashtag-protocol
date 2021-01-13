@@ -20,20 +20,42 @@
           <a :href="this.app" class="button is-primary is-outlined"> App </a>
         </div>
       </b-navbar-item>
+      <div class="is-hidden-tablet">
+        <hr />
+        <b-navbar-item>
+          <Sidebar :items="sidebarItems"></Sidebar>
+        </b-navbar-item>
+      </div>
     </template>
   </b-navbar>
 </template>
 
 <script>
+import Sidebar from "./Sidebar";
+import { resolveSidebarItems } from "../util";
+
 export default {
   name: "Navbar",
+  components: {
+    Sidebar,
+  },
   data() {
     return {
       developers: "",
     };
   },
   mounted() {
-    this.developers = this.website + "/developers";
+    this.developers = this.website + "developers";
+  },
+  computed: {
+    sidebarItems() {
+      return resolveSidebarItems(
+        this.$page,
+        this.$page.regularPath,
+        this.$site,
+        this.$localePath
+      );
+    },
   },
 };
 </script>

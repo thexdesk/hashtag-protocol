@@ -38,20 +38,47 @@ import {
 export function handleHashtagRegistered(event: HashtagRegistered): void {
   let registryContract = ERC721HashtagRegistry.bind(event.address);
 
+  let tagFee = registryContract.tagFee();
+  let modulo = registryContract.modulo();
+  let platformPercentageOfTagFee = registryContract.platformPercentage();
+  let publisherPercentageOfTagFee = registryContract.publisherPercentage();
+  let remainingPercentage = modulo.minus(platformPercentageOfTagFee).minus(publisherPercentageOfTagFee);
+
   let protocolAddress = registryContract.hashtagProtocol();
   let protocolContract = HashtagProtocol.bind(protocolAddress);
+  let platformAddress = protocolContract.platform();
 
   let hashtagId = event.params.hashtagId;
+  let owner = protocolContract.ownerOf(hashtagId);
 
-  let hashtagFee = event.params.hashtagFee;
-  let publisherFee = event.params.publisherFee;
-  let platformFee = event.params.platformFee;
-  let totalFee = hashtagFee.plus(publisherFee).plus(platformFee);
+  let publisherFee = tagFee.times(publisherPercentageOfTagFee).div(modulo);
+  let platformFee = tagFee.times(platformPercentageOfTagFee).div(modulo);
+  let remainingFee = tagFee.times(remainingPercentage).div(modulo);
 
-  // Update hashtag data
   let hashtag = Hashtag.load(hashtagId.toString());
+
+  // this is a pre-auction state if true or post-auction if false
+  if (owner.equals(platformAddress)) {
+    hashtag.creatorRevenue = hashtag.creatorRevenue.plus(remainingFee);
+
+    // Update creator counts and fees
+    let creator = protocolContract.getCreatorAddress(hashtagId);
+    let ownerEntity = safeLoadOwner(creator.toHexString());
+    ownerEntity.tagCount = ownerEntity.tagCount.plus(ONE);
+    ownerEntity.tagFees = ownerEntity.tagFees.plus(remainingFee);
+    ownerEntity.save();
+  } else {
+    hashtag.ownerRevenue = hashtag.ownerRevenue.plus(remainingFee);
+
+    // Update owner counts and fees
+    let ownerEntity = safeLoadOwner(owner.toHexString());
+    ownerEntity.tagCount = ownerEntity.tagCount.plus(ONE);
+    ownerEntity.tagFees = ownerEntity.tagFees.plus(remainingFee);
+    ownerEntity.save();
+  }
+
+  // Update rest of hashtag data
   hashtag.tagCount = hashtag.tagCount.plus(ONE);
-  hashtag.ownerRevenue = hashtag.ownerRevenue.plus(hashtagFee);
   hashtag.publisherRevenue = hashtag.publisherRevenue.plus(publisherFee);
   hashtag.protocolRevenue = hashtag.protocolRevenue.plus(platformFee);
   hashtag.save();
@@ -86,12 +113,6 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   tagEntity.publisher = event.params.publisher;
   tagEntity.save();
 
-  // Update owner counts and fees
-  let owner = safeLoadOwner(protocolContract.ownerOf(hashtagId).toHexString());
-  owner.tagCount = owner.tagCount.plus(ONE);
-  owner.tagFees = owner.tagFees.plus(hashtagFee);
-  owner.save();
-
   // update publisher counts and fees
   let publisherEntity = safeLoadPublisher(event.params.publisher.toHexString());
   publisherEntity.tagCount = publisherEntity.tagCount.plus(ONE);
@@ -106,6 +127,6 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   // update tagger counts
   let tagger = safeLoadTagger(event.params.tagger.toHexString());
   tagger.tagCount = tagger.tagCount.plus(ONE);
-  tagger.feesPaid = tagger.feesPaid.plus(totalFee);
+  tagger.feesPaid = tagger.feesPaid.plus(tagFee);
   tagger.save();
 }

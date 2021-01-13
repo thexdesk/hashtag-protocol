@@ -1,0 +1,5 @@
+{
+  "include": [
+      "./hashtag-docs/docs/**/*"
+  ]
+}

@@ -1,10 +1,12 @@
-pragma solidity 0.6.6;
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Burnable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./HashtagAccessControls.sol";
+import { HashtagAccessControls } from "./HashtagAccessControls.sol";
 
 /**
  * @title HashtagProtocol contract
@@ -20,29 +22,21 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         string hashtag,
         string displayHashtag,
         address indexed publisher,
-        uint256 platformFee,
-        uint256 publisherFee
+        address creator
     );
 
-    // Definition of a Hashtag which bundles associated metadata
+    /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
-        uint256 created;
         address originalPublisher;
         address creator;
-        string value;
         string displayVersion;
     }
 
-    uint256 public tokenPointer = 0;
-    uint256 public fee = 0.01 ether;
-
+    uint256 tokenPointer;
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
     mapping(string => uint256) public hashtagToTokenId;
-    mapping(string => uint256) public displayHashtagToTokenId;
 
     address payable public platform;
-    uint256 public platformPercentage = 9000;
-    uint256 modulo = 10000;
 
     uint256 public hashtagMinStringLength = 3;
     uint256 public hashtagMaxStringLength = 32;
@@ -72,7 +66,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     function exists(uint256 _tokenId) public view returns (bool) {
         return _exists(_tokenId);
     }
-    
+
     /**
      * @notice Admin method for updating the token URI of a hashtag
      * @param _tokenId ID of the hashtag
@@ -99,74 +93,42 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @dev A fee is required unless the caller has an admin role
      * @param _hashtag String version of the hashtag to mint
      * @param _publisher Address of the publisher through which the hashtag is being created
-     * @param _recipient Address that will receive the hashtag
+     * @param _creator Address of the account to be attributed with creation
      * @return _tokenId ID of the new hashtag
     */
-    function mint(string memory _hashtag, address payable _publisher, address _recipient) payable public returns (uint256 _tokenId) {
+    function mint(string calldata _hashtag, address payable _publisher, address _creator) payable external returns (uint256 _tokenId) {
         require(accessControls.isPublisher(_publisher), "Mint: The publisher must be whitelisted");
-        require(accessControls.isAdmin(_msgSender()) || msg.value >= fee, "Mint: Must send the platform fee");
 
+        // Perform basic hashtag validation
         _assertHashtagIsValid(_hashtag);
+
+        string memory lowerHashtagToMint = _lower(_hashtag);
 
         // generate the new hashtag token id
         tokenPointer = tokenPointer.add(1);
         uint256 tokenId = tokenPointer;
 
         // create the hashtag
-        string memory hashtagKey = _lower(_hashtag);
         tokenIdToHashtag[tokenId] = Hashtag({
-            value : hashtagKey,
             displayVersion : _hashtag,
-            created : now,
             originalPublisher : _publisher,
-            creator : _msgSender()
-            });
+            creator : _creator
+        });
 
         // store a reverse lookup and mint the tag
-        hashtagToTokenId[hashtagKey] = tokenId;
-        displayHashtagToTokenId[_hashtag] = tokenId;
+        hashtagToTokenId[lowerHashtagToMint] = tokenId;
 
-        _mint(_recipient, tokenId);
-
-        uint256 platformFee;
-        uint256 publisherFee;
-        if (msg.value > 0) {
-            // split fee
-            platformFee = msg.value.div(modulo).mul(platformPercentage);
-            (bool platformSuccess,) = platform.call{value : platformFee}("");
-            require(platformSuccess, "Failed to transfer commission to platform");
-
-            publisherFee = msg.value.sub(platformFee);
-            (bool publisherSuccess,) = _publisher.call{value : publisherFee}("");
-            require(publisherSuccess, "Failed to transfer commission to publisher");
-        }
+        _mint(platform, tokenId);
 
         // log the minting event
-        emit MintHashtag(tokenId, _recipient, hashtagKey, _hashtag, _publisher, platformFee, publisherFee);
+        emit MintHashtag(tokenId, platform, lowerHashtagToMint, _hashtag, _publisher, _creator);
 
         return tokenId;
     }
 
     /**
-     * @notice Admin functionality for setting the fee required in order to create and mint a hashtag
-     * @param _fee Value that the fee will be set to in WEI
-    */
-    function setFee(uint256 _fee) onlyAdmin external {
-        fee = _fee;
-    }
-
-    /**
-     * @notice Admin functionality for updating the percentage of the minting fee that the platform receives
-     * @dev The percentage defined must be to 2 decimal places. For example: For a percentage of 12.55%, multiply this by 100 to get 1255
-     * @param _platformPercentage Percentage of the minting fee that the Hashtag Protocol receives
-    */
-    function setPlatformPercentage(uint256 _platformPercentage) onlyAdmin external {
-        platformPercentage = _platformPercentage;
-    }
-
-    /**
      * @notice Admin functionality for updating the address that receives the commission on behalf of the platform
-     * @param _platform Address that receives platform fees
+     * @param _platform Address that receives minted NFTs
     */
     function setPlatform(address payable _platform) onlyAdmin external {
         platform = _platform;
@@ -189,14 +151,29 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
     }
 
     /**
+     * @notice Admin functionality for updating the access controls
+     * @param _accessControls Address of the access controls contract
+    */
+    function updateAccessControls(HashtagAccessControls _accessControls) onlyAdmin external {
+        require(address(_accessControls) != address(0), "HashtagProtocol.updateAccessControls: Cannot be zero");
+        accessControls = _accessControls;
+    }
+
+    /**
+     * @notice Returns creator of a token
+     * @param _tokenId ID of a hashtag
+     * @return _creator creator of the hashtag
+    */
+    function getCreatorAddress(uint256 _tokenId) public view returns (address _creator) {
+        return tokenIdToHashtag[_tokenId].creator;
+    }
+
+    /**
      * @notice Private method used for validating a hashtag before minting
      * @dev A series of assertions are performed reverting the transaction for any validation violations
      * @param _hashtag Proposed hashtag string
     */
     function _assertHashtagIsValid(string memory _hashtag) private view {
-        string memory hashtagKey = _lower(_hashtag);
-        require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
-
         bytes memory hashtagStringBytes = bytes(_hashtag);
         require(
             hashtagStringBytes.length >= hashtagMinStringLength,
@@ -216,17 +193,22 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
             ))
         );
 
+        require(hashtagStringBytes[0] == 0x23, "Must start with #");
+
+        string memory hashtagKey = _lower(_hashtag);
+        require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
+
         uint256 alphabetCharCount = 0;
-        for (uint256 i; i < hashtagStringBytes.length; i++) {
+        // start from first char after #
+        for (uint256 i = 1; i < hashtagStringBytes.length; i++) {
             bytes1 char = hashtagStringBytes[i];
 
             // Generally ensure that the character is alpha numeric
             bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
-                                     !(char >= 0x41 && char <= 0x5A) && //A-Z
-                                     !(char >= 0x61 && char <= 0x7A) && //a-z
-                                     !(char == 0x2E);
+            !(char >= 0x41 && char <= 0x5A) && //A-Z
+            !(char >= 0x61 && char <= 0x7A); //a-z
 
-            require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9");
+            require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #");
 
             // Should the char be alphabetic, increment alphabetCharCount
             if ((char >= 0x41 && char <= 0x5A) || (char >= 0x61 && char <= 0x7A)) {
@@ -235,7 +217,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         }
 
         // Ensure alphabetCharCount is at least 1
-        require(alphabetCharCount > 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
+        require(alphabetCharCount >= 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
     }
 
     /**
@@ -243,7 +225,7 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
      * @param _base String to convert
      * @return string Lowercase version of string supplied
     */
-    function _lower(string memory _base) internal pure returns (string memory) {
+    function _lower(string memory _base) private pure returns (string memory) {
         bytes memory bStr = bytes(_base);
         bytes memory bLower = new bytes(bStr.length);
         for (uint i = 0; i < bStr.length; i++) {
@@ -257,6 +239,4 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         }
         return string(bLower);
     }
-
-    // TODO: expose admin drain for excess ETH in the contract
 }

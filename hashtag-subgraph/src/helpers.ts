@@ -37,7 +37,6 @@ export function safeLoadPublisher(id: string): Publisher | null {
         entity = new Publisher(id);
         entity.mintCount = ZERO;
         entity.tagCount = ZERO;
-        entity.mintFees = ZERO;
         entity.tagFees = ZERO;
     }
 
@@ -56,7 +55,6 @@ export function safeLoadPlatform(id: string): Platform | null {
 
     if (entity === null) {
         entity = new Platform(id);
-        entity.mintFees = ZERO;
         entity.tagFees = ZERO;
     }
 

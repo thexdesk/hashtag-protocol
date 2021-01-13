@@ -6,9 +6,9 @@ dataSources:
     name: HashtagProtocol
     network: rinkeby
     source:
-      address: "0x1a8A97B7Fe6470112d19B04aD6614b39FbC09E33"
+      address: "0x8E0c170C5E2DB55C036be1ed5EF517838F6f94eE"
       abi: HashtagProtocol
-      startBlock: 6930886
+      startBlock: 7690444
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -19,16 +19,16 @@ dataSources:
         - name: HashtagProtocol
           file: ./abis/HashtagProtocol.json
       eventHandlers:
-        - event: MintHashtag(indexed uint256,indexed address,string,string,indexed address,uint256,uint256)
+        - event: MintHashtag(indexed uint256,indexed address,string,string,indexed address,address)
           handler: handleMintHashtag
       file: ./src/protocol-mapping.ts
   - kind: ethereum/contract
     name: ERC721HashtagRegistry
     network: rinkeby
     source:
-      address: "0xd97F4755bB571A03Edf4A583C5C0cB4cC95EeFd2"
+      address: "0x169973633Ba0E71c881b3C5CB08F51de23aA49Ab"
       abi: ERC721HashtagRegistry
-      startBlock: 6930890
+      startBlock: 7690446
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -41,16 +41,16 @@ dataSources:
         - name: HashtagProtocol
           file: ./abis/HashtagProtocol.json
       eventHandlers:
-        - event: HashtagRegistered(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint256,uint256)
+        - event: HashtagRegistered(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint256)
           handler: handleHashtagRegistered
       file: ./src/erc721-hashtag-registry.ts
   - kind: ethereum/contract
     name: HashtagAccessControls
     network: rinkeby
     source:
-      address: "0x0ECf0F526312919049ddd39f0D1CDDb22A556466"
+      address: "0x9Dec867346cBF62a2A321D7A9994959fc71C7502"
       abi: HashtagAccessControls
-      startBlock: 6930884
+      startBlock: 7690442
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3

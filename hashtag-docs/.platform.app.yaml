@@ -18,7 +18,7 @@ web:
             # The folder from which to serve static assets, for this location.
             #
             # This is a filesystem path, relative to the application root.
-            root: "docs/dist"
+            root: "deploy"
             index:
                 - "index.html"
             # How long to allow static assets from this location to be cached.
@@ -39,18 +39,17 @@ web:
 disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
+# Become available after 
 mounts:
-  '/docs/dist':
+  '/deploy':
     source: local
-    source_path: dist
-  '/docs/tmp':
-    source: local
-    source_path: tmp
-  # Mount the shared help/documentation drive.
-  '/network/docs':
+    source_path: deploy
+  # Cross-app shared drive.
+  # @see /hashtag-protocol/.platform/services.yaml
+  '/shared':
     source: service
-    service: docs
-    source_path: network/docs
+    service: shared
+    source_path: shared
 
 # Build dependencies
 dependencies:
@@ -62,11 +61,14 @@ hooks:
     build: |
       set -e
       yarn install
-    deploy: |
+      mkdir build
+      mkdir tmp
       npm run build
     post_deploy: |
       # If we're building on Platform.sh...
       if [ -d /app/.global ]; then
-        # Copy raw markdown documents to network drive (network/docs).
+        # Copy raw markdown documents to shared drive.
         /app/scripts/platformsh/push-docs.sh
+        # Move static build files to deploy/web folder.
+        cp -R build/* deploy/
       fi

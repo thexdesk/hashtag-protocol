@@ -3,41 +3,7 @@
     <nav class="level container">
       <!-- Left side -->
       <div class="level-item">
-        <p>
-          <strong>Hashtag Protocol</strong> by
-          <b-dropdown
-            :triggers="['hover', 'click']"
-            position="is-top-right"
-            class="has-text-left"
-          >
-            <a slot="trigger" role="button">Michael Paler</a>
-            <b-dropdown-item aria-role="listitem" custom>
-              <b-button
-                tag="a"
-                icon-left="email"
-                href="mailto:michael@hashtag-protocol.org"
-                target="_blank"
-              >
-                michael@hashtag-protocol.org
-              </b-button>
-            </b-dropdown-item>
-            <b-dropdown-item aria-role="listitem" custom>
-              <b-button
-                tag="a"
-                icon-left="linkedin"
-                href="https://www.linkedin.com/in/michael-paler"
-                target="_blank"
-              >
-                LinkedIn
-              </b-button>
-            </b-dropdown-item> </b-dropdown
-          >. The source code will be licensed
-          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The
-          website content is licensed
-          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
-            >CC BY NC SA 4.0</a
-          >.
-        </p>
+        <p>© Hashtag Protocol, Inc. 2020</p>
       </div>
 
       <!-- Right side -->

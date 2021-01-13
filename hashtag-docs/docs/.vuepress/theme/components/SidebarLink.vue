@@ -79,4 +79,8 @@ function renderChildren(h, children, path, route, maxDepth, depth = 1) {
 }
 </script>
 
-<style lang="stylus"></style>
+<style lang="scss">
+.sidebar-sub-headers {
+  font-size: 0.85rem;
+}
+</style>

@@ -10,15 +10,29 @@
         "internalType": "contract HashtagProtocol",
         "name": "_hashtagProtocol",
         "type": "address"
-      },
-      {
-        "internalType": "contract HashtagLinkSplitter",
-        "name": "_splitter",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "who",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "DrawDown",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -56,19 +70,13 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "platformFee",
+        "name": "tagId",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "publisherFee",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "hashtagFee",
+        "name": "tagFee",
         "type": "uint256"
       }
     ],
@@ -86,75 +94,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "hashtagIdToListOfTagIds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "hashtagProtocol",
-    "outputs": [
-      {
-        "internalType": "contract HashtagProtocol",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "mintAndTagDiscount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "modulo",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -162,19 +102,9 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
-    "name": "nftToListOfTagIds",
+    "name": "accrued",
     "outputs": [
       {
         "internalType": "uint256",
@@ -183,213 +113,20 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "publisherToListOfTagIds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "splitter",
-    "outputs": [
-      {
-        "internalType": "contract HashtagLinkSplitter",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "tagFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "tagIdToTag",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "hashtagId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "nftId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "tagger",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tagstamp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "publisher",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "taggerToListOfTagIds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "totalTags",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_hashtag",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "_nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_nftId",
-        "type": "uint256"
-      },
       {
         "internalType": "address payable",
-        "name": "_publisher",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_tagger",
+        "name": "_account",
         "type": "address"
       }
     ],
-    "name": "mintAndTag",
+    "name": "drawDown",
     "outputs": [],
-    "stateMutability": "payable",
-    "type": "function",
-    "payable": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_hashtagId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_nftId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_publisher",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_tagger",
-        "type": "address"
-      }
-    ],
-    "name": "tag",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function",
-    "payable": true
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -433,31 +170,28 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_hashtagId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getAllTagIdsForAGivenHashtag",
+    "inputs": [],
+    "name": "hashtagProtocol",
     "outputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "contract HashtagProtocol",
         "name": "",
-        "type": "uint256[]"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
+      {
+        "internalType": "string",
+        "name": "_hashtag",
+        "type": "string"
+      },
       {
         "internalType": "address",
         "name": "_nftContract",
@@ -467,59 +201,93 @@
         "internalType": "uint256",
         "name": "_nftId",
         "type": "uint256"
-      }
-    ],
-    "name": "getAllTagIdsForAGivenNft",
-    "outputs": [
+      },
       {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "_publisher",
         "type": "address"
-      }
-    ],
-    "name": "getAllTagIdsForAGivenPublisher",
-    "outputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
+      },
       {
         "internalType": "address",
         "name": "_tagger",
         "type": "address"
       }
     ],
-    "name": "getAllTagIdsForAGivenTagger",
+    "name": "mintAndTag",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "modulo",
     "outputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint256[]"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "paid",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "platformPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "publisherPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "remainingPercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [
@@ -538,18 +306,38 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_mintAndTagDiscount",
+        "name": "_hashtagId",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_nftContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_publisher",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_tagger",
+        "type": "address"
       }
     ],
-    "name": "setMintAndTagDiscount",
+    "name": "tag",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "calculateTagFeeAfterDiscount",
+    "name": "tagFee",
     "outputs": [
       {
         "internalType": "uint256",
@@ -558,34 +346,82 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "calculateMintAndTagFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "contract HashtagLinkSplitter",
-        "name": "_splitter",
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "tagIdToTag",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "hashtagId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nftId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "tagger",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tagstamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "publisher",
         "type": "address"
       }
     ],
-    "name": "updateSplitter",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "totalDue",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_due",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalTags",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -597,6 +433,24 @@
       }
     ],
     "name": "updateAccessControls",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_platformPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_publisherPercentage",
+        "type": "uint256"
+      }
+    ],
+    "name": "updatePercentages",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
