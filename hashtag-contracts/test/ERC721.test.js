@@ -357,12 +357,11 @@ contract('ERC721', function (accounts) {
           });
         });
 
-        describe.skip('to a contract that does not implement the required function', function () {
+        describe('to a contract that does not implement the required function', function () {
           it('reverts', async function () {
-            const nonReceiver = this.token;
-            await expectRevert(
-              this.token.safeTransferFrom(owner, nonReceiver.address, tokenId, { from: owner }),
-              'XXX',
+            const nonReceiver = this.accessControls;
+            await expectRevert.unspecified(
+              this.token.safeTransferFrom(owner, nonReceiver.address, tokenId, { from: owner })
             );
           });
         });
