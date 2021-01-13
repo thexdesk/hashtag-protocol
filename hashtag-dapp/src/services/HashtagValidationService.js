@@ -21,14 +21,14 @@ class HashtagValidationService {
       return false;
     }
 
-    if (value.length > 15) {
+    if (value.length > 32) {
       this.dangerToast(
         `Sorry, but '${value}' is an invalid tag as it's more than 15 characters long.`
       );
       return false;
     }
 
-    if (!/^\d*[a-zA-Z][a-zA-Z0-9]*$/.test(value)) {
+    if (!/^#*\d*[a-zA-Z][a-zA-Z0-9]*$/.test(value)) {
       this.dangerToast(
         `Sorry, but '${value}' is an invalid tag as it's either not alpha numeric or only numeric.`
       );

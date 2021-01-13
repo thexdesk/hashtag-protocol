@@ -5,7 +5,6 @@ const INFURA_KEY = process.env.PROTOTYPE_BR_INFURA_KEY || '';
 
 const HashtagAccessControls = artifacts.require('HashtagAccessControls');
 const HashtagProtocol = artifacts.require('HashtagProtocol');
-const HashtagLinkSplitter = artifacts.require('HashtagLinkSplitter');
 const ERC721HashtagRegistry = artifacts.require('ERC721HashtagRegistry');
 
 module.exports = async function (deployer, network, accounts) {
@@ -15,9 +14,8 @@ module.exports = async function (deployer, network, accounts) {
 
     const accessControls = await HashtagAccessControls.deployed();
     const hashtagProtocol = await HashtagProtocol.deployed();
-    const splitter = await HashtagLinkSplitter.deployed();
 
-    await deployer.deploy(ERC721HashtagRegistry, accessControls.address, hashtagProtocol.address, splitter.address, {from: creator});
+    await deployer.deploy(ERC721HashtagRegistry, accessControls.address, hashtagProtocol.address, {from: creator});
 
     console.log('successful!');
 };

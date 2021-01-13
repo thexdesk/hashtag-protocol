@@ -15,7 +15,6 @@ export const SNAPSHOT = gql(`
             id
             mintCount
             tagCount
-            mintFees
             tagFees
         }
         owners(first: 10, orderBy: mintCount, orderDirection: desc) {
@@ -49,7 +48,6 @@ export const SNAPSHOT = gql(`
         }
         platform(id: "platform") {
             id
-            mintFees
             tagFees
         }
         taggers(first: 10, orderBy: tagCount, orderDirection: desc) {
@@ -122,9 +120,6 @@ query hashtagsByName($name: String!) {
         publisher
         timestamp
         tagCount
-        totalMintingFee
-        publisherMintingFee
-        platformMintingFee
         ownerRevenue
         publisherRevenue
         protocolRevenue
@@ -299,7 +294,6 @@ query publisherByAcc($id: String!) {
       id  
       mintCount
       tagCount
-      mintFees
       tagFees
     }
 }
@@ -369,7 +363,6 @@ query pagedPublishers($first: Int!, $skip: Int!) {
         id
         mintCount
         tagCount
-        mintFees
         tagFees
     }
 }`);

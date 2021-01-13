@@ -34,7 +34,7 @@
                         <template slot-scope="props">
                           <b-taglist attached>
                             <b-tag type="is-primary" size="is-medium"
-                              >#{{ props.option.displayHashtag }}
+                              >{{ props.option.displayHashtag }}
                             </b-tag>
                             <b-tag type="is-dark" size="is-medium"
                               >{{ props.option.tagCount }}
@@ -61,7 +61,7 @@
                               @close="$refs.taginput.removeTag(index, $event)"
                             >
                               <div v-if="tag.displayHashtag">
-                                #{{ tag.displayHashtag }}
+                                {{ tag.displayHashtag }}
                               </div>
                               <div v-else>#{{ tag }}</div>
                             </b-tag>
@@ -115,7 +115,7 @@
                           <br />
                           <small
                             >{{ props.option.contractName }}
-                            <b>#{{ props.option.tokenId }}</b>
+                            <b>{{ props.option.tokenId }}</b>
                           </small>
                         </div>
                       </div>
@@ -308,10 +308,7 @@
                         {{ props.row.tagCount }}
                       </b-table-column>
                       <b-table-column field="revenue" label="Revenue" centered>
-                        <eth-amount-sum
-                          :value1="props.row.tagFees"
-                          :value2="props.row.mintFees"
-                        ></eth-amount-sum>
+                        <eth-amount :value="props.row.tagFees"></eth-amount>
                       </b-table-column>
                     </template>
                   </b-table>
@@ -772,7 +769,7 @@
                           <template slot-scope="props">
                             <b-taglist attached>
                               <b-tag type="is-primary" size="is-medium"
-                                >#{{ props.option.displayHashtag }}
+                                >{{ props.option.displayHashtag }}
                               </b-tag>
                               <b-tag type="is-dark" size="is-medium"
                                 >{{ props.option.tagCount }}
@@ -799,7 +796,7 @@
                                 "
                               >
                                 <div v-if="tag.displayHashtag">
-                                  #{{ tag.displayHashtag }}
+                                  {{ tag.displayHashtag }}
                                 </div>
                                 <div v-else>#{{ tag }}</div>
                               </b-tag>
@@ -833,10 +830,7 @@
     <Footer>
       <span v-if="platform" class="has-text-grey-light">
         Platform revenue
-        <eth-amount-sum
-          :value1="platform.mintFees"
-          :value2="platform.tagFees"
-        ></eth-amount-sum>
+        <eth-amount :value="platform.tagFees"></eth-amount>
       </span>
     </Footer>
   </div>
@@ -845,7 +839,6 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
-import EthAmountSum from "../components/EthAmountSum";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
@@ -868,7 +861,6 @@ export default {
     TimestampFrom,
     EthAccount,
     EthAmount,
-    EthAmountSum,
     MarkdownDoc,
     Footer,
     Hashtag,
@@ -970,8 +962,19 @@ export default {
           nftId: this.modalForm.nft.tokenId,
         });
       } else {
+        const hashtag = this.modalForm.hashtag[0];
+        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
+        if (hashtagValue.charAt(0) !== "#") {
+          hashtagValue = `#${hashtagValue}`;
+        }
+
+        const hashtags = this.hashtags || [];
+        const findExistingHashtagResult = hashtags.filter(
+          (tag) => tag.name.toLowerCase() === hashtagValue.toLowerCase()
+        );
+
         await this.$store.dispatch("tag", {
-          hashtagId: this.modalForm.hashtag[0].id,
+          hashtagId: findExistingHashtagResult[0].id,
           nftContract: this.modalForm.nft.contractAddress,
           nftId: this.modalForm.nft.tokenId,
         });
@@ -981,9 +984,10 @@ export default {
       this.isTagModalActive = false;
     },
     getFilteredTags: function (text) {
-      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
-      });
+      const hashtags = this.hashtags || [];
+      this.hashtagInputTags = hashtags.filter(
+        (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
+      );
     },
     isNewTag: function () {
       if (
@@ -997,7 +1001,7 @@ export default {
             return (
               option.name
                 .toLowerCase()
-                .indexOf(this.hashtagInput[0].toLowerCase()) >= 0
+                .indexOf("#" + this.hashtagInput[0].toLowerCase()) >= 0
             );
           }).length === 0
         );
@@ -1005,7 +1009,7 @@ export default {
       return false;
     },
     mintHashtag() {
-      this.$store.dispatch("mint", this.hashtagInput[0]);
+      this.$store.dispatch("mint", `#${this.hashtagInput[0]}`);
     },
     onNftSelected(nft) {
       this.modalForm.nft = nft;
