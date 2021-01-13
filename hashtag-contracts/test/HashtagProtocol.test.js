@@ -103,7 +103,7 @@ describe('HashtagProtocol Tests', function () {
     });
 
     it('should mint', async function () {
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
 
       const hashtag = '#BlockRocket';
       const lowerHashtag = '#blockrocket';
@@ -119,7 +119,7 @@ describe('HashtagProtocol Tests', function () {
           creatorAddress,
         );
 
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId(lowerHashtag)).to.be.equal('1');
       expect(await this.hashtagProtocol.exists(BigNumber.from('1'))).to.be.true;
 
@@ -133,11 +133,11 @@ describe('HashtagProtocol Tests', function () {
     it('should mint from owner without fee', async function () {
       await this.hashtagProtocol.connect(platform);
 
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
 
       await this.hashtagProtocol.mint('#blockrocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId('#blockrocket')).to.be.equal('1');
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
 
@@ -182,15 +182,11 @@ describe('HashtagProtocol Tests', function () {
       const tokenId = constants.One;
       await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('');
+      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('1');
 
       await this.hashtagProtocol.connect(platform).setBaseURI('hastag.io/');
 
       expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hastag.io/${tokenId}`);
-
-      await this.hashtagProtocol.connect(platform).setTokenURI(tokenId, 'hello');
-
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hastag.io/hello`);
     });
   });
 });

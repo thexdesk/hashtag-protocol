@@ -2,18 +2,22 @@
 
 pragma solidity 0.6.12;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721Burnable.sol";
+import "./interfaces/IERC721Token.sol";
+import "./interfaces/IERC721Receiver.sol";
+
+import { HashtagAccessControls } from "./HashtagAccessControls.sol";
+
+import "@openzeppelin/contracts/introspection/ERC165.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import { HashtagAccessControls } from "./HashtagAccessControls.sol";
+import "@openzeppelin/contracts/GSN/Context.sol";
 
 /**
  * @title HashtagProtocol contract
  * @notice Core smart contract of the protocol that governs the creation of hashtag tokens
  * @author Hashtag Protocol
 */
-contract HashtagProtocol is ERC721, ERC721Burnable {
+contract HashtagProtocol is IERC721Token, ERC165, Context {
     using SafeMath for uint256;
 
     event MintHashtag(
@@ -25,6 +29,37 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         address creator
     );
 
+    // @notice ERC165 interface for ERC721
+    bytes4 private constant _INTERFACE_ID_ERC721 = 0x80ac58cd;
+
+    // @notice ERC165 interface for ERC721 Metadata
+    bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
+
+    // @notice Token name
+    string public name = "Hashtag Protocol";
+
+    // @notice Token symbol
+    string public symbol = "HASHTAG";
+
+    // @notice Function selector for ERC721Receiver.onERC721Received
+    // 0x150b7a02
+    bytes4 constant internal ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
+
+    // @notice Mapping of tokenId => owner
+    mapping(uint256 => address) internal owners;
+
+    // @notice Mapping of tokenId => approved address
+    mapping(uint256 => address) internal approvals;
+
+    // @notice Mapping of owner => number of tokens owned
+    mapping(address => uint256) internal balances;
+
+    // @notice Mapping of owner => operator => approved
+    mapping(address => mapping(address => bool)) internal operatorApprovals;
+
+    // @notice baseURI for looking up up tokenURI for a token
+    string public baseURI;
+
     /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
         address originalPublisher;
@@ -32,15 +67,25 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         string displayVersion;
     }
 
-    uint256 tokenPointer;
+    // @notice current tip of the hashtag tokens (and total supply) as minted consecutively
+    uint256 public tokenPointer;
+
+    // @notice lookup of Hashtag info from token ID
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
+
+    // @notice lookup of Hashtag string to token ID
     mapping(string => uint256) public hashtagToTokenId;
 
+    // @notice core Hashtag protocol account
     address payable public platform;
 
-    uint256 public hashtagMinStringLength = 3;
-    uint256 public hashtagMaxStringLength = 32;
+    // @notice minimum hashtag length
+    uint256 constant public hashtagMinStringLength = 3;
 
+    // @notice maximum hashtag length
+    uint256 constant public hashtagMaxStringLength = 32;
+
+    // @notice access controls smart contract
     HashtagAccessControls public accessControls;
 
     /**
@@ -52,40 +97,26 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         _;
     }
 
-    constructor (HashtagAccessControls _accessControls, address payable _platform)
-    public ERC721("Hashtag Protocol", "HASHTAG") {
+    /**
+      * @notice Constructs the smart contract with access controls and platform address
+      * @param _accessControls core contract for managing access and roles
+      * @param _platform address of the Hashtag protocol core account
+     */
+    constructor (HashtagAccessControls _accessControls, address payable _platform) public {
         accessControls = _accessControls;
         platform = _platform;
+
+        _registerInterface(_INTERFACE_ID_ERC721);
+        _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
-    /**
-     * @notice Utility method for checking whether a hashtag exists
-     * @param _tokenId ID of the hashtag
-     * @return bool True if a hashtag exists, false if not
-    */
-    function exists(uint256 _tokenId) public view returns (bool) {
-        return _exists(_tokenId);
-    }
-
-    /**
-     * @notice Admin method for updating the token URI of a hashtag
-     * @param _tokenId ID of the hashtag
-     * @param _uri New token URI
-    */
-    function setTokenURI(uint256 _tokenId, string memory _uri) onlyAdmin public {
-        _setTokenURI(_tokenId, _uri);
-    }
 
     /**
      * @notice Admin method for updating the base token URI of a hashtag
      * @param _baseURI Base URI for all tokens
     */
     function setBaseURI(string memory _baseURI) onlyAdmin public {
-        _setBaseURI(_baseURI);
-    }
-
-    function _beforeTokenTransfer(address _from, address _to, uint256 _tokenId) internal virtual override(ERC721) {
-        super._beforeTokenTransfer(_from, _to, _tokenId);
+        baseURI = _baseURI;
     }
 
     /**
@@ -118,9 +149,14 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
         // store a reverse lookup and mint the tag
         hashtagToTokenId[lowerHashtagToMint] = tokenId;
 
-        _mint(platform, tokenId);
+        // Mint
+        owners[tokenId] = platform;
+        balances[platform] = balances[platform].add(1);
 
-        // log the minting event
+        // Single Transfer event for a single token
+        emit Transfer(address(0), platform, tokenId);
+
+        // Hashtag minting event for a single token
         emit MintHashtag(tokenId, platform, lowerHashtagToMint, _hashtag, _publisher, _creator);
 
         return tokenId;
@@ -238,5 +274,306 @@ contract HashtagProtocol is ERC721, ERC721Burnable {
             }
         }
         return string(bLower);
+    }
+
+    /**
+     * @notice Existence check on a token
+     * @param _tokenId token ID
+     * @return true if exists
+    */
+    function exists(uint256 _tokenId) external view returns (bool) {
+        return owners[_tokenId] != address(0);
+    }
+
+    /**
+     * @notice token URI for a token
+     * @param _tokenId token ID
+     * @return token URI of the token, if exists
+    */
+    function tokenURI(uint256 _tokenId) external view returns (string memory) {
+        require(owners[_tokenId] != address(0), "Token ID must exist");
+        return string(abi.encodePacked(baseURI, Strings.toString(_tokenId)));
+    }
+
+    /// @notice Transfers the ownership of an NFT from one address to another address
+    /// @dev Throws unless `msg.sender` is the current owner, an authorized
+    ///      operator, or the approved address for this NFT. Throws if `_from` is
+    ///      not the current owner. Throws if `_to` is the zero address. Throws if
+    ///      `_tokenId` is not a valid NFT. When transfer is complete, this function
+    ///      checks if `_to` is a smart contract (code size > 0). If so, it calls
+    ///      `onERC721Received` on `_to` and throws if the return value is not
+    ///      `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`.
+    /// @param _from The current owner of the NFT
+    /// @param _to The new owner
+    /// @param _tokenId The NFT to transfer
+    /// @param _data Additional data with no specified format, sent in call to `_to`
+    function safeTransferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId,
+        bytes calldata _data
+    )
+    override
+    external
+    {
+        transferFrom(
+            _from,
+            _to,
+            _tokenId
+        );
+
+        uint256 receiverCodeSize;
+        assembly {
+            receiverCodeSize := extcodesize(_to)
+        }
+        if (receiverCodeSize > 0) {
+            bytes4 selector = IERC721Receiver(_to).onERC721Received(
+                _msgSender(),
+                _from,
+                _tokenId,
+                _data
+            );
+            require(
+                selector == ERC721_RECEIVED,
+                "ERC721_INVALID_SELECTOR"
+            );
+        }
+    }
+
+    /// @notice Transfers the ownership of an NFT from one address to another address
+    /// @dev This works identically to the other function with an extra data parameter,
+    ///      except this function just sets data to "".
+    /// @param _from The current owner of the NFT
+    /// @param _to The new owner
+    /// @param _tokenId The NFT to transfer
+    function safeTransferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId
+    )
+    override
+    external
+    {
+        transferFrom(
+            _from,
+            _to,
+            _tokenId
+        );
+
+        uint256 receiverCodeSize;
+        assembly {
+            receiverCodeSize := extcodesize(_to)
+        }
+        if (receiverCodeSize > 0) {
+            bytes4 selector = IERC721Receiver(_to).onERC721Received(
+                _msgSender(),
+                _from,
+                _tokenId,
+                ""
+            );
+            require(
+                selector == ERC721_RECEIVED,
+                "ERC721_INVALID_SELECTOR"
+            );
+        }
+    }
+
+    /// @notice Change or reaffirm the approved address for an NFT
+    /// @dev The zero address indicates there is no approved address.
+    ///      Throws unless `msg.sender` is the current NFT owner, or an authorized
+    ///      operator of the current owner.
+    /// @param _approved The new approved NFT controller
+    /// @param _tokenId The NFT to approve
+    function approve(address _approved, uint256 _tokenId)
+    override
+    external
+    {
+        address owner = ownerOf(_tokenId);
+        require(
+            _msgSender() == owner || isApprovedForAll(owner, _msgSender()),
+            "ERC721_INVALID_SENDER"
+        );
+
+        approvals[_tokenId] = _approved;
+        emit Approval(
+            owner,
+            _approved,
+            _tokenId
+        );
+    }
+
+    /// @notice Enable or disable approval for a third party ("operator") to manage
+    ///         all of `msg.sender`'s assets
+    /// @dev Emits the ApprovalForAll event. The contract MUST allow
+    ///      multiple operators per owner.
+    /// @param _operator Address to add to the set of authorized operators
+    /// @param _approved True if the operator is approved, false to revoke approval
+    function setApprovalForAll(address _operator, bool _approved)
+    override
+    external
+    {
+        operatorApprovals[_msgSender()][_operator] = _approved;
+        emit ApprovalForAll(
+            _msgSender(),
+            _operator,
+            _approved
+        );
+    }
+
+    /// @notice Count all NFTs assigned to an owner
+    /// @dev NFTs assigned to the zero address are considered invalid, and this
+    ///      function throws for queries about the zero address.
+    /// @param _owner An address for whom to query the balance
+    /// @return The number of NFTs owned by `_owner`, possibly zero
+    function balanceOf(address _owner)
+    override
+    external
+    view
+    returns (uint256)
+    {
+        require(
+            _owner != address(0),
+            "ERC721_ZERO_OWNER"
+        );
+        return balances[_owner];
+    }
+
+    /// @notice Transfer ownership of an NFT -- THE CALLER IS RESPONSIBLE
+    ///         TO CONFIRM THAT `_to` IS CAPABLE OF RECEIVING NFTS OR ELSE
+    ///         THEY MAY BE PERMANENTLY LOST
+    /// @dev Throws unless `msg.sender` is the current owner, an authorized
+    ///      operator, or the approved address for this NFT. Throws if `_from` is
+    ///      not the current owner. Throws if `_to` is the zero address. Throws if
+    ///      `_tokenId` is not a valid NFT.
+    /// @param _from The current owner of the NFT
+    /// @param _to The new owner
+    /// @param _tokenId The NFT to transfer
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId
+    )
+    override
+    public
+    {
+        require(
+            _to != address(0),
+            "ERC721_ZERO_TO_ADDRESS"
+        );
+
+        address owner = ownerOf(_tokenId);
+        require(
+            _from == owner,
+            "ERC721_OWNER_MISMATCH"
+        );
+
+        address spender = _msgSender();
+        address approvedAddress = getApproved(_tokenId);
+        require(
+            spender == owner ||
+            isApprovedForAll(owner, spender) ||
+            approvedAddress == spender,
+            "ERC721_INVALID_SPENDER"
+        );
+
+        if (approvedAddress != address(0)) {
+            approvals[_tokenId] = address(0);
+        }
+
+        owners[_tokenId] = _to;
+        balances[_from] = balances[_from].sub(1);
+        balances[_to] = balances[_to].add(1);
+
+        emit Transfer(
+            _from,
+            _to,
+            _tokenId
+        );
+    }
+
+    /// @notice Find the owner of an NFT
+    /// @dev NFTs assigned to zero address are considered invalid, and queries
+    ///      about them do throw.
+    /// @param _tokenId The identifier for an NFT
+    /// @return The address of the owner of the NFT
+    function ownerOf(uint256 _tokenId)
+    override
+    public
+    view
+    returns (address)
+    {
+        address owner = owners[_tokenId];
+        require(
+            owner != address(0),
+            "ERC721_ZERO_OWNER"
+        );
+        return owner;
+    }
+
+    /// @notice Get the approved address for a single NFT
+    /// @dev Throws if `_tokenId` is not a valid NFT.
+    /// @param _tokenId The NFT to find the approved address for
+    /// @return The approved address for this NFT, or the zero address if there is none
+    function getApproved(uint256 _tokenId)
+    override
+    public
+    view
+    returns (address)
+    {
+        return approvals[_tokenId];
+    }
+
+    /// @notice Query if an address is an authorized operator for another address
+    /// @param _owner The address that owns the NFTs
+    /// @param _operator The address that acts on behalf of the owner
+    /// @return True if `_operator` is an approved operator for `_owner`, false otherwise
+    function isApprovedForAll(address _owner, address _operator)
+    override
+    public
+    view
+    returns (bool)
+    {
+        return operatorApprovals[_owner][_operator];
+    }
+
+    function isContract(address account) internal view returns (bool) {
+        // According to EIP-1052, 0x0 is the value returned for not-yet created accounts
+        // and 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470 is returned
+        // for accounts without code, i.e. `keccak256('')`
+        bytes32 codehash;
+        bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
+        // solhint-disable-next-line no-inline-assembly
+        assembly {codehash := extcodehash(account)}
+        return (codehash != accountHash && codehash != 0x0);
+    }
+
+    function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data)
+    private returns (bool)
+    {
+        if (!isContract(to)) {
+            return true;
+        }
+        // solhint-disable-next-line avoid-low-level-calls
+        (bool success, bytes memory returndata) = to.call(abi.encodeWithSelector(
+                IERC721Receiver(to).onERC721Received.selector,
+                _msgSender(),
+                from,
+                tokenId,
+                _data
+            ));
+        if (!success) {
+            if (returndata.length > 0) {
+                // solhint-disable-next-line no-inline-assembly
+                assembly {
+                    let returndata_size := mload(returndata)
+                    revert(add(32, returndata), returndata_size)
+                }
+            } else {
+                revert("ERC721: transfer to non ERC721Receiver implementer");
+            }
+        } else {
+            bytes4 retval = abi.decode(returndata, (bytes4));
+            return (retval == ERC721_RECEIVED);
+        }
     }
 }
