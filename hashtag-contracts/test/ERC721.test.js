@@ -12,7 +12,7 @@ const HashtagProtocol = artifacts.require('HashtagProtocol');
 const ERC721ReceiverMock = artifacts.require('ERC721ReceiverMock');
 
 contract('ERC721', function (accounts) {
-  const [owner, newOwner, approved, anotherApproved, operator, other, publisher, creator] = accounts;
+  const [owner, approved, anotherApproved, operator, other, publisher, creator] = accounts;
 
   const firstTokenId = new BN('1');
   const secondTokenId = new BN('2');
@@ -21,7 +21,9 @@ contract('ERC721', function (accounts) {
   const RECEIVER_MAGIC_VALUE = '0x150b7a02';
 
   beforeEach(async function () {
-    this.accessControls = await HashtagAccessControls.new();
+    this.accessControls = await HashtagAccessControls.new({from: owner});
+    await this.accessControls.grantRole(await this.accessControls.SMART_CONTRACT_ROLE(), owner, {from: owner});
+
     this.token = await HashtagProtocol.new(this.accessControls.address, owner);
 
     // add a publisher to the protocol
@@ -75,15 +77,21 @@ contract('ERC721', function (accounts) {
 
   context('with minted tokens', function () {
     beforeEach(async function () {
+      // this mints to the protocol where owner is address zero
       await this.token.mint('#blockrocket', publisher, creator);
       await this.token.mint('#michael', publisher, creator);
+      await this.token.mint('#vince', publisher, creator);
+
       this.toWhom = other; // default to other for toWhom in context-dependent tests
     });
 
     describe('balanceOf', function () {
       context('when the given address owns some tokens', function () {
         it('returns the amount of tokens owned by the given address', async function () {
-          expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('2'); // platform owns minted before auction
+          await this.token.transferFrom(owner, other, firstTokenId, {from: owner});
+          await this.token.transferFrom(owner, other, secondTokenId, {from: owner});
+
+          expect(await this.token.balanceOf(other)).to.be.bignumber.equal('2'); // platform owns minted before auction
         });
       });
 
@@ -104,20 +112,17 @@ contract('ERC721', function (accounts) {
 
     describe('ownerOf', function () {
       context('when the given token ID was tracked by this token', function () {
-        const tokenId = firstTokenId;
 
-        it('returns the owner of the given token ID', async function () {
-          expect(await this.token.ownerOf(tokenId)).to.be.equal(owner); // platform owns minted before auction
-        });
-      });
+        it('returns address zero when token is owned by platform', async function () {
+          expect(await this.token.ownerOf(firstTokenId)).to.be.equal(constants.ZERO_ADDRESS); // platform owns minted before auction
+          expect((await this.token.tokenIdToHashtag(firstTokenId)).creator).to.be.equal(creator);
+        })
 
-      context('when the given token ID was not tracked by this token', function () {
-        const tokenId = nonExistentTokenId;
+        it('returns the owner of the given token ID when not owned by the platform', async function () {
+          // send #vince to other
+          await this.token.transferFrom(owner, other, '3', {from: owner});
 
-        it('reverts', async function () {
-          await expectRevert(
-            this.token.ownerOf(tokenId), 'ERC721_ZERO_OWNER',
-          );
+          expect(await this.token.ownerOf('3')).to.be.equal(other); // platform owns minted before auction
         });
       });
     });
@@ -129,6 +134,10 @@ contract('ERC721', function (accounts) {
       let logs = null;
 
       beforeEach(async function () {
+        // send token to owner to correct ownership info not set up in mint
+        await this.token.transferFrom(owner, owner, tokenId, {from: owner});
+        await this.token.transferFrom(owner, owner, secondTokenId, {from: owner});
+
         await this.token.approve(approved, tokenId, { from: owner });
         await this.token.setApprovalForAll(operator, true, { from: owner });
       });
@@ -398,6 +407,7 @@ contract('ERC721', function (accounts) {
       context('when clearing approval', function () {
         context('when there was no prior approval', function () {
           beforeEach(async function () {
+            await this.token.transferFrom(owner, owner, tokenId, {from: owner});
             ({ logs } = await this.token.approve(ZERO_ADDRESS, tokenId, { from: owner }));
           });
 
@@ -407,6 +417,7 @@ contract('ERC721', function (accounts) {
 
         context('when there was a prior approval', function () {
           beforeEach(async function () {
+            await this.token.transferFrom(owner, owner, tokenId, {from: owner});
             await this.token.approve(approved, tokenId, { from: owner });
             ({ logs } = await this.token.approve(ZERO_ADDRESS, tokenId, { from: owner }));
           });
@@ -419,6 +430,7 @@ contract('ERC721', function (accounts) {
       context('when approving a non-zero address', function () {
         context('when there was no prior approval', function () {
           beforeEach(async function () {
+            await this.token.transferFrom(owner, owner, tokenId, {from: owner});
             ({ logs } = await this.token.approve(approved, tokenId, { from: owner }));
           });
 
@@ -428,6 +440,7 @@ contract('ERC721', function (accounts) {
 
         context('when there was a prior approval to the same address', function () {
           beforeEach(async function () {
+            await this.token.transferFrom(owner, owner, tokenId, {from: owner});
             await this.token.approve(approved, tokenId, { from: owner });
             ({ logs } = await this.token.approve(approved, tokenId, { from: owner }));
           });
@@ -438,6 +451,7 @@ contract('ERC721', function (accounts) {
 
         context('when there was a prior approval to a different address', function () {
           beforeEach(async function () {
+            await this.token.transferFrom(owner, owner, tokenId, {from: owner});
             await this.token.approve(anotherApproved, tokenId, { from: owner });
             ({ logs } = await this.token.approve(anotherApproved, tokenId, { from: owner }));
           });
@@ -456,6 +470,7 @@ contract('ERC721', function (accounts) {
 
       context('when the sender is approved for the given token ID', function () {
         it('reverts', async function () {
+          await this.token.transferFrom(owner, owner, tokenId, {from: owner});
           await this.token.approve(approved, tokenId, { from: owner });
           await expectRevert(this.token.approve(anotherApproved, tokenId, { from: approved }),
             'ERC721_INVALID_SENDER');
@@ -464,6 +479,7 @@ contract('ERC721', function (accounts) {
 
       context('when the sender is an operator', function () {
         beforeEach(async function () {
+          await this.token.transferFrom(owner, owner, tokenId, {from: owner});
           await this.token.setApprovalForAll(operator, true, { from: owner });
           ({ logs } = await this.token.approve(approved, tokenId, { from: operator }));
         });
@@ -475,7 +491,7 @@ contract('ERC721', function (accounts) {
       context('when the given token ID does not exist', function () {
         it('reverts', async function () {
           await expectRevert(this.token.approve(approved, nonExistentTokenId, { from: operator }),
-            'ERC721_ZERO_OWNER');
+            'ERC721_INVALID_SENDER');
         });
       });
     });
@@ -562,6 +578,7 @@ contract('ERC721', function (accounts) {
 
         context('when account has been approved', async function () {
           beforeEach(async function () {
+            await this.token.transferFrom(owner, owner, firstTokenId, {from: owner});
             await this.token.approve(approved, firstTokenId, { from: owner });
           });
 
@@ -584,8 +601,14 @@ contract('ERC721', function (accounts) {
       });
 
       it('creates the token', async function () {
-        expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('1');
-        expect(await this.token.ownerOf(firstTokenId)).to.equal(owner);
+        expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('0');
+        expect(await this.token.ownerOf(firstTokenId)).to.equal(ZERO_ADDRESS);
+
+        const hashtag = await this.token.tokenIdToHashtag(firstTokenId);
+
+        expect(hashtag.originalPublisher).to.equal(publisher)
+        expect(hashtag.creator).to.equal(creator)
+        expect(hashtag.displayVersion).to.equal('#blockrocket')
       });
     });
   });

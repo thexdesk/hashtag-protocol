@@ -150,8 +150,8 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         hashtagToTokenId[lowerHashtagToMint] = tokenId;
 
         // Mint
-        owners[tokenId] = platform;
-        balances[platform] = balances[platform].add(1);
+//        owners[tokenId] = platform;
+//        balances[platform] = balances[platform].add(1);
 
         // Single Transfer event for a single token
         emit Transfer(address(0), platform, tokenId);
@@ -282,7 +282,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
      * @return true if exists
     */
     function exists(uint256 _tokenId) external view returns (bool) {
-        return owners[_tokenId] != address(0);
+        return tokenIdToHashtag[_tokenId].creator != address(0);
     }
 
     /**
@@ -291,7 +291,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
      * @return token URI of the token, if exists
     */
     function tokenURI(uint256 _tokenId) external view returns (string memory) {
-        require(owners[_tokenId] != address(0), "Token ID must exist");
+        require(tokenIdToHashtag[_tokenId].creator != address(0), "Token ID must exist");
         return string(abi.encodePacked(baseURI, Strings.toString(_tokenId)));
     }
 
@@ -462,30 +462,45 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         );
 
         address owner = ownerOf(_tokenId);
-        require(
-            _from == owner,
-            "ERC721_OWNER_MISMATCH"
-        );
+
+        if (owner == address(0) && tokenIdToHashtag[_tokenId].creator == address(0)) {
+            revert("ERC721_ZERO_OWNER");
+        } else if (owner != address(0)) {
+            require(
+                _from == owner,
+                "ERC721_OWNER_MISMATCH"
+            );
+        }
 
         address spender = _msgSender();
-        address approvedAddress = getApproved(_tokenId);
-        require(
-            spender == owner ||
-            isApprovedForAll(owner, spender) ||
-            approvedAddress == spender,
-            "ERC721_INVALID_SPENDER"
-        );
+        // when owner is zero and there is hashtag data, it means the hashtag is owned by platform
+        if (owner == address(0) && tokenIdToHashtag[_tokenId].creator != address(0)) {
+            require(accessControls.isSmartContract(spender), "Only authorised contracts can move protocol owned hashtags");
+        } else {
+            address approvedAddress = getApproved(_tokenId);
+            require(
+                spender == owner ||
+                isApprovedForAll(owner, spender) ||
+                approvedAddress == spender,
+                "ERC721_INVALID_SPENDER"
+            );
 
-        if (approvedAddress != address(0)) {
-            approvals[_tokenId] = address(0);
+            if (approvedAddress != address(0)) {
+                approvals[_tokenId] = address(0);
+            }
         }
 
         owners[_tokenId] = _to;
-        balances[_from] = balances[_from].sub(1);
+
+        if (owner != address(0)) {
+            balances[_from] = balances[_from].sub(1);
+        }
+
         balances[_to] = balances[_to].add(1);
 
+        // todo assert in tests this works correctly
         emit Transfer(
-            _from,
+            owner == address(0) ? platform : _from,
             _to,
             _tokenId
         );
@@ -502,12 +517,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     view
     returns (address)
     {
-        address owner = owners[_tokenId];
-        require(
-            owner != address(0),
-            "ERC721_ZERO_OWNER"
-        );
-        return owner;
+        return owners[_tokenId];
     }
 
     /// @notice Get the approved address for a single NFT

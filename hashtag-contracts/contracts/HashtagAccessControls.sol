@@ -18,6 +18,15 @@ contract HashtagAccessControls is AccessControl {
     }
 
     /**
+     * @notice Checks whether an address has a smart contract role
+     * @param _addr Address being checked
+     * @return bool True if the address has the role, false if not
+    */
+    function isSmartContract(address _addr) public view returns (bool) {
+        return hasRole(SMART_CONTRACT_ROLE, _addr);
+    }
+
+    /**
      * @notice Checks whether an address has an admin role
      * @param _addr Address being checked
      * @return bool True if the address has the role, false if not
