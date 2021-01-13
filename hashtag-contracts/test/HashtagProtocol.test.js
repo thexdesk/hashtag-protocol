@@ -182,11 +182,11 @@ describe('HashtagProtocol Tests', function () {
       const tokenId = constants.One;
       await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('1');
+      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('https://api.com/v1/1');
 
-      await this.hashtagProtocol.connect(platform).setBaseURI('hastag.io/');
+      await this.hashtagProtocol.connect(platform).setBaseURI('hashtag.io/');
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hastag.io/${tokenId}`);
+      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hashtag.io/${tokenId}`);
     });
   });
 });

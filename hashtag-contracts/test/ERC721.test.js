@@ -31,11 +31,10 @@ contract('ERC721', function (accounts) {
   shouldSupportInterfaces([
     'ERC165',
     'ERC721',
-    'ERC721Enumerable',
     'ERC721Metadata',
   ]);
 
-  describe.only('metadata', function () {
+  describe('metadata', function () {
     it('has a name', async function () {
       expect(await this.token.name()).to.be.equal("Hashtag Protocol");
     });
@@ -74,7 +73,7 @@ contract('ERC721', function (accounts) {
     });
   });
 
-  context.only('with minted tokens', function () {
+  context('with minted tokens', function () {
     beforeEach(async function () {
       await this.token.mint('#blockrocket', publisher, creator);
       await this.token.mint('#michael', publisher, creator);
@@ -374,65 +373,6 @@ contract('ERC721', function (accounts) {
       });
     });
 
-    // describe('safe mint', function () {
-    //   const fourthTokenId = new BN(4);
-    //   const tokenId = fourthTokenId;
-    //   const data = '0x42';
-    //
-    //   describe('via safeMint', function () { // regular minting is tested in ERC721Mintable.test.js and others
-    //     it('calls onERC721Received — with data', async function () {
-    //       this.receiver = await ERC721ReceiverMock.new(RECEIVER_MAGIC_VALUE, false);
-    //       const receipt = await this.token.safeMint(this.receiver.address, tokenId, data);
-    //
-    //       await expectEvent.inTransaction(receipt.tx, ERC721ReceiverMock, 'Received', {
-    //         from: ZERO_ADDRESS,
-    //         tokenId: tokenId,
-    //         data: data,
-    //       });
-    //     });
-    //
-    //     it('calls onERC721Received — without data', async function () {
-    //       this.receiver = await ERC721ReceiverMock.new(RECEIVER_MAGIC_VALUE, false);
-    //       const receipt = await this.token.safeMint(this.receiver.address, tokenId);
-    //
-    //       await expectEvent.inTransaction(receipt.tx, ERC721ReceiverMock, 'Received', {
-    //         from: ZERO_ADDRESS,
-    //         tokenId: tokenId,
-    //       });
-    //     });
-    //
-    //     context('to a receiver contract returning unexpected value', function () {
-    //       it('reverts', async function () {
-    //         const invalidReceiver = await ERC721ReceiverMock.new('0x42', false);
-    //         await expectRevert(
-    //           this.token.safeMint(invalidReceiver.address, tokenId),
-    //           'ERC721_INVALID_SELECTOR',
-    //         );
-    //       });
-    //     });
-    //
-    //     context('to a receiver contract that throws', function () {
-    //       it('reverts', async function () {
-    //         const revertingReceiver = await ERC721ReceiverMock.new(RECEIVER_MAGIC_VALUE, true);
-    //         await expectRevert(
-    //           this.token.safeMint(revertingReceiver.address, tokenId),
-    //           'ERC721ReceiverMock: reverting',
-    //         );
-    //       });
-    //     });
-    //
-    //     context('to a contract that does not implement the required function', function () {
-    //       it('reverts', async function () {
-    //         const nonReceiver = this.token;
-    //         await expectRevert(
-    //           this.token.safeMint(nonReceiver.address, tokenId),
-    //           'ERC721_INVALID_SELECTOR',
-    //         );
-    //       });
-    //     });
-    //   });
-    // });
-
     describe('approve', function () {
       const tokenId = firstTokenId;
 
@@ -636,125 +576,23 @@ contract('ERC721', function (accounts) {
         });
       });
     });
-
-    // describe('tokenOfOwnerByIndex', function () {
-    //   describe('when the given index is lower than the amount of tokens owned by the given address', function () {
-    //     it('returns the token ID placed at the given index', async function () {
-    //       expect(await this.token.tokenOfOwnerByIndex(owner, 0)).to.be.bignumber.equal(firstTokenId);
-    //     });
-    //   });
-    //
-    //   describe('when the index is greater than or equal to the total tokens owned by the given address', function () {
-    //     it('reverts', async function () {
-    //       await expectRevert(
-    //         this.token.tokenOfOwnerByIndex(owner, 2), 'EnumerableSet: index out of bounds',
-    //       );
-    //     });
-    //   });
-    //
-    //   describe('when the given address does not own any token', function () {
-    //     it('reverts', async function () {
-    //       await expectRevert(
-    //         this.token.tokenOfOwnerByIndex(other, 0), 'EnumerableSet: index out of bounds',
-    //       );
-    //     });
-    //   });
-    //
-    //   describe('after transferring all tokens to another user', function () {
-    //     beforeEach(async function () {
-    //       await this.token.transferFrom(owner, other, firstTokenId, { from: owner });
-    //       await this.token.transferFrom(owner, other, secondTokenId, { from: owner });
-    //     });
-    //
-    //     it('returns correct token IDs for target', async function () {
-    //       expect(await this.token.balanceOf(other)).to.be.bignumber.equal('2');
-    //       const tokensListed = await Promise.all(
-    //         [0, 1].map(i => this.token.tokenOfOwnerByIndex(other, i)),
-    //       );
-    //       expect(tokensListed.map(t => t.toNumber())).to.have.members([firstTokenId.toNumber(),
-    //         secondTokenId.toNumber()]);
-    //     });
-    //
-    //     it('returns empty collection for original owner', async function () {
-    //       expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('0');
-    //       await expectRevert(
-    //         this.token.tokenOfOwnerByIndex(owner, 0), 'EnumerableSet: index out of bounds',
-    //       );
-    //     });
-    //   });
-    // });
-
-    // describe('tokenByIndex', function () {
-    //   it('returns all tokens', async function () {
-    //     const tokensListed = await Promise.all(
-    //       [0, 1].map(i => this.token.tokenByIndex(i)),
-    //     );
-    //     expect(tokensListed.map(t => t.toNumber())).to.have.members([firstTokenId.toNumber(),
-    //       secondTokenId.toNumber()]);
-    //   });
-    //
-    //   it('reverts if index is greater than supply', async function () {
-    //     await expectRevert(
-    //       this.token.tokenByIndex(2), 'EnumerableMap: index out of bounds',
-    //     );
-    //   });
-    //
-    //   [firstTokenId, secondTokenId].forEach(function (tokenId) {
-    //     it(`returns all tokens after burning token ${tokenId} and minting new tokens`, async function () {
-    //       const newTokenId = new BN(300);
-    //       const anotherNewTokenId = new BN(400);
-    //
-    //       await this.token.burn(tokenId);
-    //       await this.token.mint(newOwner, newTokenId);
-    //       await this.token.mint(newOwner, anotherNewTokenId);
-    //
-    //       expect(await this.token.totalSupply()).to.be.bignumber.equal('3');
-    //
-    //       const tokensListed = await Promise.all(
-    //         [0, 1, 2].map(i => this.token.tokenByIndex(i)),
-    //       );
-    //       const expectedTokens = [firstTokenId, secondTokenId, newTokenId, anotherNewTokenId].filter(
-    //         x => (x !== tokenId),
-    //       );
-    //       expect(tokensListed.map(t => t.toNumber())).to.have.members(expectedTokens.map(t => t.toNumber()));
-    //     });
-    //   });
-    // });
   });
 
-  // describe('_mint(address, uint256)', function () {
-  //   it('reverts with a null destination address', async function () {
-  //     await expectRevert(
-  //       this.token.mint(ZERO_ADDRESS, firstTokenId), 'ERC721: mint to the zero address',
-  //     );
-  //   });
-  //
-  //   context('with minted token', async function () {
-  //     beforeEach(async function () {
-  //       ({ logs: this.logs } = await this.token.mint(owner, firstTokenId));
-  //     });
-  //
-  //     it('emits a Transfer event', function () {
-  //       expectEvent.inLogs(this.logs, 'Transfer', { from: ZERO_ADDRESS, to: owner, tokenId: firstTokenId });
-  //     });
-  //
-  //     it('creates the token', async function () {
-  //       expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('1');
-  //       expect(await this.token.ownerOf(firstTokenId)).to.equal(owner);
-  //     });
-  //
-  //     it('adjusts owner tokens by index', async function () {
-  //       expect(await this.token.tokenOfOwnerByIndex(owner, 0)).to.be.bignumber.equal(firstTokenId);
-  //     });
-  //
-  //     it('adjusts all tokens list', async function () {
-  //       expect(await this.token.tokenByIndex(0)).to.be.bignumber.equal(firstTokenId);
-  //     });
-  //
-  //     it('reverts when adding a token id that already exists', async function () {
-  //       await expectRevert(this.token.mint(owner, firstTokenId), 'ERC721: token already minted');
-  //     });
-  //   });
-  // });
+  describe('_mint(address, uint256)', function () {
+    context('with minted token', async function () {
+      beforeEach(async function () {
+        ({ logs: this.logs } = await this.token.mint('#blockrocket', publisher, creator));
+      });
+
+      it('emits a Transfer event', function () {
+        expectEvent.inLogs(this.logs, 'Transfer', { from: ZERO_ADDRESS, to: owner, tokenId: firstTokenId });
+      });
+
+      it('creates the token', async function () {
+        expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('1');
+        expect(await this.token.ownerOf(firstTokenId)).to.equal(owner);
+      });
+    });
+  });
 
 });
