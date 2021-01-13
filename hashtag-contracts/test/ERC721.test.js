@@ -146,10 +146,6 @@ contract('ERC721', function (accounts) {
           expect(await this.token.getApproved(tokenId)).to.be.equal(ZERO_ADDRESS);
         });
 
-        it.skip('emits an Approval event', async function () {
-          expectEvent.inLogs(logs, 'Approval', { owner, approved: ZERO_ADDRESS, tokenId: tokenId });
-        });
-
         it('adjusts owners balances', async function () {
           expect(await this.token.balanceOf(owner)).to.be.bignumber.equal('1');
         });
