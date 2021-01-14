@@ -20,7 +20,6 @@ Vue.use(VueScreen, "bulma");
 // Connections for GraphQL.
 let hashtagClientURI = process.env.VUE_APP_HASHTAG_SUBGRAPH_URL;
 let nftsClientURI = process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL;
-
 const config = require("platformsh-config").config();
 
 // Set GraphQL connections when app runs on Platform.sh.
@@ -29,11 +28,11 @@ if (config.isValidPlatform()) {
   // We are on Platform.sh.
   hashtagClientURI = config.variable("VUE_APP_HASHTAG_SUBGRAPH_URL");
   nftsClientURI = config.variable("VUE_APP_TOP_NFTS_SUBGRAPH_URL");
+  /* eslint-disable no-console */
   console.log("Hello");
   console.log(nftsClientURI);
+  /* eslint-enable no-console */
 }
-
-console.log("Goodbye");
 
 const hashtagClient = new ApolloClient({
   uri: hashtagClientURI,
