@@ -2,10 +2,13 @@
   "name": "hashtag-protocol-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "serve": "vue-cli-service serve",
+    "build-dev": "vue-cli-service build --mode development",
+    "build-staging": "vue-cli-service build --mode staging",
+    "build-production": "vue-cli-service build --mode production",
     "buildenvvar": "platform-var dist"
   },
   "dependencies": {

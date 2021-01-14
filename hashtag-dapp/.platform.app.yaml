@@ -108,11 +108,18 @@ hooks:
     build: |
       set -e
       yarn install
-      npm run build
-      # If we're not building on Platform.sh...
       if ! [ -d /app/.global ]; then
+        # Building in local development environment
+        # via CLI command `platform build`.
+        yarn build-dev
         # Move raw markdown documents hashtag-docs.
         ./scripts/pull-docs.sh
+      elif ["$PLATFORM_BRANCH" != master ]; then
+        # Building on Platform.sh dev environment. eg. PR or stage branch.
+        yarn build-staging
+      elif [ "$PLATFORM_BRANCH" = master ]; then
+        # Building on Platform.sh master branch. aka. Production.
+        yarn build-production
       fi
 
     # The deploy hook runs after your application has been deployed and started.
