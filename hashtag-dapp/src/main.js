@@ -18,16 +18,25 @@ Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bulma");
 
 // Connections for GraphQL.
+let hashtagClientURI = process.env.VUE_APP_HASHTAG_SUBGRAPH_URL;
+let nftsClientURI = process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL;
+
+const config = require("platformsh-config").config();
+
+// Set GraphQL connections when app runs on Platform.sh.
+// See https://github.com/platformsh/config-reader-nodejs
+if (config.isValidPlatform()) {
+  // We are on Platform.sh.
+  hashtagClientURI = config.VUE_APP_HASHTAG_SUBGRAPH_URL;
+  nftsClientURI = config.VUE_APP_TOP_NFTS_SUBGRAPH_URL;
+}
+
 const hashtagClient = new ApolloClient({
-  uri:
-    process.env.VUE_APP_HASHTAG_SUBGRAPH_URL ||
-    "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
+  uri: hashtagClientURI,
 });
 
 const nftsClient = new ApolloClient({
-  uri:
-    process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL ||
-    "https://api.thegraph.com/subgraphs/name/blockrockettech/nft-tokens",
+  uri: nftsClientURI,
 });
 
 const apolloProvider = new VueApollo({
