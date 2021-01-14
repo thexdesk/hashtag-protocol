@@ -122,6 +122,12 @@ const actions = {
       if (readyToTransact) {
         const onboardState = onboard.getState();
 
+        if (window.ethereum) {
+          window.ethereum.on("accountsChanged", () => {
+            dispatch("bootstrap");
+          });
+        }
+
         const signer = provider.getSigner();
         const chain = await provider.getNetwork();
 
