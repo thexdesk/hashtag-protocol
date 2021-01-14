@@ -112,8 +112,6 @@ describe('HashtagProtocol Tests', function () {
         .to.emit(this.hashtagProtocol, 'MintHashtag')
         .withArgs(
           constants.One,
-          platformAddress,
-          lowerHashtag,
           hashtag,
           publisherAddress,
           creatorAddress,
