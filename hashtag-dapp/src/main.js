@@ -29,6 +29,8 @@ if (config.isValidPlatform()) {
   // We are on Platform.sh.
   hashtagClientURI = config.VUE_APP_HASHTAG_SUBGRAPH_URL;
   nftsClientURI = config.VUE_APP_TOP_NFTS_SUBGRAPH_URL;
+  console.log("on platform");
+  console.log(nftsClientURI);
 }
 
 const hashtagClient = new ApolloClient({
