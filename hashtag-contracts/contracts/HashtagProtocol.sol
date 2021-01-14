@@ -20,13 +20,6 @@ import "@openzeppelin/contracts/GSN/Context.sol";
 contract HashtagProtocol is IERC721Token, ERC165, Context {
     using SafeMath for uint256;
 
-    event MintHashtag(
-        uint256 indexed tokenId,
-        string displayHashtag,
-        address indexed publisher,
-        address creator
-    );
-
     // @notice ERC165 interface for ERC721
     bytes4 private constant _INTERFACE_ID_ERC721 = 0x80ac58cd;
 
@@ -147,9 +140,6 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
 
         // Single Transfer event for a single token
         emit Transfer(address(0), platform, tokenId);
-
-        // Hashtag minting event for a single token
-        emit MintHashtag(tokenId, _hashtag, _publisher, _creator);
 
         return tokenId;
     }

@@ -108,14 +108,7 @@ describe('HashtagProtocol Tests', function () {
       const hashtag = '#BlockRocket';
       const lowerHashtag = '#blockrocket';
 
-      await expect(this.hashtagProtocol.connect(random).mint(hashtag, publisherAddress, creatorAddress))
-        .to.emit(this.hashtagProtocol, 'MintHashtag')
-        .withArgs(
-          constants.One,
-          hashtag,
-          publisherAddress,
-          creatorAddress,
-        );
+      await this.hashtagProtocol.connect(random).mint(hashtag, publisherAddress, creatorAddress);
 
       expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId(lowerHashtag)).to.be.equal('1');
