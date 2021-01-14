@@ -86,7 +86,6 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   // Store tag information
   let tagEntity = new Tag(event.transaction.hash.toHexString());
   tagEntity.hashtagId = hashtagId.toString();
-  tagEntity.hashtagName = protocolContract.tokenIdToHashtag(hashtagId).value3;
   tagEntity.hashtagDisplayHashtag = hashtag.displayHashtag;
   tagEntity.nftContract = event.params.nftContract;
   tagEntity.nftId = event.params.nftId.toString();
