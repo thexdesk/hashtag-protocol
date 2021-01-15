@@ -108,24 +108,29 @@ hooks:
     build: |
       set -e
       yarn install
+
+      # Run through the same build process locally as would be run on
+      # Platform.sh. via CLI command `platform build`.
+      # see https://docs.platform.sh/development/local.html#building-the-site-locally
       if ! [ -d /app/.global ]; then
-        # Building in local development environment
-        # via CLI command `platform build`.
-        echo "\n\nBuilding Platform.sh staging environment locally."
-        echo "See https://docs.platform.sh/development/local.html#building-the-site-locally\n\n"
+        # Build the app.
         yarn build-dev
-        # Move raw markdown documents hashtag-docs.
+        # Move raw markdown documents from hashtag-docs.
         ./scripts/pull-docs.sh
+
+      # Building on Platform.sh dev environment. eg. PR or stage branch.
       elif [ ! "$PLATFORM_BRANCH" = "master" ]; then
-        # Building on Platform.sh dev environment. eg. PR or stage branch.
-        echo "\n\nBuilding platform branch ${PLATFORM_BRANCH}.\n\n"
+        echo "\n\nBuilding Platform.sh branch $PLATFORM_BRANCH.\n\n"
+        # Build the app.
         yarn build-staging
+
+      # Building on Platform.sh master branch. aka. Production.
       elif [ "$PLATFORM_BRANCH" = "master" ]; then
-        # Building on Platform.sh master branch. aka. Production.
-        echo "\n\nBuilding platform branch ${PLATFORM_BRANCH}.\n\n"
+        echo "\n\nBuilding Platform.sh branch $PLATFORM_BRANCH.\n\n"
+        # Build the app.
         yarn build-production
       fi
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
-      npm run buildenvvar
+      yarn buildenvvar
