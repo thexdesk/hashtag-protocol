@@ -111,14 +111,18 @@ hooks:
       if ! [ -d /app/.global ]; then
         # Building in local development environment
         # via CLI command `platform build`.
+        echo "\n\nBuilding Platform.sh staging environment locally."
+        echo "See https://docs.platform.sh/development/local.html#building-the-site-locally\n\n"
         yarn build-dev
         # Move raw markdown documents hashtag-docs.
         ./scripts/pull-docs.sh
-      elif ["$PLATFORM_BRANCH" != master ]; then
+      elif [ ! "$PLATFORM_BRANCH" = "master" ]; then
         # Building on Platform.sh dev environment. eg. PR or stage branch.
+        echo "\n\nBuilding platform branch ${PLATFORM_BRANCH}.\n\n"
         yarn build-staging
-      elif [ "$PLATFORM_BRANCH" = master ]; then
+      elif [ "$PLATFORM_BRANCH" = "master" ]; then
         # Building on Platform.sh master branch. aka. Production.
+        echo "\n\nBuilding platform branch ${PLATFORM_BRANCH}.\n\n"
         yarn build-production
       fi
 
