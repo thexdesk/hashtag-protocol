@@ -17,11 +17,6 @@ Vue.use(VueMoment);
 Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bulma");
 
-/* eslint-disable no-console */
-console.log("build test");
-console.log(process.env.VUE_APP_HASHTAG_SUBGRAPH_URL);
-/* eslint-enable no-console */
-
 // Connections for GraphQL.
 const hashtagClient = new ApolloClient({
   uri: process.env.VUE_APP_HASHTAG_SUBGRAPH_URL,
