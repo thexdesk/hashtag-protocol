@@ -102,6 +102,8 @@ dependencies:
     stylelint-config-standard: '20.0.0'
     stylelint-processor-html: '1.0.0'
     stylelint-scss: '3.16.0'
+  php:
+    platformsh/cli: '3.64.6'
 
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
