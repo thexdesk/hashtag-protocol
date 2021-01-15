@@ -109,24 +109,28 @@ hooks:
       set -e
       yarn install
 
+      if [ -d /app/.global ]; then
+        export GIT_BRANCH=$(./scripts/platformsh/get-branch.sh)
+        echo -e "Git Branch: $GIT_BRANCH"
+      fi
+
       # Run through the same build process locally as would be run on
       # Platform.sh. via CLI command `platform build`.
       # see https://docs.platform.sh/development/local.html#building-the-site-locally
       if ! [ -d /app/.global ]; then
         # Build the app.
         yarn build-dev
+
         # Move raw markdown documents from hashtag-docs.
         ./scripts/pull-docs.sh
 
       # Building on Platform.sh dev environment. eg. PR or stage branch.
-      elif [ ! "$PLATFORM_BRANCH" = "master" ]; then
-        echo $PLATFORM_BRANCH
+      elif [ ! "$GIT_BRANCH" = "master" ]; then
         # Build the app.
         yarn build-staging
 
       # Building on Platform.sh master branch. aka. Production.
-      elif [ "$PLATFORM_BRANCH" = "master" ]; then
-        echo "\n\nBuilding Platform.sh branch $PLATFORM_BRANCH.\n\n"
+      elif [ "$GIT_BRANCH" = "master" ]; then
         # Build the app.
         yarn build-production
       fi
