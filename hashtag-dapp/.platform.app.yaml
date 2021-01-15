@@ -102,39 +102,18 @@ dependencies:
     stylelint-config-standard: '20.0.0'
     stylelint-processor-html: '1.0.0'
     stylelint-scss: '3.16.0'
-  php:
-    platformsh/cli: '3.64.6'
 
 # The hooks executed at various points in the lifecycle of the application.
 hooks:
     build: |
       set -e
       yarn install
+      yarn build
 
-      if [ -d /app/.global ]; then
-        export GIT_BRANCH=$(./scripts/platformsh/get-branch.sh)
-        echo -e "Git Branch: $GIT_BRANCH"
-      fi
-
-      # Run through the same build process locally as would be run on
-      # Platform.sh. via CLI command `platform build`.
-      # see https://docs.platform.sh/development/local.html#building-the-site-locally
+      # We are building locally.
       if ! [ -d /app/.global ]; then
-        # Build the app.
-        yarn build-dev
-
         # Move raw markdown documents from hashtag-docs.
         ./scripts/pull-docs.sh
-
-      # Building on Platform.sh dev environment. eg. PR or stage branch.
-      elif [ ! "$GIT_BRANCH" = "master" ]; then
-        # Build the app.
-        yarn build-staging
-
-      # Building on Platform.sh master branch. aka. Production.
-      elif [ "$GIT_BRANCH" = "master" ]; then
-        # Build the app.
-        yarn build-production
       fi
 
     # The deploy hook runs after your application has been deployed and started.
