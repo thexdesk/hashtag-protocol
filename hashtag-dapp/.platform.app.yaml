@@ -120,7 +120,7 @@ hooks:
 
       # Building on Platform.sh dev environment. eg. PR or stage branch.
       elif [ ! "$PLATFORM_BRANCH" = "master" ]; then
-        echo "\n\nBuilding Platform.sh branch $PLATFORM_BRANCH.\n\n"
+        echo $PLATFORM_BRANCH
         # Build the app.
         yarn build-staging
 
