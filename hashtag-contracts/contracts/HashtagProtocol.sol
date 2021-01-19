@@ -533,7 +533,9 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
 
         tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
 
-        balances[_to] = balances[_to].add(1);
+        if (_to != platform) {
+            balances[_to] = balances[_to].add(1);
+        }
 
         emit Transfer(
             _from,

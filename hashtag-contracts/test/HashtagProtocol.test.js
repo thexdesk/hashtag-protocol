@@ -323,5 +323,38 @@ describe('HashtagProtocol Tests', function () {
       expect(await this.hashtagProtocol.ownerOf(tokenId)).to.be.equal(platformAddress);
     });
 
+    it('when being reset by the platform, the platforms balance does not increase and the owners balance decreases', async function () {
+
+      // zero before
+      expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
+
+      // Move it to random
+      await this.hashtagProtocol.connect(platform).transferFrom(platformAddress, randomAddress, tokenId);
+
+      // balances changed - platform stays at zero
+      expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
+      expect((await this.hashtagProtocol.balanceOf(randomAddress)).toString()).to.be.equal('1');
+
+      // increase by 2 years and 31 days
+      const target = this.lastTransferTime
+        .add(
+          await this.hashtagProtocol.maxStaleTokenTime()
+        ).add(
+          BigNumber.from(time.duration.days(31).toString())
+        );
+      await time.increaseTo(target.toString());
+
+      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
+        .to.emit(this.hashtagProtocol, 'HashtagReset')
+        .withArgs(tokenId, randomAddress);
+
+      // check timestamp has increased
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+
+      // both balances back to zero
+      expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
+      expect((await this.hashtagProtocol.balanceOf(randomAddress)).toString()).to.be.equal('0');
+    });
   });
 });
