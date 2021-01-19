@@ -71,7 +71,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     // @notice lookup of Hashtag info from token ID
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
 
-    // @notice lookup of Hashtag string to token ID
+    // @notice lookup of (lowercase) Hashtag string to token ID
     mapping(string => uint256) public hashtagToTokenId;
 
     // @notice core Hashtag protocol account
@@ -202,21 +202,8 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     function _assertHashtagIsValid(string memory _hashtag) private view returns (string memory) {
         bytes memory hashtagStringBytes = bytes(_hashtag);
         require(
-            hashtagStringBytes.length >= hashtagMinStringLength,
-            string(abi.encodePacked(
-                "Invalid format: Hashtag must be at least ",
-                Strings.toString(hashtagMinStringLength),
-                " characters long."
-            ))
-        );
-
-        require(
-            hashtagStringBytes.length <= hashtagMaxStringLength,
-            string(abi.encodePacked(
-                "Invalid format: Hashtag must not exceed ",
-                Strings.toString(hashtagMaxStringLength),
-                " characters."
-            ))
+            hashtagStringBytes.length >= hashtagMinStringLength &&  hashtagStringBytes.length <= hashtagMaxStringLength,
+            "Invalid format: Hashtag must not exceed length requirements"
         );
 
         require(hashtagStringBytes[0] == 0x23, "Must start with #");
@@ -515,13 +502,11 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     returns (address)
     {
         address owner = owners[_tokenId];
-
         if (owner == address(0) && tokenIdToHashtag[_tokenId].creator != address(0)) {
             return platform;
         }
 
         require(owner != address(0), "ERC721_ZERO_OWNER");
-
         return owner;
     }
 

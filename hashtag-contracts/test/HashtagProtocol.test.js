@@ -58,7 +58,7 @@ describe('HashtagProtocol Tests', function () {
 
         const shortHashtag = '#' + randomHashtag.substring(0, hashtagMinStringLength - 2);
         await expect(this.hashtagProtocol.connect(publisher).mint(shortHashtag, publisherAddress, creatorAddress))
-          .to.be.revertedWith(`Invalid format: Hashtag must be at least ${hashtagMinStringLength} characters long`);
+          .to.be.revertedWith(`Invalid format: Hashtag must not exceed length requirements`);
       });
 
       it('should revert if hashtag does not meet max length requirements', async function () {
@@ -66,7 +66,7 @@ describe('HashtagProtocol Tests', function () {
 
         const longHashtag = '#' + randomHashtag.substring(0, hashtagMaxStringLength);
         await expect(this.hashtagProtocol.connect(publisher).mint(longHashtag, publisherAddress, creatorAddress))
-          .to.be.revertedWith(`Invalid format: Hashtag must not exceed ${hashtagMaxStringLength} characters.`);
+          .to.be.revertedWith(`Invalid format: Hashtag must not exceed length requirements`);
       });
 
       it('should revert if hashtag has an invalid character', async function () {
