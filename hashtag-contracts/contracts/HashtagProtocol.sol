@@ -5,7 +5,7 @@ pragma solidity 0.6.12;
 import "./interfaces/IERC721Token.sol";
 import "./interfaces/IERC721Receiver.sol";
 
-import { HashtagAccessControls } from "./HashtagAccessControls.sol";
+import {HashtagAccessControls} from "./HashtagAccessControls.sol";
 
 import "@openzeppelin/contracts/introspection/ERC165.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
@@ -27,6 +27,26 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         address creator
     );
 
+    event HashtagReset(
+        uint256 indexed tokenId,
+        address indexed owner
+    );
+
+    event HashtagRenewed(
+        uint256 indexed tokenId,
+        address indexed caller
+    );
+
+    event MaxStaleTokenTimeUpdated(
+        uint256 originalMaxStaleTokenTime,
+        uint256 updatedMaxStaleTokenTime
+    );
+
+    event RenewalPeriodUpdated(
+        uint256 originalRenewalPeriod,
+        uint256 updatedRenewalPeriod
+    );
+
     // @notice ERC165 interface for ERC721
     bytes4 private constant _INTERFACE_ID_ERC721 = 0x80ac58cd;
 
@@ -38,6 +58,12 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
 
     // @notice Token symbol
     string public symbol = "HASHTAG";
+
+    // @notice minimum time in seconds that a hashtag is not reclaimable
+    uint256 public maxStaleTokenTime = 730 days;
+
+    // @notice the time after maxStaleTokenTime which the owner can still reclaim ownership
+    uint256 public renewalPeriod = 30 days;
 
     // @notice Function selector for ERC721Receiver.onERC721Received
     // 0x150b7a02
@@ -62,6 +88,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     struct Hashtag {
         address originalPublisher;
         address creator;
+        uint256 lastTransferTime;
         string displayVersion;
     }
 
@@ -118,8 +145,25 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     }
 
     /**
+     * @notice Admin method for updating the renewal period
+     * @param _renewalPeriod the renewal period in seconds after becoming eligible for resetting
+    */
+    function setRenewalPeriod(uint256 _renewalPeriod) onlyAdmin public {
+        emit RenewalPeriodUpdated(renewalPeriod, _renewalPeriod);
+        renewalPeriod = _renewalPeriod;
+    }
+
+    /**
+     * @notice Admin method for updating the max stale token time
+     * @param _maxStaleTokenTime the max time in seconds a token can not move before being able to be reset
+    */
+    function setMaxStaleTokenTime(uint256 _maxStaleTokenTime) onlyAdmin public {
+        emit MaxStaleTokenTimeUpdated(maxStaleTokenTime, _maxStaleTokenTime);
+        maxStaleTokenTime = _maxStaleTokenTime;
+    }
+
+    /**
      * @notice Method that a publisher can call to create a hashtag
-     * @dev A fee is required unless the caller has an admin role
      * @param _hashtag String version of the hashtag to mint
      * @param _publisher Address of the publisher through which the hashtag is being created
      * @param _creator Address of the account to be attributed with creation
@@ -137,9 +181,10 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
 
         // create the hashtag
         tokenIdToHashtag[tokenId] = Hashtag({
-            displayVersion : _hashtag,
-            originalPublisher : _publisher,
-            creator : _creator
+        displayVersion : _hashtag,
+        originalPublisher : _publisher,
+        lastTransferTime : block.timestamp, // TODO maybe we dont need to store this on creation?
+        creator : _creator
         });
 
         // store a reverse lookup and mint the tag
@@ -202,7 +247,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     function _assertHashtagIsValid(string memory _hashtag) private view returns (string memory) {
         bytes memory hashtagStringBytes = bytes(_hashtag);
         require(
-            hashtagStringBytes.length >= hashtagMinStringLength &&  hashtagStringBytes.length <= hashtagMaxStringLength,
+            hashtagStringBytes.length >= hashtagMinStringLength && hashtagStringBytes.length <= hashtagMaxStringLength,
             "Invalid format: Hashtag must not exceed length requirements"
         );
 
@@ -219,7 +264,8 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
             // Generally ensure that the character is alpha numeric
             bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
             !(char >= 0x41 && char <= 0x5A) && //A-Z
-            !(char >= 0x61 && char <= 0x7A); //a-z
+            !(char >= 0x61 && char <= 0x7A);
+            //a-z
 
             require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #");
 
@@ -260,7 +306,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
      * @param _tokenId token ID
      * @return true if exists
     */
-    function exists(uint256 _tokenId) external view returns (bool) {
+    function exists(uint256 _tokenId) public view returns (bool) {
         return tokenIdToHashtag[_tokenId].creator != address(0);
     }
 
@@ -471,15 +517,21 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
             );
         }
 
-        if (approvedAddress != address(0)) {
+        _transferFrom(_tokenId, approvedAddress, _to, _from);
+    }
+
+    function _transferFrom(uint256 _tokenId, address _approvedAddress, address _to, address _from) internal {
+        if (_approvedAddress != address(0)) {
             approvals[_tokenId] = address(0);
         }
 
         owners[_tokenId] = _to;
 
-        if (owner != platform) {
+        if (_from != platform) {
             balances[_from] = balances[_from].sub(1);
         }
+
+        tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
 
         balances[_to] = balances[_to].add(1);
 
@@ -488,6 +540,43 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
             _to,
             _tokenId
         );
+    }
+
+    /// @notice Renews a hash tag, setting its last transfer time to be now
+    /// @dev Can only be called by token owner
+    /// @dev Can only be called when within renewal period
+    /// @param _tokenId The identifier for an NFT
+    function renewHashtag(uint256 _tokenId) external {
+        require(_msgSender() == ownerOf(_tokenId), "renewHashtag: Invalid sender");
+
+        uint256 lastTransferTime = tokenIdToHashtag[_tokenId].lastTransferTime;
+        require(
+            lastTransferTime.add(maxStaleTokenTime) <= block.timestamp &&
+            lastTransferTime.add(maxStaleTokenTime.add(renewalPeriod)) >= block.timestamp,
+            "renewHashtag: Token not eligible for renewal yet"
+        );
+
+        tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
+
+        emit HashtagRenewed(_tokenId, _msgSender());
+    }
+
+    /// @notice Resets a hash tag, transfering ownership back to the platform
+    /// @dev Can only be called by token owner
+    /// @dev Can only be called when within renewal period
+    /// @param _tokenId The identifier for an NFT
+    function resetHashtag(uint256 _tokenId) external {
+        require(exists(_tokenId), "resetHashtag: Invalid token ID");
+        require(ownerOf(_tokenId) != platform, "resetHashtag: Already owned by the platform");
+
+        uint256 lastTransferTime = tokenIdToHashtag[_tokenId].lastTransferTime;
+        require(
+            lastTransferTime.add(maxStaleTokenTime.add(renewalPeriod)) < block.timestamp,
+            "resetHashtag: Token not eligible for reset yet"
+        );
+        _transferFrom(_tokenId, getApproved(_tokenId), platform, ownerOf(_tokenId));
+
+        emit HashtagReset(_tokenId, _msgSender());
     }
 
     /// @notice Find the owner of an NFT
