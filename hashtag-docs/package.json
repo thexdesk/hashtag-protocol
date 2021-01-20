@@ -9,7 +9,6 @@
   "devDependencies": {
     "@vuepress/plugin-active-header-links": "^1.7.1",
     "@vuepress/theme-default": "^1.7.1",
-    "@vuepress/theme-vue": "^1.7.1",
     "add": "^2.0.6",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.12.1",

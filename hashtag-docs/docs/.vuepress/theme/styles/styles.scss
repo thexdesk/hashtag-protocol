@@ -86,6 +86,17 @@ h6 {
   }
 }
 
+.menu-list {
+  a {
+    text-decoration: none;
+  }
+
+  a.active {
+    font-weight: 700;
+    color: $primary;
+  }
+}
+
 .navbar {
   .navbar-brand {
     img {
@@ -129,12 +140,6 @@ h6 {
   }
 }
 
-.menu-list {
-  a.active {
-    font-weight: 700;
-  }
-}
-
 // Padding. This can be removed in Bulma 0.9.0
 .pt-1 {
   padding-top: 1rem;
@@ -142,4 +147,8 @@ h6 {
 
 .pb-1 {
   padding-bottom: 1rem;
+}
+
+.content pre[class*="language-"] {
+  margin-bottom: 1em;
 }

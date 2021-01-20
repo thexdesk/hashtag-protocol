@@ -1,0 +1,73 @@
+.custom-block {
+
+  .custom-block-title {
+    font-weight: 600;
+    margin-bottom: -0.4rem;
+  }
+
+  &.tip,
+  &.warning,
+  &.danger {
+    padding: 1rem 1.5rem;
+    border-left-width: 0.5rem;
+    border-left-style: solid;
+    margin: 1rem 0;
+  }
+
+  &.tip {
+    background-color: $primary-light;
+    border-color: $primary;
+  }
+
+  &.warning {
+    background-color: $warning-light;
+    border-color: $warning;
+    color: $warning-dark;
+
+    .custom-block-title {
+      color: $warning-dark;
+    }
+
+    a {
+      color: $warning-dark;
+    }
+  }
+
+  &.danger {
+    background-color: $danger-light;
+    border-color: $danger;
+    color: $danger-dark;
+
+    .danger .custom-block-title {
+      color: $danger-dark;
+    }
+
+    a {
+      color: $danger-dark;
+    }
+  }
+
+  &.details {
+    display: block;
+    position: relative;
+    border-radius: 2px;
+    margin: 1.6em 0;
+    padding: 1.6em;
+    background-color: $white-ter;
+
+    h4 {
+      margin-top: 0;
+    }
+
+    figure:last-child,
+    p:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    summary {
+      outline: none;
+      cursor: pointer;
+    }
+  }
+}

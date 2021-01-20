@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = {
+  extend: "@vuepress/theme-default",
   title: "Hashtag Documentation",
   description: "Hashtag Documentation",
   dest: "build",
@@ -23,6 +24,26 @@ module.exports = {
           ["/roadmap.html", "Project Roadmap"],
           ["/hashtag-council.html", "Hashtag Council"],
           ["/faqs.html", "FAQs"],
+        ],
+      },
+      {
+        title: "Develop",
+        collapsable: false,
+        children: [
+          ["/develop/", "Getting Started"],
+          ["/develop/contracts", "Smart Contracts"],
+          ["/develop/demo-app", "Demo Application"],
+          ["/develop/docs", "Documentation"],
+          ["/develop/graphql", "GraphQL API"],
+          ["/develop/website", "Marketing Site"],
+        ],
+      },
+      {
+        title: "Implement",
+        collapsable: false,
+        children: [
+          ["/implement/", "Introduction"],
+          ["/implement/getting-started", "Getting Started"],
         ],
       },
     ],
