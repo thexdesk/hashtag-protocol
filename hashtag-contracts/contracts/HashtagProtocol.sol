@@ -59,11 +59,11 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     // @notice Token symbol
     string public symbol = "HASHTAG";
 
-    // @notice minimum time in seconds that a hashtag is not reclaimable
+    /// @notice minimum time in seconds that a hashtag is not reclaimable
     uint256 public maxStaleTokenTime = 730 days;
 
-    // @notice the time after maxStaleTokenTime which the owner can still reclaim ownership
-    uint256 public renewalPeriod = 30 days;
+    /// @notice the time after maxStaleTokenTime which the owner can still reclaim ownership
+    uint256 public renewalGracePeriod = 30 days;
 
     // @notice Function selector for ERC721Receiver.onERC721Received
     // 0x150b7a02
@@ -149,8 +149,8 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
      * @param _renewalPeriod the renewal period in seconds after becoming eligible for resetting
     */
     function setRenewalPeriod(uint256 _renewalPeriod) onlyAdmin public {
-        emit RenewalPeriodUpdated(renewalPeriod, _renewalPeriod);
-        renewalPeriod = _renewalPeriod;
+        emit RenewalPeriodUpdated(renewalGracePeriod, _renewalPeriod);
+        renewalGracePeriod = _renewalPeriod;
     }
 
     /**
@@ -183,7 +183,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         tokenIdToHashtag[tokenId] = Hashtag({
         displayVersion : _hashtag,
         originalPublisher : _publisher,
-        lastTransferTime : block.timestamp, // TODO maybe we dont need to store this on creation?
+        lastTransferTime : block.timestamp,
         creator : _creator
         });
 
@@ -520,6 +520,12 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         _transferFrom(_tokenId, approvedAddress, _to, _from);
     }
 
+    /// @notice Internal method for handling token transfer flow, has special case handling for platform transfers as
+    ///         to not change its balance which is always set to zero by design
+    /// @param _tokenId The identifier for an NFT
+    /// @param _approvedAddress The approval address, can set set to zero address
+    /// @param _to Who will be receiving the token after transfer
+    /// @param _from Who is transferring the token
     function _transferFrom(uint256 _tokenId, address _approvedAddress, address _to, address _from) internal {
         if (_approvedAddress != address(0)) {
             approvals[_tokenId] = address(0);
@@ -531,6 +537,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
             balances[_from] = balances[_from].sub(1);
         }
 
+        // Ensure last transfer time is set to now
         tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
 
         if (_to != platform) {
@@ -544,26 +551,18 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         );
     }
 
-    /// @notice Renews a hash tag, setting its last transfer time to be now
+    /// @notice Renews a hash tag by setting its last transfer time to be now
     /// @dev Can only be called by token owner
-    /// @dev Can only be called when within renewal period
     /// @param _tokenId The identifier for an NFT
     function renewHashtag(uint256 _tokenId) external {
         require(_msgSender() == ownerOf(_tokenId), "renewHashtag: Invalid sender");
-
-        uint256 lastTransferTime = tokenIdToHashtag[_tokenId].lastTransferTime;
-        require(
-            lastTransferTime.add(maxStaleTokenTime) <= block.timestamp &&
-            lastTransferTime.add(maxStaleTokenTime.add(renewalPeriod)) >= block.timestamp,
-            "renewHashtag: Token not eligible for renewal yet"
-        );
 
         tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
 
         emit HashtagRenewed(_tokenId, _msgSender());
     }
 
-    /// @notice Resets a hash tag, transfering ownership back to the platform
+    /// @notice Resets a hash tag, transferring ownership back to the platform
     /// @dev Can only be called by token owner
     /// @dev Can only be called when within renewal period
     /// @param _tokenId The identifier for an NFT
@@ -573,7 +572,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
 
         uint256 lastTransferTime = tokenIdToHashtag[_tokenId].lastTransferTime;
         require(
-            lastTransferTime.add(maxStaleTokenTime.add(renewalPeriod)) < block.timestamp,
+            lastTransferTime.add(maxStaleTokenTime.add(renewalGracePeriod)) < block.timestamp,
             "resetHashtag: Token not eligible for reset yet"
         );
         _transferFrom(_tokenId, getApproved(_tokenId), platform, ownerOf(_tokenId));

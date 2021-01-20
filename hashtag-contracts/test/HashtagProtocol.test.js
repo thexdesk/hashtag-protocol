@@ -43,7 +43,7 @@ describe('HashtagProtocol Tests', function () {
     });
     it('should have default configs', async function () {
       expect(await this.hashtagProtocol.maxStaleTokenTime()).to.be.equal('63072000');
-      expect(await this.hashtagProtocol.renewalPeriod()).to.be.equal('2592000');
+      expect(await this.hashtagProtocol.renewalGracePeriod()).to.be.equal('2592000');
     });
   });
 
@@ -215,27 +215,18 @@ describe('HashtagProtocol Tests', function () {
         .to.be.revertedWith('ERC721_ZERO_OWNER');
     });
 
-    it('will fail if token not not eligible yet', async function () {
+    it('can be reset before renewal period has passed', async function () {
       // increase by 1 year
       const target = this.lastTransferTime.add(BigNumber.from(time.duration.years(1).toString()));
       await time.increaseTo(target.toString());
 
       await expect(this.hashtagProtocol.connect(platform).renewHashtag(tokenId))
-        .to.be.revertedWith('renewHashtag: Token not eligible for renewal yet');
-    });
+        .to.emit(this.hashtagProtocol, 'HashtagRenewed')
+        .withArgs(tokenId, platformAddress);
 
-    it('will fail if token past renewal period', async function () {
-      // increase by 2 years and 31 days
-      const target = this.lastTransferTime
-        .add(
-          await this.hashtagProtocol.maxStaleTokenTime()
-        ).add(
-          BigNumber.from(time.duration.days(31).toString())
-        );
-      await time.increaseTo(target.toString());
-
-      await expect(this.hashtagProtocol.connect(platform).renewHashtag(tokenId))
-        .to.be.revertedWith('renewHashtag: Token not eligible for renewal yet');
+      // check timestamp has increased
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
     });
 
     it('once reset, last transfer time reset', async function () {
