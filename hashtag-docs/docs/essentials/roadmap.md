@@ -6,8 +6,8 @@ participants creates a positive feedback loop leading to positive network
 growth and tangible benefits to society. 
 
 Our incentive mechanisms involve at least [six key
-participants](/participants.html) each with different user stories and use
-cases. Having participants to interact in a fully operational manner
+participants](/essentials/participants) each with different user stories
+and use cases. Having participants to interact in a fully operational manner
 from at launch is not possible: as such it will be choreographed in the
 following phases:
 
@@ -21,9 +21,7 @@ following phases:
    [demonstration application](https://app.hashtag-protocol.org) published by
    the Protocol.
 
-
 ## Phase 2: Platform promotion
-
 
 1. Seed the network with real Hashtag Tokens and tagging real assets with
    them.
@@ -33,16 +31,14 @@ following phases:
    protocol.
 4. Promote the Protocol to all appropriate social channels.
 5. Improve & expand documentation.
-6. Recruit [Hashtag Protocol Council](/hashtag-council.html).
+6. Recruit [Hashtag Protocol Council](/essentials/hashtag-council).
 7. Develop the Hashtag Auction functionality and UI.
-
 
 ## Phase 3: Launch public HASHTAG auction
 
-1. Launch the [Public Hashtag Token Auction](/protocol-overview.html#hashtag-auction).
+1. Launch the [Public Hashtag Token Auction](/essentials/#hashtag-auction).
 2. Continue to develop auction so third parties may run auctions (ie. Become
    “auctioneers”).
-
 
 ## Phase 4: Tagger incentivization and data quality mechanisms
 
