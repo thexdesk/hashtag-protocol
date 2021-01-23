@@ -7,7 +7,7 @@
       <div class="container">
         <div class="columns">
           <div class="column is-hidden-mobile is-one-quarter-tablet">
-            <div class="sticky">
+            <div>
               <Sidebar :items="sidebarItems"></Sidebar>
             </div>
           </div>
@@ -33,7 +33,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import PageEdit from "../components/PageEdit";
 import Sidebar from "../components/Sidebar";
-import { resolveSidebarItems } from "../util";
+import { resolveSidebarItems } from "@vuepress/theme-default/util/index.js";
 
 export default {
   name: "Layout",

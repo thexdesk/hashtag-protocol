@@ -42,6 +42,7 @@ h6 {
   font-weight: 500;
   line-height: 1.25;
   color: $dark;
+  border-bottom: none;
 
   &:hover .header-anchor {
     opacity: 1;
@@ -86,60 +87,6 @@ h6 {
   }
 }
 
-.menu-list {
-  a {
-    text-decoration: none;
-  }
-
-  a.active {
-    font-weight: 700;
-    color: $primary;
-  }
-}
-
-.navbar {
-  .navbar-brand {
-    img {
-      margin-right: 0.4rem;
-    }
-
-    a.navbar-item,
-    a.navbar-item:hover {
-      color: $dark;
-      text-decoration: none;
-
-      span {
-        font-size: 1.25rem;
-        font-weight: 700;
-      }
-    }
-  }
-
-  .navbar-menu {
-    .navbar-end {
-      .navbar-item {
-        font-weight: 700;
-      }
-
-      a {
-        &.navbar-item {
-          padding: 0;
-          margin: 0.5rem 0.75rem;
-          &:hover {
-            text-decoration: none;
-            border-bottom: 1px solid;
-          }
-        }
-
-        &.router-link-active {
-          color: $primary;
-          border-bottom: 1px solid;
-        }
-      }
-    }
-  }
-}
-
 // Padding. This can be removed in Bulma 0.9.0
 .pt-1 {
   padding-top: 1rem;
@@ -151,4 +98,25 @@ h6 {
 
 .content pre[class*="language-"] {
   margin-bottom: 1em;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+
+  tr {
+    border-top: 1px solid $grey-lighter;
+
+    &:nth-child(2n) {
+      background-color: $white-bis;
+    }
+  }
+
+  th,
+  td {
+    border: 1px solid $grey-lighter;
+    padding: 0.6em 1em;
+  }
 }

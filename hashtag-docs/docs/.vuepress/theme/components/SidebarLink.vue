@@ -1,5 +1,9 @@
 <script>
-import { isActive, hashRE, groupHeaders } from "../util";
+import {
+  isActive,
+  hashRE,
+  groupHeaders,
+} from "@vuepress/theme-default/util/index.js";
 
 export default {
   functional: true,

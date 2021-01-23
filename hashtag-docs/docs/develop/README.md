@@ -1,4 +1,4 @@
-# Getting started developing HASHTAG
+# Developing Hashtag Protocol
 
 If you are interested in helping us improve the Hashtag Protocol, this is the
 place for you. Contained in this section is documentation around the structure
@@ -64,7 +64,7 @@ To contribute to the project, this is the typical flow:
    creates a new "feature" branch off of the **stage branch**. Only work
    against the master branch only in the case of Hotfixes.
 
-      ```` powershell
+      ```` sh
       git checkout stage
       git pull upstream stage
       git checkout -b [github-issue-number]-short-description-of-feature
@@ -132,7 +132,7 @@ Message](http://chris.beams.io/posts/git-commit/):
 
 Example:
 
-```` unix
+```` txt
 Summarize changes in around 50 characters or less
 
 More detailed explanatory text, if necessary. Wrap it to about 72

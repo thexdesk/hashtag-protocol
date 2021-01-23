@@ -1,11 +1,10 @@
 # Documentation
 
-The Hashtag Protocol documentation site (what you are reading), is maintained 
-using the very popular [Vuepress](https://vuepress.vuejs.org/), a Vue powered
-static site generator. Vuepress provides their [own in-depth
-documentation](https://vuepress.vuejs.org/guide/) on how to implement and
-develop a Vuepress site. Detailed here will be instructions
-related to our specific implementation.
+The Hashtag Protocol documentation site, is maintained using the very popular
+[Vuepress](https://vuepress.vuejs.org/), a Vue powered static site generator.
+Vuepress provides their own in-depth documentation on how to implement and
+develop a Vuepress site. Detailed here will be instructions related to our
+specific implementation.
 
 ## Adding / editing pages
 
@@ -16,12 +15,13 @@ your permissions, the Github user interface will allow you to commit your
 changes directly to the stage branch, or create a new branch and issue a PR
 into staging.
 
-::: warning NOTE 
+::: tip 
 If you are wanting to edit or add documentation in conjunction with
-development of a different component of the platform (eg. Smart contracts), it is
+development of a different module of the platform (eg. Smart contracts), it is
 recommended that you edit the Vuepress files locally in your working branch
 and pull request those changes alongside your code change.
 :::
+
 
 ## Developing locally
 
