@@ -3,6 +3,10 @@ import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
 import BlocknativeSdk from "bnc-sdk";
 import { ToastProgrammatic as Toast } from "buefy";
+import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
+import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
+import utils from "../../utils";
+import nftCache from "../../data/nfts";
 
 const eventMap = {
   txSent: {
@@ -36,9 +40,8 @@ const eventMap = {
 };
 
 let provider;
-
 const onboard = Onboard({
-  dappId: "773ba398-31f9-4816-a3b3-960a075a0f31", // Hashtag API key
+  dappId: process.env.BLOCKNATIVE_API_KEY,
   networkId: 4, // Dapp currently only supports Rinkeby
   subscriptions: {
     wallet: (wallet) => {
@@ -52,7 +55,7 @@ const onboard = Onboard({
 
 // create options object
 const options = {
-  dappId: "8bf348fd-d9df-4b54-b8b1-1ad14d15e4c3",
+  dappId: process.env.BLOCKNATIVE_API_KEY,
   networkId: 4, // Dapp currently only supports Rinkeby
   // Optional. See docs.
   // transactionHandlers: [(event) => console.log(event.transaction)],
@@ -61,13 +64,8 @@ const options = {
 // initialize and connect to the api
 const blocknative = new BlocknativeSdk(options);
 
-import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
-import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
-import utils from "../../utils";
-
+// @TODO: Gonna keep this here for now till we figure out a more scalable solution.
 const KO_RINKEBY_ADDRESS = "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e";
-
-import nftCache from "../../data/nfts";
 
 const state = {
   web3Objects: {},
@@ -156,7 +154,7 @@ const actions = {
             erc721HashtagRegistryContract,
           },
           account: onboardState.address,
-          publisher: "0xd677aed0965ac9b54e709f01a99ceca205aebc4b", //FIXME - hardcoded for now for rinkeby testing
+          publisher: process.env.APP_PUBLISHER_ADDRESS,
           readyToTransact,
         });
 
