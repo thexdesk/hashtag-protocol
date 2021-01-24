@@ -10,14 +10,14 @@ width="500"/></p>
 <br /><br />
 
 For details on how key participants interact with the Protocol, please see the [Protocol
-Overview](/protocol-overview.html).  
-For details on project phases, please see [Project Roadmap](/roadmap.html)
+Overview](/essentials/).  
+For details on project phases, please see [Project Roadmap](/essentials/roadmap)
 
 
 ## Publisher (phase 1,2)
 
-Application or platform that implements Hashtag Protocol. All publishers must be white-listed by
-Protocol to implement minting and tagging contracts.
+Application or platform that implements Hashtag Protocol. All publishers must be
+white-listed by Protocol to implement minting and tagging contracts.
 
 Examples include OpenSea, KnownOrigin, SuperRare, etc.
 

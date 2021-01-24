@@ -1,7 +1,7 @@
 // Bulma variables
 // see @https://bulma.io/documentation/customize/variables
 
-$primary: #24ae60;
+$primary: #188c4a; // #24ae60;
 /* stylelint-disable function-name-case */
 $primary-invert: findColorInvert($primary);
 $primary-light: findLightColor($primary);
@@ -47,10 +47,15 @@ $colors: (
 
 // Update Bulma's global variables
 $family-sans-serif: "Roboto", sans-serif;
+$family-monospace: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+
+$code-family: $family-monospace;
 $body-family: $family-sans-serif;
 // $body-background-color: $grey-lighter;
 $link: $primary;
 $link-hover: $primary;
+
+$content-heading-weight: 500;
 
 $code: $grey-darker;
 
@@ -63,7 +68,12 @@ $footer-padding: 3rem 1.5rem 6rem;
 $navbar-breakpoint: $tablet;
 $navbar-item-hover-background-color: $white;
 
+$menu-item-hover-color: $primary;
 $menu-item-active-color: $primary;
 $menu-item-active-background-color: $background;
 
 $section-padding: 0.25rem 0.8rem;
+
+// Vuepress variables
+$codeBgColor: #282c34;
+$accentColor: #3eaf7c;

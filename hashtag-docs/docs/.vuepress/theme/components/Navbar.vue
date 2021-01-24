@@ -32,7 +32,7 @@
 
 <script>
 import Sidebar from "./Sidebar";
-import { resolveSidebarItems } from "../util";
+import { resolveSidebarItems } from "@vuepress/theme-default/util/index.js";
 
 export default {
   name: "Navbar",
