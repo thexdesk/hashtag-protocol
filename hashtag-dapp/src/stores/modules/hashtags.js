@@ -41,7 +41,7 @@ const eventMap = {
 
 let provider;
 const onboard = Onboard({
-  dappId: process.env.BLOCKNATIVE_API_KEY,
+  dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
   networkId: 4, // Dapp currently only supports Rinkeby
   subscriptions: {
     wallet: (wallet) => {
@@ -55,11 +55,13 @@ const onboard = Onboard({
 
 // create options object
 const options = {
-  dappId: process.env.BLOCKNATIVE_API_KEY,
+  dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
   networkId: 4, // Dapp currently only supports Rinkeby
   // Optional. See docs.
   // transactionHandlers: [(event) => console.log(event.transaction)],
 };
+
+console.log(process.env.VUE_APP_BLOCKNATIVE_API_KEY);
 
 // initialize and connect to the api
 const blocknative = new BlocknativeSdk(options);
@@ -160,7 +162,7 @@ const actions = {
             erc721HashtagRegistryContract,
           },
           account: onboardState.address,
-          publisher: process.env.APP_PUBLISHER_ADDRESS,
+          publisher: process.env.VUE_APP_PUBLISHER_ADDRESS,
           readyToTransact,
         });
 
