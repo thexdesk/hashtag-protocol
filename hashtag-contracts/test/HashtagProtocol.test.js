@@ -1,3 +1,4 @@
+const {time, expectEvent} = require('@openzeppelin/test-helpers');
 const web3 = require('web3');
 const {expect} = require('chai');
 
@@ -6,7 +7,7 @@ const {utils, BigNumber, constants} = ethers;
 describe('HashtagProtocol Tests', function () {
 
   let platform, platformAddress, publisher, publisherAddress;
-  let buyer, buyerAddress, anotherAddress, random, randomAddress, creator, creatorAddress;
+  let buyer, buyerAddress, anotherAddress, another, random, randomAddress, creator, creatorAddress;
 
   beforeEach(async function () {
     const accounts = await ethers.getSigners();
@@ -40,6 +41,10 @@ describe('HashtagProtocol Tests', function () {
       expect(await this.hashtagProtocol.symbol()).to.be.equal('HASHTAG');
       expect(await this.hashtagProtocol.platform()).to.be.equal(platformAddress);
     });
+    it('should have default configs', async function () {
+      expect(await this.hashtagProtocol.maxStaleTokenTime()).to.be.equal('63072000');
+      expect(await this.hashtagProtocol.renewalGracePeriod()).to.be.equal('2592000');
+    });
   });
 
   describe('Minting hashtags', async function () {
@@ -58,7 +63,7 @@ describe('HashtagProtocol Tests', function () {
 
         const shortHashtag = '#' + randomHashtag.substring(0, hashtagMinStringLength - 2);
         await expect(this.hashtagProtocol.connect(publisher).mint(shortHashtag, publisherAddress, creatorAddress))
-          .to.be.revertedWith(`Invalid format: Hashtag must be at least ${hashtagMinStringLength} characters long`);
+          .to.be.revertedWith(`Invalid format: Hashtag must not exceed length requirements`);
       });
 
       it('should revert if hashtag does not meet max length requirements', async function () {
@@ -66,7 +71,7 @@ describe('HashtagProtocol Tests', function () {
 
         const longHashtag = '#' + randomHashtag.substring(0, hashtagMaxStringLength);
         await expect(this.hashtagProtocol.connect(publisher).mint(longHashtag, publisherAddress, creatorAddress))
-          .to.be.revertedWith(`Invalid format: Hashtag must not exceed ${hashtagMaxStringLength} characters.`);
+          .to.be.revertedWith(`Invalid format: Hashtag must not exceed length requirements`);
       });
 
       it('should revert if hashtag has an invalid character', async function () {
@@ -103,23 +108,14 @@ describe('HashtagProtocol Tests', function () {
     });
 
     it('should mint', async function () {
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
 
       const hashtag = '#BlockRocket';
       const lowerHashtag = '#blockrocket';
 
-      await expect(this.hashtagProtocol.connect(random).mint(hashtag, publisherAddress, creatorAddress))
-        .to.emit(this.hashtagProtocol, 'MintHashtag')
-        .withArgs(
-          constants.One,
-          platformAddress,
-          lowerHashtag,
-          hashtag,
-          publisherAddress,
-          creatorAddress,
-        );
+      await this.hashtagProtocol.connect(random).mint(hashtag, publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId(lowerHashtag)).to.be.equal('1');
       expect(await this.hashtagProtocol.exists(BigNumber.from('1'))).to.be.true;
 
@@ -127,17 +123,18 @@ describe('HashtagProtocol Tests', function () {
       expect(hashtagData.displayVersion.toLowerCase()).to.be.equal(lowerHashtag);
       expect(hashtagData.displayVersion).to.be.equal(hashtag);
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(0);
       expect(hashtagData.creator).to.be.equal(creatorAddress);
     });
 
     it('should mint from owner without fee', async function () {
       await this.hashtagProtocol.connect(platform);
 
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('0');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('0');
 
       await this.hashtagProtocol.mint('#blockrocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.totalSupply()).to.be.equal('1');
+      expect(await this.hashtagProtocol.tokenPointer()).to.be.equal('1');
       expect(await this.hashtagProtocol.hashtagToTokenId('#blockrocket')).to.be.equal('1');
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag('1');
 
@@ -173,7 +170,7 @@ describe('HashtagProtocol Tests', function () {
 
     it('should revert when updating access controls to zero address', async function () {
       await expect(this.hashtagProtocol.connect(platform).updateAccessControls(constants.AddressZero))
-        .to.be.revertedWith("HashtagProtocol.updateAccessControls: Cannot be zero");
+        .to.be.revertedWith('HashtagProtocol.updateAccessControls: Cannot be zero');
     });
   });
 
@@ -182,15 +179,173 @@ describe('HashtagProtocol Tests', function () {
       const tokenId = constants.One;
       await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('');
+      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('https://api.com/v1/1');
 
-      await this.hashtagProtocol.connect(platform).setBaseURI('hastag.io/');
+      await this.hashtagProtocol.connect(platform).setBaseURI('hashtag.io/');
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hastag.io/${tokenId}`);
+      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hashtag.io/${tokenId}`);
+    });
+  });
 
-      await this.hashtagProtocol.connect(platform).setTokenURI(tokenId, 'hello');
+  describe('renewing a hashtag', async function () {
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal(`hastag.io/hello`);
+    const tokenId = constants.One;
+
+    beforeEach(async function () {
+      await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
+
+      // platform owns minted before auction
+      expect(await this.hashtagProtocol.ownerOf(tokenId)).to.be.equal(platformAddress);
+
+      // check token one is minted
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(hashtagData.displayVersion.toLowerCase()).to.be.equal('#blockrocket');
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(0);
+
+      this.lastTransferTime = hashtagData.lastTransferTime;
+    });
+
+    it('will fail if not the owner', async function () {
+      await expect(this.hashtagProtocol.connect(random).renewHashtag(tokenId))
+        .to.be.revertedWith('renewHashtag: Invalid sender');
+    });
+
+    it('will fail if token does not exist', async function () {
+      await expect(this.hashtagProtocol.connect(random).renewHashtag(constants.Two))
+        .to.be.revertedWith('ERC721_ZERO_OWNER');
+    });
+
+    it('can be reset before renewal period has passed', async function () {
+      // increase by 1 year
+      const target = this.lastTransferTime.add(BigNumber.from(time.duration.years(1).toString()));
+      await time.increaseTo(target.toString());
+
+      await expect(this.hashtagProtocol.connect(platform).renewHashtag(tokenId))
+        .to.emit(this.hashtagProtocol, 'HashtagRenewed')
+        .withArgs(tokenId, platformAddress);
+
+      // check timestamp has increased
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+    });
+
+    it('once reset, last transfer time reset', async function () {
+      // increase by 2 years and 1 days
+      const target = this.lastTransferTime
+        .add(
+          await this.hashtagProtocol.maxStaleTokenTime()
+        ).add(
+          BigNumber.from(time.duration.days(1).toString())
+        );
+      await time.increaseTo(target.toString());
+
+      await expect(this.hashtagProtocol.connect(platform).renewHashtag(tokenId))
+        .to.emit(this.hashtagProtocol, 'HashtagRenewed')
+        .withArgs(tokenId, platformAddress);
+
+      // check timestamp has increased
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+    });
+  });
+
+  describe('resetting a hashtag', async function () {
+    const tokenId = constants.One;
+
+    beforeEach(async function () {
+      await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
+
+      // platform owns minted before auction
+      expect(await this.hashtagProtocol.ownerOf(tokenId)).to.be.equal(platformAddress);
+
+      // check token one is minted
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(hashtagData.displayVersion.toLowerCase()).to.be.equal('#blockrocket');
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(0);
+
+      this.lastTransferTime = hashtagData.lastTransferTime;
+    });
+
+    it('will fail if token does not exist', async function () {
+      await expect(this.hashtagProtocol.connect(random).resetHashtag(constants.Two))
+        .to.be.revertedWith('resetHashtag: Invalid token ID');
+    });
+
+    it('will fail if already owned by the platform', async function () {
+      await expect(this.hashtagProtocol.connect(platform).resetHashtag(tokenId))
+        .to.be.revertedWith('resetHashtag: Already owned by the platform');
+    });
+
+    it('will fail if token not not eligible yet', async function () {
+
+      // Move it to random
+      await this.hashtagProtocol.connect(platform).transferFrom(platformAddress, randomAddress, tokenId);
+
+      // move on a bit
+      const target = this.lastTransferTime.add(BigNumber.from(time.duration.years(1).toString()));
+      await time.increaseTo(target.toString());
+
+      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
+        .to.be.revertedWith('resetHashtag: Token not eligible for reset yet');
+    });
+
+    it('will succeed once renewal period has passed', async function () {
+      // Move it to random
+      await this.hashtagProtocol.connect(platform).transferFrom(platformAddress, randomAddress, tokenId);
+
+      // increase by 2 years and 31 days
+      const target = this.lastTransferTime
+        .add(
+          await this.hashtagProtocol.maxStaleTokenTime()
+        ).add(
+          BigNumber.from(time.duration.days(31).toString())
+        );
+      await time.increaseTo(target.toString());
+
+      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
+        .to.emit(this.hashtagProtocol, 'HashtagReset')
+        .withArgs(tokenId, randomAddress);
+
+      // check timestamp has increased
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+
+      // platform now once again owns the token
+      expect(await this.hashtagProtocol.ownerOf(tokenId)).to.be.equal(platformAddress);
+    });
+
+    it('when being reset by the platform, the platforms balance does not increase and the owners balance decreases', async function () {
+
+      // zero before
+      expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
+
+      // Move it to random
+      await this.hashtagProtocol.connect(platform).transferFrom(platformAddress, randomAddress, tokenId);
+
+      // balances changed - platform stays at zero
+      expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
+      expect((await this.hashtagProtocol.balanceOf(randomAddress)).toString()).to.be.equal('1');
+
+      // increase by 2 years and 31 days
+      const target = this.lastTransferTime
+        .add(
+          await this.hashtagProtocol.maxStaleTokenTime()
+        ).add(
+          BigNumber.from(time.duration.days(31).toString())
+        );
+      await time.increaseTo(target.toString());
+
+      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
+        .to.emit(this.hashtagProtocol, 'HashtagReset')
+        .withArgs(tokenId, randomAddress);
+
+      // check timestamp has increased
+      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
+      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+
+      // both balances back to zero
+      expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
+      expect((await this.hashtagProtocol.balanceOf(randomAddress)).toString()).to.be.equal('0');
     });
   });
 });

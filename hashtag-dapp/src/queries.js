@@ -26,7 +26,6 @@ export const SNAPSHOT = gql(`
         tags(first: 5, orderBy: timestamp, orderDirection: desc) {
             id
             hashtagId
-            hashtagName
             hashtagDisplayHashtag
             nftContract
             nftContractName
@@ -59,7 +58,7 @@ export const SNAPSHOT = gql(`
 
 export const ALL_TAGS_BY_HASHTAG = gql`
   query allTagsByHashtag($hashtag: String!) {
-    allTagsByHashtag: tags(where: { hashtagName: $hashtag }) {
+    allTagsByHashtag: tags(where: { hashtagDisplayHashtag: $hashtag }) {
       id
     }
   }
@@ -72,11 +71,11 @@ export const PAGED_TAGS_BY_HASHTAG = gql`
       skip: $skip
       orderBy: timestamp
       orderDirection: desc
-      where: { hashtagName: $hashtag }
+      where: { hashtagDisplayHashtag: $hashtag }
     ) {
       id
       hashtagId
-      hashtagName
+      hashtagDisplayHashtag
       nftContract
       nftContractName
       nftImage
@@ -92,10 +91,9 @@ export const PAGED_TAGS_BY_HASHTAG = gql`
 
 export const TAGS_BY_HASHTAG = gql(`
 query tagsByHashtag($hashtag: String!) {
-   tagsByHashtag: tags(orderBy: timestamp, orderDirection: desc, where: {hashtagName: $hashtag}) {
+   tagsByHashtag: tags(orderBy: timestamp, orderDirection: desc, where: {hashtagDisplayHashtag: $hashtag}) {
       id
       hashtagId
-      hashtagName
       hashtagDisplayHashtag
       nftContract
       nftContractName
@@ -142,7 +140,6 @@ export const TAGS_BY_DIGITAL_ASSET = gql(`
     timestamp
     publisher
     hashtagId
-    hashtagName
     hashtagDisplayHashtag
   }
 }`);
@@ -215,7 +212,6 @@ export const PAGED_TAGS_BY_TAGGER = gql`
     tagsByTagger: tags(first: $first, skip: $skip, where: { tagger: $tagger }) {
       id
       hashtagId
-      hashtagName
       hashtagDisplayHashtag
       nftContract
       nftId
@@ -235,7 +231,6 @@ query tagsByTagger($tagger: String!) {
   tagsByTagger: tags(where:{ tagger: $tagger}) {
     id
     hashtagId
-    hashtagName
     hashtagDisplayHashtag
     nftContract
     nftId
@@ -263,7 +258,6 @@ query tagsByPublisher($publisher: String!, $first: Int!, $skip: Int!) {
   tagsByPublisher: tags(first: $first, skip: $skip, where:{ publisher: $publisher}) {
     id
     hashtagId
-    hashtagName
     hashtagDisplayHashtag
     nftContract
     nftId
@@ -334,7 +328,6 @@ query pagedTags($first: Int!, $skip: Int!) {
         pagedTags: tags(first: $first, skip: $skip, orderBy: timestamp, orderDirection: desc) {
             id
             hashtagId
-            hashtagName
             hashtagDisplayHashtag
             nftContract
             nftContractName
