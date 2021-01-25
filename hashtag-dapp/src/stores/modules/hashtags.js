@@ -61,8 +61,6 @@ const options = {
   // transactionHandlers: [(event) => console.log(event.transaction)],
 };
 
-console.log(process.env.VUE_APP_BLOCKNATIVE_API_KEY);
-
 // initialize and connect to the api
 const blocknative = new BlocknativeSdk(options);
 
