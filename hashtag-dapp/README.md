@@ -13,7 +13,7 @@ yarn install --lock-file # or `npm install`
 ### Running the Frontend
 
 ```
-npm run serve
+yarn serve
 ```
 
 ### Using
