@@ -432,7 +432,7 @@ export default {
       query: PAGED_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          hashtag: this.hashtag,
           first: this.first,
           skip: this.skip,
         };
@@ -443,7 +443,7 @@ export default {
       query: ALL_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          hashtag: this.hashtag,
         };
       },
       manual: true,
@@ -456,7 +456,7 @@ export default {
       query: HASHTAGS_BY_NAME,
       variables() {
         return {
-          name: this.hashtag && this.hashtag.toLowerCase(),
+          name: this.hashtag,
         };
       },
       pollInterval: 1000, // ms
