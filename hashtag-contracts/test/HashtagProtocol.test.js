@@ -42,8 +42,7 @@ describe('HashtagProtocol Tests', function () {
       expect(await this.hashtagProtocol.platform()).to.be.equal(platformAddress);
     });
     it('should have default configs', async function () {
-      expect(await this.hashtagProtocol.maxStaleTokenTime()).to.be.equal('63072000');
-      expect(await this.hashtagProtocol.renewalGracePeriod()).to.be.equal('2592000');
+      expect(await this.hashtagProtocol.ownershipTermLength()).to.be.equal('63072000');
     });
   });
 
@@ -123,7 +122,6 @@ describe('HashtagProtocol Tests', function () {
       expect(hashtagData.displayVersion.toLowerCase()).to.be.equal(lowerHashtag);
       expect(hashtagData.displayVersion).to.be.equal(hashtag);
       expect(hashtagData.originalPublisher).to.be.equal(publisherAddress);
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(0);
       expect(hashtagData.creator).to.be.equal(creatorAddress);
     });
 
@@ -200,9 +198,10 @@ describe('HashtagProtocol Tests', function () {
       // check token one is minted
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
       expect(hashtagData.displayVersion.toLowerCase()).to.be.equal('#blockrocket');
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(0);
 
-      this.lastTransferTime = hashtagData.lastTransferTime;
+      // this sets the last transfer time to now
+      await this.hashtagProtocol.connect(platform).renewHashtag(tokenId);
+      this.lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
     });
 
     it('will fail if not the owner', async function () {
@@ -225,15 +224,15 @@ describe('HashtagProtocol Tests', function () {
         .withArgs(tokenId, platformAddress);
 
       // check timestamp has increased
-      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+      const lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
+      expect(Number(BigNumber.from(lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
     });
 
     it('once reset, last transfer time reset', async function () {
       // increase by 2 years and 1 days
       const target = this.lastTransferTime
         .add(
-          await this.hashtagProtocol.maxStaleTokenTime()
+          await this.hashtagProtocol.ownershipTermLength()
         ).add(
           BigNumber.from(time.duration.days(1).toString())
         );
@@ -244,8 +243,8 @@ describe('HashtagProtocol Tests', function () {
         .withArgs(tokenId, platformAddress);
 
       // check timestamp has increased
-      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+      const lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
+      expect(Number(BigNumber.from(lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
     });
   });
 
@@ -261,19 +260,21 @@ describe('HashtagProtocol Tests', function () {
       // check token one is minted
       const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
       expect(hashtagData.displayVersion.toLowerCase()).to.be.equal('#blockrocket');
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(0);
 
-      this.lastTransferTime = hashtagData.lastTransferTime;
+      await this.hashtagProtocol.connect(platform).renewHashtag(tokenId);
+      this.lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
+
+      expect(Number(BigNumber.from(this.lastTransferTime))).to.be.greaterThan(0);
     });
 
     it('will fail if token does not exist', async function () {
-      await expect(this.hashtagProtocol.connect(random).resetHashtag(constants.Two))
-        .to.be.revertedWith('resetHashtag: Invalid token ID');
+      await expect(this.hashtagProtocol.connect(random).recycleHashtag(constants.Two))
+        .to.be.revertedWith('recycleHashtag: Invalid token ID');
     });
 
     it('will fail if already owned by the platform', async function () {
-      await expect(this.hashtagProtocol.connect(platform).resetHashtag(tokenId))
-        .to.be.revertedWith('resetHashtag: Already owned by the platform');
+      await expect(this.hashtagProtocol.connect(platform).recycleHashtag(tokenId))
+        .to.be.revertedWith('recycleHashtag: Already owned by the platform');
     });
 
     it('will fail if token not not eligible yet', async function () {
@@ -285,8 +286,8 @@ describe('HashtagProtocol Tests', function () {
       const target = this.lastTransferTime.add(BigNumber.from(time.duration.years(1).toString()));
       await time.increaseTo(target.toString());
 
-      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
-        .to.be.revertedWith('resetHashtag: Token not eligible for reset yet');
+      await expect(this.hashtagProtocol.connect(random).recycleHashtag(tokenId))
+        .to.be.revertedWith('recycleHashtag: Token not eligible for recycling yet');
     });
 
     it('will succeed once renewal period has passed', async function () {
@@ -296,19 +297,19 @@ describe('HashtagProtocol Tests', function () {
       // increase by 2 years and 31 days
       const target = this.lastTransferTime
         .add(
-          await this.hashtagProtocol.maxStaleTokenTime()
+          await this.hashtagProtocol.ownershipTermLength()
         ).add(
           BigNumber.from(time.duration.days(31).toString())
         );
       await time.increaseTo(target.toString());
 
-      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
+      await expect(this.hashtagProtocol.connect(random).recycleHashtag(tokenId))
         .to.emit(this.hashtagProtocol, 'HashtagReset')
         .withArgs(tokenId, randomAddress);
 
       // check timestamp has increased
-      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+      const lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
+      expect(Number(BigNumber.from(lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
 
       // platform now once again owns the token
       expect(await this.hashtagProtocol.ownerOf(tokenId)).to.be.equal(platformAddress);
@@ -329,19 +330,19 @@ describe('HashtagProtocol Tests', function () {
       // increase by 2 years and 31 days
       const target = this.lastTransferTime
         .add(
-          await this.hashtagProtocol.maxStaleTokenTime()
+          await this.hashtagProtocol.ownershipTermLength()
         ).add(
           BigNumber.from(time.duration.days(31).toString())
         );
       await time.increaseTo(target.toString());
 
-      await expect(this.hashtagProtocol.connect(random).resetHashtag(tokenId))
+      await expect(this.hashtagProtocol.connect(random).recycleHashtag(tokenId))
         .to.emit(this.hashtagProtocol, 'HashtagReset')
         .withArgs(tokenId, randomAddress);
 
       // check timestamp has increased
-      const hashtagData = await this.hashtagProtocol.tokenIdToHashtag(tokenId);
-      expect(Number(BigNumber.from(hashtagData.lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+      const lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
+      expect(Number(BigNumber.from(lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
 
       // both balances back to zero
       expect((await this.hashtagProtocol.balanceOf(platformAddress)).toString()).to.be.equal('0');
