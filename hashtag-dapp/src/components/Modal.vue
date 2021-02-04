@@ -26,9 +26,7 @@
       </div>
       <div class="tag">
         <h1>Tag this asset</h1>
-        <p>
-          Add one or more hashtags to describe this digital asset.
-        </p>
+        <p>Add one or more hashtags to describe this digital asset.</p>
 
         <div class="ui input push-below">
           <input
@@ -49,9 +47,7 @@
         <div class="ui input push-below">
           <input placeholder="Token ID" />
         </div>
-        <button class="ui primary button full-width">
-          Save
-        </button>
+        <button class="ui primary button full-width">Save</button>
       </div>
     </div>
   </div>

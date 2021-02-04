@@ -39,6 +39,11 @@
           </b-dropdown-item>
         </b-dropdown>
       </b-navbar-item>
+
+      <b-navbar-item v-if="account !== 'Connect wallet'">
+        <button class="button is-primary" @click="drawdown">0.00003 Ξ</button>
+      </b-navbar-item>
+
       <b-navbar-item tag="div">
         <div class="buttons">
           <a
@@ -58,6 +63,7 @@
 </template>
 
 <script>
+import Drawdown from "./Drawdown";
 import { mapGetters } from "vuex";
 
 export default {
@@ -106,6 +112,16 @@ export default {
     },
     setCurrentMenu() {
       this.currentMenu = this.$data.menusArr[this.section].text;
+    },
+    drawdown() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: Drawdown,
+        hasModalCard: true,
+        customClass: "custom-class",
+        trapFocus: true,
+        width: 640,
+      });
     },
   },
 };
