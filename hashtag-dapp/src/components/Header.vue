@@ -53,6 +53,16 @@
           </a>
         </div>
       </b-navbar-item>
+      <b-navbar-item tag="div">
+        <div class="buttons">
+          <a
+            class="button is-primary is-outlined"
+            @click="drawDownFromRegistry"
+          >
+            {{ accrued | toEth }} Ξ
+          </a>
+        </div>
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
@@ -96,7 +106,7 @@ export default {
   created() {
     this.setCurrentMenu();
   },
-  computed: mapGetters(["account"]),
+  computed: mapGetters(["account", "accrued"]),
   methods: {
     connect() {
       this.$store.dispatch("bootstrap");
@@ -106,6 +116,9 @@ export default {
     },
     setCurrentMenu() {
       this.currentMenu = this.$data.menusArr[this.section].text;
+    },
+    drawDownFromRegistry() {
+      this.$store.dispatch("drawDownFromRegistry");
     },
   },
 };

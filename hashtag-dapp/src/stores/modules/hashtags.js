@@ -69,6 +69,7 @@ const KO_RINKEBY_ADDRESS = "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e";
 
 const state = {
   web3Objects: {},
+  accrued: null,
   fees: {
     protocol: 0,
     tagging: ethers.utils.parseEther("0.01"),
@@ -92,6 +93,7 @@ const getters = {
       ? state.web3Objects.account
       : "Connect wallet";
   },
+  accrued: (state) => state.accrued,
 };
 
 const actions = {
@@ -166,6 +168,7 @@ const actions = {
 
         dispatch("getTaggingFee");
         dispatch("getMintAndTagFee");
+        dispatch("getAccruedEthFromRegistry");
       }
     }
 
@@ -276,6 +279,35 @@ const actions = {
     commit("setTaggingFee", fee);
   },
 
+  async getAccruedEthFromRegistry({ commit }) {
+    const { contracts, account } = state.web3Objects;
+    const { erc721HashtagRegistryContract } = contracts;
+    const accrued = await erc721HashtagRegistryContract.totalDue(account);
+
+    commit("setAccrued", accrued);
+  },
+
+  async drawDownFromRegistry({ state, dispatch }) {
+    const { contracts, account } = state.web3Objects;
+    const { erc721HashtagRegistryContract } = contracts;
+    const tx = await erc721HashtagRegistryContract.drawDown(account);
+
+    const { emitter } = blocknative.transaction(tx.hash);
+
+    emitter.on("all", (transaction) => {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-bottom",
+        type: eventMap[transaction.eventCode].type,
+      });
+
+      if (transaction.eventCode === "txConfirmed") {
+        dispatch("getAccruedEthFromRegistry");
+      }
+    });
+  },
+
   async getMintAndTagFee({ commit }) {
     const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
     const fee = (await erc721HashtagRegistryContract.tagFee()).toString();
@@ -312,6 +344,10 @@ const mutations = {
 
   setNFTAssets(state, payload) {
     Vue.set(state, "nftAssetCache", payload);
+  },
+
+  setAccrued(state, accrued) {
+    Vue.set(state, "accrued", accrued);
   },
 };
 
