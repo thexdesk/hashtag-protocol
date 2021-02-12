@@ -1,11 +1,10 @@
 @import "bulma/sass/utilities/_all";
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
-@import url("https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css");
+// @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+// @import url("https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css");
 
 $primary: #24ae60;
 /* stylelint-disable function-name-case */
 $primary-invert: findColorInvert($primary);
-$primary-light: findLightColor($primary);
 
 $colors: (
   "white": (
@@ -61,13 +60,23 @@ a:hover {
 //$subtitle-color: $black-ter;
 
 $divider-background-color: $grey;
-$footer-padding: 3rem 1.5rem 6rem;
+$footer-padding: 3rem 1.5rem 8rem;
+$footer-background-color: $grey-lighter;
 
 // Removes hamburger in global nav.
 $navbar-breakpoint: 414px;
 $navbar-item-hover-background-color: $white;
 
 $section-padding: 0.25rem 0.8rem;
+
+.body {
+  position: relative;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  padding-bottom: 9rem;
+}
 
 @mixin my-touch {
   @media screen and (max-width: $navbar-breakpoint - 1px) {
