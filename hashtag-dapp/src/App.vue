@@ -21,6 +21,5 @@ export default {
 };
 </script>
 <style lang="scss">
-// @import "bulma";
-// @import "buefy/src/scss/buefy";
+@import "./styles/themes/hashtag/theme";
 </style>

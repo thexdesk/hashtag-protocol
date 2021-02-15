@@ -1,3 +1,6 @@
+// variables.scss is preloaded in src/vue.config.js
+@import "bulma/sass/utilities/_all";
+
 $primary: #24ae60;
 /* stylelint-disable function-name-case */
 $primary-invert: findColorInvert($primary);
@@ -23,6 +26,7 @@ $colors: (
   "primary": (
     $primary,
     $primary-invert,
+    $primary-light,
   ),
   "info": (
     $info,
@@ -45,21 +49,17 @@ $colors: (
 // Update Bulma's global variables
 $family-sans-serif: "Roboto", sans-serif;
 $body-family: $family-sans-serif;
-$body-background-color: $grey-lighter;
+//$body-background-color: $grey-lighter;
 $link: $primary;
-$navbar-item-color: $link;
-$navbar-item-active-color: $white;
-$navbar-burger-color: $link;
-$navbar-item-hover-background-color: transparent;
-$dropdown-item-active-color: $white;
-
-//$title-color: $black-ter;
-//$subtitle-color: $black-ter;
+$link-hover: $primary;
 
 $divider-background-color: $grey;
-$footer-padding: 3rem 1.5rem 6rem;
+
+$footer-padding: 0 0 5rem;
+$footer-background-color: $grey-lighter;
 
 // Removes hamburger in global nav.
-//$navbar-breakpoint: 414px;
+$navbar-breakpoint: $tablet;
+$navbar-item-hover-background-color: $white;
 
-$section-padding: 0.25rem 0.8rem;
+$section-padding: 0 0.8rem;
