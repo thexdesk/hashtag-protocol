@@ -1,21 +1,21 @@
 <template>
   <div class="body">
-    <div class="content-wrap">
-      <section class="nav has-background-white">
+    <div class="content-wrapper">
+      <section class="nav">
         <div class="container">
-          <Navbar></Navbar>
+          <Navbar />
         </div>
       </section>
-      <section class="main">
-        <div class="section has-background-white hero">
-          <div class="container">
+      <section class="section main">
+        <div class="container">
+          <div class="hero">
             <div class="columns is-vcentered is-desktop">
               <div class="column overview">
-                <h1 class="is-size-1 title is-spaced has-text-white-invert">
+                <h1 class="is-size-1 title is-spaced">
                   An experimental content tagging protocol for the decentralized
                   internet
                 </h1>
-                <div class="is-size-4 content has-text-white-invert">
+                <div class="is-size-4 content">
                   <p>
                     Hashtag is a simple, decentralized protocol built for
                     developers to tokenize hashtag strings as non-fungible
@@ -61,6 +61,8 @@ export default {
 
 <style lang="scss">
 .main {
+  padding-bottom: 0;
+
   .hero {
     padding-top: 4rem;
     padding-bottom: 0;

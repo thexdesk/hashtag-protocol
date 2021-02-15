@@ -1,3 +1,6 @@
+// Master scss file for Hashtag Dapp theme.
+@import "bulma/sass/utilities/_all";
+
 $primary: #24ae60;
 /* stylelint-disable function-name-case */
 $primary-invert: findColorInvert($primary);
@@ -47,19 +50,16 @@ $family-sans-serif: "Roboto", sans-serif;
 $body-family: $family-sans-serif;
 $body-background-color: $grey-lighter;
 $link: $primary;
+
+$navbar-breakpoint: $tablet;
 $navbar-item-color: $link;
 $navbar-item-active-color: $white;
 $navbar-burger-color: $link;
 $navbar-item-hover-background-color: transparent;
 $dropdown-item-active-color: $white;
 
-//$title-color: $black-ter;
-//$subtitle-color: $black-ter;
-
 $divider-background-color: $grey;
-$footer-padding: 3rem 1.5rem 6rem;
+$footer-padding: 0 0 5rem;
+$footer-background-color: $grey-lighter;
 
-// Removes hamburger in global nav.
-//$navbar-breakpoint: 414px;
-
-$section-padding: 0.25rem 0.8rem;
+$section-padding: 0 0.8rem;

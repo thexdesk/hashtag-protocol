@@ -51,7 +51,7 @@ $family-monospace: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
 
 $code-family: $family-monospace;
 $body-family: $family-sans-serif;
-// $body-background-color: $grey-lighter;
+$body-background-color: $grey-lighter;
 $link: $primary;
 $link-hover: $primary;
 
@@ -62,7 +62,8 @@ $code: $grey-darker;
 $footer-background-color: $grey-lighter;
 
 $divider-background-color: $grey;
-$footer-padding: 3rem 1.5rem 6rem;
+$footer-padding: 2rem 0 5rem;
+$footer-background-color: $grey-lighter;
 
 // Removes hamburger in global nav.
 $navbar-breakpoint: $tablet;
@@ -72,7 +73,7 @@ $menu-item-hover-color: $primary;
 $menu-item-active-color: $primary;
 $menu-item-active-background-color: $background;
 
-$section-padding: 0.25rem 0.8rem;
+$section-padding: 0 0.8rem;
 
 // Vuepress variables
 $codeBgColor: #282c34;

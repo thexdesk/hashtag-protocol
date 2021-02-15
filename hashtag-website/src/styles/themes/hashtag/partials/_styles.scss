@@ -13,7 +13,12 @@ a:hover {
   flex-direction: column;
 }
 
-.content-wrap {
+.content-wrapper {
+  flex: 1;
+  background-color: $white;
+}
+
+section {
   flex: 1;
 }
 

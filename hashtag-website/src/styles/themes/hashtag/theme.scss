@@ -2,6 +2,8 @@
 @import url("https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css");
 @import "bulma";
 @import "buefy/src/scss/buefy";
+@import "@creativebulma/bulma-divider";
 
 // Bulma style overrides and custom themeing.
 @import './partials/_styles.scss';
+@import './partials/_navbar.scss';

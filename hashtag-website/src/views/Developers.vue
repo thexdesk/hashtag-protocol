@@ -1,12 +1,12 @@
 <template>
   <div class="body">
     <div class="content-wrapper">
-      <section class="nav has-background-white">
+      <section class="section nav">
         <div class="container">
           <Navbar></Navbar>
         </div>
       </section>
-      <div class="section is-medium has-background-white">
+      <section class="section is-medium">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column">
@@ -48,8 +48,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="section is-medium has-background-dark">
+      </section>
+      <section class="section is-medium has-background-dark">
         <div class="container">
           <div class="columns">
             <div class="column is-4">
@@ -98,8 +98,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="section is-medium has-background-white">
+      </section>
+      <section class="section is-medium has-background-white">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
@@ -151,8 +151,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="section is-medium has-background-dark subgraph">
+      </section>
+      <section class="section is-medium has-background-dark subgraph">
         <div class="container">
           <div class="columns">
             <div class="column is-5">
@@ -223,8 +223,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="section is-medium has-background-white">
+      </section>
+      <section class="section is-medium has-background-white">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column">
@@ -322,7 +322,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
     <Footer></Footer>
   </div>

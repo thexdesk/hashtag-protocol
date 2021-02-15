@@ -1,11 +1,7 @@
-// Master scss file for Hashtag Dapp theme.
-@import "bulma/sass/utilities/_all";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css");
-@import './_variables.scss';
 @import "bulma";
 @import "buefy/src/scss/buefy";
-@import "@creativebulma/bulma-divider";
 
-// Bulma style overrides.
-@import './styles.scss';
+// Bulma style overrides and custom themeing.
+@import './partials/_styles.scss';
