@@ -55,10 +55,7 @@
       </b-navbar-item>
       <b-navbar-item tag="div" v-if="account !== 'Connect wallet'">
         <div class="buttons">
-          <a
-            class="button is-primary is-outlined"
-            @click="drawdown"
-          >
+          <a class="button is-primary is-outlined" @click="drawdown">
             {{ accrued | toEth }} Ξ
           </a>
         </div>
@@ -117,9 +114,6 @@ export default {
     },
     setCurrentMenu() {
       this.currentMenu = this.$data.menusArr[this.section].text;
-    },
-    drawDownFromRegistry() {
-      this.$store.dispatch("drawDownFromRegistry");
     },
     drawdown() {
       this.$buefy.modal.open({

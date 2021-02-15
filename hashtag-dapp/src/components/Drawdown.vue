@@ -7,13 +7,31 @@
     </header>
     <div class="card-content">
       <div class="summary">
-        <p class="title is-1">0.00003 ETH</p>
+        <p class="title is-1">{{ accrued | toEth }} Ξ</p>
         <p class="subtitle is-6">TOTAL EARNED</p>
       </div>
-      <button class="button is-primary">Withdraw</button>
+      <button class="button is-primary" @click="drawDownFromRegistry">
+        Withdraw
+      </button>
     </div>
   </div>
 </template>
+
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters(["accrued"]),
+  },
+  methods: {
+    drawDownFromRegistry() {
+      this.$store.dispatch("drawDownFromRegistry");
+    },
+  },
+};
+</script>
+
 <style lang="scss">
 .card.drawdown {
   width: 350px;
