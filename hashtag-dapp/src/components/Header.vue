@@ -53,11 +53,11 @@
           </a>
         </div>
       </b-navbar-item>
-      <b-navbar-item tag="div">
+      <b-navbar-item tag="div" v-if="account !== 'Connect wallet'">
         <div class="buttons">
           <a
             class="button is-primary is-outlined"
-            @click="drawDownFromRegistry"
+            @click="drawdown"
           >
             {{ accrued | toEth }} Ξ
           </a>
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import Drawdown from "./Drawdown";
 import { mapGetters } from "vuex";
 
 export default {
@@ -119,6 +120,16 @@ export default {
     },
     drawDownFromRegistry() {
       this.$store.dispatch("drawDownFromRegistry");
+    },
+    drawdown() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: Drawdown,
+        hasModalCard: true,
+        customClass: "custom-class",
+        trapFocus: true,
+        width: 640,
+      });
     },
   },
 };
