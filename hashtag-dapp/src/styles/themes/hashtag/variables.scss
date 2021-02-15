@@ -1,7 +1,7 @@
-// Bulma variables
-// see @https://bulma.io/documentation/customize/variables
+// Master scss file for Hashtag Dapp theme.
+@import "bulma/sass/utilities/_all";
 
-$primary: #188c4a; // #24ae60;
+$primary: #24ae60;
 /* stylelint-disable function-name-case */
 $primary-invert: findColorInvert($primary);
 $primary-light: findLightColor($primary);
@@ -42,39 +42,24 @@ $colors: (
   "danger": (
     $danger,
     $danger-invert,
-  )
+  ),
 );
 
 // Update Bulma's global variables
 $family-sans-serif: "Roboto", sans-serif;
-$family-monospace: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
-
-$code-family: $family-monospace;
 $body-family: $family-sans-serif;
 $body-background-color: $grey-lighter;
 $link: $primary;
-$link-hover: $primary;
 
-$content-heading-weight: 500;
-
-$code: $grey-darker;
-
-$footer-background-color: $grey-lighter;
+$navbar-breakpoint: $tablet;
+$navbar-item-color: $link;
+$navbar-item-active-color: $white;
+$navbar-burger-color: $link;
+$navbar-item-hover-background-color: transparent;
+$dropdown-item-active-color: $white;
 
 $divider-background-color: $grey;
-$footer-padding: 2rem 0 5rem;
+$footer-padding: 0 0 5rem;
 $footer-background-color: $grey-lighter;
 
-// Removes hamburger in global nav.
-$navbar-breakpoint: $tablet;
-$navbar-item-hover-background-color: $white;
-
-$menu-item-hover-color: $primary;
-$menu-item-active-color: $primary;
-$menu-item-active-background-color: $background;
-
 $section-padding: 0 0.8rem;
-
-// Vuepress variables
-$codeBgColor: #282c34;
-$accentColor: #3eaf7c;

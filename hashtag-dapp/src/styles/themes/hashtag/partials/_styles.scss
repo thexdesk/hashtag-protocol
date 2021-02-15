@@ -1,3 +1,36 @@
+html,
+body {
+  height: 100%;
+  background-color: $footer-background-color;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.body {
+  display: flex;  /* use the flex model */
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.content-wrapper,
+section {
+  flex: 1;
+}
+
+@mixin my-touch {
+  @media screen and (max-width: $navbar-breakpoint - 1px) {
+    @content;
+  }
+}
+
+@mixin my-desktop {
+  @media screen and (min-width: $navbar-breakpoint) {
+    @content;
+  }
+}
+
 .container {
   @include until($desktop) {
     padding-left: 1.5rem;
@@ -13,6 +46,7 @@
   a.navbar-item,
   a.navbar-item:hover {
     color: $white;
+    text-decoration: none;
 
     h1 {
       font-size: 1.25rem;

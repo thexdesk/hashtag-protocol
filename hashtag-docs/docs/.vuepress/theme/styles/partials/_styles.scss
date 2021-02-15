@@ -1,11 +1,17 @@
-html {
-  scroll-behavior: smooth;
+html, body {
   height: 100%;
+  background-color: $footer-background-color;
 }
 
-body,
-#app {
-  height: 100%;
+.body {
+  display: flex;  /* use the flex model */
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1;
+  background-color: $white;
 }
 
 a {
@@ -14,12 +20,20 @@ a {
   }
 
   &.header-anchor {
-    font-size: 0.85em;
-    float: left;
-    margin-left: -0.87em;
+    float: none;
+    margin-left: 0;
     padding-right: 0.23em;
     margin-top: 0.125em;
     opacity: 0;
+    display: inline-block;
+
+    &::before {
+      font: normal normal normal 24px/1 "Material Design Icons";
+      text-rendering: auto;
+      line-height: inherit;
+      content: "\F339";
+      font-size: inherit;
+    }
   }
 
   // The following can be removed when app & website bulma are upgraded to 9.x
@@ -71,13 +85,6 @@ h6 {
       margin-top: -50px;
     }
   }
-}
-
-.body {
-  box-sizing: border-box;
-  position: relative;
-  padding-bottom: 268px;
-  min-height: 100%;
 }
 
 .container {

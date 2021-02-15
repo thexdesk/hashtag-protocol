@@ -1,3 +1,7 @@
+section.nav {
+  border-bottom: 1px solid $grey-lighter;
+}
+
 .navbar {
   border-bottom: none;
   height: 76px;
@@ -43,3 +47,10 @@
     }
   }
 }
+
+// .container > .navbar {
+//   .navbar-brand {
+//     @include ltr-property("margin", 0, false); }
+//   .navbar-menu {
+//     @include ltr-property("margin", 0); } 
+// }
