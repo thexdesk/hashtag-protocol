@@ -71,6 +71,7 @@ const state = {
     tagging: ethers.utils.parseEther("0.01"),
     mintAndTag: ethers.utils.parseEther("0.01"),
   },
+  openModalCloseFn: () => {},
 };
 
 const getters = {
@@ -160,6 +161,10 @@ const actions = {
     }
 
     // dispatch("cacheNFTAssets");
+  },
+
+  captureOpenModalCloseFn({ commit }, openModalCloseFn) {
+    commit("setOpenModalCloseFn", openModalCloseFn);
   },
 
   async changeWallet() {
@@ -274,7 +279,7 @@ const actions = {
     commit("setAccrued", accrued);
   },
 
-  async drawDownFromRegistry({ state, dispatch }) {
+  async drawDownFromRegistry({ state, dispatch, commit }) {
     const { contracts, account } = state.web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
     const tx = await erc721HashtagRegistryContract.drawDown(account);
@@ -290,7 +295,9 @@ const actions = {
       });
 
       if (transaction.eventCode === "txConfirmed") {
+        state.openModalCloseFn();
         dispatch("getAccruedEthFromRegistry");
+        commit("setOpenModalCloseFn", () => {});
       }
     });
   },
@@ -322,6 +329,10 @@ const mutations = {
 
   setAccrued(state, accrued) {
     Vue.set(state, "accrued", accrued);
+  },
+
+  setOpenModalCloseFn(state, openModalCloseFn) {
+    Vue.set(state, "openModalCloseFn", openModalCloseFn);
   },
 };
 

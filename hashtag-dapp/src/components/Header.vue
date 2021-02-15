@@ -116,7 +116,7 @@ export default {
       this.currentMenu = this.$data.menusArr[this.section].text;
     },
     drawdown() {
-      this.$buefy.modal.open({
+      const result = this.$buefy.modal.open({
         parent: this,
         component: Drawdown,
         hasModalCard: true,
@@ -124,6 +124,8 @@ export default {
         trapFocus: true,
         width: 640,
       });
+
+      this.$store.dispatch("captureOpenModalCloseFn", result.close);
     },
   },
 };
