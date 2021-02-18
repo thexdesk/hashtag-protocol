@@ -58,8 +58,15 @@ $navbar-burger-color: $link;
 $navbar-item-hover-background-color: transparent;
 $dropdown-item-active-color: $white;
 
+//$title-color: $black-ter;
+//$subtitle-color: $black-ter;
+
 $divider-background-color: $grey;
 $footer-padding: 0 0 5rem;
 $footer-background-color: $grey-lighter;
 
-$section-padding: 0 0.8rem;
+// Removes hamburger in global nav.
+//$navbar-breakpoint: 414px;
+
+$section-padding: 0.25rem 0.8rem;
+$card-radius: 1rem;

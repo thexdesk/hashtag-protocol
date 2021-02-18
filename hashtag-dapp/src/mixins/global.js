@@ -11,7 +11,7 @@ Vue.mixin({
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
       etherscanRinkby: "https://rinkeby.etherscan.io",
-      contractRinkby: "0x1a8a97b7fe6470112d19b04ad6614b39fbc09e33",
+      contractRinkby: "0xa948549116e716cc0da11afdbcabf01ff04fc35e",
 
       // Section(s) is ued by dropdown menu in header component.
       sections: [
