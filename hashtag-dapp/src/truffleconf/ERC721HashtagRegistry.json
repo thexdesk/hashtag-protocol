@@ -459,6 +459,9 @@
     }
   ],
   "networks": {
+    "1": {
+      "address": "0x2a23A463C7d676f3C94402eA0B0450E36BF14305"
+    },
     "4": {
       "address": "0x2a23A463C7d676f3C94402eA0B0450E36BF14305"
     }
