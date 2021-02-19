@@ -238,7 +238,7 @@ const actions = {
     const { hashtag, nftContract, nftId } = payload;
 
     const tx = await erc721HashtagRegistryContract.mintAndTag(
-      hashtag,
+      hashtag.indexOf("#") === 0 ? hashtag : `#${hashtag}`,
       nftContract,
       nftId,
       publisher,
