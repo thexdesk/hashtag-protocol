@@ -9,6 +9,7 @@ import { HashtagProtocol } from "../generated/HashtagProtocol/HashtagProtocol";
 import { Tag, Hashtag } from "../generated/schema";
 
 import {
+  toLowerCase,
   safeLoadPublisher,
   safeLoadPlatform,
   safeLoadOwner,
@@ -87,6 +88,11 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   let tagEntity = new Tag(event.transaction.hash.toHexString());
   tagEntity.hashtagId = hashtagId.toString();
   tagEntity.hashtagDisplayHashtag = hashtag.displayHashtag;
+
+  let lowerHashtag = toLowerCase(hashtag.displayHashtag)
+  tagEntity.hashtag = lowerHashtag
+  tagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
+
   tagEntity.nftContract = event.params.nftContract;
   tagEntity.nftId = event.params.nftId.toString();
 

@@ -412,10 +412,14 @@ export default {
     Pagination,
   },
   data() {
+    let routeHashtag = this.$route.params.hashtag;
+    routeHashtag = routeHashtag.replace("#", "");
+    routeHashtag = routeHashtag.toLowerCase();
+
     return {
       activeTab: null,
       erc721: "http://erc721.org",
-      hashtag: this.$route.params.hashtag,
+      hashtag: routeHashtag,
       hashtagsByName: null,
       isOverviewModalActive: false,
       isSummaryModalActive: false,

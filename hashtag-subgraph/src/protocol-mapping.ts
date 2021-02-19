@@ -6,7 +6,7 @@ import {
 } from "../generated/HashtagProtocol/HashtagProtocol";
 
 import { Hashtag } from "../generated/schema";
-import {safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
+import {toLowerCase, safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
 
 /*
  * Track the minting of a hashtag
@@ -32,20 +32,7 @@ export function handleMintHashtag(event: MintHashtag): void {
   hashtagEntity.displayHashtag = event.params.displayHashtag;
 
   let displayHashtag: string = event.params.displayHashtag
-  let lowerHashtag: string = ""
-  for(let i = 0; i < displayHashtag.length; i++) {
-    let displayHashtagChar: i32 = displayHashtag.charCodeAt(i)
-
-    let lowercaseChar: i32
-    // A is char code 65 and Z is 90. If the char code is in this range, add 32 to make it lower case
-    if (displayHashtagChar >= 65 && displayHashtagChar <= 90) {
-      lowercaseChar = displayHashtagChar + 32
-    } else {
-      lowercaseChar = displayHashtagChar
-    }
-
-    lowerHashtag = lowerHashtag.concat(String.fromCharCode(lowercaseChar))
-  }
+  let lowerHashtag: string = toLowerCase(displayHashtag)
 
   hashtagEntity.hashtag = lowerHashtag
   hashtagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
