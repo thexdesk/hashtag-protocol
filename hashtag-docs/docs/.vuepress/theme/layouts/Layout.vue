@@ -7,20 +7,20 @@
       <section class="section main">
         <div class="container">
           <div class="columns">
-            <div
-              class="column is-hidden-mobile is-one-quarter-tablet has-background-white-ter"
-            >
+            <div class="column is-3 is-hidden-touch has-background-white-ter">
               <div>
                 <Sidebar :items="sidebarItems"></Sidebar>
               </div>
             </div>
-            <div class="column has-background-white">
+            <div
+              class="column is-7-widescreen is-9-desktop is-12-touch has-background-white"
+            >
               <div class="content">
                 <Content />
               </div>
             </div>
             <div
-              class="column is-hidden-touch is-hidden-desktop-only is-2 has-background-white"
+              class="column is-2-desktop is-hidden-touch is-hidden-desktop-only has-background-white"
             >
               <div class="sticky">
                 <PageEdit />
@@ -68,14 +68,17 @@ export default {
 section.main {
   padding-top: 12px;
   padding-bottom: 12px;
-  background: linear-gradient(
-    to right,
-    $white-ter 0%,
-    $white-ter 50%,
-    $white 50%,
-    $white 100%
-  );
   background-color: $white;
+
+  @include from($desktop) {
+    background: linear-gradient(
+      to right,
+      $white-ter 0%,
+      $white-ter 50%,
+      $white 50%,
+      $white 100%
+    );
+  }
 
   .column {
     padding-top: 2rem;
@@ -84,7 +87,7 @@ section.main {
       padding-bottom: 3.5rem;
 
       // Give content more padding from tablet upwards.
-      @include from($tablet) {
+      @include from($desktop) {
         padding-left: 2rem;
       }
     }

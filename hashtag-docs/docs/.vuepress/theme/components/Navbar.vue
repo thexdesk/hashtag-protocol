@@ -20,7 +20,7 @@
           <a :href="this.app" class="button is-primary is-outlined"> App </a>
         </div>
       </b-navbar-item>
-      <div class="is-hidden-tablet">
+      <div class="is-hidden-desktop">
         <hr />
         <b-navbar-item>
           <Sidebar :items="sidebarItems"></Sidebar>
