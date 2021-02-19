@@ -6,7 +6,7 @@ import {
 } from "../generated/HashtagProtocol/HashtagProtocol";
 
 import { Hashtag } from "../generated/schema";
-import {safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
+import {toLowerCase, safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
 
 /*
  * Track the minting of a hashtag
@@ -30,6 +30,13 @@ export function handleMintHashtag(event: MintHashtag): void {
 
   hashtagEntity.name = hashtag.value2;
   hashtagEntity.displayHashtag = event.params.displayHashtag;
+
+  let displayHashtag: string = event.params.displayHashtag
+  let lowerHashtag: string = toLowerCase(displayHashtag)
+
+  hashtagEntity.hashtag = lowerHashtag
+  hashtagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
+
   hashtagEntity.owner = hashtagContract.platform();
   hashtagEntity.publisher = event.params.publisher;
   hashtagEntity.timestamp = event.block.timestamp;

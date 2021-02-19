@@ -413,10 +413,14 @@ export default {
     Pagination,
   },
   data() {
+    let routeHashtag = this.$route.params.hashtag;
+    routeHashtag = routeHashtag.replace("#", "");
+    routeHashtag = routeHashtag.toLowerCase();
+
     return {
       activeTab: null,
       erc721: "http://erc721.org",
-      hashtag: this.$route.params.hashtag,
+      hashtag: routeHashtag,
       hashtagsByName: null,
       isOverviewModalActive: false,
       isSummaryModalActive: false,
@@ -433,7 +437,7 @@ export default {
       query: PAGED_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag,
+          hashtag: this.hashtag,
           first: this.first,
           skip: this.skip,
         };
@@ -444,7 +448,7 @@ export default {
       query: ALL_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag,
+          hashtag: this.hashtag,
         };
       },
       manual: true,
@@ -457,7 +461,7 @@ export default {
       query: HASHTAGS_BY_NAME,
       variables() {
         return {
-          name: this.hashtag && this.hashtag,
+          name: this.hashtag,
         };
       },
       pollInterval: 1000, // ms
@@ -467,6 +471,9 @@ export default {
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
     },
+  },
+  created() {
+    this.$router.replace(`/hashtag/${this.hashtag}`);
   },
 };
 </script>

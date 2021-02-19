@@ -2,6 +2,8 @@ type Hashtag @entity {
   id: ID!
   name: String!
   displayHashtag: String!
+  hashtag: String!
+  hashtagWithoutHash: String!
   owner: Bytes!
   publisher: Bytes!
   timestamp: BigInt!
@@ -18,6 +20,8 @@ type Tag @entity {
   id: ID!
   hashtagId: String!
   hashtagDisplayHashtag: String!
+  hashtag: String!
+  hashtagWithoutHash: String!
   nftContract: Bytes!
   nftId: String!
   nftContractName: String!

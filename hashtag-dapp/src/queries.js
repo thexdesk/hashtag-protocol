@@ -58,7 +58,7 @@ export const SNAPSHOT = gql(`
 
 export const ALL_TAGS_BY_HASHTAG = gql`
   query allTagsByHashtag($hashtag: String!) {
-    allTagsByHashtag: tags(where: { hashtagDisplayHashtag: $hashtag }) {
+    allTagsByHashtag: tags(where: { hashtagWithoutHash: $hashtag }) {
       id
     }
   }
@@ -71,7 +71,7 @@ export const PAGED_TAGS_BY_HASHTAG = gql`
       skip: $skip
       orderBy: timestamp
       orderDirection: desc
-      where: { hashtagDisplayHashtag: $hashtag }
+      where: { hashtagWithoutHash: $hashtag }
     ) {
       id
       hashtagId
@@ -89,28 +89,9 @@ export const PAGED_TAGS_BY_HASHTAG = gql`
   }
 `;
 
-export const TAGS_BY_HASHTAG = gql(`
-query tagsByHashtag($hashtag: String!) {
-   tagsByHashtag: tags(orderBy: timestamp, orderDirection: desc, where: {hashtagDisplayHashtag: $hashtag}) {
-      id
-      hashtagId
-      hashtagDisplayHashtag
-      nftContract
-      nftContractName
-      nftImage
-      nftName
-      nftDescription
-      nftId
-      tagger
-      timestamp
-      publisher
-   }
-}
-`);
-
 export const HASHTAGS_BY_NAME = gql(`
 query hashtagsByName($name: String!) {
-   hashtagsByName:  hashtags(first:1, where: {name:$name}) {
+   hashtagsByName:  hashtags(first:1, where: {hashtagWithoutHash:$name}) {
         id
         name
         displayHashtag
