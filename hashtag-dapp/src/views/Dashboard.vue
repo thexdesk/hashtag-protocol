@@ -169,12 +169,12 @@
                           ></timestamp-from>
                         </b-table-column>
                         <b-table-column
-                          field="owner"
-                          label="Owner"
+                          field="creator"
+                          label="Creator"
                           :visible="$screen.desktop"
                         >
                           <eth-account
-                            :value="props.row.owner"
+                            :value="props.row.creator"
                             route="owner-detail"
                           ></eth-account>
                         </b-table-column>

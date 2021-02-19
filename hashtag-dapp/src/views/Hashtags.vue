@@ -50,6 +50,12 @@
                         </th>
                         <th class="">
                           <div class="th-wrap">
+                            Creator
+                            <!---->
+                          </div>
+                        </th>
+                        <th class="">
+                          <div class="th-wrap">
                             Owner
                             <!---->
                           </div>
@@ -89,8 +95,9 @@
                           ></timestamp-from>
                         </td>
                         <td data-label="Owner" class="">
-                          <eth-account :value="hashtag.owner"></eth-account>
+                          <eth-account :value="hashtag.creator"></eth-account>
                         </td>
+                        <td data-label="Owner" class="">Pending Auction</td>
                         <td data-label="Publisher" class="">
                           <eth-account :value="hashtag.publisher"></eth-account>
                         </td>

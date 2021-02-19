@@ -96,6 +96,7 @@ query hashtagsByName($name: String!) {
         name
         displayHashtag
         owner
+        creator
         publisher
         timestamp
         tagCount
@@ -289,6 +290,7 @@ query pagedHashtags($first: Int!, $skip: Int!) {
             name
             displayHashtag
             owner
+            creator
             publisher
             timestamp
             tagCount
@@ -384,6 +386,7 @@ export const FIRST_THOUSAND_HASHTAGS = gql(`
       name
       displayHashtag
       owner
+      creator
       publisher
       timestamp
       tagCount

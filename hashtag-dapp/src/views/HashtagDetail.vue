@@ -52,7 +52,7 @@
                           <td class="has-text-weight-bold">Creator</td>
                           <td>
                             <eth-account
-                              :value="hashtagsByName[0].owner"
+                              :value="hashtagsByName[0].creator"
                               route="owner-detail"
                             ></eth-account>
                           </td>
