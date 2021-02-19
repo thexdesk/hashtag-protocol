@@ -59,3 +59,10 @@ type Platform @entity {
   id: ID!
   tagFees: BigInt!
 }
+
+type Creator @entity {
+  id: ID!
+  hashtagCount: BigInt!
+  tagCount: BigInt!
+  revenue: BigInt!
+}
