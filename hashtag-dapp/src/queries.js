@@ -175,6 +175,7 @@ query hashtagsByPublisher($publisher: String!, $first: Int!, $skip: Int!) {
     name
     displayHashtag
     owner
+    creator
     publisher
     timestamp
     tagCount

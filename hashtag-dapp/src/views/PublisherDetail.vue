@@ -85,11 +85,7 @@
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Hashtag revenue</td>
-                          <td>
-                            <eth-amount
-                              :value="publisherByAcc.mintFees"
-                            ></eth-amount>
-                          </td>
+                          <td>Pending auction</td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Tag count</td>
@@ -108,10 +104,9 @@
                         <tr>
                           <td class="has-text-weight-bold">Total revenue</td>
                           <td>
-                            <eth-amount-sum
-                              :value1="publisherByAcc.mintFees"
-                              :value2="publisherByAcc.tagFees"
-                            ></eth-amount-sum>
+                            <eth-amount
+                              :value="publisherByAcc.tagFees"
+                            ></eth-amount>
                           </td>
                         </tr>
                       </tbody>
@@ -158,6 +153,12 @@
                             </th>
                             <th class="">
                               <div class="th-wrap">
+                                Creator
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
                                 Owner
                                 <!---->
                               </div>
@@ -189,12 +190,13 @@
                                 :value="hashtag.timestamp"
                               ></timestamp-from>
                             </td>
-                            <td data-label="Owner" class="">
+                            <td data-label="Creator" class="">
                               <eth-account
-                                :value="hashtag.owner"
+                                :value="hashtag.creator"
                                 route="owner-detail"
                               ></eth-account>
                             </td>
+                            <td data-label="Owner" class="">Pending Auction</td>
                             <td data-label="tag-count" class="">
                               {{ hashtag.tagCount }}
                             </td>
@@ -437,7 +439,6 @@ import {
   ALL_TAG_IDS_BY_PUBLISHER,
   PAGED_TAGS_BY_PUBLISHER,
 } from "../queries";
-import EthAmountSum from "../components/EthAmountSum";
 import EthAmount from "../components/EthAmount";
 import Hashtag from "../components/Hashtag";
 import MarkdownDoc from "../components/MarkdownDoc";
@@ -456,7 +457,6 @@ export default {
     TimestampFrom,
     Hashtag,
     EthAmount,
-    EthAmountSum,
     EthAccount,
     Footer,
     Header,
