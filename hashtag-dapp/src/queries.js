@@ -103,6 +103,7 @@ query hashtagsByName($name: String!) {
         ownerRevenue
         publisherRevenue
         protocolRevenue
+        creatorRevenue
    }
 }
 `);

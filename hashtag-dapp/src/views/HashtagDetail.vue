@@ -59,12 +59,7 @@
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Owner</td>
-                          <td>
-                            <eth-account
-                              :value="hashtagsByName[0].owner"
-                              route="owner-detail"
-                            ></eth-account>
-                          </td>
+                          <td>Pending auction</td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Publisher</td>
@@ -104,17 +99,8 @@
                     <table class="table">
                       <tbody>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Creation price</td>
-                          <td>
-                            {{ hashtagsByName[0].totalMintingFee | toEth }}
-                            Ξ<br />{{
-                              hashtagsByName[0].publisherMintingFee | toEth
-                            }}
-                            Ξ to Publisher<br />{{
-                              hashtagsByName[0].platformMintingFee | toEth
-                            }}
-                            Ξ to Protocol
-                          </td>
+                          <td class="has-text-weight-bold">Sale price</td>
+                          <td>Pending Auction</td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagged content</td>
@@ -125,6 +111,8 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
+                            {{ hashtagsByName[0].creatorRevenue | toEth }} Ξ
+                            Creator<br />
                             {{ hashtagsByName[0].ownerRevenue | toEth }} Ξ
                             Owner<br />{{
                               hashtagsByName[0].publisherRevenue | toEth
