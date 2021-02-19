@@ -30,6 +30,26 @@ export function handleMintHashtag(event: MintHashtag): void {
 
   hashtagEntity.name = hashtag.value2;
   hashtagEntity.displayHashtag = event.params.displayHashtag;
+
+  let displayHashtag: string = event.params.displayHashtag
+  let lowerHashtag: string = ""
+  for(let i = 0; i < displayHashtag.length; i++) {
+    let displayHashtagChar: i32 = displayHashtag.charCodeAt(i)
+
+    let lowercaseChar: i32
+    // A is char code 65 and Z is 90. If the char code is in this range, add 32 to make it lower case
+    if (displayHashtagChar >= 65 && displayHashtagChar <= 90) {
+      lowercaseChar = displayHashtagChar + 32
+    } else {
+      lowercaseChar = displayHashtagChar
+    }
+
+    lowerHashtag = lowerHashtag.concat(String.fromCharCode(lowercaseChar))
+  }
+
+  hashtagEntity.hashtag = lowerHashtag
+  hashtagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
+
   hashtagEntity.owner = hashtagContract.platform();
   hashtagEntity.publisher = event.params.publisher;
   hashtagEntity.timestamp = event.block.timestamp;
