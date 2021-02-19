@@ -745,6 +745,9 @@
     }
   ],
   "networks": {
+    "1": {
+      "address": "0xA948549116e716CC0Da11AFdbCabf01ff04Fc35e"
+    },
     "4": {
       "address": "0xA948549116e716CC0Da11AFdbCabf01ff04Fc35e"
     }

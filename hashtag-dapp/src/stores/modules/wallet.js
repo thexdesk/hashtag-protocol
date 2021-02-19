@@ -41,7 +41,7 @@ const eventMap = {
 let provider;
 const onboard = Onboard({
   dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
-  networkId: 4, // Dapp currently only supports Rinkeby
+  networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
   subscriptions: {
     wallet: (wallet) => {
       provider = new ethers.providers.Web3Provider(wallet.provider);
@@ -55,7 +55,7 @@ const onboard = Onboard({
 // create options object
 const options = {
   dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
-  networkId: 4, // Dapp currently only supports Rinkeby
+  networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
   // Optional. See docs.
   // transactionHandlers: [(event) => console.log(event.transaction)],
 };

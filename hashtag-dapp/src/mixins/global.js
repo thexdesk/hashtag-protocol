@@ -1,19 +1,35 @@
 import Vue from "vue";
+import HashtagProtocolTruffleConf from "../truffleconf/HashtagProtocol";
+import ERC721HashtagRegistry from "../truffleconf/ERC721HashtagRegistry";
+import utils from "../utils";
+import onBoardChainMap from "../data/onBoardChainMap.json";
+
+const chainID = process.env.VUE_APP_ONBOARD_NETWORK_ID;
 
 Vue.mixin({
   data: function () {
     return {
+      // @TODO: Put the following into env. variables?
       designNotes: "/docs/hashtag-protocol.pdf",
       // App and Docs base urls. Values set here are for
       // production environment. Note values are overridden
-      // via devBaseUrls() when on platform.sh dev environments.
+      // via setBaseUrls() when on platform.sh dev environments.
       website: "https://www.hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
-      etherscanRinkby: "https://rinkeby.etherscan.io",
-      contractRinkby: "0xa948549116e716cc0da11afdbcabf01ff04fc35e",
 
-      // Section(s) is ued by dropdown menu in header component.
+      // The following are for generating etherscan links.
+      etherscanBaseUrl: onBoardChainMap[chainID].url,
+      hashtagProtocolContractAddress: utils.getContractAddressFromTruffleConf(
+        HashtagProtocolTruffleConf,
+        chainID
+      ),
+      erc721HashtagRegistryAddress: utils.getContractAddressFromTruffleConf(
+        ERC721HashtagRegistry,
+        chainID
+      ),
+
+      // Section(s) is used by dropdown menu in header component.
       sections: [
         "dashboard",
         "hashtags",
@@ -27,7 +43,7 @@ Vue.mixin({
     };
   },
   created() {
-    this.setDevBaseUrls();
+    this.setBaseUrls();
     this.setSection();
   },
   methods: {
@@ -39,7 +55,7 @@ Vue.mixin({
      * @public This is a public method
      */
     popModal(modal) {
-      // Set the modal visiblity variable to true.
+      // Set the modal visibility variable to true.
       // @see Buefy b-modal https://buefy.org/documentation/modal/
       this[modal] = true;
     },
@@ -80,7 +96,7 @@ Vue.mixin({
      * Hashtag Website https://www.pr-75-pnnelki-nv7d6mu5vsflk.us-2.platformsh.site
      *
      */
-    setDevBaseUrls() {
+    setBaseUrls() {
       var baseUrl = new URL(window.location);
       var parts = baseUrl.hostname.split(".");
       if (parts.includes("platformsh") && parts.includes("app")) {
