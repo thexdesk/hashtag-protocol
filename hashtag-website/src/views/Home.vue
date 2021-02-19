@@ -1,41 +1,45 @@
 <template>
   <div class="body">
-    <section class="nav has-background-white">
-      <div class="container">
-        <Navbar></Navbar>
-      </div>
-    </section>
-    <section class="main">
-      <div class="section has-background-white hero">
+    <div class="content-wrapper">
+      <section class="nav">
         <div class="container">
-          <div class="columns is-vcentered">
-            <div class="column">
-              <h1 class="is-size-1 title is-spaced has-text-white-invert">
-                An experimental content tagging protocol for the decentralized
-                internet
-              </h1>
-              <div class="is-size-4 content has-text-white-invert">
-                <p>
-                  Hashtag is a simple, decentralized protocol built for
-                  developers to tokenize hashtag strings as non-fungible tokens
-                  (NFTs), link them with online media and surface this data for
-                  use in networks, platforms and applications.
-                </p>
-                <p>
-                  <a class="button is-primary" href="/developers">Learn more</a>
-                </p>
+          <Navbar />
+        </div>
+      </section>
+      <section class="section main">
+        <div class="container">
+          <div class="hero">
+            <div class="columns is-vcentered is-desktop">
+              <div class="column overview">
+                <h1 class="is-size-1 title is-spaced">
+                  An experimental content tagging protocol for the decentralized
+                  internet
+                </h1>
+                <div class="is-size-4 content">
+                  <p>
+                    Hashtag is a simple, decentralized protocol built for
+                    developers to tokenize hashtag strings as non-fungible
+                    tokens (NFTs), link them with online media and surface this
+                    data for use in networks, platforms and applications.
+                  </p>
+                  <p>
+                    <a class="button is-primary" href="/developers"
+                      >Learn more</a
+                    >
+                  </p>
+                </div>
               </div>
-            </div>
-            <div class="column">
-              <span class="image">
-                <img :src="require(`../assets/img/hero.png`)" />
-              </span>
+              <div class="column" style="align-self: flex-end">
+                <span class="image">
+                  <img :src="require(`../assets/img/hero.png`)" />
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <Footer></Footer>
+      </section>
+    </div>
+    <Footer />
   </div>
 </template>
 
@@ -57,9 +61,15 @@ export default {
 
 <style lang="scss">
 .main {
+  padding-bottom: 0;
+
   .hero {
     padding-top: 4rem;
     padding-bottom: 0;
+  }
+
+  .overview {
+    padding-bottom: 4rem;
   }
 }
 </style>

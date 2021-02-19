@@ -53,11 +53,19 @@
           </a>
         </div>
       </b-navbar-item>
+      <b-navbar-item tag="div" v-if="account !== 'Connect wallet'">
+        <div class="buttons">
+          <a class="button is-primary is-outlined" @click="drawdown">
+            {{ accrued | toEth }} Ξ
+          </a>
+        </div>
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
 
 <script>
+import Drawdown from "./Drawdown";
 import { mapGetters } from "vuex";
 
 export default {
@@ -96,7 +104,7 @@ export default {
   created() {
     this.setCurrentMenu();
   },
-  computed: mapGetters(["account"]),
+  computed: mapGetters(["account", "accrued"]),
   methods: {
     connect() {
       this.$store.dispatch("bootstrap");
@@ -106,6 +114,18 @@ export default {
     },
     setCurrentMenu() {
       this.currentMenu = this.$data.menusArr[this.section].text;
+    },
+    drawdown() {
+      const result = this.$buefy.modal.open({
+        parent: this,
+        component: Drawdown,
+        hasModalCard: true,
+        customClass: "custom-class",
+        trapFocus: true,
+        width: 640,
+      });
+
+      this.$store.dispatch("captureOpenModalCloseFn", result.close);
     },
   },
 };

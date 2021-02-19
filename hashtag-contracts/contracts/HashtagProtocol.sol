@@ -37,9 +37,9 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         address indexed caller
     );
 
-    event MaxStaleTokenTimeUpdated(
-        uint256 originalMaxStaleTokenTime,
-        uint256 updatedMaxStaleTokenTime
+    event OwnershipTermLengthUpdated(
+        uint256 originalOwnershipLength,
+        uint256 updatedOwnershipLength
     );
 
     event RenewalPeriodUpdated(
@@ -53,17 +53,14 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     // @notice ERC165 interface for ERC721 Metadata
     bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
 
-    // @notice Token name
+    /// @notice Token name
     string public name = "Hashtag Protocol";
 
-    // @notice Token symbol
+    /// @notice Token symbol
     string public symbol = "HASHTAG";
 
-    /// @notice minimum time in seconds that a hashtag is not reclaimable
-    uint256 public maxStaleTokenTime = 730 days;
-
-    /// @notice the time after maxStaleTokenTime which the owner can still reclaim ownership
-    uint256 public renewalGracePeriod = 30 days;
+    /// @notice minimum time in seconds that a hashtag is owned
+    uint256 public ownershipTermLength = 730 days;
 
     // @notice Function selector for ERC721Receiver.onERC721Received
     // 0x150b7a02
@@ -81,36 +78,38 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     // @notice Mapping of owner => operator => approved
     mapping(address => mapping(address => bool)) internal operatorApprovals;
 
-    // @notice baseURI for looking up up tokenURI for a token
+    /// @notice baseURI for looking up up tokenURI for a token
     string public baseURI = "https://api.com/v1/";
 
     /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
         address originalPublisher;
         address creator;
-        uint256 lastTransferTime;
         string displayVersion;
     }
 
-    // @notice current tip of the hashtag tokens (and total supply) as minted consecutively
+    /// @notice current tip of the hashtag tokens (and total supply) as minted consecutively
     uint256 public tokenPointer;
 
-    // @notice lookup of Hashtag info from token ID
+    /// @notice lookup of Hashtag info from token ID
     mapping(uint256 => Hashtag) public tokenIdToHashtag;
 
-    // @notice lookup of (lowercase) Hashtag string to token ID
+    /// @notice lookup of (lowercase) Hashtag string to token ID
     mapping(string => uint256) public hashtagToTokenId;
 
-    // @notice core Hashtag protocol account
+    /// @notice Last time a token was interacted with
+    mapping(uint256 => uint256) public tokenIdToLastTransferTime;
+
+    /// @notice core Hashtag protocol account
     address payable public platform;
 
-    // @notice minimum hashtag length
+    /// @notice minimum hashtag length
     uint256 constant public hashtagMinStringLength = 3;
 
-    // @notice maximum hashtag length
+    /// @notice maximum hashtag length
     uint256 constant public hashtagMaxStringLength = 32;
 
-    // @notice access controls smart contract
+    /// @notice access controls smart contract
     HashtagAccessControls public accessControls;
 
     /**
@@ -145,21 +144,12 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     }
 
     /**
-     * @notice Admin method for updating the renewal period
-     * @param _renewalPeriod the renewal period in seconds after becoming eligible for resetting
+     * @notice Admin method for updating the ownership length for all hashtag tokens i.e. a global param
+     * @param _ownershipTermLength New length in unix epoch seconds
     */
-    function setRenewalPeriod(uint256 _renewalPeriod) onlyAdmin public {
-        emit RenewalPeriodUpdated(renewalGracePeriod, _renewalPeriod);
-        renewalGracePeriod = _renewalPeriod;
-    }
-
-    /**
-     * @notice Admin method for updating the max stale token time
-     * @param _maxStaleTokenTime the max time in seconds a token can not move before being able to be reset
-    */
-    function setMaxStaleTokenTime(uint256 _maxStaleTokenTime) onlyAdmin public {
-        emit MaxStaleTokenTimeUpdated(maxStaleTokenTime, _maxStaleTokenTime);
-        maxStaleTokenTime = _maxStaleTokenTime;
+    function setOwnershipTermLength(uint256 _ownershipTermLength) onlyAdmin public {
+        emit OwnershipTermLengthUpdated(ownershipTermLength, _ownershipTermLength);
+        ownershipTermLength = _ownershipTermLength;
     }
 
     /**
@@ -183,7 +173,6 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         tokenIdToHashtag[tokenId] = Hashtag({
         displayVersion : _hashtag,
         originalPublisher : _publisher,
-        lastTransferTime : block.timestamp,
         creator : _creator
         });
 
@@ -237,68 +226,6 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     */
     function getCreatorAddress(uint256 _tokenId) public view returns (address _creator) {
         return tokenIdToHashtag[_tokenId].creator;
-    }
-
-    /**
-     * @notice Private method used for validating a hashtag before minting
-     * @dev A series of assertions are performed reverting the transaction for any validation violations
-     * @param _hashtag Proposed hashtag string
-    */
-    function _assertHashtagIsValid(string memory _hashtag) private view returns (string memory) {
-        bytes memory hashtagStringBytes = bytes(_hashtag);
-        require(
-            hashtagStringBytes.length >= hashtagMinStringLength && hashtagStringBytes.length <= hashtagMaxStringLength,
-            "Invalid format: Hashtag must not exceed length requirements"
-        );
-
-        require(hashtagStringBytes[0] == 0x23, "Must start with #");
-
-        string memory hashtagKey = _lower(_hashtag);
-        require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
-
-        uint256 alphabetCharCount = 0;
-        // start from first char after #
-        for (uint256 i = 1; i < hashtagStringBytes.length; i++) {
-            bytes1 char = hashtagStringBytes[i];
-
-            // Generally ensure that the character is alpha numeric
-            bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
-            !(char >= 0x41 && char <= 0x5A) && //A-Z
-            !(char >= 0x61 && char <= 0x7A);
-            //a-z
-
-            require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #");
-
-            // Should the char be alphabetic, increment alphabetCharCount
-            if ((char >= 0x41 && char <= 0x5A) || (char >= 0x61 && char <= 0x7A)) {
-                alphabetCharCount = alphabetCharCount.add(1);
-            }
-        }
-
-        // Ensure alphabetCharCount is at least 1
-        require(alphabetCharCount >= 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
-
-        return hashtagKey;
-    }
-
-    /**
-     * @notice Converts a string to its lowercase equivalent
-     * @param _base String to convert
-     * @return string Lowercase version of string supplied
-    */
-    function _lower(string memory _base) private pure returns (string memory) {
-        bytes memory bStr = bytes(_base);
-        bytes memory bLower = new bytes(bStr.length);
-        for (uint i = 0; i < bStr.length; i++) {
-            // Uppercase character...
-            if ((bStr[i] >= 0x41) && (bStr[i] <= 0x5A)) {
-                // So we add 32 to make it lowercase
-                bLower[i] = bytes1(uint8(bStr[i]) + 32);
-            } else {
-                bLower[i] = bStr[i];
-            }
-        }
-        return string(bLower);
     }
 
     /**
@@ -520,61 +447,30 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         _transferFrom(_tokenId, approvedAddress, _to, _from);
     }
 
-    /// @notice Internal method for handling token transfer flow, has special case handling for platform transfers as
-    ///         to not change its balance which is always set to zero by design
-    /// @param _tokenId The identifier for an NFT
-    /// @param _approvedAddress The approval address, can set set to zero address
-    /// @param _to Who will be receiving the token after transfer
-    /// @param _from Who is transferring the token
-    function _transferFrom(uint256 _tokenId, address _approvedAddress, address _to, address _from) internal {
-        if (_approvedAddress != address(0)) {
-            approvals[_tokenId] = address(0);
-        }
-
-        owners[_tokenId] = _to;
-
-        if (_from != platform) {
-            balances[_from] = balances[_from].sub(1);
-        }
-
-        // Ensure last transfer time is set to now
-        tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
-
-        if (_to != platform) {
-            balances[_to] = balances[_to].add(1);
-        }
-
-        emit Transfer(
-            _from,
-            _to,
-            _tokenId
-        );
-    }
-
     /// @notice Renews a hash tag by setting its last transfer time to be now
     /// @dev Can only be called by token owner
     /// @param _tokenId The identifier for an NFT
     function renewHashtag(uint256 _tokenId) external {
         require(_msgSender() == ownerOf(_tokenId), "renewHashtag: Invalid sender");
 
-        tokenIdToHashtag[_tokenId].lastTransferTime = block.timestamp;
+        tokenIdToLastTransferTime[_tokenId] = block.timestamp;
 
         emit HashtagRenewed(_tokenId, _msgSender());
     }
 
-    /// @notice Resets a hash tag, transferring ownership back to the platform
-    /// @dev Can only be called by token owner
-    /// @dev Can only be called when within renewal period
-    /// @param _tokenId The identifier for an NFT
-    function resetHashtag(uint256 _tokenId) external {
-        require(exists(_tokenId), "resetHashtag: Invalid token ID");
-        require(ownerOf(_tokenId) != platform, "resetHashtag: Already owned by the platform");
+    /// @notice Recycling a hashtag i.e. transferring ownership back to the platform due to stale ownership
+    /// @dev Token must exist, be not already be owned by platform and time of TX must be greater than lastTransferTime
+    /// @param _tokenId The identifier for the hashtag being recycled
+    function recycleHashtag(uint256 _tokenId) external {
+        require(exists(_tokenId), "recycleHashtag: Invalid token ID");
+        require(ownerOf(_tokenId) != platform, "recycleHashtag: Already owned by the platform");
 
-        uint256 lastTransferTime = tokenIdToHashtag[_tokenId].lastTransferTime;
+        uint256 lastTransferTime = tokenIdToLastTransferTime[_tokenId];
         require(
-            lastTransferTime.add(maxStaleTokenTime.add(renewalGracePeriod)) < block.timestamp,
-            "resetHashtag: Token not eligible for reset yet"
+            lastTransferTime.add(ownershipTermLength) < block.timestamp,
+            "recycleHashtag: Token not eligible for recycling yet"
         );
+
         _transferFrom(_tokenId, getApproved(_tokenId), platform, ownerOf(_tokenId));
 
         emit HashtagReset(_tokenId, _msgSender());
@@ -635,6 +531,99 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
         // solhint-disable-next-line no-inline-assembly
         assembly {codehash := extcodehash(account)}
         return (codehash != accountHash && codehash != 0x0);
+    }
+
+    /**
+     * @notice Private method used for validating a hashtag before minting
+     * @dev A series of assertions are performed reverting the transaction for any validation violations
+     * @param _hashtag Proposed hashtag string
+    */
+    function _assertHashtagIsValid(string memory _hashtag) private view returns (string memory) {
+        bytes memory hashtagStringBytes = bytes(_hashtag);
+        require(
+            hashtagStringBytes.length >= hashtagMinStringLength && hashtagStringBytes.length <= hashtagMaxStringLength,
+            "Invalid format: Hashtag must not exceed length requirements"
+        );
+
+        require(hashtagStringBytes[0] == 0x23, "Must start with #");
+
+        string memory hashtagKey = _lower(_hashtag);
+        require(hashtagToTokenId[hashtagKey] == 0, "Hashtag validation: Hashtag already owned.");
+
+        uint256 alphabetCharCount = 0;
+        // start from first char after #
+        for (uint256 i = 1; i < hashtagStringBytes.length; i++) {
+            bytes1 char = hashtagStringBytes[i];
+
+            // Generally ensure that the character is alpha numeric
+            bool isInvalidCharacter = !(char >= 0x30 && char <= 0x39) && //0-9
+            !(char >= 0x41 && char <= 0x5A) && //A-Z
+            !(char >= 0x61 && char <= 0x7A);
+            //a-z
+
+            require(!isInvalidCharacter, "Invalid character found: Hashtag may only contain characters A-Z, a-z, 0-9 and #");
+
+            // Should the char be alphabetic, increment alphabetCharCount
+            if ((char >= 0x41 && char <= 0x5A) || (char >= 0x61 && char <= 0x7A)) {
+                alphabetCharCount = alphabetCharCount.add(1);
+            }
+        }
+
+        // Ensure alphabetCharCount is at least 1
+        require(alphabetCharCount >= 1, "Invalid format: Hashtag must contain at least 1 alphabetic character.");
+
+        return hashtagKey;
+    }
+
+    /**
+     * @notice Converts a string to its lowercase equivalent
+     * @param _base String to convert
+     * @return string Lowercase version of string supplied
+    */
+    function _lower(string memory _base) private pure returns (string memory) {
+        bytes memory bStr = bytes(_base);
+        bytes memory bLower = new bytes(bStr.length);
+        for (uint i = 0; i < bStr.length; i++) {
+            // Uppercase character...
+            if ((bStr[i] >= 0x41) && (bStr[i] <= 0x5A)) {
+                // So we add 32 to make it lowercase
+                bLower[i] = bytes1(uint8(bStr[i]) + 32);
+            } else {
+                bLower[i] = bStr[i];
+            }
+        }
+        return string(bLower);
+    }
+
+    /// @notice Internal method for handling token transfer flow, has special case handling for platform transfers as
+    ///         to not change its balance which is always set to zero by design
+    /// @param _tokenId The identifier for an NFT
+    /// @param _approvedAddress The approval address, can set set to zero address
+    /// @param _to Who will be receiving the token after transfer
+    /// @param _from Who is transferring the token
+    function _transferFrom(uint256 _tokenId, address _approvedAddress, address _to, address _from) private {
+        if (_approvedAddress != address(0)) {
+            approvals[_tokenId] = address(0);
+        }
+
+        owners[_tokenId] = _to;
+
+        if (_from != platform) {
+            balances[_from] = balances[_from].sub(1);
+        }
+
+        // Ensure last transfer time is set to now
+        tokenIdToLastTransferTime[_tokenId] = block.timestamp;
+
+        if (_to != platform) {
+            balances[_to] = balances[_to].add(1);
+        }
+
+        emit Transfer(
+            _from,
+            _to,
+            _tokenId
+        );
     }
 
     function _checkOnERC721Received(address from, address to, uint256 tokenId, bytes memory _data)

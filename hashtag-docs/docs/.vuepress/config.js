@@ -58,6 +58,11 @@ module.exports = {
   },
   markdown: {
     lineNumbers: true,
+    anchor: {
+      permalink: true,
+      permalinkBefore: false,
+      permalinkSymbol: "",
+    },
   },
   configureWebpack: {
     resolve: {

@@ -1,5 +1,5 @@
 <template>
-  <b-navbar :fixed-top="true" class="container">
+  <b-navbar>
     <template slot="brand">
       <b-navbar-item tag="a" :href="this.website">
         <img
