@@ -36,6 +36,7 @@
                           <td class="has-text-weight-bold">Token ID</td>
                           <td>
                             <HashtagTokenId
+                              :hashtag="hashtagsByName[0].displayHashtag"
                               :value="hashtagsByName[0].id"
                             ></HashtagTokenId>
                           </td>
