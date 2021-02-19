@@ -38,6 +38,7 @@ export function handleMintHashtag(event: MintHashtag): void {
   hashtagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
 
   hashtagEntity.owner = hashtagContract.platform();
+  hashtagEntity.creator = hashtag.value1;
   hashtagEntity.publisher = event.params.publisher;
   hashtagEntity.timestamp = event.block.timestamp;
   hashtagEntity.tagCount = BigInt.fromI32(0);

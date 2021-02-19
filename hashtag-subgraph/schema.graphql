@@ -5,6 +5,7 @@ type Hashtag @entity {
   hashtag: String!
   hashtagWithoutHash: String!
   owner: Bytes!
+  creator: Bytes!
   publisher: Bytes!
   timestamp: BigInt!
   tagCount: BigInt!
