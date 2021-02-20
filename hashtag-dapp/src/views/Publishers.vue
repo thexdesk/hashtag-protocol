@@ -1,12 +1,6 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+    <Header />
     <section class="main">
       <div class="container">
         <h1 class="title is-1">Publishers</h1>
