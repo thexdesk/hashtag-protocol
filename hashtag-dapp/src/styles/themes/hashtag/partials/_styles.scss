@@ -12,23 +12,29 @@ a:hover {
   display: flex;  /* use the flex model */
   min-height: 100%;
   flex-direction: column;
+
+  section.hero {
+    padding-top: 0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  &.dashboard {
+    section.hero {
+      padding-bottom: 29rem;
+      margin-bottom: -27rem;
+
+      @include from($tablet) {
+        padding-bottom: 17rem;
+        margin-bottom: -15rem;
+      }
+    }
+  }
 }
 
 .content-wrapper,
 section {
   flex: 1;
-}
-
-@mixin my-touch {
-  @media screen and (max-width: $navbar-breakpoint - 1px) {
-    @content;
-  }
-}
-
-@mixin my-desktop {
-  @media screen and (min-width: $navbar-breakpoint) {
-    @content;
-  }
 }
 
 .container {
@@ -94,4 +100,16 @@ img.nft-thumb {
 
 .bn-onboard-modal {
   z-index: 50;
+}
+
+@mixin my-touch {
+  @media screen and (max-width: $navbar-breakpoint - 1px) {
+    @content;
+  }
+}
+
+@mixin my-desktop {
+  @media screen and (min-width: $navbar-breakpoint) {
+    @content;
+  }
 }
