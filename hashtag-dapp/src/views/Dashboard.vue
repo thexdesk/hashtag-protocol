@@ -1,130 +1,23 @@
 <template>
-  <div class="body">
+  <div class="body dashboard">
     <div class="content-wrapper">
-      <section class="hero dash has-background-grey-dark is-bold">
-        <div class="hero-head">
-          <div class="container">
-            <Header></Header>
-          </div>
-        </div>
-        <div class="hero-body">
-          <div class="container">
-            <div class="columns is-tablet is-centered">
-              <div class="column is-5 is-12-mobile">
-                <article class="tile is-child">
-                  <p class="title is-4 has-text-white">Create a hashtag</p>
-                  <template>
-                    <section>
-                      <b-field v-if="hashtags">
-                        <b-taginput
-                          v-model="hashtagInput"
-                          :data="hashtagInputTags"
-                          attached
-                          autocomplete
-                          :allow-new="true"
-                          maxtags="1"
-                          field="name"
-                          ref="taginput"
-                          icon="pound"
-                          size="is-medium"
-                          :has-counter="false"
-                          placeholder="Enter hashtag"
-                          @typing="getFilteredTags"
-                          :before-adding="validateTag"
-                        >
-                          <template slot-scope="props">
-                            <b-taglist attached>
-                              <b-tag type="is-primary" size="is-medium"
-                                >{{ props.option.displayHashtag }}
-                              </b-tag>
-                              <b-tag type="is-dark" size="is-medium"
-                                >{{ props.option.tagCount }}
-                              </b-tag>
-                            </b-taglist>
-                          </template>
-                          <template slot="empty">
-                            <span class="new-hashtag"
-                              >Unique hashtag! Press enter to continue...</span
-                            >
-                          </template>
-                          <template slot="selected" slot-scope="props">
-                            <div v-bind:class="{ box: isNewTag() }">
-                              <b-tag
-                                v-for="(tag, index) in props.tags"
-                                :key="index"
-                                :tabstop="false"
-                                ellipsis
-                                attached
-                                type="is-primary"
-                                size="is-medium"
-                                closable
-                                close-type="is-dark"
-                                @close="$refs.taginput.removeTag(index, $event)"
-                              >
-                                <div v-if="tag.displayHashtag">
-                                  {{ tag.displayHashtag }}
-                                </div>
-                                <div v-else>#{{ tag }}</div>
-                              </b-tag>
-                              <div class="field">
-                                <div class="control">
-                                  <b-button
-                                    type="is-primary"
-                                    class="is-outlined"
-                                    @click="mintHashtag()"
-                                    :disabled="!isNewTag()"
-                                    v-bind:class="{ 'is-hidden': !isNewTag() }"
-                                    >Mint token
-                                  </b-button>
-                                </div>
-                              </div>
-                            </div>
-                          </template>
-                        </b-taginput>
-                      </b-field>
-                    </section>
-                  </template>
-                </article>
-              </div>
-              <div class="divider is-vertical is-hidden-mobile">OR</div>
-              <div class="divider is-hidden-tablet">OR</div>
-              <div class="column is-5 is-12-mobile">
-                <article class="tile is-child">
-                  <p class="title is-4 has-text-white">Tag some content</p>
-                  <b-field>
-                    <b-autocomplete
-                      v-model="tagForm.nftName"
-                      placeholder='Search NFTs by name; eg "Dog"'
-                      icon="magnify"
-                      field="name"
-                      size="is-medium"
-                      :loading="isFetching"
-                      @select="onNftSelected"
-                      @typing="getAsyncData"
-                      :data="nameContains"
-                    >
-                      <template slot-scope="props">
-                        <div class="media">
-                          <div class="media-left">
-                            <img
-                              :src="props.option.metadataImageURI"
-                              width="32"
-                            />
-                          </div>
-                          <div class="media-content">
-                            {{ props.option.metadataName }}
-                            <br />
-                            <small
-                              >{{ props.option.contractName }}
-                              <b>{{ props.option.tokenId }}</b>
-                            </small>
-                          </div>
-                        </div>
-                      </template>
-                    </b-autocomplete>
-                  </b-field>
-                </article>
-              </div>
+      <Header />
+      <section class="widgets">
+        <div class="container">
+          <div class="columns is-tablet is-centered">
+            <div class="column is-5 is-12-mobile">
+              <article class="tile is-child">
+                <p class="title is-4 has-text-white">Create a hashtag</p>
+                <Mint />
+              </article>
+            </div>
+            <div class="divider is-vertical is-hidden-mobile">OR</div>
+            <div class="divider is-hidden-tablet">OR</div>
+            <div class="column is-5 is-12-mobile">
+              <article class="tile is-child">
+                <p class="title is-4 has-text-white">Tag some content</p>
+                <MintAndTag />
+              </article>
             </div>
           </div>
         </div>
@@ -723,126 +616,6 @@
             </div>
           </div>
         </b-modal>
-        <b-modal
-          :active.sync="isTagModalActive"
-          :width="720"
-          scroll="keep"
-          @close="resetModalForm"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="tile is-ancestor">
-                <div class="tile is-5">
-                  <!-- 1/3 -->
-                  <div class="card">
-                    <div class="card-image">
-                      <figure class="image">
-                        <img
-                          v-if="modalForm.nft"
-                          :src="modalForm.nft.metadataImageURI"
-                          alt="Image"
-                        />
-                      </figure>
-                    </div>
-                    <div class="card-content">
-                      <span
-                        class="has-text-weight-bold is-size-6 is-block"
-                        v-if="modalForm.nft"
-                        >{{ modalForm.nft.metadataName }}</span
-                      >
-                      <Span class="is-size-7 is-block">Known Origin</Span>
-                    </div>
-                  </div>
-                </div>
-                <div class="tile">
-                  <div class="tile is-child modal-tag">
-                    <div class="content">
-                      <span class="has-text-weight-bold is-size-4 is-block"
-                        >Tag this asset</span
-                      >
-                      <span class="is-block is-size-6"
-                        >Choose a hashtag to describe this digital asset.</span
-                      >
-                    </div>
-
-                    <form>
-                      <div class="field">
-                        <div class="control">
-                          <b-taginput
-                            v-model="modalForm.hashtag"
-                            :data="hashtagInputTags"
-                            autocomplete
-                            :allow-new="true"
-                            maxtags="1"
-                            :has-counter="false"
-                            field="name"
-                            ref="tagginginput"
-                            icon="pound"
-                            placeholder="Enter a hashtag"
-                            @typing="getFilteredTags"
-                            @add="tagAssetValidation"
-                            :before-adding="validateTag"
-                          >
-                            <template slot-scope="props">
-                              <b-taglist attached>
-                                <b-tag type="is-primary" size="is-medium"
-                                  >{{ props.option.displayHashtag }}
-                                </b-tag>
-                                <b-tag type="is-dark" size="is-medium"
-                                  >{{ props.option.tagCount }}
-                                </b-tag>
-                              </b-taglist>
-                            </template>
-                            <template slot="empty">
-                              New hashtag! Press enter to continue...
-                            </template>
-                            <template slot="selected" slot-scope="props">
-                              <div v-bind:class="{ box: isTaggable }">
-                                <b-tag
-                                  v-for="(tag, index) in props.tags"
-                                  :key="index"
-                                  :tabstop="false"
-                                  ellipsis
-                                  attached
-                                  type="is-primary"
-                                  size="is-medium"
-                                  closable
-                                  close-type="is-dark"
-                                  @close="
-                                    $refs.tagginginput.removeTag(index, $event)
-                                  "
-                                >
-                                  <div v-if="tag.displayHashtag">
-                                    {{ tag.displayHashtag }}
-                                  </div>
-                                  <div v-else>#{{ tag }}</div>
-                                </b-tag>
-                                <div class="field">
-                                  <div class="control">
-                                    <b-button
-                                      type="is-primary"
-                                      class="is-outlined"
-                                      @click="tagNft()"
-                                      :disabled="!isTaggable"
-                                      v-bind:class="{
-                                        'is-hidden': !isTaggable,
-                                      }"
-                                      >Tag asset
-                                    </b-button>
-                                  </div>
-                                </div>
-                              </div>
-                            </template>
-                          </b-taginput>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </b-modal>
       </section>
     </div>
     <Footer />
@@ -857,29 +630,29 @@ import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
+import Mint from "../components/Mint";
+import MintAndTag from "../components/MintAndTag";
 import NftLink from "../components/NftLink";
-import {
-  SNAPSHOT,
-  FIRST_THOUSAND_HASHTAGS,
-  NFTS_ASSETS_NAME_CONTAINS,
-} from "@/queries";
-import { mapGetters } from "vuex";
+import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+//import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
-import HashtagValidationService from "@/services/HashtagValidationService";
-import debounce from "lodash/debounce";
+//import HashtagValidationService from "@/services/HashtagValidationService";
+//import debounce from "lodash/debounce";
 
 export default {
   name: "Hashtags",
   components: {
-    TimestampFrom,
     EthAccount,
     EthAmount,
-    MarkdownDoc,
     Footer,
     Hashtag,
     Header,
     HelpModal,
+    MarkdownDoc,
+    Mint,
+    MintAndTag,
     NftLink,
+    TimestampFrom,
   },
   data() {
     return {
@@ -889,35 +662,8 @@ export default {
       isTopOwnersModalActive: false,
       isPopHashtagsModalActive: false,
       isTopTaggersModalActive: false,
-      isTagModalActive: false,
       isCustom: false,
-      modalForm: {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-        mintAndTag: false,
-      },
-      hashtagInput: null,
-      hashtagInputTags: [],
-      nameContains: [],
-      isFetching: false,
-      tagForm: {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      },
     };
-  },
-  computed: {
-    ...mapGetters(["supportedNfts", "nftAssetCache"]),
-    isTaggable() {
-      return (
-        this.modalForm.nftName &&
-        this.modalForm.nftName.length > 0 &&
-        this.modalForm.hashtag &&
-        this.modalForm.hashtag.length > 0
-      );
-    },
   },
   apollo: {
     hashtags: {
@@ -949,136 +695,15 @@ export default {
       pollInterval: 1000, // ms
     },
   },
-  methods: {
-    getAsyncData: debounce(async function (name) {
-      if (!name.length) {
-        this.nameContains = [];
-        return;
-      }
-
-      const { data } = await this.$apollo.query({
-        query: NFTS_ASSETS_NAME_CONTAINS,
-        client: "nftsClient",
-        variables: {
-          first: 100,
-          name: name,
-        },
-      });
-
-      this.nameContains = data.nameContains;
-    }, 300),
-    async tagNft() {
-      if (this.modalForm.mintAndTag) {
-        await this.$store.dispatch("mintAndTag", {
-          hashtag: this.modalForm.hashtag[0],
-          nftContract: this.modalForm.nft.contractAddress,
-          nftId: this.modalForm.nft.tokenId,
-        });
-      } else {
-        const hashtag = this.modalForm.hashtag[0];
-        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
-        if (hashtagValue.charAt(0) !== "#") {
-          hashtagValue = `#${hashtagValue}`;
-        }
-
-        const hashtags = this.hashtags || [];
-        const findExistingHashtagResult = hashtags.filter(
-          (tag) => tag.name.toLowerCase() === hashtagValue.toLowerCase()
-        );
-
-        await this.$store.dispatch("tag", {
-          hashtagId: findExistingHashtagResult[0].id,
-          nftContract: this.modalForm.nft.contractAddress,
-          nftId: this.modalForm.nft.tokenId,
-        });
-      }
-
-      this.resetModalForm();
-      this.isTagModalActive = false;
-    },
-    getFilteredTags: function (text) {
-      const hashtags = this.hashtags || [];
-      this.hashtagInputTags = hashtags.filter(
-        (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
-      );
-    },
-    isNewTag: function () {
-      if (
-        this.hashtagInput &&
-        Array.isArray(this.hashtagInput) &&
-        (typeof this.hashtagInput[0] === "string" ||
-          this.hashtagInput[0] instanceof String)
-      ) {
-        return (
-          (this.hashtags || []).filter((option) => {
-            return (
-              option.name
-                .toLowerCase()
-                .indexOf("#" + this.hashtagInput[0].toLowerCase()) >= 0
-            );
-          }).length === 0
-        );
-      }
-      return false;
-    },
-    mintHashtag() {
-      this.$store.dispatch("mint", `#${this.hashtagInput[0]}`);
-    },
-    onNftSelected(nft) {
-      this.modalForm.nft = nft;
-      this.modalForm.nftName = nft.metadataName;
-      this.isTagModalActive = true;
-    },
-    resetModalForm() {
-      this.modalForm = {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      };
-    },
-    validateTag(hashtag) {
-      return this.hashtagValidationService.validateTag(hashtag);
-    },
-    tagAssetValidation(hashtag) {
-      const tagContentValid = this.validateTag(hashtag);
-      if (tagContentValid) {
-        const hashtagValue =
-          this.modalForm.hashtag[0] && this.modalForm.hashtag[0].name
-            ? this.modalForm.hashtag[0].name
-            : this.modalForm.hashtag[0];
-
-        const isNewHashtag =
-          (this.hashtagInputTags || []).filter((option) => {
-            return (
-              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
-            );
-          }).length === 0;
-
-        this.modalForm.mintAndTag = isNewHashtag;
-      }
-    },
-  },
-  created() {
-    this.hashtagValidationService = new HashtagValidationService(
-      this.$buefy.toast
-    );
-  },
 };
 </script>
 
 <style lang="scss">
-.modal-tag {
-  padding: 1rem;
+section.widgets {
+  padding-bottom: 5rem;
 }
 
-section.hero {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 2rem;
-
-  &.dash {
-    padding-bottom: 5rem;
-    margin-bottom: -4rem;
-  }
+.modal-tag {
+  padding: 1rem;
 }
 </style>
