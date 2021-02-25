@@ -6,7 +6,7 @@ import {
 } from "../generated/ERC721HashtagRegistry/ERC721HashtagRegistry";
 
 import { HashtagProtocol } from "../generated/HashtagProtocol/HashtagProtocol";
-import { Tag, Hashtag } from "../generated/schema";
+import { Tag, Hashtag, Creator } from "../generated/schema";
 
 import {
   toLowerCase,
@@ -15,7 +15,7 @@ import {
   safeLoadOwner,
   safeLoadTagger,
   extractNftIPFSMetadata,
-  ONE,
+  ONE, ZERO, safeLoadCreator,
 } from "./helpers";
 
 /*
@@ -61,13 +61,13 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
   // this is a pre-auction state if true or post-auction if false
   if (owner.equals(platformAddress)) {
     hashtag.creatorRevenue = hashtag.creatorRevenue.plus(remainingFee);
-
-    // Update creator counts and fees
+    
+    //  Update creator counts and fees
     let creator = protocolContract.getCreatorAddress(hashtagId);
-    let ownerEntity = safeLoadOwner(creator.toHexString());
-    ownerEntity.tagCount = ownerEntity.tagCount.plus(ONE);
-    ownerEntity.tagFees = ownerEntity.tagFees.plus(remainingFee);
-    ownerEntity.save();
+    let creatorEntity = safeLoadCreator(creator.toHexString());
+    creatorEntity.revenue = creatorEntity.revenue.plus(remainingFee);
+    creatorEntity.tagCount = creatorEntity.tagCount.plus(ONE);
+    creatorEntity.save();
   } else {
     hashtag.ownerRevenue = hashtag.ownerRevenue.plus(remainingFee);
 
