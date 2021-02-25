@@ -62,7 +62,7 @@ type Platform @entity {
 
 type Creator @entity {
   id: ID!
-  hashtagCount: BigInt!
+  mintCount: BigInt!
   tagCount: BigInt!
   revenue: BigInt!
 }
