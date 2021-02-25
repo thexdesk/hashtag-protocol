@@ -1,12 +1,6 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+    <Header />
     <section class="main" v-if="hashtagsByName && hashtagsByName[0]">
       <div class="container">
         <h1 class="title is-1">{{ hashtagsByName[0].displayHashtag }}</h1>
@@ -36,6 +30,7 @@
                           <td class="has-text-weight-bold">Token ID</td>
                           <td>
                             <HashtagTokenId
+                              :hashtag="hashtagsByName[0].displayHashtag"
                               :value="hashtagsByName[0].id"
                             ></HashtagTokenId>
                           </td>
@@ -412,10 +407,14 @@ export default {
     Pagination,
   },
   data() {
+    let routeHashtag = this.$route.params.hashtag;
+    routeHashtag = routeHashtag.replace("#", "");
+    routeHashtag = routeHashtag.toLowerCase();
+
     return {
       activeTab: null,
       erc721: "http://erc721.org",
-      hashtag: this.$route.params.hashtag,
+      hashtag: routeHashtag,
       hashtagsByName: null,
       isOverviewModalActive: false,
       isSummaryModalActive: false,
@@ -432,7 +431,7 @@ export default {
       query: PAGED_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          hashtag: this.hashtag,
           first: this.first,
           skip: this.skip,
         };
@@ -443,7 +442,7 @@ export default {
       query: ALL_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          hashtag: this.hashtag,
         };
       },
       manual: true,
@@ -456,7 +455,7 @@ export default {
       query: HASHTAGS_BY_NAME,
       variables() {
         return {
-          name: this.hashtag && this.hashtag.toLowerCase(),
+          name: this.hashtag,
         };
       },
       pollInterval: 1000, // ms
@@ -466,6 +465,9 @@ export default {
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
     },
+  },
+  created() {
+    this.$router.replace(`/hashtag/${this.hashtag}`);
   },
 };
 </script>

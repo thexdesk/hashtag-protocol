@@ -108,13 +108,14 @@ hooks:
     build: |
       set -e
       yarn install
-      npm run build
-      # If we're not building on Platform.sh...
+      yarn build
+
+      # We are building locally.
       if ! [ -d /app/.global ]; then
-        # Move raw markdown documents hashtag-docs.
+        # Move raw markdown documents from hashtag-docs.
         ./scripts/pull-docs.sh
       fi
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
-      npm run buildenvvar
+      yarn buildenvvar

@@ -19,15 +19,11 @@ Vue.use(VueScreen, "bulma");
 
 // Connections for GraphQL.
 const hashtagClient = new ApolloClient({
-  uri:
-    process.env.VUE_APP_HASHTAG_SUBGRAPH_URL ||
-    "https://api.thegraph.com/subgraphs/name/blockrockettech/hashtag",
+  uri: process.env.VUE_APP_HASHTAG_SUBGRAPH_URL,
 });
 
 const nftsClient = new ApolloClient({
-  uri:
-    process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL ||
-    "https://api.thegraph.com/subgraphs/name/blockrockettech/nft-tokens",
+  uri: process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL,
 });
 
 const apolloProvider = new VueApollo({
@@ -51,7 +47,7 @@ Vue.filter("shortEth", function (value) {
   if (!value) return value;
 
   return `
-  ${value.substr(0, 4)}...${value.substr(value.length - 4, value.length)}
+  ${value.substr(0, 6)}...${value.substr(value.length - 4, value.length)}
   `;
 });
 

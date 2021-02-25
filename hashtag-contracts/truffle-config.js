@@ -7,7 +7,7 @@ const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY || '';
 module.exports = {
     compilers: {
         solc: {
-            version: '0.6.6',
+            version: '0.6.12',
             settings: {
                 optimizer: {
                     enabled: true, // Default: false

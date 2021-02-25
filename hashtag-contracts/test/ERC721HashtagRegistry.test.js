@@ -75,7 +75,7 @@ describe('ERC721HashtagRegistry Tests', function () {
       await this.hashtagProtocol.connect(tagger).mint('#pussypower', publisherAddress, taggerAddress, {value: utils.parseEther('1')});
       this.hashtagId = await this.hashtagProtocol.hashtagToTokenId('#pussypower');
     });
-    
+
     it('should be able to mint and tag', async function () {
       const nftId = constants.One;
 

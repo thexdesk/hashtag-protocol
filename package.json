@@ -1,4 +1,8 @@
 {
+  "name": "hashtag-protocol-mono-repo",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.4.0",

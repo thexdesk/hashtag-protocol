@@ -1,0 +1,129 @@
+html, body {
+  height: 100%;
+  background-color: $footer-background-color;
+}
+
+.body {
+  display: flex;  /* use the flex model */
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1;
+  background-color: $white;
+}
+
+a {
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &.header-anchor {
+    float: none;
+    margin-left: 0;
+    padding-right: 0.23em;
+    margin-top: 0.125em;
+    opacity: 0;
+    display: inline-block;
+
+    &::before {
+      font: normal normal normal 24px/1 "Material Design Icons";
+      text-rendering: auto;
+      line-height: inherit;
+      content: "\F339";
+      font-size: inherit;
+    }
+  }
+
+  // The following can be removed when app & website bulma are upgraded to 9.x
+  &.button {
+    height: 2.25em;
+    padding-bottom: calc(0.375em - 1px);
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    padding-top: calc(0.375em - 1px);
+    text-decoration: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+  line-height: 1.25;
+  color: $dark;
+  border-bottom: none;
+
+  &:hover .header-anchor {
+    opacity: 1;
+  }
+}
+
+.content {
+  h1 {
+    font-size: $size-2;
+    margin-bottom: 1.5rem;
+  }
+  h2 {
+    font-size: $size-3;
+  }
+  h3 {
+    font-size: $size-4;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    &:not(:first-child) {
+      padding-top: 84px;
+      margin-top: -50px;
+    }
+  }
+}
+
+.container {
+  @include until($desktop) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+// Padding. This can be removed in Bulma 0.9.0
+.pt-1 {
+  padding-top: 1rem;
+}
+
+.pb-1 {
+  padding-bottom: 1rem;
+}
+
+.content pre[class*="language-"] {
+  margin-bottom: 1em;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  display: block;
+  overflow-x: auto;
+
+  tr {
+    border-top: 1px solid $grey-lighter;
+
+    &:nth-child(2n) {
+      background-color: $white-bis;
+    }
+  }
+
+  th,
+  td {
+    border: 1px solid $grey-lighter;
+    padding: 0.6em 1em;
+  }
+}

@@ -1,11 +1,12 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 
 import {
-  MintHashtag
+  MintHashtag,
+  HashtagProtocol
 } from "../generated/HashtagProtocol/HashtagProtocol";
 
 import { Hashtag } from "../generated/schema";
-import {safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
+import {toLowerCase, safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
 
 /*
  * Track the minting of a hashtag
@@ -24,10 +25,19 @@ import {safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers
  */
 export function handleMintHashtag(event: MintHashtag): void {
   let hashtagEntity = new Hashtag(event.params.tokenId.toString());
+  let hashtagContract = HashtagProtocol.bind(event.address);
+  let hashtag = hashtagContract.tokenIdToHashtag(event.params.tokenId);
 
-  hashtagEntity.name = event.params.hashtag;
+  hashtagEntity.name = hashtag.value2;
   hashtagEntity.displayHashtag = event.params.displayHashtag;
-  hashtagEntity.owner = event.params.owner;
+
+  let displayHashtag: string = event.params.displayHashtag
+  let lowerHashtag: string = toLowerCase(displayHashtag)
+
+  hashtagEntity.hashtag = lowerHashtag
+  hashtagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
+
+  hashtagEntity.owner = hashtagContract.platform();
   hashtagEntity.publisher = event.params.publisher;
   hashtagEntity.timestamp = event.block.timestamp;
   hashtagEntity.tagCount = BigInt.fromI32(0);

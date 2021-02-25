@@ -2,10 +2,6 @@
 
 ## smart contracts
 
-### dependencies
-
-Ganache (for a local blockchain)
-
 ### commands
 
 installs dependencies
@@ -13,8 +9,4 @@ installs dependencies
 
 compile and test
 `npm test`
-
-test (without compile of contracts)
-`npm run fast-test`
-
 

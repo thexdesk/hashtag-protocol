@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = {
+  extend: "@vuepress/theme-default",
   title: "Hashtag Documentation",
   description: "Hashtag Documentation",
   dest: "build",
@@ -9,20 +10,41 @@ module.exports = {
     smoothScroll: true,
     repo: "hashtag-protocol/hashtag-protocol",
     docsDir: "hashtag-docs/docs",
+    docsBranch: "stage",
     repoLabel: "Edit on Github",
     editLinks: true,
     editLinkText: "Edit on Github",
     sidebar: [
+      ["/", "Introduction"],
       {
         title: "Essentials",
         collapsable: false,
         children: [
-          ["/", "Introduction"],
-          ["/protocol-overview.html", "Protocol Overview"],
-          ["/participants.html", "Key Participants"],
-          ["/roadmap.html", "Project Roadmap"],
-          ["/hashtag-council.html", "Hashtag Council"],
-          ["/faqs.html", "FAQs"],
+          ["/essentials/", "Protocol Overview"],
+          ["/essentials/participants", "Key Participants"],
+          ["/essentials/roadmap", "Project Roadmap"],
+          ["/essentials/hashtag-council", "Hashtag Council"],
+          ["/essentials/faqs", "FAQs"],
+        ],
+      },
+      {
+        title: "Develop",
+        collapsable: false,
+        children: [
+          ["/develop/", "Getting Started"],
+          ["/develop/contracts", "Smart Contracts"],
+          ["/develop/demo-app", "Demo Application"],
+          ["/develop/docs", "Documentation"],
+          ["/develop/graphql", "GraphQL API"],
+          ["/develop/website", "Marketing Site"],
+        ],
+      },
+      {
+        title: "Implement",
+        collapsable: false,
+        children: [
+          ["/implement/", "Introduction"],
+          ["/implement/getting-started", "Getting Started"],
         ],
       },
     ],
@@ -34,6 +56,14 @@ module.exports = {
         @import "@styles/theme.scss";
       `,
   },
+  markdown: {
+    lineNumbers: true,
+    anchor: {
+      permalink: true,
+      permalinkBefore: false,
+      permalinkSymbol: "",
+    },
+  },
   configureWebpack: {
     resolve: {
       alias: {
@@ -43,6 +73,14 @@ module.exports = {
     },
   },
   plugins: [
+    [
+      "vuepress-plugin-code-copy",
+      {
+        color: "#188c4a",
+        backgroundColor: "#188c4a",
+        successText: "Copied",
+      },
+    ],
     ["@vuepress/active-header-links"],
     ["@vuepress/last-updated"],
     [
@@ -51,7 +89,7 @@ module.exports = {
         bundles: [
           {
             // Merge faq.md files in /guide/faqs into a single page.
-            path: "/faqs.html",
+            path: "/essentials/faqs.html",
             filter: (pages) => {
               // optional
               return pages.filter(({ path }) => path.includes("/faqs/"));
