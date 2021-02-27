@@ -6,59 +6,66 @@
           <Navbar></Navbar>
         </div>
       </section>
-      <div class="section is-medium has-background-white">
+      <section class="section has-background-white">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h1 class="is-size-1 title is-spaced">Build with us.</h1>
-              <div class="content is-size-5">
+              <div class="content is-size-6">
                 <p>
-                  Hashtag Protocol is an experimental, pre-product-market fit
-                  project that needs your help! We have a
-                  <a href="https://app.hashtag-protocol.org" target="_blank"
-                    >proof-of-concept demo</a
-                  >
-                  and a small team who continue to develop the project.
+                  Hashtag Protocol is an experimental, early stage project
+                  focused on helping application developers provide
+                  decentralized tagging to their application and earning revenue
+                  at the same time.
                 </p>
                 <p>
                   Besides questions, suggestions or critiques, we are especially
-                  interested in hearing from the following:
+                  interested in hearing from those who are:
                 </p>
                 <ul>
                   <li>
-                    Non-fungible token projects who would like to have their
-                    digital assets be taggable by Hashtag Tokens during the beta
-                    and subsequent mainnet launch of the project.
+                    Interested in offering decentralized asset/content tagging
+                    functionality in your application.
                   </li>
                   <li>
-                    App / dApp developers interested in offering decentralized
-                    asset/content tagging functionality to their users or their
-                    application.
+                    Interested in setting up one or more independent HASHTAG
+                    registration and auction sites (think Go Daddy but for
+                    HASHTAG tokens).
                   </li>
                   <li>
-                    Web application developers (blockchain, general UI/UX) who
-                    are interested in the mission of the project and would like
-                    to get involved “early on”.
+                    Non-fungible token projects or token owners who would like
+                    to have their digital assets be taggable on our
+                    demonstration dApp.
+                  </li>
+                  <li>
+                    Any developer interested in our vision and would like to get
+                    involved “early on”.
                   </li>
                   <li>
                     Seed stage/pre-product-market fit VCs who want to disrupt
-                    the centralized social networks' strangle hold on the vast
+                    the centralized social networks' stranglehold on the vast
                     social, informational and financial equity of stored in
                     hashtags.
                   </li>
                 </ul>
                 <p>
-                  To get in touch, please email
+                  To earn revenue from Hashtag Protocol your publisher wallet
+                  address must be whitelisted in our Protocol contracts.
+                </p>
+                <p>
+                  To whitelist your application/project or to access our
+                  repository and Discord channel or for general inquiries,
+                  please email
                   <a href="mailto:contact@hashtag-protocol.org"
                     >contact@hashtag-protocol.org</a
-                  >
+                  >.
                 </p>
               </div>
             </div>
             <div class="column is-offset-1 is-4"></div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
     <Footer />
   </div>
