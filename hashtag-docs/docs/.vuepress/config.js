@@ -81,6 +81,7 @@ module.exports = {
         successText: "Copied",
       },
     ],
+    ["vuepress-plugin-table-of-contents"],
     ["@vuepress/active-header-links"],
     ["@vuepress/last-updated"],
     [

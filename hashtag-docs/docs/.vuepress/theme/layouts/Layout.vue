@@ -23,6 +23,7 @@
               class="column is-2-desktop is-hidden-touch is-hidden-desktop-only has-background-white"
             >
               <div class="sticky">
+                <TOC />
                 <PageEdit />
               </div>
             </div>
