@@ -6,7 +6,7 @@
           <Navbar />
         </div>
       </section>
-      <section class="section main">
+      <section class="main">
         <div class="container">
           <div class="hero">
             <div class="columns is-vcentered is-desktop">
@@ -23,7 +23,9 @@
                     data for use in networks, platforms and applications.
                   </p>
                   <p>
-                    <a class="button is-primary" href="/developers"
+                    <a
+                      class="button is-medium is-primary is-outlined"
+                      href="/developers"
                       >Learn more</a
                     >
                   </p>
