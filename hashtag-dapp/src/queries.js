@@ -144,6 +144,17 @@ query ownerByAcc($id: String!) {
 }
 `);
 
+export const CREATOR_BY_ACC = gql(`
+query creatorByAcc($id: String!) {
+  creatorByAcc: creator(id: $id) {
+    id
+    mintCount
+    tagCount
+    tagFees
+  }
+}
+`);
+
 export const ALL_HASHTAG_IDS_BY_OWNER = gql`
   query allHashtagsByOwner($owner: String!) {
     allHashtagsByOwner: hashtags(where: { owner: $owner }) {
@@ -152,9 +163,31 @@ export const ALL_HASHTAG_IDS_BY_OWNER = gql`
   }
 `;
 
+export const ALL_HASHTAG_IDS_BY_CREATOR = gql`
+  query allHashtagsByCreator($creator: String!) {
+    allHashtagsByCreator: hashtags(where: { creator: $creator }) {
+      id
+    }
+  }
+`;
+
 export const PAGED_HASHTAGS_BY_OWNER = gql(`
 query hashtagsByOwner($owner: String!, $first: Int!, $skip: Int!) {
   hashtagsByOwner: hashtags(first: $first, skip: $skip, where:{ owner: $owner}) {
+    id
+    name
+    displayHashtag
+    owner
+    publisher
+    timestamp
+    tagCount
+  }
+}
+`);
+
+export const PAGED_HASHTAGS_BY_CREATOR = gql(`
+query hashtagsByCreator($creator: String!, $first: Int!, $skip: Int!) {
+  hashtagsByCreator: hashtags(first: $first, skip: $skip, where:{ creator: $creator}) {
     id
     name
     displayHashtag

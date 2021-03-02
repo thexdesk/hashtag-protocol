@@ -10,6 +10,7 @@ import Owners from "./views/Owners";
 import OwnerDetail from "./views/OwnerDetail";
 import Publishers from "./views/Publishers";
 import Creators from "./views/Creators";
+import CreatorDetail from "@/views/CreatorDetail";
 import PublisherDetail from "./views/PublisherDetail";
 import Taggers from "./views/Taggers";
 import TaggerDetail from "./views/TaggerDetail";
@@ -63,6 +64,11 @@ export const router = new VueRouter({
       path: "/creators",
       name: "creators",
       component: Creators,
+    },
+    {
+      path: "/creator/:address",
+      name: "creator-detail",
+      component: CreatorDetail,
     },
     {
       path: "/publisher/:address",
