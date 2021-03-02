@@ -65,8 +65,8 @@ export function handleHashtagRegistered(event: HashtagRegistered): void {
     //  Update creator counts and fees
     let creator = protocolContract.getCreatorAddress(hashtagId);
     let creatorEntity = safeLoadCreator(creator.toHexString());
-    creatorEntity.revenue = creatorEntity.revenue.plus(remainingFee);
     creatorEntity.tagCount = creatorEntity.tagCount.plus(ONE);
+    creatorEntity.tagFees = creatorEntity.tagFees.plus(remainingFee);
     creatorEntity.save();
   } else {
     hashtag.ownerRevenue = hashtag.ownerRevenue.plus(remainingFee);

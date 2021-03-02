@@ -64,5 +64,5 @@ type Creator @entity {
   id: ID!
   mintCount: BigInt!
   tagCount: BigInt!
-  revenue: BigInt!
+  tagFees: BigInt!
 }

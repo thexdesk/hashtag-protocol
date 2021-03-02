@@ -113,7 +113,7 @@ export function safeLoadCreator(id: string): Creator | null {
         entity = new Creator(id);
         entity.mintCount = ZERO;
         entity.tagCount = ZERO;
-        entity.revenue = ZERO;
+        entity.tagFees = ZERO;
     }
 
     return entity;
