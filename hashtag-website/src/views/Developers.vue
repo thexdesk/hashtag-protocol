@@ -6,82 +6,68 @@
           <Navbar></Navbar>
         </div>
       </section>
-      <section class="section is-medium">
+      <section class="section">
         <div class="container">
           <div class="columns is-vcentered">
-            <div class="column">
+            <div class="column is-5">
               <h1 class="is-size-1 title is-spaced">
                 Provide your users rich, decentralized content tagging stored to
                 a global, immutable database.
               </h1>
-              <div class="content is-size-5 is-spaced">
-                <p>
-                  At its core, Hashtag Protocol is conceptually simple: it’s a
-                  set of Ethereum smart contracts that enables the tokenization
-                  of hashtag strings into ERC-721 non-fungible tokens (NFTs);
-                  the “tagging” of other digital assets with those tokens; and
-                  APIs for surfacing this data for use in networks, platforms
-                  and applications.
-                </p>
-                <p>
-                  Stitched into this functionality are mechanisms to incentivise
-                  all participants of the system.
-                </p>
-              </div>
-            </div>
-            <div class="column is-5 is-offset-1">
-              <div
-                class="content has-text-centered is-size-5 is-spaced box has-background-grey-lighter"
-              >
-                <strong>Demo:</strong>&nbsp;
-                <a :href="this.app">Hashtag dApp</a>
-                <hr />
-                <strong>Technical:</strong>&nbsp; <a :href="this.docs">Docs</a>,
+              <div class="is-size-5 is-spaced">
+                <strong>Demo</strong>&nbsp;
+                <a :href="this.app" type="is-primary"> Hashtag dApp </a>
+                <br />
+                <strong>Technical</strong>&nbsp; <a :href="this.docs">Docs</a>,
                 <a :href="designNotes" download="hashtag-protocol.pdf"
                   >Design notes</a
                 >,
                 <a href="/build">Github repo</a>
-                <hr />
-                <strong>Social:</strong>&nbsp; <a href="/build">Discord</a>,
+                <br />
+                <strong>Connect</strong>&nbsp;
+                <a href="mailto:contact@hashtag-protocol.org">Email us</a>,
+                <a href="/build">Discord</a>,
                 <a href="https://hashtagprotocol.substack.com">Substack</a>
               </div>
+            </div>
+            <div class="column is-7">
+              <span class="image">
+                <img :src="require(`../assets/img/wordcloud.png`)" />
+              </span>
             </div>
           </div>
         </div>
       </section>
       <section class="section is-medium has-background-dark">
         <div class="container">
-          <div class="columns">
-            <div class="column is-4">
-              <h2 class="title is-spaced has-text-white-ter">
-                Create Hashtag Tokens
+          <div class="columns is-vcentered">
+            <div class="column is-5">
+              <h2 class="title is-size-3 is-spaced has-text-white-ter">
+                Create HASHTAG Tokens
               </h2>
               <div class="content is-medium has-text-white-ter">
                 <p>
-                  Hashtag Tokens are digital representations of hashtag text
-                  strings stored as non-fungible tokens (NFTs) on the Ethereum
-                  blockchain. Hashtag uses the
-                  <a href="http://erc721.org/">Ethereum ERC-721</a>
-                  specification for Hashtag Tokens. Tokens are created by
-                  executing the
-                  <span class="is-family-code has-text-primary">mint()</span>
-                  or
-                  <span class="is-family-code has-text-primary"
-                    >mintAndTag()</span
-                  >
-                  methods in the ERC-721 smart contract on a participating
-                  publisher application. At the present time, only whitelisted
-                  publisher addresses may mint Hashtag Tokens.
+                  Hashtag Tokens (HASHTAG) are digital representations of
+                  hashtag text strings stored as non-fungible tokens (NFTs) on
+                  the Ethereum blockchain.
                 </p>
                 <p>
-                  Minting fees, paid for by the Ethereum address minting the
-                  token, are split 70/30 between the publisher application and
-                  the Protocol.
+                  As a whitelisted publisher, you can generate revenue from
+                  HASHTAG minted in your application.
+                </p>
+                <p>
+                  <a
+                    href="https://docs.hashtag-protocol.org/essentials/#hashtag-token-hashtag"
+                    >Learn about HASHTAG cryptoeconomics</a
+                  >
+                  <span class="icon has-text-primary">
+                    <i class="mdi mdi-arrow-right mdi-18px"></i>
+                  </span>
                 </p>
               </div>
             </div>
-            <div class="column is-offset-1 is-7">
-              <div class="is-size-6 create-tokens line-numbers">
+            <div class="column is-offset-1 is-6">
+              <div class="is-size-7 create-tokens line-numbers">
                 <b-tabs type="is-boxed" :animated="false">
                   <b-tab-item label="mint()">
                     <prism language="solidity">
@@ -102,37 +88,13 @@
       <section class="section is-medium has-background-white">
         <div class="container">
           <div class="columns is-vcentered">
-            <div class="column is-5">
-              <h2 class="title is-spaced">Tag content with Hashtag Tokens</h2>
-              <div class="content is-medium">
-                <p>
-                  Hashtag provides smart contracts for linking a Hashtag Token
-                  to any online digital artifact, effectively “tagging” that
-                  content with a hashtag string. Tagging contract design allows
-                  for a digital asset to be tagged with any number of Hashtag
-                  Tokens and conversely, any single Hashtag Token to tag many
-                  digital assets.
-                </p>
-                <p>
-                  Tagging contracts collect a micro-fee paid for by the user or
-                  platform executing the contract. Tagging proceeds are shared
-                  among the Hashtag Token owner, the publisher facilitating the
-                  tagging event, and the Protocol.
-                </p>
-                <p>
-                  Our first tagging contract supports tagging other ERC-721
-                  non-fungible tokens. The Protocol roadmap includes plans to
-                  add tagging contracts for other digital/online artifacts as
-                  well as community contributed tagging contracts.
-                </p>
-              </div>
-            </div>
-            <div class="column is-offset-1">
+            <div class="column is-6">
               <div class="content">
                 <template>
                   <b-carousel
                     :autoplay="false"
                     :indicator-inside="false"
+                    animated="fade"
                     indicator-style="is-boxes"
                   >
                     <b-carousel-item
@@ -149,37 +111,57 @@
                 </template>
               </div>
             </div>
+            <div class="column is-4 is-offset-1">
+              <h2 class="title is-size-3 is-spaced">
+                Tag content with HASHTAG
+              </h2>
+              <div class="content is-medium">
+                <p>
+                  Generate revenue when users tag content in your application.
+                </p>
+                <p>
+                  Our first tagging contract supports on-chain tagging of other
+                  ERC-721 non-fungible tokens.
+                </p>
+                <p>
+                  <a
+                    href="https://docs.hashtag-protocol.org/essentials/#tagging-digital-content"
+                    alt="on-chain tagging cryptoeconomics"
+                    >Learn about on-chain tagging</a
+                  >
+                  <span class="icon has-text-primary">
+                    <i class="mdi mdi-arrow-right mdi-18px"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
       <section class="section is-medium has-background-dark subgraph">
         <div class="container">
-          <div class="columns">
+          <div class="columns is-vcentered">
             <div class="column is-5">
-              <h2 class="title is-spaced has-text-white-ter">
-                Surface and display Hashtag data in new and meaningful ways.
+              <h2 class="title is-size-3 is-spaced has-text-white-ter">
+                Surface and display tagging data in new and meaningful ways.
               </h2>
               <div class="content is-medium has-text-white-ter">
                 <p>
-                  Minting and tagging events are captured by the Hashtag
-                  Protocol Subgraph hosted on
-                  <a href="https://thegraph.com/">The Graph</a>.
+                  Minting and tagging events from all publishers are captured by
+                  the
+                  <a
+                    href="https://thegraph.com/explorer/subgraph/hashtag-protocol/hashtag-rinkby"
+                    >Hashtag Protocol subgraph</a
+                  >.
                 </p>
                 <p>
-                  Utilize our Hashtag Subgraph to rapidly query Protocol
-                  transaction data and present in your own way.
-                </p>
-                <p>
-                  See our
-                  <a href="https://docs.hashtag-protocol.org"
-                    >documentation site</a
-                  >
-                  for the full set of data lenses.
+                  Rapidly query Protocol transaction data and present in your
+                  own way.
                 </p>
               </div>
             </div>
-            <div class="column is-offset-1">
-              <div class="is-size-6 create-tokens line-numbers">
+            <div class="column is-6 is-offset-1">
+              <div class="is-size-7 create-tokens line-numbers">
                 <b-tabs type="is-boxed" :animated="false">
                   <b-tab-item label="Query">
                     <prism language="javascript">
@@ -227,99 +209,75 @@
       <section class="section is-medium has-background-white">
         <div class="container">
           <div class="columns is-vcentered">
-            <div class="column">
-              <h2 class="title is-spaced">
+            <div class="column is-5">
+              <h2 class="title is-size-3 is-spaced">
                 Generate revenue from Hashtag’s permissionless, decentralized
                 tagging protocol.
               </h2>
               <div class="content is-size-5">
                 <p>
-                  Hashtag Protocol is committed to incentivising all
-                  participants of the system.
+                  While our mission is to serve application developers, stitched
+                  into Hashtag Protocol are game-theory incentive mechanisms
+                  that harness the self-interest of at least six key market
+                  participants to drive positive network growth.
                 </p>
-                <h4>Application developer / content publisher</h4>
-                <ul>
-                  <li>
-                    Enable social & machine tagging of digital assets &
-                    artifacts to an immutable, global database.
-                  </li>
-                  <li>
-                    Earn 70% of the Token minting fee, paid by the Ethereum
-                    address minting the token, for Hashtag Tokens minted on your
-                    platform.
-                  </li>
-                  <li>
-                    Earn 20% of the content tagging micro-fee, paid by the
-                    Ethereum address tagging content, for content tagged with
-                    <em>any</em> Hashtag Token.
-                  </li>
-                  <li>
-                    Expose content & tagging data from your platform to other
-                    dApps, applications and systems.
-                  </li>
-                  <li>
-                    Surface tagging data and present it in new and meaningful
-                    ways.
-                  </li>
-                </ul>
-
-                <h4>Hashtag Token creator & owner</h4>
-                <ul>
-                  <li>
-                    Users can create (“mint”) Hashtag tokens on any
-                    participating publisher platform; in effect becoming the
-                    Hashtag "owner".
-                  </li>
-                  <li>
-                    Token Owners earn 70% of tagging micro-fee, paid by the
-                    Ethereum address tagging content, when Hashtag Tokens they
-                    own are used to tag any content on any publisher platform.
-                  </li>
-                  <li>
-                    Buy or sell Hashtag Tokens on a secondary NFT market such as
-                    OpenSea.io.
-                  </li>
-                </ul>
-
-                <h4>Content tagger</h4>
-                <ul>
-                  <li>
-                    The "content tagger" is any user or machine that executes a
-                    Hashtag Protocol tagging contract. Reasons for tagging
-                    content are the same as in centralized social media and
-                    social bookmarking platforms. In exchange for a micro-fee,
-                    tagged content is broadcast from the publisher application
-                    to a global, immutable database freely accessible by any
-                    application.
-                  </li>
-                  <li>
-                    By tagging content, taggers make easier to find within a
-                    publisher application.
-                  </li>
-                  <li>
-                    Enrich the metaverse by linking previously isolated digital
-                    artifacts
-                  </li>
-                </ul>
+                <p>
+                  <a
+                    href="https://docs.hashtag-protocol.org/essentials/participants.html"
+                  >
+                    View key participants</a
+                  >
+                  <span class="icon has-text-primary">
+                    <i class="mdi mdi-arrow-right mdi-18px"></i>
+                  </span>
+                </p>
               </div>
             </div>
-            <div class="column">
-              <div class="content has-text-centered is-size-5">
-                <h4>Token minting revenue</h4>
-                <span class="image">
-                  <img
-                    :src="require(`../assets/img/minting-revenue-sharing.svg`)"
-                  />
-                </span>
-                <hr />
-                <h4>Content tagging revenue</h4>
-                <span class="image">
-                  <img
-                    :src="require(`../assets/img/tagging-revenue-sharing.svg`)"
-                  />
-                </span>
+            <div class="column is-5 is-offset-1">
+              <span class="image">
+                <img :src="require(`../assets/img/participants.png`)" />
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section is-medium has-background-dark">
+        <div class="container">
+          <div class="columns is-vcentered">
+            <div class="column is-4"></div>
+            <div class="column is-4">
+              <h2 class="title is-spaced has-text-white-ter">
+                Build with us.<br />
+              </h2>
+              <div class="content is-medium has-text-white-ter">
+                <p>
+                  Help create a future where hashtags are mediated by a
+                  decentralized crypto-economic network rather than a few
+                  central authorities.
+                </p>
+                <div class="buttons">
+                  <b-button
+                    size="is-medium"
+                    tag="a"
+                    href="https://docs.hashtag-protocol.org"
+                    type="is-primary"
+                    outlined
+                  >
+                    View docs
+                  </b-button>
+                  <b-button
+                    size="is-medium"
+                    tag="a"
+                    href="/build"
+                    type="is-primary"
+                    outlined
+                  >
+                    Whitelist my application
+                  </b-button>
+                </div>
               </div>
             </div>
+            <div class="column is-offset-1 is-1"></div>
           </div>
         </div>
       </section>
@@ -333,6 +291,8 @@ import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Navbar from "../components/Navbar";
 import NftLink from "../components/NftLink";
+// import RevenueModel from "../components/RevenueModel";
+
 import { SNAPSHOT } from "@/queries";
 
 export default {
@@ -342,6 +302,7 @@ export default {
     Hashtag,
     Navbar,
     NftLink,
+    // RevenueModel,
   },
   data() {
     // prettier-ignore

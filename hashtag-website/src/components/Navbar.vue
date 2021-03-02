@@ -36,10 +36,10 @@ export default {
 }
 
 .navbar-menu {
-  a {
-    &.button {
-      text-decoration: none;
-    }
+  a,
+  a:hover,
+  a.button {
+    text-decoration: none;
   }
 }
 
