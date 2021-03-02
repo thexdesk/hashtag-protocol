@@ -39,149 +39,208 @@ const eventMap = {
 };
 
 let provider;
-const onboard = Onboard({
-  dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
-  networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
-  subscriptions: {
-    wallet: (wallet) => {
-      provider = new ethers.providers.Web3Provider(wallet.provider);
-
-      // store the selected wallet name to be retrieved next time the app loads
-      localStorage.setItem("selectedWallet", wallet.name);
-    },
-  },
-});
-
-// create options object
-const options = {
-  dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
-  networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
-  // Optional. See docs.
-  // transactionHandlers: [(event) => console.log(event.transaction)],
-};
-
-// initialize and connect to the api
-const blocknative = new BlocknativeSdk(options);
 
 const state = {
+  address: null,
+  network: null,
+  balance: null,
+
+  onboard: {},
+  blocknative: {},
+  wallet: {},
   web3Objects: {},
-  accrued: null,
+  signer: {},
+
   fees: {
     protocol: 0,
     tagging: ethers.utils.parseEther("0.01"),
     mintAndTag: ethers.utils.parseEther("0.01"),
   },
+  accrued: null,
+
   openModalCloseFn: () => {},
 };
 
 const getters = {
   homesteadProvider: (state) => state.web3Objects.homesteadProvider,
-  account: (state) => {
-    return state.web3Objects && state.web3Objects.account
-      ? state.web3Objects.account
-      : "Connect wallet";
-  },
   accrued: (state) => state.accrued,
+  address: (state) => state.address,
+  network: (state) => state.network,
+  balance: (state) => state.balance,
+  onboard: (state) => state.onboard,
+  wallet: (state) => state.wallet,
+  signer: (state) => state.signer,
+  blocknative: (state) => state.blocknative,
 };
 
 const actions = {
-  async bootstrap({ commit, dispatch }) {
-    // check if a wallet was previously selected and use that
-    const previouslySelectedWallet = localStorage.getItem("selectedWallet");
+  async initOnboard({ commit }) {
+    const onboard = Onboard({
+      dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
+      networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
+      subscriptions: {
+        address: (address) => {
+          commit("setWalletAddress", address);
+        },
+        network: (network) => {
+          commit("setWalletNetwork", network);
+        },
+        balance: (balance) => {
+          commit("setWalletBalance", balance);
+        },
+        wallet: (wallet) => {
+          if (wallet.provider) {
+            commit("setWallet", wallet);
 
-    let userSelectedAWallet;
-    if (
-      previouslySelectedWallet != null &&
-      previouslySelectedWallet !== "null"
-    ) {
-      userSelectedAWallet = await onboard.walletSelect(
-        previouslySelectedWallet
-      );
-    } else {
-      userSelectedAWallet = await onboard.walletSelect();
+            const ethersProvider = new ethers.providers.Web3Provider(
+              wallet.provider
+            );
+
+            provider = ethersProvider;
+
+            const signer = provider.getSigner();
+
+            console.log(signer);
+            commit("setSigner", signer);
+
+            // store the selected wallet name to be retrieved next time the app loads
+            localStorage.setItem("selectedWallet", wallet.name);
+          } else {
+            provider = null;
+            commit("setSigner", {});
+            commit("setWallet", {});
+          }
+        },
+      },
+    });
+
+    commit("setOnBoard", onboard);
+
+    //dispatch("reconnectWallet");
+    //dispatch("getTaggingFee");
+    //dispatch("getMintAndTagFee");
+    //dispatch("getAccruedEthFromRegistry");
+  },
+
+  async reconnectWallet() {
+    const previouslySelectedWallet = window.localStorage.getItem(
+      "selectedWallet"
+    );
+
+    if (previouslySelectedWallet && this.onboard) {
+      this.onboard.walletSelect(previouslySelectedWallet);
     }
+  },
 
-    // True if either a wallet was previously selected or was now selected from the modal
-    // Will be false if the user closes the modal before selecting a wallet
-    if (userSelectedAWallet) {
-      // Check wallet is ready to transact
-      const readyToTransact = await onboard.walletCheck();
+  async initBlocknative({ commit }) {
+    const options = {
+      dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
+      networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
+    };
 
-      if (readyToTransact) {
-        const onboardState = onboard.getState();
+    const blocknative = new BlocknativeSdk(options);
+    commit("setBlocknative", blocknative);
+  },
 
-        if (window.ethereum) {
-          window.ethereum.on("accountsChanged", () => {
-            dispatch("bootstrap");
-          });
-        }
+  async initProtocol({ state, commit, dispatch }) {
+    //const readyToTransact = await dispatch("connectWallet");
 
-        const signer = provider.getSigner();
-        const chain = await provider.getNetwork();
+    const readyToTransact = true;
+    if (readyToTransact) {
+      console.log("initProtocol called");
+      console.log(state.address);
+      //console.log(state.provider);
+      // const signer = state.signer;
+      const chain = state.network;
 
-        const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
-          HashtagProtocolTruffleConf,
-          chain.chainId
-        );
-        const hashtagProtocolContract = new ethers.Contract(
-          hashtagProtocolContractAddress,
-          HashtagProtocolTruffleConf.abi,
-          signer
-        );
+      const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
+        HashtagProtocolTruffleConf,
+        chain
+      );
+      const hashtagProtocolContract = new ethers.Contract(
+        hashtagProtocolContractAddress,
+        HashtagProtocolTruffleConf.abi,
+        state.signer
+      );
 
-        const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
-          ERC721HashtagRegistry,
-          chain.chainId
-        );
+      const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
+        ERC721HashtagRegistry,
+        chain
+      );
 
-        const erc721HashtagRegistryContract = new ethers.Contract(
-          erc721HashtagRegistryAddress,
-          ERC721HashtagRegistry.abi,
-          signer
-        );
+      const erc721HashtagRegistryContract = new ethers.Contract(
+        erc721HashtagRegistryAddress,
+        ERC721HashtagRegistry.abi,
+        state.signer
+      );
 
-        commit("setWeb3Objects", {
-          provider,
-          homesteadProvider: ethers.getDefaultProvider("homestead"),
-          signer,
-          chain,
-          contracts: {
-            hashtagProtocolContract,
-            erc721HashtagRegistryContract,
-          },
-          account: onboardState.address,
-          publisher: process.env.VUE_APP_PUBLISHER_ADDRESS,
-          readyToTransact,
-        });
+      commit("setWeb3Objects", {
+        provider,
+        homesteadProvider: ethers.getDefaultProvider("homestead"),
+        signer: state.signer,
+        contracts: {
+          hashtagProtocolContract,
+          erc721HashtagRegistryContract,
+        },
+        publisher: process.env.VUE_APP_PUBLISHER_ADDRESS,
+      });
 
-        dispatch("getTaggingFee");
-        dispatch("getMintAndTagFee");
-        dispatch("getAccruedEthFromRegistry");
+      dispatch("getTaggingFee");
+      dispatch("getMintAndTagFee");
+      dispatch("getAccruedEthFromRegistry");
+    }
+  },
+
+  async readyToTransact({ state }) {
+    if (!provider) {
+      const walletSelected = await state.onboard.walletSelect();
+      if (!walletSelected) {
+        return false;
       }
     }
 
-    // dispatch("cacheNFTAssets");
+    const ready = await state.onboard.walletCheck();
+    return ready;
+  },
+
+  bootstrap({ dispatch }) {
+    dispatch("initOnboard");
+    dispatch("initBlocknative");
+    dispatch("initProtocol");
+    dispatch("connectWallet");
+  },
+
+  async connectWallet({ state }) {
+    if (!provider) {
+      const walletSelected = await state.onboard.walletSelect();
+      if (!walletSelected) {
+        return false;
+      }
+    }
+
+    const ready = await state.onboard.walletCheck();
+    return ready;
   },
 
   captureOpenModalCloseFn({ commit }, openModalCloseFn) {
     commit("setOpenModalCloseFn", openModalCloseFn);
   },
 
-  async changeWallet() {
-    await onboard.walletSelect();
-  },
-
   async mint({ state, dispatch }, payload) {
-    if (!state.web3Objects.readyToTransact) {
+    if (!dispatch("readyToTransact")) {
       await dispatch("bootstrap");
     }
 
-    const { contracts, account, publisher } = state.web3Objects;
+    const { contracts, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    const tx = await hashtagProtocolContract.mint(payload, publisher, account);
+    const tx = await hashtagProtocolContract.mint(
+      payload,
+      publisher,
+      state.address
+    );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    const { emitter } = state.blocknative.transaction(tx.hash);
 
     emitter.on("all", (transaction) => {
       Toast.open({
@@ -194,12 +253,12 @@ const actions = {
   },
 
   async tag({ state, dispatch }, payload) {
-    if (!state.web3Objects.readyToTransact) {
+    if (!dispatch("readyToTransact")) {
       await dispatch("bootstrap");
     }
 
     const { web3Objects, fees } = state;
-    const { account, contracts, publisher } = web3Objects;
+    const { contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
     const { hashtagId, nftContract, nftId } = payload;
 
@@ -209,13 +268,13 @@ const actions = {
       nftContract,
       nftId,
       publisher,
-      account,
+      state.address,
       {
         value: ethers.utils.bigNumberify(fees.tagging),
       }
     );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    const { emitter } = state.blocknative.transaction(tx.hash);
 
     emitter.on("all", (transaction) => {
       Toast.open({
@@ -228,12 +287,12 @@ const actions = {
   },
 
   async mintAndTag({ state, dispatch }, payload) {
-    if (!state.web3Objects.readyToTransact) {
+    if (!dispatch("readyToTransact")) {
       await dispatch("bootstrap");
     }
 
     const { web3Objects, fees } = state;
-    const { account, contracts, publisher } = web3Objects;
+    const { contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
     const { hashtag, nftContract, nftId } = payload;
 
@@ -242,13 +301,13 @@ const actions = {
       nftContract,
       nftId,
       publisher,
-      account,
+      state.address,
       {
         value: ethers.utils.bigNumberify(fees.tagging),
       }
     );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    const { emitter } = state.blocknative.transaction(tx.hash);
 
     emitter.on("all", (transaction) => {
       Toast.open({
@@ -271,22 +330,23 @@ const actions = {
     commit("setTaggingFee", fee);
   },
 
-  async getAccruedEthFromRegistry({ commit }) {
-    const { contracts, account } = state.web3Objects;
+  async getAccruedEthFromRegistry({ state, commit }) {
+    const { contracts } = state.web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
-    const accrued = await erc721HashtagRegistryContract.totalDue(account);
+    console.log(state.address);
+    const accrued = await erc721HashtagRegistryContract.totalDue(state.address);
 
     commit("setAccrued", accrued);
   },
 
   async drawDownFromRegistry({ state, dispatch, commit }) {
-    const { contracts, account } = state.web3Objects;
+    const { contracts } = state.web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
-    const tx = await erc721HashtagRegistryContract.drawDown(account);
+    const tx = await erc721HashtagRegistryContract.drawDown(state.address);
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    const { emitter } = state.blocknative.transaction(tx.hash);
 
-    emitter.on("all", (transaction) => {
+    emitter.on("all", function (transaction) {
       Toast.open({
         duration: 5000,
         message: eventMap[transaction.eventCode].msg,
@@ -333,6 +393,38 @@ const mutations = {
 
   setOpenModalCloseFn(state, openModalCloseFn) {
     Vue.set(state, "openModalCloseFn", openModalCloseFn);
+  },
+
+  setWalletAddress(state, address) {
+    Vue.set(state, "address", address);
+  },
+
+  setWalletNetwork(state, network) {
+    Vue.set(state, "network", network);
+  },
+
+  setWalletBalance(state, balance) {
+    Vue.set(state, "balance", balance);
+  },
+
+  setWallet(state, wallet) {
+    Vue.set(state, "wallet", wallet);
+  },
+
+  setOnBoard(state, onboard) {
+    Vue.set(state, "onboard", onboard);
+  },
+
+  setProvider(state, provider) {
+    Vue.set(state, "provider", provider);
+  },
+
+  setSigner(state, signer) {
+    Vue.set(state, "signer", signer);
+  },
+
+  setBlocknative(state, blocknative) {
+    Vue.set(state, "onboard", blocknative);
   },
 };
 

@@ -43,18 +43,18 @@
       <b-navbar-item tag="div">
         <div class="buttons">
           <a
-            v-if="account !== 'Connect wallet'"
+            v-if="address !== null"
             class="button is-primary is-outlined"
             @click="changeWallet"
           >
-            {{ account | shortEth }}
+            {{ address | shortEth }}
           </a>
           <a v-else class="button is-primary is-outlined" @click="connect">
-            {{ account }}
+            Connect wallet
           </a>
         </div>
       </b-navbar-item>
-      <b-navbar-item tag="div" v-if="account !== 'Connect wallet'">
+      <b-navbar-item tag="div" v-if="address !== null">
         <div class="buttons">
           <a class="button is-primary is-outlined" @click="drawdown">
             {{ accrued | toEth }} Ξ
@@ -105,10 +105,31 @@ export default {
   created() {
     this.setCurrentMenu();
   },
-  computed: mapGetters(["account", "accrued"]),
+  async mounted() {
+    await this.initOnboard();
+    await this.reconnectWallet();
+    await this.initProtocol();
+    //this.$store.dispatch("initProtocol");
+  },
+  computed: mapGetters(["account", "accrued", "address", "onboard", "wallet"]),
   methods: {
-    connect() {
-      this.$store.dispatch("bootstrap");
+    async initOnboard() {
+      await this.$store.dispatch("initOnboard");
+    },
+    async initProtocol() {
+      await this.$store.dispatch("initProtocol");
+    },
+    async reconnectWallet() {
+      const previouslySelectedWallet = window.localStorage.getItem(
+        "selectedWallet"
+      );
+
+      if (previouslySelectedWallet && this.onboard) {
+        this.onboard.walletSelect(previouslySelectedWallet);
+      }
+    },
+    async connect() {
+      await this.$store.dispatch("connectWallet");
     },
     changeWallet() {
       this.$store.dispatch("changeWallet");
