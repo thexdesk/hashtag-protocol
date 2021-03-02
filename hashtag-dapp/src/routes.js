@@ -9,6 +9,7 @@ import NftDetail from "./views/NftDetail";
 import Owners from "./views/Owners";
 import OwnerDetail from "./views/OwnerDetail";
 import Publishers from "./views/Publishers";
+import Creators from "./views/Creators";
 import PublisherDetail from "./views/PublisherDetail";
 import Taggers from "./views/Taggers";
 import TaggerDetail from "./views/TaggerDetail";
@@ -57,6 +58,11 @@ export const router = new VueRouter({
       path: "/publishers",
       name: "publishers",
       component: Publishers,
+    },
+    {
+      path: "/creators",
+      name: "creators",
+      component: Creators,
     },
     {
       path: "/publisher/:address",

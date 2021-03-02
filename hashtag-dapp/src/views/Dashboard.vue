@@ -272,6 +272,62 @@
                       @popModalFromChild="popModal"
                       class="is-pulled-right"
                     ></help-modal>
+                    <h2 class="title is-5">Top creators</h2>
+                    <b-table :data="creators || []">
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'creators' }"
+                            >Browse creators </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props" focusable>
+                        <b-table-column field="id" label="Creator">
+                          <eth-account
+                            :value="props.row.id"
+                            route="creator-detail"
+                          ></eth-account>
+                        </b-table-column>
+                        <b-table-column
+                          field="mintedCount"
+                          label="Hashtags"
+                          centered
+                        >
+                          {{ props.row.mintCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="revenue"
+                          label="Revenue"
+                          centered
+                        >
+                          <eth-amount :value="props.row.tagFees"></eth-amount>
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <help-modal
+                      modal="isTopPublishersModalActive"
+                      @popModalFromChild="popModal"
+                      class="is-pulled-right"
+                    ></help-modal>
                     <h2 class="title is-5">Top publishers</h2>
                     <b-table :data="publishers || []">
                       <template slot="footer" v-if="!isCustom">
@@ -320,6 +376,10 @@
                   </article>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
               <div class="tile is-parent is-6 is-12-mobile">
                 <div class="tile is-child box">
                   <article class="is-white">
@@ -376,10 +436,6 @@
                   </article>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="tile is-ancestor">
-            <div class="tile is-horizontal">
               <div class="tile is-parent is-6 is-12-mobile">
                 <div class="tile is-child box">
                   <article class="is-white">
@@ -419,6 +475,10 @@
                   </article>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
               <div class="tile is-parent is-6 is-12-mobile">
                 <div class="tile is-child box">
                   <help-modal
@@ -927,6 +987,10 @@ export default {
     publishers: {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
+    },
+    creators: {
+      query: SNAPSHOT,
+      pollInterval: 1000,
     },
     owners: {
       query: SNAPSHOT,

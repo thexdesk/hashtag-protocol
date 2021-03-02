@@ -53,6 +53,12 @@ export const SNAPSHOT = gql(`
             id
             tagCount
         }
+        creators(first: 10, orderBy: tagCount, orderDirection: desc) {
+            id
+            mintCount
+            tagCount 
+            tagFees
+        }
     }
 `);
 
@@ -344,6 +350,24 @@ query pagedPublishers($first: Int!, $skip: Int!) {
         tagFees
     }
 }`);
+
+export const PAGED_CREATORS = gql(`
+query pagedCreators($first: Int!, $skip: Int!) {
+    pagedCreators: creators(first: $first, skip: $skip, orderBy: tagCount, orderDirection: desc) {
+        id
+        mintCount
+        tagCount
+        tagFees
+    }
+}`);
+
+export const ALL_CREATORS = gql`
+  query {
+    creators {
+      id
+    }
+  }
+`;
 
 export const ALL_OWNER_ADDRESSES = gql`
   query {
