@@ -53,6 +53,12 @@ export const SNAPSHOT = gql(`
             id
             tagCount
         }
+        creators(first: 10, orderBy: tagCount, orderDirection: desc) {
+            id
+            mintCount
+            tagCount 
+            tagFees
+        }
     }
 `);
 
@@ -96,12 +102,14 @@ query hashtagsByName($name: String!) {
         name
         displayHashtag
         owner
+        creator
         publisher
         timestamp
         tagCount
         ownerRevenue
         publisherRevenue
         protocolRevenue
+        creatorRevenue
    }
 }
 `);
@@ -136,6 +144,17 @@ query ownerByAcc($id: String!) {
 }
 `);
 
+export const CREATOR_BY_ACC = gql(`
+query creatorByAcc($id: String!) {
+  creatorByAcc: creator(id: $id) {
+    id
+    mintCount
+    tagCount
+    tagFees
+  }
+}
+`);
+
 export const ALL_HASHTAG_IDS_BY_OWNER = gql`
   query allHashtagsByOwner($owner: String!) {
     allHashtagsByOwner: hashtags(where: { owner: $owner }) {
@@ -144,9 +163,31 @@ export const ALL_HASHTAG_IDS_BY_OWNER = gql`
   }
 `;
 
+export const ALL_HASHTAG_IDS_BY_CREATOR = gql`
+  query allHashtagsByCreator($creator: String!) {
+    allHashtagsByCreator: hashtags(where: { creator: $creator }) {
+      id
+    }
+  }
+`;
+
 export const PAGED_HASHTAGS_BY_OWNER = gql(`
 query hashtagsByOwner($owner: String!, $first: Int!, $skip: Int!) {
   hashtagsByOwner: hashtags(first: $first, skip: $skip, where:{ owner: $owner}) {
+    id
+    name
+    displayHashtag
+    owner
+    publisher
+    timestamp
+    tagCount
+  }
+}
+`);
+
+export const PAGED_HASHTAGS_BY_CREATOR = gql(`
+query hashtagsByCreator($creator: String!, $first: Int!, $skip: Int!) {
+  hashtagsByCreator: hashtags(first: $first, skip: $skip, where:{ creator: $creator}) {
     id
     name
     displayHashtag
@@ -173,6 +214,7 @@ query hashtagsByPublisher($publisher: String!, $first: Int!, $skip: Int!) {
     name
     displayHashtag
     owner
+    creator
     publisher
     timestamp
     tagCount
@@ -289,6 +331,7 @@ query pagedHashtags($first: Int!, $skip: Int!) {
             name
             displayHashtag
             owner
+            creator
             publisher
             timestamp
             tagCount
@@ -341,6 +384,24 @@ query pagedPublishers($first: Int!, $skip: Int!) {
     }
 }`);
 
+export const PAGED_CREATORS = gql(`
+query pagedCreators($first: Int!, $skip: Int!) {
+    pagedCreators: creators(first: $first, skip: $skip, orderBy: tagCount, orderDirection: desc) {
+        id
+        mintCount
+        tagCount
+        tagFees
+    }
+}`);
+
+export const ALL_CREATORS = gql`
+  query {
+    creators {
+      id
+    }
+  }
+`;
+
 export const ALL_OWNER_ADDRESSES = gql`
   query {
     owners {
@@ -384,6 +445,7 @@ export const FIRST_THOUSAND_HASHTAGS = gql(`
       name
       displayHashtag
       owner
+      creator
       publisher
       timestamp
       tagCount

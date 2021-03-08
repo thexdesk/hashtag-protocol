@@ -1,14 +1,21 @@
 <template>
   <div class="body">
-    <Header />
-    <section class="main" v-if="foundPublisher">
+    <section class="hero has-background-grey-dark is-bold">
+      <div class="hero-head">
+        <div class="container">
+          <Header></Header>
+        </div>
+      </div>
+    </section>
+    <section class="main" v-if="creatorByAcc">
       <div class="container">
-        <h1 class="title is-1">Publisher: {{ foundPublisher.name }}</h1>
+        <h1 class="title is-1">
+          Creator: <eth-account :value="creator"></eth-account>
+        </h1>
         <h2 class="subtitle">
-          Hashtag Protocol Publisher
+          Hashtag Protocol Token Creator
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
-            <router-link :to="{ name: 'publishers' }"
-              >Browse publishers</router-link
+            <router-link :to="{ name: 'creators' }">Browse creators</router-link
             >&nbsp;
             <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
           </span>
@@ -17,40 +24,20 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isPubInfoModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
-                <h2 class="title is-4">Publisher information</h2>
+                <!--                <help-modal-->
+                <!--                  modal="isOwnerInfoModalActive"-->
+                <!--                  @popModalFromChild="popModal"-->
+                <!--                  class="is-pulled-right"-->
+                <!--                ></help-modal>-->
+                <h2 class="title is-4">Creator information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
-                        <tr>
-                          <td class="has-text-weight-bold">Name</td>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Creator address</td>
                           <td>
-                            {{ foundPublisher.name }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="has-text-weight-bold">
-                            Publisher address
-                          </td>
-                          <td>
-                            <eth-account
-                              :value="foundPublisher.address"
-                            ></eth-account>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="has-text-weight-bold">Official website</td>
-                          <td>
-                            <a v-bind:href="foundPublisher.website"
-                              >{{ foundPublisher.website }}
-                              <b-icon icon="open-in-new" size="is-small">
-                              </b-icon
-                            ></a>
+                            <eth-account :value="creator"></eth-account>
                           </td>
                         </tr>
                       </tbody>
@@ -61,46 +48,43 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
-                <h2 class="title is-4">Market summary for KnownOrigin</h2>
-                <div class="b-table" v-if="publisherByAcc">
+                <!--                <help-modal-->
+                <!--                  modal="isMarketSummaryActive"-->
+                <!--                  @popModalFromChild="popModal"-->
+                <!--                  class="is-pulled-right"-->
+                <!--                ></help-modal>-->
+                <h2 class="title is-4">Market summary</h2>
+                <div class="b-table" v-if="creatorByAcc">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Hashtags</td>
                           <td>
-                            {{ publisherByAcc.mintCount }}
+                            {{ creatorByAcc.mintCount }}
                           </td>
                         </tr>
-                        <tr>
-                          <td class="has-text-weight-bold">Hashtag revenue</td>
-                          <td>Pending auction</td>
-                        </tr>
-                        <tr>
-                          <td class="has-text-weight-bold">Tag count</td>
+                        <tr draggable="false" class="">
+                          <td class="has-text-weight-bold">Tagged content</td>
                           <td>
-                            {{ publisherByAcc.tagCount }}
+                            {{ creatorByAcc.tagCount }}
                           </td>
                         </tr>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
                             <eth-amount
-                              :value="publisherByAcc.tagFees"
+                              :value="creatorByAcc.tagFees"
                             ></eth-amount>
                           </td>
                         </tr>
-                        <tr>
+                        <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Total revenue</td>
                           <td>
-                            <eth-amount
-                              :value="publisherByAcc.tagFees"
-                            ></eth-amount>
+                            <eth-amount-sum
+                              :value1="creatorByAcc.tagFees"
+                              :value2="0"
+                            ></eth-amount-sum>
                           </td>
                         </tr>
                       </tbody>
@@ -114,91 +98,65 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isActivityModalActive"
-                @popModalFromChild="popModal"
+              <b-tooltip
+                label="Help"
+                position="is-bottom"
                 class="is-pulled-right"
-              ></help-modal>
+                type="is-dark"
+              >
+                <button
+                  class="button is-white"
+                  @click="isActivityModalActive = true"
+                >
+                  <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
+                </button>
+              </b-tooltip>
               <h2 class="title is-4 is-spaced">
-                Recent activity on KnownOrigin
+                Activity for <eth-account :value="creator"></eth-account>
               </h2>
               <b-tabs v-model="activeTab" :animated="false">
                 <b-tab-item label="Hashtags">
                   <div class="b-table">
-                    <!---->
-                    <!---->
                     <div class="table-wrapper has-mobile-cards">
                       <table class="table">
                         <thead>
                           <tr>
-                            <!---->
-                            <!---->
-                            <th class="">
-                              <div class="th-wrap">
-                                Hashtag
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Hashtag</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Created
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Created</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Creator
-                                <!---->
-                              </div>
-                            </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Owner
-                                <!---->
-                              </div>
-                            </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tag count
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Publisher</div>
                             </th>
                           </tr>
-                          <!---->
-                          <!---->
                         </thead>
-                        <tbody v-if="hashtagsByPublisher">
+                        <tbody>
                           <tr
-                            v-for="hashtag in hashtagsByPublisher"
+                            draggable="false"
+                            class=""
+                            v-for="hashtag in hashtagsByCreator"
                             v-bind:key="hashtag.id"
                           >
-                            <!---->
-                            <!---->
                             <td data-label="Hashtag" class="">
                               <hashtag
                                 :value="hashtag.displayHashtag"
                               ></hashtag>
                             </td>
-                            <td data-label="Minted" class="">
+                            <td data-label="Created" class="">
                               <timestamp-from
                                 :value="hashtag.timestamp"
                               ></timestamp-from>
                             </td>
-                            <td data-label="Creator" class="">
+                            <td data-label="Publisher" class="">
                               <eth-account
-                                :value="hashtag.creator"
-                                route="owner-detail"
+                                :value="hashtag.publisher"
+                                route="publisher-detail"
                               ></eth-account>
                             </td>
-                            <td data-label="Owner" class="">Pending Auction</td>
-                            <td data-label="tag-count" class="">
-                              {{ hashtag.tagCount }}
-                            </td>
                           </tr>
-                          <!---->
-                          <!---->
                         </tbody>
-                        <!---->
                       </table>
                       <Pagination
                         :entity-count="hashtagsTab.hashtagsCount"
@@ -206,61 +164,36 @@
                         @tabSelected="hashtagsTabSelected"
                       />
                     </div>
-                    <!---->
                   </div>
                 </b-tab-item>
                 <b-tab-item label="Tagged content">
                   <div class="b-table">
-                    <!---->
-                    <!---->
                     <div class="table-wrapper has-mobile-cards">
                       <table class="table">
                         <thead>
                           <tr>
-                            <!---->
-                            <!---->
                             <th>
-                              <div class="th-wrap"><!----></div>
+                              <div class="th-wrap"></div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Asset Name
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Asset Name</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Project
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Project</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Hashtag
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Hashtag</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagged
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagged</div>
                             </th>
-                            <th class="">
-                              <div class="th-wrap">
-                                Tagger
-                                <!---->
-                              </div>
+                            <th>
+                              <div class="th-wrap">Tagger</div>
                             </th>
                           </tr>
-                          <!---->
-                          <!---->
                         </thead>
-                        <tbody v-if="tagsByPublisher">
-                          <tr
-                            v-for="tag in tagsByPublisher"
-                            v-bind:key="tag.id"
-                          >
+                        <tbody>
+                          <tr v-for="tag in tagsByTagger" v-bind:key="tag.id">
                             <td class="has-text-centered">
                               <router-link
                                 :to="{
@@ -308,7 +241,6 @@
                             </td>
                           </tr>
                         </tbody>
-                        <!---->
                       </table>
                       <Pagination
                         :entity-count="taggedContentTab.taggedCount"
@@ -316,7 +248,6 @@
                         @tabSelected="taggedContentTabSelected"
                       />
                     </div>
-                    <!---->
                   </div>
                 </b-tab-item>
               </b-tabs>
@@ -324,13 +255,13 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isPubInfoModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isOwnerInfoModalActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
             <div class="content">
               <markdown-doc
                 doc-type="help"
-                filename="publisher-detail-publisher-info"
+                filename="owner-detail-owner-info"
               ></markdown-doc>
               <b-collapse
                 :open="false"
@@ -349,14 +280,12 @@
                     :icon="!props.open ? 'menu-down' : 'menu-up'"
                   ></b-icon>
                   {{
-                    !props.open
-                      ? 'What\'s a "Publisher"?'
-                      : 'What\'s a "Publisher"?'
+                    !props.open ? 'What\'s an "Owner"?' : 'What\'s an "Owner"?'
                   }}
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="040-what-is-a-publisher"
+                  filename="050-what-is-an-owner"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -364,13 +293,13 @@
           </div>
         </div>
       </b-modal>
-      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
+      <b-modal :active.sync="isMarketSummaryActive" :width="640" scroll="keep">
         <div class="card">
           <div class="card-content">
             <div class="content">
               <markdown-doc
                 doc-type="help"
-                filename="publisher-detail-market-summary"
+                filename="owner-detail-market-summary"
               ></markdown-doc>
               <b-collapse
                 :open="false"
@@ -410,7 +339,7 @@
             <div class="content">
               <markdown-doc
                 doc-type="help"
-                filename="publisher-detail-recent-activity"
+                filename="owner-detail-recent-activity"
               ></markdown-doc>
             </div>
           </div>
@@ -425,52 +354,48 @@
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
+// import HelpModal from "../components/HelpModal";
 import {
-  ALL_HASHTAG_IDS_BY_PUBLISHER,
-  PAGED_HASHTAGS_BY_PUBLISHER,
-  PUBLISHER_BY_ACC,
-  ALL_TAG_IDS_BY_PUBLISHER,
-  PAGED_TAGS_BY_PUBLISHER,
+  PAGED_HASHTAGS_BY_CREATOR,
+  CREATOR_BY_ACC,
+  PAGED_TAGS_BY_TAGGER,
+  ALL_TAG_IDS_BY_TAGGER,
+  ALL_HASHTAG_IDS_BY_CREATOR,
 } from "../queries";
 import EthAmount from "../components/EthAmount";
+import EthAmountSum from "../components/EthAmountSum";
 import Hashtag from "../components/Hashtag";
+import TimestampFrom from "../components/TimestampFrom";
 import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
-import TimestampFrom from "../components/TimestampFrom";
-import { mapGetters } from "vuex";
-import { ethers } from "ethers";
 
 const PAGE_SIZE = 10;
 
 export default {
-  name: "PublisherDetail",
+  name: "CreatorDetail",
   components: {
-    NftLink,
-    TimestampFrom,
-    Hashtag,
+    EthAmountSum,
     EthAmount,
     EthAccount,
     Footer,
+    Hashtag,
     Header,
-    HelpModal,
+    // HelpModal,
     MarkdownDoc,
+    NftLink,
     Pagination,
+    TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      hashtagsByName: null,
-      isPubInfoModalActive: false,
-      isSummaryModalActive: false,
+      isOwnerInfoModalActive: false,
+      isMarketSummaryActive: false,
       isActivityModalActive: false,
-      publisher: this.$route.params.address,
-      publisherName: "KnownOrigin",
-      publisherRegistration: "https://#",
-      publisherWebsite: "https://knownorigin.io",
-      publisherRegURL: null,
+      creator: this.$route.params.address,
       tagsByHashtag: null,
+      hashtagsByName: null,
       hashtagsTab: {
         pageSize: PAGE_SIZE,
         first: PAGE_SIZE,
@@ -486,55 +411,55 @@ export default {
     };
   },
   apollo: {
-    publisherByAcc: {
-      query: PUBLISHER_BY_ACC,
+    creatorByAcc: {
+      query: CREATOR_BY_ACC,
       variables() {
         return {
-          id: this.publisher,
+          id: this.creator,
         };
       },
     },
-    hashtagsByPublisherCount: {
-      query: ALL_HASHTAG_IDS_BY_PUBLISHER,
-      manual: true,
+    hashtagsByCreator: {
+      query: PAGED_HASHTAGS_BY_CREATOR,
       variables() {
         return {
-          publisher: this.publisher,
-        };
-      },
-      result({ data }) {
-        this.hashtagsTab.hashtagsCount = data.hashtagIdsByPublisher.length;
-      },
-    },
-    hashtagsByPublisher: {
-      query: PAGED_HASHTAGS_BY_PUBLISHER,
-      variables() {
-        return {
-          publisher: this.publisher,
+          creator: this.creator,
           first: this.hashtagsTab.first,
           skip: this.hashtagsTab.skip,
         };
       },
     },
-    tagsByPublisherCount: {
-      query: ALL_TAG_IDS_BY_PUBLISHER,
+    allHashtagsByCreator: {
+      query: ALL_HASHTAG_IDS_BY_CREATOR,
       manual: true,
+      result({ data }) {
+        this.hashtagsTab.hashtagsCount = data.allHashtagsByCreator.length;
+      },
       variables() {
         return {
-          publisher: this.publisher,
+          creator: this.creator,
         };
       },
-      result({ data }) {
-        this.taggedContentTab.taggedCount = data.allTagIdsByPublisher.length;
-      },
     },
-    tagsByPublisher: {
-      query: PAGED_TAGS_BY_PUBLISHER,
+    tagsByTagger: {
+      query: PAGED_TAGS_BY_TAGGER,
       variables() {
         return {
-          publisher: this.publisher,
+          tagger: this.creator,
           first: this.taggedContentTab.first,
           skip: this.taggedContentTab.skip,
+        };
+      },
+    },
+    tagsByTaggerCount: {
+      query: ALL_TAG_IDS_BY_TAGGER,
+      manual: true,
+      result({ data }) {
+        this.taggedContentTab.taggedCount = data.allTagIdsByTagger.length;
+      },
+      variables() {
+        return {
+          tagger: this.creator,
         };
       },
     },
@@ -545,21 +470,6 @@ export default {
     },
     taggedContentTabSelected(pageId) {
       this.taggedContentTab.skip = pageId * PAGE_SIZE;
-    },
-  },
-  computed: {
-    ...mapGetters(["publisherDirectory"]),
-    foundPublisher() {
-      if (this.publisherDirectory) {
-        const filteredResults = this.publisherDirectory.filter(
-          (publisher) =>
-            ethers.utils.getAddress(publisher.address) ===
-            ethers.utils.getAddress(this.$route.params.address)
-        );
-        return filteredResults.length === 1 ? filteredResults[0] : null;
-      }
-
-      return null;
     },
   },
 };

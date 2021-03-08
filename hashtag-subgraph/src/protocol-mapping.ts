@@ -5,8 +5,8 @@ import {
   HashtagProtocol
 } from "../generated/HashtagProtocol/HashtagProtocol";
 
-import { Hashtag } from "../generated/schema";
-import {toLowerCase, safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE} from "./helpers";
+import { Hashtag, Creator } from "../generated/schema";
+import {toLowerCase, safeLoadOwner, safeLoadPlatform, safeLoadPublisher, ONE, ZERO, safeLoadCreator} from "./helpers";
 
 /*
  * Track the minting of a hashtag
@@ -38,6 +38,7 @@ export function handleMintHashtag(event: MintHashtag): void {
   hashtagEntity.hashtagWithoutHash = lowerHashtag.substring(1, lowerHashtag.length)
 
   hashtagEntity.owner = hashtagContract.platform();
+  hashtagEntity.creator = hashtag.value1;
   hashtagEntity.publisher = event.params.publisher;
   hashtagEntity.timestamp = event.block.timestamp;
   hashtagEntity.tagCount = BigInt.fromI32(0);
@@ -59,4 +60,9 @@ export function handleMintHashtag(event: MintHashtag): void {
   // platform
   let platform = safeLoadPlatform("platform");
   platform.save();
+
+  // creator
+  let creator = safeLoadCreator(hashtag.value1.toHexString());
+  creator.mintCount = creator.mintCount.plus(ONE);
+  creator.save();
 }
