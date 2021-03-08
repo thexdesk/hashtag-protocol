@@ -1,11 +1,17 @@
 <template>
   <div class="body">
-    <Header />
+    <section class="hero has-background-grey-dark is-bold">
+      <div class="hero-head">
+        <div class="container">
+          <Header></Header>
+        </div>
+      </div>
+    </section>
     <section class="main">
       <div class="container">
-        <h1 class="title is-1">Hashtags</h1>
+        <h1 class="title is-1">Creators</h1>
         <h2 class="subtitle">
-          Hashtag Protocol Tokens
+          Hashtag Creators
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
             <router-link :to="{ name: 'dashboard' }">Dashboard</router-link
             >&nbsp;
@@ -15,11 +21,11 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isOverviewModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
+              <!--              <help-modal-->
+              <!--                modal="isOverviewModalActive"-->
+              <!--                @popModalFromChild="popModal"-->
+              <!--                class="is-pulled-right"-->
+              <!--              ></help-modal>-->
               <h2 class="title is-4 is-spaced"></h2>
               <div class="b-table">
                 <!---->
@@ -32,37 +38,25 @@
                         <!---->
                         <th class="">
                           <div class="th-wrap">
-                            Hashtag
-                            <!---->
-                          </div>
-                        </th>
-                        <th class="">
-                          <div class="th-wrap">
-                            Created
-                            <!---->
-                          </div>
-                        </th>
-                        <th class="">
-                          <div class="th-wrap">
                             Creator
                             <!---->
                           </div>
                         </th>
                         <th class="">
-                          <div class="th-wrap">
-                            Owner
+                          <div class="th-wrap is-centered">
+                            Hashtags
                             <!---->
                           </div>
                         </th>
                         <th class="">
-                          <div class="th-wrap">
-                            Publisher
-                            <!---->
-                          </div>
-                        </th>
-                        <th class="">
-                          <div class="th-wrap">
+                          <div class="th-wrap is-centered">
                             Tag count
+                            <!---->
+                          </div>
+                        </th>
+                        <th class="">
+                          <div class="th-wrap is-centered">
+                            Revenue
                             <!---->
                           </div>
                         </th>
@@ -71,42 +65,41 @@
                       <!---->
                       <!---->
                     </thead>
-                    <tbody v-if="pagedHashtags">
+                    <tbody v-if="pagedCreators">
                       <tr
                         draggable="false"
                         class=""
-                        v-for="hashtag in pagedHashtags"
-                        v-bind:key="hashtag.id"
+                        v-for="creator in pagedCreators"
+                        v-bind:key="creator.id"
                       >
                         <!---->
                         <!---->
-                        <td data-label="Hashtag" class="">
-                          <hashtag :value="hashtag.displayHashtag"></hashtag>
+                        <td data-label="Owner" class="">
+                          <eth-account
+                            :value="creator.id"
+                            route="creator-detail"
+                          ></eth-account>
                         </td>
-                        <td data-label="Minted" class="">
-                          <timestamp-from
-                            :value="hashtag.timestamp"
-                          ></timestamp-from>
+                        <td data-label="Hashtags" class="has-text-centered">
+                          {{ creator.mintCount }}
                         </td>
-                        <td data-label="Creator" class="">
-                          <eth-account :value="hashtag.creator"></eth-account>
+                        <td data-label="Tag count" class="has-text-centered">
+                          {{ creator.tagCount }}
                         </td>
-                        <td data-label="Owner" class="">Pending Auction</td>
-                        <td data-label="Publisher" class="">
-                          <eth-account :value="hashtag.publisher"></eth-account>
-                        </td>
-                        <td data-label="Count" class="">
-                          {{ hashtag.tagCount }}
+                        <td data-label="Revenue" class="has-text-centered">
+                          <eth-amount :value="creator.tagFees"></eth-amount>
                         </td>
                         <!---->
                       </tr>
+                      <!---->
+                      <!---->
                     </tbody>
                   </table>
                 </div>
                 <!---->
               </div>
               <Pagination
-                :entity-count="hashtagCount"
+                :entity-count="creatorsCount"
                 :page-size="pageSize"
                 @tabSelected="tabSelected"
               />
@@ -120,7 +113,7 @@
             <div class="content">
               <markdown-doc
                 doc-type="help"
-                filename="hashtags-list-overview"
+                filename="publishers-list-overview"
               ></markdown-doc>
               <b-collapse
                 :open="false"
@@ -139,13 +132,13 @@
                   ></b-icon>
                   {{
                     !props.open
-                      ? "What's a Hashtag Token?"
-                      : "What's a Hashtag Token?"
+                      ? "What's a Hashtag Protocol Publisher?"
+                      : "What's a Hashtag Protocol Publisher?"
                   }}
                 </a>
                 <markdown-doc
                   doc-type="faq"
-                  filename="020-what-is-hashtag-token"
+                  filename="040-what-is-a-publisher"
                   class="pt-1 pb-1"
                 ></markdown-doc>
               </b-collapse>
@@ -160,26 +153,24 @@
 
 <script>
 import EthAccount from "../components/EthAccount";
+import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
-import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
+// import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
 import Pagination from "../components/Pagination";
-import TimestampFrom from "../components/TimestampFrom";
-import { PAGED_HASHTAGS, ALL_HASHTAG_TOKEN_IDS } from "../queries";
+import { PAGED_CREATORS, ALL_CREATORS } from "@/queries";
 
 const PAGE_SIZE = 10;
 
 export default {
   name: "Nfts",
   components: {
+    EthAmount,
     EthAccount,
-    TimestampFrom,
-    Hashtag,
     Footer,
     Header,
-    HelpModal,
+    // HelpModal,
     MarkdownDoc,
     Pagination,
   },
@@ -190,12 +181,12 @@ export default {
       pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,
-      hashtagCount: 0,
+      creatorsCount: 0,
     };
   },
   apollo: {
-    pagedHashtags: {
-      query: PAGED_HASHTAGS,
+    pagedCreators: {
+      query: PAGED_CREATORS,
       variables() {
         return {
           first: this.first,
@@ -203,11 +194,11 @@ export default {
         };
       },
     },
-    hashtagCount: {
-      query: ALL_HASHTAG_TOKEN_IDS,
+    creatorsCount: {
+      query: ALL_CREATORS,
       manual: true,
       result({ data }) {
-        this.hashtagCount = data.hashtags.length;
+        this.creatorsCount = data.creators.length;
       },
     },
   },
