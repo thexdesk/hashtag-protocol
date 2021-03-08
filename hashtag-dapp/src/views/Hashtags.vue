@@ -94,7 +94,7 @@
                             :value="hashtag.timestamp"
                           ></timestamp-from>
                         </td>
-                        <td data-label="Owner" class="">
+                        <td data-label="Creator" class="">
                           <eth-account :value="hashtag.creator"></eth-account>
                         </td>
                         <td data-label="Owner" class="">Pending Auction</td>

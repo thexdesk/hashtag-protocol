@@ -128,9 +128,6 @@
                               <div class="th-wrap">Created</div>
                             </th>
                             <th>
-                              <div class="th-wrap">Creator</div>
-                            </th>
-                            <th>
                               <div class="th-wrap">Publisher</div>
                             </th>
                           </tr>
@@ -151,9 +148,6 @@
                               <timestamp-from
                                 :value="hashtag.timestamp"
                               ></timestamp-from>
-                            </td>
-                            <td data-label="Creator" class="">
-                              <eth-account :value="hashtag.owner"></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
                               <eth-account

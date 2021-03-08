@@ -53,7 +53,7 @@
                           <td>
                             <eth-account
                               :value="hashtagsByName[0].creator"
-                              route="owner-detail"
+                              route="creator-detail"
                             ></eth-account>
                           </td>
                         </tr>

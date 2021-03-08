@@ -175,7 +175,7 @@
                         >
                           <eth-account
                             :value="props.row.creator"
-                            route="owner-detail"
+                            route="creator-detail"
                           ></eth-account>
                         </b-table-column>
                         <b-table-column
