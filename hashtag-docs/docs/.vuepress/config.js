@@ -14,6 +14,7 @@ module.exports = {
     repoLabel: "Edit on Github",
     editLinks: true,
     editLinkText: "Edit on Github",
+    activeHeaderLinks: false, // Default: true
     sidebar: [
       ["/", "Introduction"],
       {
@@ -48,7 +49,7 @@ module.exports = {
         ],
       },
     ],
-    sidebarDepth: 1,
+    sidebarDepth: 0,
   },
   // https://stackoverflow.com/questions/60009780/import-global-sass-variables-into-vuepress-components
   scss: {
@@ -82,7 +83,6 @@ module.exports = {
       },
     ],
     ["vuepress-plugin-table-of-contents"],
-    ["@vuepress/active-header-links"],
     ["@vuepress/last-updated"],
     [
       "vuepress-plugin-merge-pages",
