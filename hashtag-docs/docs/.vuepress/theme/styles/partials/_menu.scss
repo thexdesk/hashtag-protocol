@@ -1,12 +1,18 @@
-.menu-list {
-  a,
-  a:hover {
+.menu-list,
+.toc-menu {
+  a {
     text-decoration: none;
     font-weight: 500;
-  }
+    color: $dark;
 
-  a.active {
-    font-weight: 700;
-    color: $primary;
+    &:hover {
+      color: $primary;
+      text-decoration: none;
+
+    }
+
+    &.active {
+      color: $primary;
+    }
   }
 }
