@@ -112,9 +112,11 @@ table {
   margin: 1rem 0;
   display: block;
   overflow-x: auto;
+  max-width: 100%;
 
   tr {
     border-top: 1px solid $grey-lighter;
+    width: 100%;
 
     &:nth-child(2n) {
       background-color: $white-bis;
@@ -126,4 +128,8 @@ table {
     border: 1px solid $grey-lighter;
     padding: 0.6em 1em;
   }
+}
+
+.edit-page {
+  margin-top: 4rem;
 }

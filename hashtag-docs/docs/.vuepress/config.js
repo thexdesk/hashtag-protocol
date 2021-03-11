@@ -16,12 +16,13 @@ module.exports = {
     editLinkText: "Edit on Github",
     activeHeaderLinks: false, // Default: true
     sidebar: [
-      ["/", "Introduction"],
+      ["/", "Hashtag Docs"],
       {
         title: "Essentials",
         collapsable: false,
         children: [
-          ["/essentials/", "Protocol Overview"],
+          ["/essentials/", "Vision"],
+          ["/essentials/protocol-overview", "Protocol Overview"],
           ["/essentials/participants", "Key Participants"],
           ["/essentials/roadmap", "Project Roadmap"],
           ["/essentials/hashtag-council", "Hashtag Council"],
