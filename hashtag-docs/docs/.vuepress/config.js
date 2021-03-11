@@ -14,13 +14,15 @@ module.exports = {
     repoLabel: "Edit on Github",
     editLinks: true,
     editLinkText: "Edit on Github",
+    activeHeaderLinks: false, // Default: true
     sidebar: [
-      ["/", "Introduction"],
+      ["/", "Hashtag Docs"],
       {
         title: "Essentials",
         collapsable: false,
         children: [
-          ["/essentials/", "Protocol Overview"],
+          ["/essentials/", "Vision"],
+          ["/essentials/protocol-overview", "Protocol Overview"],
           ["/essentials/participants", "Key Participants"],
           ["/essentials/roadmap", "Project Roadmap"],
           ["/essentials/hashtag-council", "Hashtag Council"],
@@ -48,7 +50,7 @@ module.exports = {
         ],
       },
     ],
-    sidebarDepth: 1,
+    sidebarDepth: 0,
   },
   // https://stackoverflow.com/questions/60009780/import-global-sass-variables-into-vuepress-components
   scss: {
@@ -81,7 +83,7 @@ module.exports = {
         successText: "Copied",
       },
     ],
-    ["@vuepress/active-header-links"],
+    ["vuepress-plugin-table-of-contents"],
     ["@vuepress/last-updated"],
     [
       "vuepress-plugin-merge-pages",
