@@ -90,7 +90,7 @@ module.exports = {
       {
         bundles: [
           {
-            // Merge faq.md files in /guide/faqs into a single page.
+            // Merge faq.md files in /shared/faqs into a single page.
             path: "/essentials/faqs.html",
             filter: (pages) => {
               // optional
@@ -99,7 +99,7 @@ module.exports = {
             mergePages: (pages) => {
               // optional
               const pageBreak = '<hr class="page-break" />\n\n';
-              const initialValue = `# FAQs\n${pageBreak}[[TOC]]`;
+              const initialValue = `# FAQs\n\n[[TOC]]\n${pageBreak}`;
               return pages.reduce((acc, current) => {
                 return `${acc}${current.content}\n\n${pageBreak}`;
               }, initialValue);
