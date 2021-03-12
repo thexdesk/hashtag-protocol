@@ -1,5 +1,6 @@
 ## Is there any limit to what I can tag?
 
-Currently, the protocol only supports tagging other ERC-721 NFTs however,
-there is no limit to the number of items you may tag. We intend to develop
-tagging contracts for other on-chain digital asset and content types.
+There is no limit to the number of items you may tag, however the Protocol only
+supports tagging other ERC-721 NFTs. We plan to develop tagging contracts for
+other on-chain digital asset and content types. For more details on that, see
+[our roadmap](https://docs.hashtag-protocol.org/essentials/roadmap.html).

@@ -14,7 +14,7 @@ writing, this is a private repository. Please [contact
 us](mailto:info@hashtag-protocol.org) if you need access to the repository.
 
 The codebase is structured as a monorepo to make development and deployment
-easier to manage. We hope to continue to make improvements to the monorepo
+easier to manage. We intend to make improvements to the monorepo
 functionality, namely to "packagize" protocol components so they may be
 implemented independently. To this end we are considering
 [Lerna](https://lerna.js.org/). If you have experience with Lerna, and can
@@ -178,7 +178,7 @@ Relates to gh-123, gh-124
 
 ## Platform.sh
 
-å We use [Platform.sh](https://platform.sh) to develop our demonstration
+We use [Platform.sh](https://platform.sh) to develop our demonstration
 application (and hence HASHTAG). From their site: "Platform.sh is a polyglot,
 multicloud PaaS, with continuous deployment built in." For us that means
 efficient and stable remote collaboration workflows.

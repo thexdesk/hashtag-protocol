@@ -1,4 +1,5 @@
 ## What is a "Tagger"?
 
-User that interacts with tagging widget on **_Publisher_** platform to tag
-digital content.
+A **_Tagger_** is a user or entity, represented by an Ethereum wallet address,
+that pays the fee to execute the tagging contract thereby tagging a piece of
+digital content with a HASHTAG token.
