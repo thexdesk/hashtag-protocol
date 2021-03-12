@@ -1,6 +1,5 @@
 <template>
   <b-navbar :transparent="true">
-    <div>warning</div>
     <template slot="brand">
       <b-navbar-item :href="this.website">
         <img
@@ -65,6 +64,7 @@
         </div>
         <div class="buttons" v-else>
           <b-button
+            icon-left="power-plug"
             class="button is-primary is-outlined"
             @click="connectWallet"
           >

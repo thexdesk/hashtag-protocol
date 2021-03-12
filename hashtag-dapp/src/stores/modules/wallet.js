@@ -64,7 +64,6 @@ const actions = {
     onboard = Onboard({
       dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
       networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
-      selectedWalletKey: localstorageWalletKey,
       subscriptions: {
         address: (address) => {
           commit("setWalletAddress", address);
@@ -168,7 +167,7 @@ const actions = {
     }
   },
 
-  async connectWallet() {
+  async connectWallet({ dispatch }) {
     if (!provider) {
       const walletSelected = await onboard.walletSelect();
       if (!walletSelected) {
@@ -177,6 +176,9 @@ const actions = {
     }
 
     const ready = await onboard.walletCheck();
+    if (!ready) {
+      dispatch("disconnectWallet");
+    }
     return ready;
   },
 
@@ -191,7 +193,7 @@ const actions = {
     commit("setOpenModalCloseFn", () => {});
   },
 
-  async readyToTransact() {
+  async readyToTransact({ dispatch }) {
     if (!provider) {
       const walletSelected = await onboard.walletSelect();
       if (!walletSelected) {
@@ -200,6 +202,9 @@ const actions = {
     }
 
     const ready = await onboard.walletCheck();
+    if (!ready) {
+      dispatch("disconnectWallet");
+    }
     return ready;
   },
 
