@@ -26,7 +26,7 @@ Hashtag is a simple, decentralized protocol built for developers to tokenize
 hashtag strings as non-fungible tokens (NFTs), link them with online media and
 surface this data for use in networks, platforms and applications.
 
-Stitched into this functionality are game-theory incentive mechanisms that
+Stitched into this functionality are incentive mechanisms that
 harnesses the self-interest of participants to drive positive network growth.
 
 ## How can I get involved?
