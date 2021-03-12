@@ -38,6 +38,10 @@
           >
             {{ value.text }}
           </b-dropdown-item>
+          <hr class="dropdown-divider" />
+          <b-dropdown-item custom aria-role="menuitem">
+            <b>SUPPORT</b>
+          </b-dropdown-item>
         </b-dropdown>
       </b-navbar-item>
       <b-navbar-item tag="div">
@@ -83,21 +87,29 @@ export default {
           text: "Hashtags",
           path: "/hashtags",
         },
+        creators: {
+          text: "Creators",
+          path: "/creators",
+        },
         publishers: {
           text: "Publishers",
           path: "/publishers",
-        },
-        owners: {
-          text: "Owners",
-          path: "/owners",
         },
         taggers: {
           text: "Taggers",
           path: "/taggers",
         },
         nfts: {
-          text: "Tagged assets",
+          text: "Tagged content",
           path: "/nfts",
+        },
+        owners: {
+          text: "Owners",
+          path: "/owners",
+        },
+        auction: {
+          text: "Auction",
+          path: "/auction",
         },
       },
     };

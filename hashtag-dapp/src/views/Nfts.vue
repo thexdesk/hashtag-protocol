@@ -5,7 +5,7 @@
       <div class="container">
         <h1 class="title is-1">Tagged NFTs</h1>
         <h2 class="subtitle">
-          Content tagged using Hashtag Tokens
+          Content tagged with Hashtag Tokens
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
             <router-link :to="{ name: 'dashboard' }">Dashboard</router-link
             >&nbsp;

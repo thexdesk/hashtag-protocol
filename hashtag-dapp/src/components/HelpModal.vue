@@ -1,8 +1,10 @@
 <template>
   <b-tooltip label="Help" position="is-bottom" type="is-dark">
-    <button class="button is-white" @click="popModal">
-      <b-icon icon="help-circle-outline" type="is-primary"> </b-icon>
-    </button>
+    <a @click="popModal" class="has-text-grey">
+      <span class="icon"
+        ><i class="mdi mdi-help-circle-outline mdi-24px"></i
+      ></span>
+    </a>
   </b-tooltip>
 </template>
 
