@@ -1,6 +1,5 @@
 <template>
   <b-navbar :transparent="true">
-    <div>warning</div>
     <template slot="brand">
       <b-navbar-item :href="this.website">
         <img
@@ -10,7 +9,7 @@
         <h1>Hashtag</h1>
       </b-navbar-item>
     </template>
-    <template slot="end">
+    <template slot="start">
       <b-navbar-item>
         <b-dropdown
           :triggers="['hover']"
@@ -18,16 +17,17 @@
           aria-role="menu"
           :hoverable="true"
         >
-          <button
+          <b-button
             class="button is-primary"
             type="button"
             slot="trigger"
             role="button"
+            icon-left="menu-down"
           >
             <template>
               <span>{{ currentMenu }}</span>
             </template>
-          </button>
+          </b-button>
 
           <b-dropdown-item
             v-for="(value, key) in menusArr"
@@ -40,25 +40,36 @@
           </b-dropdown-item>
         </b-dropdown>
       </b-navbar-item>
+    </template>
+    <template slot="end">
       <b-navbar-item tag="div">
-        <div class="buttons">
-          <a
-            v-if="account !== 'Connect wallet'"
-            class="button is-primary is-outlined"
-            @click="changeWallet"
+        <div class="buttons" v-if="address !== null && address !== undefined">
+          <b-button
+            icon-left="bank"
+            type="is-primary"
+            @click="drawdown"
+            outlined
           >
-            {{ account | shortEth }}
-          </a>
-          <a v-else class="button is-primary is-outlined" @click="connect">
-            {{ account }}
-          </a>
+            {{ accrued | toEth }} ETH
+          </b-button>
+          <b-button
+            v-if="address !== null && address !== undefined"
+            class="button is-primary is-outlined wallet-info"
+            @click="walletInfo"
+            ><b-tag type="is-primary">{{ balance | toEth(4) }} ETH</b-tag>
+            <span class="address">
+              {{ address | shortEth }}
+            </span>
+          </b-button>
         </div>
-      </b-navbar-item>
-      <b-navbar-item tag="div" v-if="account !== 'Connect wallet'">
-        <div class="buttons">
-          <a class="button is-primary is-outlined" @click="drawdown">
-            {{ accrued | toEth }} Ξ
-          </a>
+        <div class="buttons" v-else>
+          <b-button
+            icon-left="power-plug"
+            class="button is-primary is-outlined"
+            @click="connectWallet"
+          >
+            Connect wallet
+          </b-button>
         </div>
       </b-navbar-item>
     </template>
@@ -67,6 +78,7 @@
 
 <script>
 import Drawdown from "./Drawdown";
+import WalletInfo from "./WalletInfo";
 import { mapGetters } from "vuex";
 
 export default {
@@ -102,16 +114,52 @@ export default {
       },
     };
   },
-  created() {
+  mounted() {
+    // Sets the currently active dropdown menu.
     this.setCurrentMenu();
+    // Start a mutation subscriber to watch for
+    // an initialized/changed wallet address.
+    this.unsubscribe = this.$store.subscribe((mutation) => {
+      if (mutation.type == "setWalletAddress") {
+        if (typeof mutation.payload !== "undefined") {
+          // Wallet address has changed, initialize the protocol.
+          this.initProtocol();
+        }
+      }
+    });
+
+    // Initialize OnBoard. If a previously connected wallet
+    // is found the subscriber above will be fired and
+    // the protocol will be initialized.
+    this.initOnboard();
   },
-  computed: mapGetters(["account", "accrued"]),
+  beforeDestroy() {
+    this.unsubscribe();
+  },
+  computed: mapGetters(["accrued", "balance", "address", "onboard", "wallet"]),
   methods: {
-    connect() {
-      this.$store.dispatch("bootstrap");
+    async initOnboard() {
+      await this.$store.dispatch("initOnboard");
     },
-    changeWallet() {
-      this.$store.dispatch("changeWallet");
+    async initProtocol() {
+      await this.$store.dispatch("initProtocol");
+    },
+    async connectWallet() {
+      await this.$store.dispatch("connectWallet");
+    },
+    async disconnectWallet() {
+      await this.$store.dispatch("disconnectWallet");
+    },
+    walletInfo() {
+      const result = this.$buefy.modal.open({
+        parent: this,
+        component: WalletInfo,
+        hasModalCard: true,
+        customClass: "custom-class",
+        trapFocus: true,
+        width: 550,
+      });
+      this.$store.dispatch("captureOpenModalCloseFn", result.close);
     },
     setCurrentMenu() {
       this.currentMenu = this.$data.menusArr[this.section].text;
@@ -123,7 +171,7 @@ export default {
         hasModalCard: true,
         customClass: "custom-class",
         trapFocus: true,
-        width: 640,
+        width: 550,
       });
 
       this.$store.dispatch("captureOpenModalCloseFn", result.close);
@@ -132,8 +180,27 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.hero-head {
+.navbar {
   .navbar-end {
+    .navbar-item {
+      .buttons {
+        button.wallet-info {
+          padding-left: 5px;
+
+          span {
+            &.tag {
+              position: relative;
+              top: -1px;
+            }
+          }
+
+          span.address {
+            padding-left: 8px;
+          }
+        }
+      }
+    }
+
     .dropdown-menu {
       .dropdown-item {
         font-weight: bold;

@@ -5,6 +5,7 @@ node_modules
 .grenrc.yaml
 .jsconfig.json
 jsconfig.json
+tsconfig.json
 
 # local env files
 .env.local
