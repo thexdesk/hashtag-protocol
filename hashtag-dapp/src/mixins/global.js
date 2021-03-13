@@ -47,6 +47,11 @@ Vue.mixin({
     this.setSection();
   },
   methods: {
+    chainNameFromId(chainID) {
+      if (onBoardChainMap[chainID]) {
+        return onBoardChainMap[chainID];
+      }
+    },
     /**
      * Pop a specific help text modal from the HelpModal component.
      * Called via $emit from within the component.

@@ -8,16 +8,6 @@
 export default {
   name: "App",
   components: {},
-  mounted() {
-    const previouslySelectedWallet = localStorage.getItem("selectedWallet");
-
-    if (
-      previouslySelectedWallet != null &&
-      previouslySelectedWallet !== "null"
-    ) {
-      this.$store.dispatch("bootstrap");
-    }
-  },
 };
 </script>
 <style lang="scss">

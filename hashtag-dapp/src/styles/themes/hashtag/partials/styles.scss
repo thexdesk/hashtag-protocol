@@ -6,6 +6,7 @@ body {
 
 a:hover {
   text-decoration: underline;
+  color: $primary;
 }
 
 .body {
@@ -44,25 +45,34 @@ section {
   }
 }
 
-.navbar-brand {
-  img {
-    margin-right: 0.4rem;
-  }
-
-  a.navbar-item,
-  a.navbar-item:hover {
-    color: $white;
-    text-decoration: none;
-
-    h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
+.navbar {
+  .navbar-item {
+    a,
+    a:hover {
+      text-decoration: none;
     }
   }
-}
 
-.navbar-burger:hover {
-  color: $white;
+  .navbar-brand {
+    img {
+      margin-right: 0.4rem;
+    }
+
+    a.navbar-item,
+    a.navbar-item:hover {
+      color: $white;
+      text-decoration: none;
+
+      h1 {
+        font-size: 1.25rem;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .navbar-burger:hover {
+    color: $white;
+  }
 }
 
 section.main {
@@ -91,8 +101,6 @@ img.nft-thumb {
 }
 
 .button {
-  font-weight: bold;
-
   &.is-primary.is-outlined {
     transition: all 0.3s ease;
   }
