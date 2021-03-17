@@ -17,11 +17,6 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isPubInfoModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Publisher information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
@@ -61,11 +56,6 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Market summary for KnownOrigin</h2>
                 <div class="b-table" v-if="publisherByAcc">
                   <div class="table-wrapper">
@@ -114,11 +104,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isActivityModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
               <h2 class="title is-4 is-spaced">
                 Recent activity on KnownOrigin
               </h2>
@@ -324,98 +309,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isPubInfoModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publisher-detail-publisher-info"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What\'s a "Publisher"?'
-                      : 'What\'s a "Publisher"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="040-what-is-a-publisher"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publisher-detail-market-summary"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is the "Hashtag Market"?'
-                      : 'What is the "Hashtag Market"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publisher-detail-recent-activity"
-              ></markdown-doc>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -425,7 +318,6 @@
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
 import {
   ALL_HASHTAG_IDS_BY_PUBLISHER,
   PAGED_HASHTAGS_BY_PUBLISHER,
@@ -435,7 +327,6 @@ import {
 } from "../queries";
 import EthAmount from "../components/EthAmount";
 import Hashtag from "../components/Hashtag";
-import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import TimestampFrom from "../components/TimestampFrom";
@@ -454,17 +345,12 @@ export default {
     EthAccount,
     Footer,
     Header,
-    HelpModal,
-    MarkdownDoc,
     Pagination,
   },
   data() {
     return {
       activeTab: null,
       hashtagsByName: null,
-      isPubInfoModalActive: false,
-      isSummaryModalActive: false,
-      isActivityModalActive: false,
       publisher: this.$route.params.address,
       publisherName: "KnownOrigin",
       publisherRegistration: "https://#",

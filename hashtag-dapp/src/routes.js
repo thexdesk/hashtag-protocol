@@ -14,6 +14,7 @@ import CreatorDetail from "@/views/CreatorDetail";
 import PublisherDetail from "./views/PublisherDetail";
 import Taggers from "./views/Taggers";
 import TaggerDetail from "./views/TaggerDetail";
+import Auction from "./views/Auction";
 
 Vue.use(VueRouter);
 
@@ -84,6 +85,11 @@ export const router = new VueRouter({
       path: "/tagger/:address",
       name: "tagger-detail",
       component: TaggerDetail,
+    },
+    {
+      path: "/auction",
+      name: "auction",
+      component: Auction,
     },
   ],
 });

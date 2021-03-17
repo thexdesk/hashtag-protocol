@@ -1,44 +1,12 @@
 <template>
   <b-navbar :transparent="true">
     <template slot="brand">
-      <b-navbar-item :href="this.website">
+      <b-navbar-item :href="this.app">
         <img
           src="../assets/logo-white.svg"
           alt="Content tagging for the decentralized web"
         />
         <h1>Hashtag</h1>
-      </b-navbar-item>
-    </template>
-    <template slot="start">
-      <b-navbar-item>
-        <b-dropdown
-          :triggers="['hover']"
-          v-model="currentMenu"
-          aria-role="menu"
-          :hoverable="true"
-        >
-          <b-button
-            class="button is-primary"
-            type="button"
-            slot="trigger"
-            role="button"
-            icon-left="menu-down"
-          >
-            <template>
-              <span>{{ currentMenu }}</span>
-            </template>
-          </b-button>
-
-          <b-dropdown-item
-            v-for="(value, key) in menusArr"
-            :key="key"
-            :value="value.text"
-            aria-role="menuitem"
-            :href="value.path"
-          >
-            {{ value.text }}
-          </b-dropdown-item>
-        </b-dropdown>
       </b-navbar-item>
     </template>
     <template slot="end">
@@ -72,6 +40,50 @@
           </b-button>
         </div>
       </b-navbar-item>
+      <b-navbar-item>
+        <b-dropdown
+          :triggers="['hover']"
+          v-model="currentMenu"
+          aria-role="menu"
+          position="is-bottom-left"
+        >
+          <b-button
+            class="button is-primary"
+            type="button"
+            slot="trigger"
+            role="button"
+            icon-left="menu"
+          >
+          </b-button>
+
+          <b-dropdown-item
+            v-for="(value, key) in sectionsMenuArr"
+            :key="key"
+            :value="value.text"
+            aria-role="menuitem"
+            :href="value.path"
+          >
+            {{ value.text }}
+          </b-dropdown-item>
+          <hr class="dropdown-divider" aria-role="menuitem" />
+          <b-dropdown-item
+            custom
+            aria-role="menuitem"
+            class="has-text-grey-dark has-text-weight-light"
+          >
+            DEVELOPER RESOURCES
+          </b-dropdown-item>
+          <b-dropdown-item
+            v-for="(value, key) in supportMenuArr"
+            :key="key"
+            :value="value.text"
+            aria-role="menuitem"
+            :href="value.path"
+          >
+            {{ value.text }}
+          </b-dropdown-item>
+        </b-dropdown>
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
@@ -80,13 +92,12 @@
 import Drawdown from "./Drawdown";
 import WalletInfo from "./WalletInfo";
 import { mapGetters } from "vuex";
-
 export default {
   name: "Navbar",
   data() {
     return {
       currentMenu: "Dashboard",
-      menusArr: {
+      sectionsMenuArr: {
         dashboard: {
           text: "Dashboard",
           path: "/",
@@ -95,21 +106,43 @@ export default {
           text: "Hashtags",
           path: "/hashtags",
         },
+        creators: {
+          text: "Creators",
+          path: "/creators",
+        },
         publishers: {
           text: "Publishers",
           path: "/publishers",
-        },
-        owners: {
-          text: "Owners",
-          path: "/owners",
         },
         taggers: {
           text: "Taggers",
           path: "/taggers",
         },
         nfts: {
-          text: "Tagged assets",
+          text: "Tagged content",
           path: "/nfts",
+        },
+        auction: {
+          text: "Auction",
+          path: "/auction",
+        },
+      },
+      supportMenuArr: {
+        docs: {
+          text: "Docs",
+          path: "https://docs.hashtag-protocol.org",
+        },
+        discord: {
+          text: "Discord",
+          path: process.env.VUE_APP_DISCORD_SERVER,
+        },
+        substack: {
+          text: "Substack",
+          path: "https://hashtagprotocol.substack.com/",
+        },
+        website: {
+          text: "Website",
+          path: "https://www.hashtag-protocol.org",
         },
       },
     };
@@ -162,7 +195,7 @@ export default {
       this.$store.dispatch("captureOpenModalCloseFn", result.close);
     },
     setCurrentMenu() {
-      this.currentMenu = this.$data.menusArr[this.section].text;
+      this.currentMenu = this.$data.sectionsMenuArr[this.section].text;
     },
     drawdown() {
       const result = this.$buefy.modal.open({
@@ -184,18 +217,22 @@ export default {
   .navbar-end {
     .navbar-item {
       .buttons {
-        button.wallet-info {
-          padding-left: 5px;
+        button {
+          font-weight: $weight-medium;
 
-          span {
-            &.tag {
-              position: relative;
-              top: -1px;
+          &.wallet-info {
+            padding-left: 5px;
+
+            span {
+              &.tag {
+                position: relative;
+                top: -1px;
+              }
             }
-          }
 
-          span.address {
-            padding-left: 8px;
+            span.address {
+              padding-left: 8px;
+            }
           }
         }
       }
@@ -203,7 +240,7 @@ export default {
 
     .dropdown-menu {
       .dropdown-item {
-        font-weight: bold;
+        font-weight: $weight-medium;
       }
     }
   }

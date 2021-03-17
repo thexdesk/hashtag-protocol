@@ -1,4 +1,12 @@
 .modal-card {
+  border-radius: $radius-large;
+
+  &.markdown-modal {
+    h2 {
+      font-size: $size-3;
+    }
+  }
+
   &.hashtag-modal {
     max-width: 550px;
 
@@ -7,6 +15,12 @@
     .subtitle {
       color: $white;
       width: 100%;
+    }
+
+    .modal-card-body,
+    .modal-card-foot,
+    .modal-card-head {
+      background-color: $grey-dark;
     }
 
     .card-content {

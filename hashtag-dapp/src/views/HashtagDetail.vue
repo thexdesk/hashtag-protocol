@@ -5,9 +5,10 @@
       <div class="container">
         <h1 class="title is-1">{{ hashtagsByName[0].displayHashtag }}</h1>
         <h2 class="subtitle">
-          Hashtag Protocol Token
+          HASHTAG token
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
-            <router-link :to="{ name: 'hashtags' }">Browse hashtags</router-link
+            <router-link :to="{ name: 'hashtags' }"
+              >Browse HASHTAG tokens</router-link
             >&nbsp;
             <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
           </span>
@@ -16,11 +17,6 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isOverviewModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Token overview</h2>
                 <div class="b-table" v-if="hashtagsByName">
                   <div class="table-wrapper">
@@ -83,11 +79,6 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Market summary</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
@@ -129,11 +120,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isTaggedModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
               <h2 class="title is-4 is-spaced">
                 Content tagged with {{ hashtag }}
               </h2>
@@ -239,123 +225,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtag-detail-token-overview"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? "What's a Hashtag Token?"
-                      : "What's a Hashtag Token?"
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="020-what-is-hashtag-token"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtag-detail-market-summary"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="MarketOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is the "Hashtag Market"?'
-                      : 'What is the "Hashtag Market"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isTaggedModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtag-detail-tagged-content"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="taggedContent"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="taggedContent"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content?"'
-                      : 'What is "tagged content?"'
-                  }}
-                </a>
-                <markdown-doc
-                  docType="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -366,8 +235,6 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import HashtagTokenId from "../components/HashtagTokenId";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import {
@@ -386,12 +253,10 @@ export default {
     TimestampFormatted,
     TimestampFrom,
     EthAccount,
-    MarkdownDoc,
     NftLink,
     Footer,
     HashtagTokenId,
     Header,
-    HelpModal,
     Pagination,
   },
   data() {
@@ -404,9 +269,6 @@ export default {
       erc721: "http://erc721.org",
       hashtag: routeHashtag,
       hashtagsByName: null,
-      isOverviewModalActive: false,
-      isSummaryModalActive: false,
-      isTaggedModalActive: false,
       tagsByHashtag: null,
       first: PAGE_SIZE,
       skip: 0,

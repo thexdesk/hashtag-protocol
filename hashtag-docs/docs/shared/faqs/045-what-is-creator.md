@@ -6,7 +6,7 @@ minting contract.
 
 This can be a user of a **_Publisher_** platform or the **_Publisher_** itself. 
 
-The **_Creator_** wallet address is logged in the token and will receive revenue
-from the Protocol should the token used for tagging prior to auction and/or should
-the token be purchased at auction. See [revenue
+The **_Creator_** wallet address is logged in the token and will accrue revenue
+from the Protocol if the token is used for tagging content and if the token is
+purchased at auction. See [revenue
 sharing](https://docs.hashtag-protocol.org/essentials/protocol-overview.html#revenue-sharing).
