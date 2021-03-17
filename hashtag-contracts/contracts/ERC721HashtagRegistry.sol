@@ -20,9 +20,9 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
     HashtagProtocol public hashtagProtocol;
 
     uint256 constant public modulo = 100;
-    uint256 public platformPercentage = 20; // 20%
-    uint256 public publisherPercentage = 40; // 40%
-    uint256 public remainingPercentage = 40;
+    uint256 public platformPercentage = 20;
+    uint256 public publisherPercentage = 30;
+    uint256 public remainingPercentage = 50;
 
     mapping(address => uint256) public accrued;
     mapping(address => uint256) public paid;

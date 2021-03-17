@@ -177,7 +177,7 @@ describe('HashtagProtocol Tests', function () {
       const tokenId = constants.One;
       await this.hashtagProtocol.connect(random).mint('#BlockRocket', publisherAddress, creatorAddress);
 
-      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('https://api.com/v1/1');
+      expect(await this.hashtagProtocol.tokenURI(tokenId)).to.be.equal('https://api.hashtag-protocol.io/1');
 
       await this.hashtagProtocol.connect(platform).setBaseURI('hashtag.io/');
 
@@ -245,6 +245,24 @@ describe('HashtagProtocol Tests', function () {
       // check timestamp has increased
       const lastTransferTime = await this.hashtagProtocol.tokenIdToLastTransferTime(tokenId);
       expect(Number(BigNumber.from(lastTransferTime))).to.be.greaterThan(Number(this.lastTransferTime.toString()));
+    });
+  });
+
+  describe('Admin functions', async function () {
+    it('should be able to set hashtag length as admin', async function () {
+      expect(await this.accessControls.isAdmin(platformAddress)).to.be.equal(true);
+
+      const currentMaxLength = await this.hashtagProtocol.hashtagMaxStringLength();
+      expect(currentMaxLength).to.be.equal(32);
+
+      await this.hashtagProtocol.connect(platform).setHashtagMaxStringLength(64);
+
+      const newMaxLength = await this.hashtagProtocol.hashtagMaxStringLength();
+      expect(newMaxLength).to.be.equal(64);
+    });
+
+    it('should revert if setting hashtag length if not admin', async function () {
+      await expect(this.hashtagProtocol.connect(buyer).setHashtagMaxStringLength(55)).to.be.revertedWith('Caller must be admin');
     });
   });
 
