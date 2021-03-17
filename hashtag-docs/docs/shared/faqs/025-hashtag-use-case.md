@@ -1,3 +1,4 @@
-## Is there a use case for HASHTAG?
+## Is there a use case for HASHTAG tokens?
 
-To permit NFT owners/creators (eg. digital artists) to tag their artwork (NFTs).
+NFT owners/creators (eg. digital artists) and content publishers can tag their
+artwork (NFTs) on-chain to a globally accessible, decentralized database.

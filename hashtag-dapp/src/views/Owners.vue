@@ -14,89 +14,12 @@
         </h2>
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
-            <article class="is-white box">
-              <help-modal
-                modal="isOverviewModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
-              <h2 class="title is-4 is-spaced"></h2>
-              <div class="b-table">
-                <!---->
-                <!---->
-                <div class="table-wrapper has-mobile-cards">
-                  <table tabindex="0" class="table is-hoverable">
-                    <thead>
-                      <tr>
-                        <!---->
-                        <!---->
-                        <th class="">
-                          <div class="th-wrap">
-                            Owner
-                            <!---->
-                          </div>
-                        </th>
-                        <th class="">
-                          <div class="th-wrap is-centered">
-                            Hashtags
-                            <!---->
-                          </div>
-                        </th>
-                        <th class="">
-                          <div class="th-wrap is-centered">
-                            Tag count
-                            <!---->
-                          </div>
-                        </th>
-                        <th class="">
-                          <div class="th-wrap is-centered">
-                            Revenue
-                            <!---->
-                          </div>
-                        </th>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                    </thead>
-                    <tbody v-if="pagedOwners">
-                      <tr
-                        draggable="false"
-                        class=""
-                        v-for="owner in pagedOwners"
-                        v-bind:key="owner.id"
-                      >
-                        <!---->
-                        <!---->
-                        <td data-label="Owner" class="">
-                          <eth-account
-                            :value="owner.id"
-                            route="owner-detail"
-                          ></eth-account>
-                        </td>
-                        <td data-label="Hashtags" class="has-text-centered">
-                          {{ owner.mintCount }}
-                        </td>
-                        <td data-label="Tag count" class="has-text-centered">
-                          {{ owner.tagCount }}
-                        </td>
-                        <td data-label="Revenue" class="has-text-centered">
-                          <eth-amount :value="owner.tagFees"></eth-amount>
-                        </td>
-                        <!---->
-                      </tr>
-                      <!---->
-                      <!---->
-                    </tbody>
-                  </table>
-                </div>
-                <!---->
+            <article class="is-white coming-soon">
+              <h2 class="title is-5">Top owners</h2>
+              <div class="coming-soon-img">
+                <img src="../assets/coming-soon-banner.png" />
               </div>
-              <Pagination
-                :entity-count="ownersCount"
-                :page-size="pageSize"
-                @tabSelected="tabSelected"
-              />
+              <pseudo-owners />
             </article>
           </div>
         </div>
@@ -144,34 +67,24 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
 import MarkdownDoc from "../components/MarkdownDoc";
-import Pagination from "../components/Pagination";
 import { PAGED_OWNERS, ALL_OWNER_ADDRESSES } from "../queries";
-
-const PAGE_SIZE = 10;
+import PseudoOwners from "../components/PseudoOwners";
 
 export default {
   name: "Nfts",
   components: {
-    EthAmount,
-    EthAccount,
     Footer,
     Header,
-    HelpModal,
     MarkdownDoc,
-    Pagination,
+    PseudoOwners,
   },
   data() {
     return {
       activeTab: null,
       isOverviewModalActive: false,
-      pageSize: PAGE_SIZE,
-      first: PAGE_SIZE,
       skip: 0,
       ownersCount: 0,
     };
@@ -194,12 +107,30 @@ export default {
       },
     },
   },
-  methods: {
-    tabSelected(id) {
-      this.skip = id * PAGE_SIZE;
-    },
-  },
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+article {
+  &.coming-soon {
+    position: relative;
+
+    .coming-soon-img {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      bottom: 0;
+      right: 0;
+      z-index: 1;
+      left: 0;
+      top: 0;
+
+      img {
+        position: absolute;
+        right: -20px;
+        bottom: -20px;
+      }
+    }
+  }
+}
+</style>

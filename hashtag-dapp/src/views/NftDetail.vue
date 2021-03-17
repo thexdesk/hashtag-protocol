@@ -61,11 +61,6 @@
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="tile is-child box">
-                  <help-modal
-                    modal="isTagAssetModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
                   <p class="title is-5">Tag this asset</p>
                   <form>
                     <div class="field">
@@ -140,11 +135,6 @@
                     </div>
                   </form>
                   <hr />
-                  <help-modal
-                    modal="isRecentTagsModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
                   <h2 class="title is-5">Recent tags</h2>
                   <div class="b-table">
                     <div class="table-wrapper has-mobile-cards">
@@ -206,88 +196,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isTagAssetModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagged-asset-detail-tag-asset"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content"?'
-                      : 'What is "tagged content"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isRecentTagsModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagged-asset-detail-recent-tags"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content"?'
-                      : 'What is "tagged content"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <section v-else>Loading...</section>
     <Footer></Footer>
@@ -299,8 +207,6 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import TimestampFrom from "../components/TimestampFrom";
 import { TAGS_BY_DIGITAL_ASSET, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 
@@ -313,15 +219,11 @@ export default {
     Footer,
     Hashtag,
     Header,
-    HelpModal,
-    MarkdownDoc,
     TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      isTagAssetModalActive: false,
-      isRecentTagsModalActive: false,
       name: this.$route.params.name,
       type: this.$route.params.type,
       contract: this.$route.params.contract,

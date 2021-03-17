@@ -1,5 +1,5 @@
 <template>
-  <div v-html="docBody"></div>
+  <div v-html="docBody" class="content"></div>
 </template>
 <script>
 const axios = require("axios");

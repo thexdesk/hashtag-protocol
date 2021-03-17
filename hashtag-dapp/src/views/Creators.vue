@@ -1,12 +1,6 @@
 <template>
-  <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+  <div class="body auction">
+    <Header />
     <section class="main">
       <div class="container">
         <h1 class="title is-1">Creators</h1>
@@ -21,11 +15,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <!--              <help-modal-->
-              <!--                modal="isOverviewModalActive"-->
-              <!--                @popModalFromChild="popModal"-->
-              <!--                class="is-pulled-right"-->
-              <!--              ></help-modal>-->
               <h2 class="title is-4 is-spaced"></h2>
               <div class="b-table">
                 <!---->
@@ -107,45 +96,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publishers-list-overview"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? "What's a Hashtag Protocol Publisher?"
-                      : "What's a Hashtag Protocol Publisher?"
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="040-what-is-a-publisher"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -156,8 +106,6 @@ import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-// import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import Pagination from "../components/Pagination";
 import { PAGED_CREATORS, ALL_CREATORS } from "@/queries";
 
@@ -170,14 +118,11 @@ export default {
     EthAccount,
     Footer,
     Header,
-    // HelpModal,
-    MarkdownDoc,
     Pagination,
   },
   data() {
     return {
       activeTab: null,
-      isOverviewModalActive: false,
       pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,

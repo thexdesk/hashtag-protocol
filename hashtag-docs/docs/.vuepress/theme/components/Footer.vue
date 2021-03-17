@@ -26,7 +26,7 @@
               ></span>
             </a>
             <a
-              :href="this.build"
+              :href="this.discord"
               target="_blank"
               title="Discord"
               class="is-dark navbar-item"

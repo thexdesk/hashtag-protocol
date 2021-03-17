@@ -1,12 +1,6 @@
 <template>
-  <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+  <div class="body auction">
+    <Header />
     <section class="main" v-if="creatorByAcc">
       <div class="container">
         <h1 class="title is-1">
@@ -24,11 +18,6 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <!--                <help-modal-->
-                <!--                  modal="isOwnerInfoModalActive"-->
-                <!--                  @popModalFromChild="popModal"-->
-                <!--                  class="is-pulled-right"-->
-                <!--                ></help-modal>-->
                 <h2 class="title is-4">Creator information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
@@ -48,11 +37,6 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <!--                <help-modal-->
-                <!--                  modal="isMarketSummaryActive"-->
-                <!--                  @popModalFromChild="popModal"-->
-                <!--                  class="is-pulled-right"-->
-                <!--                ></help-modal>-->
                 <h2 class="title is-4">Market summary</h2>
                 <div class="b-table" v-if="creatorByAcc">
                   <div class="table-wrapper">
@@ -98,19 +82,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <b-tooltip
-                label="Help"
-                position="is-bottom"
-                class="is-pulled-right"
-                type="is-dark"
-              >
-                <button
-                  class="button is-white"
-                  @click="isActivityModalActive = true"
-                >
-                  <b-icon icon="help-circle-outline" type="is-dark"> </b-icon>
-                </button>
-              </b-tooltip>
               <h2 class="title is-4 is-spaced">
                 Activity for <eth-account :value="creator"></eth-account>
               </h2>
@@ -255,96 +226,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isOwnerInfoModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="owner-detail-owner-info"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open ? 'What\'s an "Owner"?' : 'What\'s an "Owner"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="050-what-is-an-owner"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isMarketSummaryActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="owner-detail-market-summary"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is the "Hashtag Market"?'
-                      : 'What is the "Hashtag Market"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="owner-detail-recent-activity"
-              ></markdown-doc>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -354,7 +235,6 @@
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-// import HelpModal from "../components/HelpModal";
 import {
   PAGED_HASHTAGS_BY_CREATOR,
   CREATOR_BY_ACC,
@@ -366,7 +246,6 @@ import EthAmount from "../components/EthAmount";
 import EthAmountSum from "../components/EthAmountSum";
 import Hashtag from "../components/Hashtag";
 import TimestampFrom from "../components/TimestampFrom";
-import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 
@@ -381,8 +260,6 @@ export default {
     Footer,
     Hashtag,
     Header,
-    // HelpModal,
-    MarkdownDoc,
     NftLink,
     Pagination,
     TimestampFrom,

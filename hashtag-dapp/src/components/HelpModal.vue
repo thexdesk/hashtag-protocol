@@ -1,6 +1,6 @@
 <template>
   <b-tooltip label="Help" position="is-bottom" type="is-dark">
-    <a @click="popModal" class="has-text-grey">
+    <a class="has-text-grey">
       <span class="icon"
         ><i class="mdi mdi-help-circle-outline mdi-24px"></i
       ></span>

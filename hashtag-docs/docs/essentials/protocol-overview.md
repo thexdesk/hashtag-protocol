@@ -48,7 +48,7 @@ ERC-721 non-fungible token.  have the following features:
    where they are held until released for auction.
 9. While pending release for auction, a `HASHTAG` may be used to tag digital
    assets by any user on any **_Publisher_** platform. The first auction
-   commence in Phase 3 of the [project roadmap](/essentials/roadmap) and run
+   commences in Phase 3 of the [project roadmap](/essentials/roadmap) and run
    continually there after.
 10. Once released for auction, anyone may bid on a `HASHTAG` on any platform
     hosting auctions. See [`HASHTAG` Auction](#hashtag-auction) for more

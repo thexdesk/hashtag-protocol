@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="hashtag-mint">
     <b-field v-if="hashtags">
       <b-taginput
         v-model="hashtagInput"
@@ -29,7 +29,7 @@
         </template>
         <template slot="empty">
           <span class="new-hashtag"
-            >Unique hashtag! Press enter to continue...</span
+            >Unique HASHTAG! Press enter to continue...</span
           >
         </template>
         <template slot="selected" slot-scope="props">
