@@ -352,10 +352,6 @@ export default {
       activeTab: null,
       hashtagsByName: null,
       publisher: this.$route.params.address,
-      publisherName: "KnownOrigin",
-      publisherRegistration: "https://#",
-      publisherWebsite: "https://knownorigin.io",
-      publisherRegURL: null,
       tagsByHashtag: null,
       hashtagsTab: {
         pageSize: PAGE_SIZE,
