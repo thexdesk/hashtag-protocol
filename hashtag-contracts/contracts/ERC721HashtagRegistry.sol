@@ -29,7 +29,7 @@ contract ERC721HashtagRegistry is Context, ReentrancyGuard {
 
     uint256 public totalTags = 0;
 
-    uint256 public tagFee = 0.01 ether;
+    uint256 public tagFee = 0.001 ether;
 
     // Used to log that an NFT has been tagged
     event HashtagRegistered(

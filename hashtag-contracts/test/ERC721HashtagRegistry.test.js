@@ -86,7 +86,7 @@ describe('ERC721HashtagRegistry Tests', function () {
         nftId,
         publisherAddress,
         taggerAddress,
-        {value: utils.parseEther('0.01')}
+        {value: utils.parseEther('0.001')}
       )).to.emit(this.registry, 'HashtagRegistered')
         .withArgs(
           taggerAddress,
@@ -95,7 +95,7 @@ describe('ERC721HashtagRegistry Tests', function () {
           constants.Two,
           nftId,
           constants.One,
-          utils.parseEther('0.01'),
+          utils.parseEther('0.001'),
         );
 
       const {
@@ -116,9 +116,9 @@ describe('ERC721HashtagRegistry Tests', function () {
       expect(_publisher).to.be.equal(publisherAddress);
 
       // check accrued values
-      expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
-      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
-      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
+      expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.0003')); // 30%
+      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.0002')); // 20%
+      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.0005')); // 50%
     });
 
     it('should be able to tag a cryptokittie with #pussypower (pre-auction of #pussypower)', async function () {
@@ -130,7 +130,7 @@ describe('ERC721HashtagRegistry Tests', function () {
         nftId,
         publisherAddress,
         taggerAddress,
-        {value: utils.parseEther('0.01')}
+        {value: utils.parseEther('0.001')}
       )).to.emit(this.registry, 'HashtagRegistered')
         .withArgs(
           taggerAddress,
@@ -139,7 +139,7 @@ describe('ERC721HashtagRegistry Tests', function () {
           this.hashtagId,
           nftId,
           constants.One,
-          utils.parseEther('0.01'),
+          utils.parseEther('0.001'),
         );
 
       expect(await this.registry.totalTags()).to.be.equal(1);
@@ -162,9 +162,9 @@ describe('ERC721HashtagRegistry Tests', function () {
       expect(_publisher).to.be.equal(publisherAddress);
 
       // check accrued values
-      expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
-      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
-      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
+      expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.0003')); // 30%
+      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.0002')); // 20%
+      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.0005')); // 50%
     });
 
     it('should be able to tag a cryptokittie with #pussypower (pre and post auction of #pussypower)', async function () {
@@ -176,15 +176,15 @@ describe('ERC721HashtagRegistry Tests', function () {
         nftOneId,
         publisherAddress,
         taggerAddress,
-        {value: utils.parseEther('0.01')}
+        {value: utils.parseEther('0.001')}
       );
 
       expect(await this.registry.totalTags()).to.be.equal(1);
 
       // check accrued values
-      expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
-      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.002')); // 20%
-      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.004')); // 40%
+      expect(await this.registry.accrued(publisherAddress)).to.be.equal(utils.parseEther('0.0003')); // 430%
+      expect(await this.registry.accrued(platformAddress)).to.be.equal(utils.parseEther('0.0002')); // 20%
+      expect(await this.registry.accrued(taggerAddress)).to.be.equal(utils.parseEther('0.0005')); // 50%
 
       await this.hashtagProtocol.connect(platform).transferFrom(platformAddress, buyerAddress, this.hashtagId);
 
@@ -195,13 +195,13 @@ describe('ERC721HashtagRegistry Tests', function () {
         nftTwoId,
         publisherAddress,
         taggerAddress,
-        {value: utils.parseEther('0.01')}
+        {value: utils.parseEther('0.001')}
       );
 
-      expect(await this.registry.totalDue(publisherAddress)).to.be.equal(utils.parseEther('0.008'));
-      expect(await this.registry.totalDue(platformAddress)).to.be.equal(utils.parseEther('0.004'));
-      expect(await this.registry.totalDue(taggerAddress)).to.be.equal(utils.parseEther('0.004'));
-      expect(await this.registry.totalDue(buyerAddress)).to.be.equal(utils.parseEther('0.004'));
+      expect(await this.registry.totalDue(publisherAddress)).to.be.equal(utils.parseEther('0.0006'));
+      expect(await this.registry.totalDue(platformAddress)).to.be.equal(utils.parseEther('0.0004'));
+      expect(await this.registry.totalDue(taggerAddress)).to.be.equal(utils.parseEther('0.0005'));
+      expect(await this.registry.totalDue(buyerAddress)).to.be.equal(utils.parseEther('0.0005'));
     });
 
     it('Reverts when hashtag does not exist', async function () {
