@@ -10,6 +10,7 @@ Vue.mixin({
       website: "https://www.hashtag-protocol.org",
       app: "https://app.hashtag-protocol.org",
       docs: "https://docs.hashtag-protocol.org",
+      discord: "https://discord.gg/EyTJFRm",
     };
   },
   created() {

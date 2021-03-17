@@ -5,7 +5,7 @@
         <p class="is-size-3 has-text-weight-bold">#KeepMeUpdated</p>
         <p class="has-text-grey-light">
           Sign up to our newsletter for occasional updates about our movement to
-          bring social tagging to the decentralized web
+          decentralize hashtags
         </p>
       </div>
       <NewsletterForm />
@@ -36,7 +36,7 @@
               ></span>
             </a>
             <a
-              :href="this.build"
+              :href="this.discord"
               target="_blank"
               title="Discord"
               class="is-dark navbar-item"
@@ -90,7 +90,7 @@ export default {
 <style scoped lang="scss">
 .footer {
   .newsletter {
-    padding: 3rem 0 4rem;
+    padding: 9rem 0;
     background-color: $grey-dark;
   }
 

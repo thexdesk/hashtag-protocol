@@ -9,9 +9,12 @@ import NftDetail from "./views/NftDetail";
 import Owners from "./views/Owners";
 import OwnerDetail from "./views/OwnerDetail";
 import Publishers from "./views/Publishers";
+import Creators from "./views/Creators";
+import CreatorDetail from "@/views/CreatorDetail";
 import PublisherDetail from "./views/PublisherDetail";
 import Taggers from "./views/Taggers";
 import TaggerDetail from "./views/TaggerDetail";
+import Auction from "./views/Auction";
 
 Vue.use(VueRouter);
 
@@ -59,6 +62,16 @@ export const router = new VueRouter({
       component: Publishers,
     },
     {
+      path: "/creators",
+      name: "creators",
+      component: Creators,
+    },
+    {
+      path: "/creator/:address",
+      name: "creator-detail",
+      component: CreatorDetail,
+    },
+    {
       path: "/publisher/:address",
       name: "publisher-detail",
       component: PublisherDetail,
@@ -72,6 +85,11 @@ export const router = new VueRouter({
       path: "/tagger/:address",
       name: "tagger-detail",
       component: TaggerDetail,
+    },
+    {
+      path: "/auction",
+      name: "auction",
+      component: Auction,
     },
   ],
 });

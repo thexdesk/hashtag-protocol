@@ -5,6 +5,7 @@ type Hashtag @entity {
   hashtag: String!
   hashtagWithoutHash: String!
   owner: Bytes!
+  creator: Bytes!
   publisher: Bytes!
   timestamp: BigInt!
   tagCount: BigInt!
@@ -56,5 +57,12 @@ type Tagger @entity {
 
 type Platform @entity {
   id: ID!
+  tagFees: BigInt!
+}
+
+type Creator @entity {
+  id: ID!
+  mintCount: BigInt!
+  tagCount: BigInt!
   tagFees: BigInt!
 }

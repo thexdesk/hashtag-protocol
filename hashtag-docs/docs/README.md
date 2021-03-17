@@ -1,27 +1,41 @@
-# Introduction
+# Welcome to Hashtag
 
-People around the globe use hashtags to increase discoverability and
-engagement of online content. One estimate from 2017 is that on Twitter alone
-around 125 million hashtags are shared every day. This widespread use gives
-hashtags immense social, functional and monetary value. 
+We're glad you're here!
 
-While taggers certainly derive some value from tagging content, we believe the
-lion's share of the value is siloed, obscured and monopolized in a few
-centralized social networks.
+This site provides documentation for Hashtag, an experimental content tagging
+protocol for the decentralized internet. Here you’ll find both high-level and
+technical information for developers, end-users and anyone else trying to
+understand how to benefit from this new technology.
 
-> **We envision a paradigm shift where hashtags are mediated by a
-> decentralized crypto-economic network rather than a few central
-> authorities.**
+**Essentials** provides a high-level overview of Hashtag including our big
+vision.
 
-The result will be a global information architecture that is more freely and
-efficiently accessed than today and a system with potential use cases that may be
-revolutionary.
+**Develop** - How developers can understand, improve and contribute back to the
+Hashtag.
 
-To achieve our vision, we have developed an experimental protocol consisting
-of a set of Ethereum smart contracts that enables the tokenization of hashtag
-strings into ERC-721 non-fungible tokens (NFTs); the “tagging” of other
-digital assets with those tokens; and APIs for surfacing this data for use in
-networks, platforms and applications.
+**Implement** - How to implement Hashtag on your platform.
 
-Stitched into the Protocol are game-theory incentive mechanisms that harnesses
-the self-interest of participants to drive positive network growth. 
+_**One preface before you press on**_...like the protocol itself, this
+documentation is in a very early state. Many sections are simply placeholders.
+We hope this will change as we welcome developers like you to join the Hashtag
+community and contribute to this site and to the project.
+
+## What is Hashtag?
+
+Hashtag is a simple, decentralized protocol built for developers to tokenize
+hashtag strings as non-fungible tokens (NFTs), link them with online media and
+surface this data for use in networks, platforms and applications.
+
+Stitched into this functionality are incentive mechanisms that
+harnesses the self-interest of participants to drive positive network growth.
+
+## How can I get involved?
+
+[Try out our demo](https://app.hashtag-protocol.org)
+
+[Join the conversation on Discord](https://discord.gg/rRXa8QG435)
+
+[Subscribe to our newsletter](https://hashtagprotocol.substack.com)
+
+[Contact us for access to the beta code](https://www.hashtag-protocol.org/build)
+(or for any other reason for that matter)

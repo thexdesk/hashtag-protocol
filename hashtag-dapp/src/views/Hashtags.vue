@@ -15,11 +15,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isOverviewModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
               <h2 class="title is-4 is-spaced"></h2>
               <div class="b-table">
                 <!---->
@@ -39,6 +34,12 @@
                         <th class="">
                           <div class="th-wrap">
                             Created
+                            <!---->
+                          </div>
+                        </th>
+                        <th class="">
+                          <div class="th-wrap">
+                            Creator
                             <!---->
                           </div>
                         </th>
@@ -82,9 +83,10 @@
                             :value="hashtag.timestamp"
                           ></timestamp-from>
                         </td>
-                        <td data-label="Owner" class="">
-                          <eth-account :value="hashtag.owner"></eth-account>
+                        <td data-label="Creator" class="">
+                          <eth-account :value="hashtag.creator"></eth-account>
                         </td>
+                        <td data-label="Owner" class="">Pending Auction</td>
                         <td data-label="Publisher" class="">
                           <eth-account :value="hashtag.publisher"></eth-account>
                         </td>
@@ -107,45 +109,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtags-list-overview"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? "What's a Hashtag Token?"
-                      : "What's a Hashtag Token?"
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="020-what-is-hashtag-token"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -156,8 +119,6 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import Pagination from "../components/Pagination";
 import TimestampFrom from "../components/TimestampFrom";
 import { PAGED_HASHTAGS, ALL_HASHTAG_TOKEN_IDS } from "../queries";
@@ -172,14 +133,11 @@ export default {
     Hashtag,
     Footer,
     Header,
-    HelpModal,
-    MarkdownDoc,
     Pagination,
   },
   data() {
     return {
       activeTab: null,
-      isOverviewModalActive: false,
       pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,

@@ -21,12 +21,10 @@
               title="Github"
               class="navbar-item"
             >
-              <span class="icon"
-                ><i class="mdi mdi-github-circle mdi-24px"></i
-              ></span>
+              <span class="icon"><i class="mdi mdi-github mdi-24px"></i></span>
             </a>
             <a
-              :href="this.build"
+              :href="this.discordServer"
               target="_blank"
               title="Discord"
               class="is-dark navbar-item"

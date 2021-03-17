@@ -1,4 +1,4 @@
-import {Owner, Platform, Publisher, Tagger} from "../generated/schema";
+import {Creator, Owner, Platform, Publisher, Tagger} from "../generated/schema";
 import {BigInt, Bytes, ipfs, json, JSONValue} from "@graphprotocol/graph-ts/index";
 
 /*
@@ -94,6 +94,26 @@ export function safeLoadTagger(id: string): Tagger | null {
         entity = new Tagger(id);
         entity.tagCount = ZERO;
         entity.feesPaid = ZERO;
+    }
+
+    return entity;
+}
+
+/*
+ * Safely loads (and initialises if needed) an Creator entity
+ *
+ * Note: A Creator is the person who made the first instance of a tag
+ *
+ * id identifer; in this case the Ethereum account
+ */
+export function safeLoadCreator(id: string): Creator | null {
+    let entity = Creator.load(id);
+
+    if (entity === null) {
+        entity = new Creator(id);
+        entity.mintCount = ZERO;
+        entity.tagCount = ZERO;
+        entity.tagFees = ZERO;
     }
 
     return entity;

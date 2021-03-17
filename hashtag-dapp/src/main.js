@@ -51,8 +51,14 @@ Vue.filter("shortEth", function (value) {
   `;
 });
 
-Vue.filter("toEth", function (value) {
+Vue.filter("toEth", function (value, decimals = null) {
   if (!value) return value;
+  if (decimals) {
+    let ether = Number(
+      ethers.utils.formatEther(ethers.utils.bigNumberify(value))
+    );
+    return ether.toFixed(decimals);
+  }
   return ethers.utils.formatEther(ethers.utils.bigNumberify(value));
 });
 

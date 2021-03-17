@@ -1,7 +1,8 @@
 ## Isn’t Hashtag Protocol just rent seeking?
 
-We don’t think so. In fact, we believe the opposite. It’s a fair assumption
-the centralized social networks are controlling the vast social, informational
-and financial equity of stored in hashtags. If we succeed in our mission, this
-equity and information architecture will be decentralized and redistributed
-back to the public.
+Quite the opposite. We envision a paradigm shift where hashtags are mediated by
+a decentralized crypto-economic network rather than a few central authorities.
+
+The result will be a global information architecture that is more freely and
+efficiently accessed than today and an unlocking of value presently siloed,
+obscured and monopolized in a few centralized social networks.

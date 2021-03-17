@@ -5,11 +5,13 @@ import utils from "../utils";
 import onBoardChainMap from "../data/onBoardChainMap.json";
 
 const chainID = process.env.VUE_APP_ONBOARD_NETWORK_ID;
+const discordServer = process.env.VUE_APP_DISCORD_SERVER;
 
 Vue.mixin({
   data: function () {
     return {
       // @TODO: Put the following into env. variables?
+      discordServer: discordServer,
       designNotes: "/docs/hashtag-protocol.pdf",
       // App and Docs base urls. Values set here are for
       // production environment. Note values are overridden
@@ -47,6 +49,11 @@ Vue.mixin({
     this.setSection();
   },
   methods: {
+    chainNameFromId(chainID) {
+      if (onBoardChainMap[chainID]) {
+        return onBoardChainMap[chainID];
+      }
+    },
     /**
      * Pop a specific help text modal from the HelpModal component.
      * Called via $emit from within the component.

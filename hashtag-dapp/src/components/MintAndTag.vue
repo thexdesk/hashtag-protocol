@@ -35,9 +35,9 @@
       scroll="keep"
       @close="resetModalForm"
     >
-      <div class="card">
-        <div class="card-content">
-          <div class="tile is-ancestor">
+      <div class="modal-card markdown-modal tag-and-mint">
+        <section class="modal-card-body">
+          <div class="tile">
             <div class="tile is-5">
               <!-- 1/3 -->
               <div class="card">
@@ -61,15 +61,11 @@
               </div>
             </div>
             <div class="tile">
-              <div class="tile is-child modal-tag">
-                <div class="content">
-                  <span class="has-text-weight-bold is-size-4 is-block"
-                    >Tag this asset</span
-                  >
-                  <span class="is-block is-size-6"
-                    >Choose a hashtag to describe this digital asset.</span
-                  >
-                </div>
+              <div class="content form-wrapper">
+                <h2 class="is-title is-size-4 is-block">Tag this asset</h2>
+                <p class="is-block is-size-6">
+                  Choose a HASHTAG to describe this digital asset.
+                </p>
 
                 <form>
                   <div class="field">
@@ -100,7 +96,7 @@
                           </b-taglist>
                         </template>
                         <template slot="empty">
-                          New hashtag! Press enter to continue...
+                          New HASHTAG! Press enter to to mint and tag...
                         </template>
                         <template slot="selected" slot-scope="props">
                           <div v-bind:class="{ box: isTaggable }">
@@ -146,7 +142,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </b-modal>
   </section>
@@ -341,3 +337,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.tag-and-mint {
+  .form-wrapper {
+    padding: 1rem;
+  }
+}
+</style>

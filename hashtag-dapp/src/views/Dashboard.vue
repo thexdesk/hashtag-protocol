@@ -7,7 +7,7 @@
           <div class="columns is-tablet is-centered">
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
-                <p class="title is-4 has-text-white">Create a hashtag</p>
+                <p class="title is-4 has-text-white">Create a HASHTAG token</p>
                 <Mint />
               </article>
             </div>
@@ -29,11 +29,15 @@
               <div class="tile is-parent is-6 is-12-mobile is-vertical">
                 <div class="tile is-child box">
                   <article class="is-white">
-                    <help-modal
-                      modal="isNewHashtagsModalActive"
-                      @popModalFromChild="popModal"
-                      class="is-pulled-right"
-                    ></help-modal>
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '020-what-is-hashtag-token',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
                     <h2 class="title is-5">Newest hashtags</h2>
                     <b-table
                       :data="hashtags ? hashtags.slice(0, 10) : []"
@@ -62,13 +66,13 @@
                           ></timestamp-from>
                         </b-table-column>
                         <b-table-column
-                          field="owner"
-                          label="Owner"
+                          field="creator"
+                          label="Creator"
                           :visible="$screen.desktop"
                         >
                           <eth-account
-                            :value="props.row.owner"
-                            route="owner-detail"
+                            :value="props.row.creator"
+                            route="creator-detail"
                           ></eth-account>
                         </b-table-column>
                         <b-table-column
@@ -89,11 +93,15 @@
               <div class="tile is-parent is-6 is-12-mobile">
                 <div class="tile is-child box">
                   <article class="is-white">
-                    <help-modal
-                      modal="isRecentlyTaggedModalActive"
-                      @popModalFromChild="popModal"
-                      class="is-pulled-right"
-                    ></help-modal>
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '030-what-is-tagged-content',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
                     <h2 class="title is-5">Recently tagged content</h2>
                     <b-table :data="tags || []" focusable>
                       <template slot="footer" v-if="!isCustom">
@@ -160,11 +168,75 @@
               <div class="tile is-parent is-6 is-12-mobile">
                 <div class="tile is-child box">
                   <article class="is-white">
-                    <help-modal
-                      modal="isTopPublishersModalActive"
-                      @popModalFromChild="popModal"
-                      class="is-pulled-right"
-                    ></help-modal>
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '045-what-is-creator',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Top creators</h2>
+                    <b-table :data="creators || []">
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'creators' }"
+                            >Browse creators </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props" focusable>
+                        <b-table-column field="id" label="Creator">
+                          <eth-account
+                            :value="props.row.id"
+                            route="creator-detail"
+                          ></eth-account>
+                        </b-table-column>
+                        <b-table-column
+                          field="mintedCount"
+                          label="Hashtags"
+                          centered
+                        >
+                          {{ props.row.mintCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="revenue"
+                          label="Revenue"
+                          centered
+                        >
+                          <eth-amount :value="props.row.tagFees"></eth-amount>
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '040-what-is-a-publisher',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
                     <h2 class="title is-5">Top publishers</h2>
                     <b-table :data="publishers || []">
                       <template slot="footer" v-if="!isCustom">
@@ -213,112 +285,21 @@
                   </article>
                 </div>
               </div>
-              <div class="tile is-parent is-6 is-12-mobile">
-                <div class="tile is-child box">
-                  <article class="is-white">
-                    <help-modal
-                      modal="isTopOwnersModalActive"
-                      @popModalFromChild="popModal"
-                      class="is-pulled-right"
-                    ></help-modal>
-                    <h2 class="title is-5">Top owners</h2>
-                    <b-table :data="owners || []" focusable>
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'owners' }"
-                            >Browse owners </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props">
-                        <b-table-column field="id" label="Owner">
-                          <eth-account
-                            :value="props.row.id"
-                            route="owner-detail"
-                          ></eth-account>
-                        </b-table-column>
-                        <b-table-column
-                          field="mintedCount"
-                          label="Hashtags"
-                          centered
-                        >
-                          {{ props.row.mintCount }}
-                        </b-table-column>
-                        <b-table-column
-                          field="ownedCount"
-                          label="Tag count"
-                          centered
-                        >
-                          {{ props.row.tagCount }}
-                        </b-table-column>
-                        <b-table-column
-                          field="tagFees"
-                          label="Revenue"
-                          centered
-                        >
-                          <eth-amount :value="props.row.tagFees"></eth-amount>
-                        </b-table-column>
-                      </template>
-                    </b-table>
-                  </article>
-                </div>
-              </div>
             </div>
           </div>
           <div class="tile is-ancestor">
             <div class="tile is-horizontal">
               <div class="tile is-parent is-6 is-12-mobile">
                 <div class="tile is-child box">
-                  <article class="is-white">
-                    <help-modal
-                      modal="isPopHashtagsModalActive"
-                      @popModalFromChild="popModal"
-                      class="is-pulled-right"
-                    ></help-modal>
-                    <h2 class="title is-5">Popular hashtags</h2>
-                    <b-table :data="popular || []" focusable>
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'hashtags' }"
-                            >Browse hashtags </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props">
-                        <b-table-column field="name" label="Hashtag">
-                          <hashtag :value="props.row.displayHashtag"></hashtag>
-                        </b-table-column>
-                        <b-table-column
-                          field="tagCount"
-                          label="Tag count"
-                          centered
-                        >
-                          {{ props.row.tagCount }}
-                        </b-table-column>
-                      </template>
-                    </b-table>
-                  </article>
-                </div>
-              </div>
-              <div class="tile is-parent is-6 is-12-mobile">
-                <div class="tile is-child box">
-                  <help-modal
-                    modal="isTopTaggersModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
+                  <a
+                    @click="
+                      cardModal({
+                        type: 'faq',
+                        content: '060-what-is-a-tagger',
+                      })
+                    "
+                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                  />
                   <article class="is-white">
                     <h2 class="title is-5">Top taggers</h2>
                     <b-table :data="taggers || []" focusable>
@@ -354,268 +335,78 @@
                   </article>
                 </div>
               </div>
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '020-what-is-hashtag-token',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Popular hashtags</h2>
+                    <b-table :data="popular || []" focusable>
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'hashtags' }"
+                            >Browse hashtags </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props">
+                        <b-table-column field="name" label="Hashtag">
+                          <hashtag :value="props.row.displayHashtag"></hashtag>
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <a
+                    @click="
+                      cardModal({
+                        type: 'faq',
+                        content: '050-what-is-an-owner',
+                      })
+                    "
+                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                  />
+                  <article class="is-white coming-soon">
+                    <h2 class="title is-5">Top owners</h2>
+                    <div class="coming-soon-img">
+                      <a href="/auction"
+                        ><img src="../assets/coming-soon-banner.png"
+                      /></a>
+                    </div>
+                    <pseudo-owners />
+                  </article>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <!-- Help modals -->
-        <b-modal
-          :active.sync="isNewHashtagsModalActive"
-          :width="640"
-          scroll="keep"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <markdown-doc
-                  doc-type="help"
-                  filename="dashboard-newest-hashtags"
-                ></markdown-doc>
-                <b-collapse
-                  :open="false"
-                  aria-id="tokenOverview"
-                  animation="slide"
-                  class="pt-1 pb-1"
-                >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="tokenOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? "What's a Hashtag Token?"
-                        : "What's a Hashtag Token?"
-                    }}
-                  </a>
-                  <markdown-doc
-                    doc-type="faq"
-                    filename="020-what-is-hashtag-token"
-                    class="pt-1 pb-1"
-                  ></markdown-doc>
-                </b-collapse>
-              </div>
-            </div>
-          </div>
-        </b-modal>
-        <b-modal
-          :active.sync="isRecentlyTaggedModalActive"
-          :width="640"
-          scroll="keep"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <markdown-doc
-                  doc-type="help"
-                  filename="dashboard-recently-tagged"
-                ></markdown-doc>
-                <b-collapse
-                  :open="false"
-                  aria-id="tokenOverview"
-                  animation="slide"
-                  class="pt-1 pb-1"
-                >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="tokenOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? 'What is "tagged content"?'
-                        : 'What is "tagged content"?'
-                    }}
-                  </a>
-                  <markdown-doc
-                    doc-type="faq"
-                    filename="030-what-is-tagged-content"
-                    class="pt-1 pb-1"
-                  ></markdown-doc>
-                </b-collapse>
-              </div>
-            </div>
-          </div>
-        </b-modal>
-        <b-modal
-          :active.sync="isTopPublishersModalActive"
-          :width="640"
-          scroll="keep"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <markdown-doc
-                  doc-type="help"
-                  filename="dashboard-top-publishers"
-                ></markdown-doc>
-                <b-collapse
-                  :open="false"
-                  aria-id="tokenOverview"
-                  animation="slide"
-                  class="pt-1 pb-1"
-                >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="tokenOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? 'What\'s a "Publisher"?'
-                        : 'What\'s a "Publisher"?'
-                    }}
-                  </a>
-                  <markdown-doc
-                    doc-type="faq"
-                    filename="040-what-is-a-publisher"
-                    class="pt-1 pb-1"
-                  ></markdown-doc>
-                </b-collapse>
-              </div>
-            </div>
-          </div>
-        </b-modal>
-        <b-modal
-          :active.sync="isTopOwnersModalActive"
-          :width="640"
-          scroll="keep"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <markdown-doc
-                  doc-type="help"
-                  filename="dashboard-top-owners"
-                ></markdown-doc>
-                <b-collapse
-                  :open="false"
-                  aria-id="tokenOverview"
-                  animation="slide"
-                  class="pt-1 pb-1"
-                >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="tokenOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? 'What\'s an "Owner"?'
-                        : 'What\'s an "Owner"?'
-                    }}
-                  </a>
-                  <markdown-doc
-                    doc-type="faq"
-                    filename="050-what-is-an-owner"
-                    class="pt-1 pb-1"
-                  ></markdown-doc>
-                </b-collapse>
-              </div>
-            </div>
-          </div>
-        </b-modal>
-        <b-modal
-          :active.sync="isPopHashtagsModalActive"
-          :width="640"
-          scroll="keep"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <markdown-doc
-                  doc-type="help"
-                  filename="dashboard-popular-hashtags"
-                ></markdown-doc>
-                <b-collapse
-                  :open="false"
-                  aria-id="tokenOverview"
-                  animation="slide"
-                  class="pt-1 pb-1"
-                >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="tokenOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? "What's a Hashtag Token?"
-                        : "What's a Hashtag Token?"
-                    }}
-                  </a>
-                  <markdown-doc
-                    doc-type="faq"
-                    filename="020-what-is-hashtag-token"
-                    class="pt-1 pb-1"
-                  ></markdown-doc>
-                </b-collapse>
-              </div>
-            </div>
-          </div>
-        </b-modal>
-        <b-modal
-          :active.sync="isTopTaggersModalActive"
-          :width="640"
-          scroll="keep"
-        >
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <markdown-doc
-                  doc-type="help"
-                  filename="dashboard-top-taggers"
-                ></markdown-doc>
-                <b-collapse
-                  :open="false"
-                  aria-id="tokenOverview"
-                  animation="slide"
-                  class="pt-1 pb-1"
-                >
-                  <a
-                    slot="trigger"
-                    slot-scope="props"
-                    aria-controls="tokenOverview"
-                    class="has-text-weight-bold"
-                  >
-                    <b-icon
-                      :icon="!props.open ? 'menu-down' : 'menu-up'"
-                    ></b-icon>
-                    {{
-                      !props.open
-                        ? 'What\'s a "Tagger"?'
-                        : 'What\'s a "Tagger"?'
-                    }}
-                  </a>
-                  <markdown-doc
-                    doc-type="faq"
-                    filename="060-what-is-a-tagger"
-                    class="pt-1 pb-1"
-                  ></markdown-doc>
-                </b-collapse>
-              </div>
-            </div>
-          </div>
-        </b-modal>
       </section>
     </div>
     <Footer />
@@ -628,11 +419,12 @@ import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
+import MarkdownModal from "../components/MarkdownModal";
 import Mint from "../components/Mint";
 import MintAndTag from "../components/MintAndTag";
 import NftLink from "../components/NftLink";
+import PseudoOwners from "../components/PseudoOwners";
+
 import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 //import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
@@ -647,24 +439,29 @@ export default {
     Footer,
     Hashtag,
     Header,
-    HelpModal,
-    MarkdownDoc,
     Mint,
     MintAndTag,
     NftLink,
+    PseudoOwners,
     TimestampFrom,
   },
   data() {
     return {
-      isNewHashtagsModalActive: false,
-      isRecentlyTaggedModalActive: false,
-      isTopPublishersModalActive: false,
-      isTopOwnersModalActive: false,
-      isPopHashtagsModalActive: false,
-      isTopTaggersModalActive: false,
       isCustom: false,
     };
   },
+  methods: {
+    cardModal(props) {
+      this.$buefy.modal.open({
+        parent: this,
+        component: MarkdownModal,
+        props: props,
+        hasModalCard: true,
+        trapFocus: true,
+      });
+    },
+  },
+
   apollo: {
     hashtags: {
       query: FIRST_THOUSAND_HASHTAGS,
@@ -673,6 +470,10 @@ export default {
     publishers: {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
+    },
+    creators: {
+      query: SNAPSHOT,
+      pollInterval: 1000,
     },
     owners: {
       query: SNAPSHOT,
@@ -698,7 +499,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 section.widgets {
   padding-bottom: 5rem;
 }

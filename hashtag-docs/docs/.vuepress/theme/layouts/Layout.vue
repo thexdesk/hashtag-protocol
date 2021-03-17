@@ -7,23 +7,35 @@
       <section class="section main">
         <div class="container">
           <div class="columns">
-            <div class="column is-3 is-hidden-touch has-background-white-ter">
+            <div
+              class="column is-2-widescreen is-3-desktop is-hidden-touch has-background-white-ter"
+            >
               <div>
                 <Sidebar :items="sidebarItems"></Sidebar>
               </div>
             </div>
             <div
-              class="column is-7-widescreen is-9-desktop is-12-touch has-background-white"
+              class="column is-8-widescreen is-9-desktop is-12-touch has-background-white"
             >
               <div class="content">
                 <Content />
+                <PageEdit />
               </div>
             </div>
             <div
               class="column is-2-desktop is-hidden-touch is-hidden-desktop-only has-background-white"
             >
               <div class="sticky">
-                <PageEdit />
+                <template v-if="this.$page.headers">
+                  <div class="toc-menu menu">
+                    <p class="menu-label is-size-7">
+                      <span>Page contents</span>
+                    </p>
+                    <div class="is-size-7 menu-list">
+                      <TOC />
+                    </div>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
@@ -96,6 +108,6 @@ section.main {
 
 .sticky {
   position: sticky;
-  top: 100px;
+  top: 40px;
 }
 </style>
