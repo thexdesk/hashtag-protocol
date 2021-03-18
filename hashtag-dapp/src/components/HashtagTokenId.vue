@@ -2,14 +2,14 @@
   <div>
     {{ value }}
     <b-tooltip
-      label="view on Etherscan"
+      :label="this.label"
       position="is-bottom"
       type="is-dark"
       size="is-small"
       :animated="true"
     >
       <a :href="this.tokenUrl" target="_blank">
-        <b-icon icon="ethereum" type="is-primary" size="is-small"> </b-icon>
+        <b-icon icon="ethereum" type="is-grey-light" size="is-small"> </b-icon>
       </a>
     </b-tooltip>
   </div>
@@ -18,14 +18,17 @@
 <script>
 export default {
   name: "HashtagTokenId",
-  props: ["value"],
+  props: ["value", "hashtag"],
   data() {
     return {
       tokenUrl: "",
+      label: "",
     };
   },
-  mounted() {
-    this.tokenUrl = `${this.etherscanRinkby}/token/${this.contractRinkby}?a=${this.value}`;
+  created() {
+    // @see /src/mixins/global.js for url parts.
+    this.tokenUrl = `${this.etherscanBaseUrl}/token/${this.hashtagProtocolContractAddress}?a=${this.value}`;
+    this.label = `View ${this.hashtag} on Etherscan`;
   },
 };
 </script>

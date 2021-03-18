@@ -1,12 +1,6 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+    <Header />
     <section class="main">
       <div class="container">
         <h1 class="title is-1">
@@ -24,11 +18,6 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isTaggerInfoModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Tagger information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
@@ -48,11 +37,6 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Market summary</h2>
                 <div class="b-table" v-if="taggerByAcc">
                   <div class="table-wrapper">
@@ -81,11 +65,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isTaggedModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
               <h2 class="title is-4 is-spaced">
                 Content tagged by <eth-account :value="tagger"></eth-account>
               </h2>
@@ -199,128 +178,6 @@
           </div>
         </div>
       </div>
-      <b-modal
-        :active.sync="isTaggerInfoModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagger-detail-tagger-info"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open ? 'What\'s a "Tagger"?' : 'What\'s a "Tagger"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="060-what-is-a-tagger"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagger-detail-market-summary"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is the "Hashtag Market"?'
-                      : 'What is the "Hashtag Market"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isTaggedModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagger-detail-tagged-content"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content"?'
-                      : 'What is "tagged content"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -332,8 +189,6 @@ import EthAmount from "../components/EthAmount";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import {
@@ -353,8 +208,6 @@ export default {
     Footer,
     Hashtag,
     Header,
-    HelpModal,
-    MarkdownDoc,
     NftLink,
     Pagination,
     TimestampFrom,
@@ -362,9 +215,6 @@ export default {
   data() {
     return {
       activeTab: null,
-      isTaggerInfoModalActive: false,
-      isSummaryModalActive: false,
-      isTaggedModalActive: false,
       tagger: this.$route.params.address,
       tagsByHashtag: null,
       hashtagsByName: null,

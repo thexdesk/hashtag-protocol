@@ -1,88 +1,14 @@
 <template>
-  <div class="body">
-    <section class="hero dash has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-      <div class="hero-body">
+  <div class="body dashboard">
+    <div class="content-wrapper">
+      <Header />
+      <section class="widgets">
         <div class="container">
           <div class="columns is-tablet is-centered">
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
-                <p class="title is-4 has-text-white">Create a hashtag</p>
-                <template>
-                  <section>
-                    <b-field v-if="hashtags">
-                      <b-taginput
-                        v-model="hashtagInput"
-                        :data="hashtagInputTags"
-                        attached
-                        autocomplete
-                        :allow-new="true"
-                        maxtags="1"
-                        field="name"
-                        ref="taginput"
-                        icon="pound"
-                        size="is-medium"
-                        :has-counter="false"
-                        placeholder="Enter hashtag"
-                        @typing="getFilteredTags"
-                        :before-adding="validateTag"
-                      >
-                        <template slot-scope="props">
-                          <b-taglist attached>
-                            <b-tag type="is-primary" size="is-medium"
-                              >#{{ props.option.displayHashtag }}
-                            </b-tag>
-                            <b-tag type="is-dark" size="is-medium"
-                              >{{ props.option.tagCount }}
-                            </b-tag>
-                          </b-taglist>
-                        </template>
-                        <template slot="empty">
-                          <span class="new-hashtag"
-                            >Unique hashtag! Press enter to continue...</span
-                          >
-                        </template>
-                        <template slot="selected" slot-scope="props">
-                          <div v-bind:class="{ box: isNewTag() }">
-                            <b-tag
-                              v-for="(tag, index) in props.tags"
-                              :key="index"
-                              :tabstop="false"
-                              ellipsis
-                              attached
-                              type="is-primary"
-                              size="is-medium"
-                              closable
-                              close-type="is-dark"
-                              @close="$refs.taginput.removeTag(index, $event)"
-                            >
-                              <div v-if="tag.displayHashtag">
-                                #{{ tag.displayHashtag }}
-                              </div>
-                              <div v-else>#{{ tag }}</div>
-                            </b-tag>
-                            <div class="field">
-                              <div class="control">
-                                <b-button
-                                  type="is-primary"
-                                  class="is-outlined"
-                                  @click="mintHashtag()"
-                                  :disabled="!isNewTag()"
-                                  v-bind:class="{ 'is-hidden': !isNewTag() }"
-                                  >Mint token
-                                </b-button>
-                              </div>
-                            </div>
-                          </div>
-                        </template>
-                      </b-taginput>
-                    </b-field>
-                  </section>
-                </template>
+                <p class="title is-4 has-text-white">Create a HASHTAG token</p>
+                <Mint />
               </article>
             </div>
             <div class="divider is-vertical is-hidden-mobile">OR</div>
@@ -90,830 +16,452 @@
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
                 <p class="title is-4 has-text-white">Tag some content</p>
-                <b-field>
-                  <b-autocomplete
-                    v-model="tagForm.nftName"
-                    placeholder='Search NFTs by name; eg "Dog"'
-                    icon="magnify"
-                    field="name"
-                    size="is-medium"
-                    :loading="isFetching"
-                    @select="onNftSelected"
-                    @typing="getAsyncData"
-                    :data="nameContains"
-                  >
-                    <template slot-scope="props">
-                      <div class="media">
-                        <div class="media-left">
-                          <img
-                            :src="props.option.metadataImageURI"
-                            width="32"
-                          />
-                        </div>
-                        <div class="media-content">
-                          {{ props.option.metadataName }}
-                          <br />
-                          <small
-                            >{{ props.option.contractName }}
-                            <b>#{{ props.option.tokenId }}</b>
-                          </small>
-                        </div>
-                      </div>
-                    </template>
-                  </b-autocomplete>
-                </b-field>
+                <MintAndTag />
               </article>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section class="main">
-      <div class="container">
-        <div class="tile is-ancestor">
-          <div class="tile is-horizontal">
-            <div class="tile is-parent is-6 is-12-mobile is-vertical">
-              <div class="tile is-child box">
-                <article class="is-white">
-                  <help-modal
-                    modal="isNewHashtagsModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
-                  <h2 class="title is-5">Newest hashtags</h2>
-                  <b-table
-                    :data="hashtags ? hashtags.slice(0, 10) : []"
-                    focusable
-                  >
-                    <template slot="footer" v-if="!isCustom">
-                      <div class="has-text-right">
-                        <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags </router-link
-                        >&nbsp;
-                        <b-icon
-                          icon="arrow-right"
-                          type="is-dark"
-                          size="is-small"
-                        >
-                        </b-icon>
-                      </div>
-                    </template>
-                    <template slot-scope="props">
-                      <b-table-column field="name" label="Hashtag">
-                        <hashtag :value="props.row.displayHashtag"></hashtag>
-                      </b-table-column>
-                      <b-table-column field="timestamp" label="Created">
-                        <timestamp-from
-                          :value="props.row.timestamp"
-                        ></timestamp-from>
-                      </b-table-column>
-                      <b-table-column
-                        field="owner"
-                        label="Owner"
-                        :visible="$screen.desktop"
-                      >
-                        <eth-account
-                          :value="props.row.owner"
-                          route="owner-detail"
-                        ></eth-account>
-                      </b-table-column>
-                      <b-table-column
-                        field="publisher"
-                        label="Publisher"
-                        :visible="$screen.widescreen"
-                      >
-                        <eth-account
-                          :value="props.row.publisher"
-                          route="publisher-detail"
-                        ></eth-account>
-                      </b-table-column>
-                    </template>
-                  </b-table>
-                </article>
-              </div>
-            </div>
-            <div class="tile is-parent is-6 is-12-mobile">
-              <div class="tile is-child box">
-                <article class="is-white">
-                  <help-modal
-                    modal="isRecentlyTaggedModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
-                  <h2 class="title is-5">Recently tagged content</h2>
-                  <b-table :data="tags || []" focusable>
-                    <template slot="footer" v-if="!isCustom">
-                      <div class="has-text-right">
-                        <router-link :to="{ name: 'nfts' }"
-                          >Browse tagged assets </router-link
-                        >&nbsp;
-                        <b-icon
-                          icon="arrow-right"
-                          type="is-dark"
-                          size="is-small"
-                        >
-                        </b-icon>
-                      </div>
-                    </template>
-                    <template slot-scope="props">
-                      <b-table-column field="nftId" centered>
-                        <router-link
-                          :to="{
-                            name: 'nft-detail',
-                            params: {
-                              type: 'nft',
-                              contract: props.row.nftContract,
-                              id: props.row.nftId,
-                            },
-                          }"
-                        >
-                          <img
-                            :src="props.row.nftImage"
-                            :alt="props.row.nftName"
-                            class="nft-thumb"
-                          />
-                        </router-link>
-                      </b-table-column>
-                      <b-table-column field="nftName" label="Asset Name">
-                        <nft-link
-                          type="nft"
-                          :name="props.row.nftName"
-                          :contract="props.row.nftContract"
-                          :id="props.row.nftId"
-                        ></nft-link>
-                      </b-table-column>
-                      <b-table-column
-                        field="projectName"
-                        label="Project"
-                        :visible="$screen.widescreen"
-                      >
-                        {{ props.row.nftContractName }}
-                      </b-table-column>
-                      <b-table-column field="hashtagName" label="Hashtag">
-                        <hashtag
-                          :value="props.row.hashtagDisplayHashtag"
-                        ></hashtag>
-                      </b-table-column>
-                    </template>
-                  </b-table>
-                </article>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-horizontal">
-            <div class="tile is-parent is-6 is-12-mobile">
-              <div class="tile is-child box">
-                <article class="is-white">
-                  <help-modal
-                    modal="isTopPublishersModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
-                  <h2 class="title is-5">Top publishers</h2>
-                  <b-table :data="publishers || []">
-                    <template slot="footer" v-if="!isCustom">
-                      <div class="has-text-right">
-                        <router-link :to="{ name: 'publishers' }"
-                          >Browse publishers </router-link
-                        >&nbsp;
-                        <b-icon
-                          icon="arrow-right"
-                          type="is-dark"
-                          size="is-small"
-                        >
-                        </b-icon>
-                      </div>
-                    </template>
-                    <template slot-scope="props" focusable>
-                      <b-table-column field="id" label="Publisher">
-                        <eth-account
-                          :value="props.row.id"
-                          route="publisher-detail"
-                        ></eth-account>
-                      </b-table-column>
-                      <b-table-column
-                        field="mintedCount"
-                        label="Hashtags"
-                        centered
-                      >
-                        {{ props.row.mintCount }}
-                      </b-table-column>
-                      <b-table-column
-                        field="tagCount"
-                        label="Tag count"
-                        centered
-                      >
-                        {{ props.row.tagCount }}
-                      </b-table-column>
-                      <b-table-column field="revenue" label="Revenue" centered>
-                        <eth-amount-sum
-                          :value1="props.row.tagFees"
-                          :value2="props.row.mintFees"
-                        ></eth-amount-sum>
-                      </b-table-column>
-                    </template>
-                  </b-table>
-                </article>
-              </div>
-            </div>
-            <div class="tile is-parent is-6 is-12-mobile">
-              <div class="tile is-child box">
-                <article class="is-white">
-                  <help-modal
-                    modal="isTopOwnersModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
-                  <h2 class="title is-5">Top owners</h2>
-                  <b-table :data="owners || []" focusable>
-                    <template slot="footer" v-if="!isCustom">
-                      <div class="has-text-right">
-                        <router-link :to="{ name: 'owners' }"
-                          >Browse owners </router-link
-                        >&nbsp;
-                        <b-icon
-                          icon="arrow-right"
-                          type="is-dark"
-                          size="is-small"
-                        >
-                        </b-icon>
-                      </div>
-                    </template>
-                    <template slot-scope="props">
-                      <b-table-column field="id" label="Owner">
-                        <eth-account
-                          :value="props.row.id"
-                          route="owner-detail"
-                        ></eth-account>
-                      </b-table-column>
-                      <b-table-column
-                        field="mintedCount"
-                        label="Hashtags"
-                        centered
-                      >
-                        {{ props.row.mintCount }}
-                      </b-table-column>
-                      <b-table-column
-                        field="ownedCount"
-                        label="Tag count"
-                        centered
-                      >
-                        {{ props.row.tagCount }}
-                      </b-table-column>
-                      <b-table-column field="tagFees" label="Revenue" centered>
-                        <eth-amount :value="props.row.tagFees"></eth-amount>
-                      </b-table-column>
-                    </template>
-                  </b-table>
-                </article>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-horizontal">
-            <div class="tile is-parent is-6 is-12-mobile">
-              <div class="tile is-child box">
-                <article class="is-white">
-                  <help-modal
-                    modal="isPopHashtagsModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
-                  <h2 class="title is-5">Popular hashtags</h2>
-                  <b-table :data="popular || []" focusable>
-                    <template slot="footer" v-if="!isCustom">
-                      <div class="has-text-right">
-                        <router-link :to="{ name: 'hashtags' }"
-                          >Browse hashtags </router-link
-                        >&nbsp;
-                        <b-icon
-                          icon="arrow-right"
-                          type="is-dark"
-                          size="is-small"
-                        >
-                        </b-icon>
-                      </div>
-                    </template>
-                    <template slot-scope="props">
-                      <b-table-column field="name" label="Hashtag">
-                        <hashtag :value="props.row.displayHashtag"></hashtag>
-                      </b-table-column>
-                      <b-table-column
-                        field="tagCount"
-                        label="Tag count"
-                        centered
-                      >
-                        {{ props.row.tagCount }}
-                      </b-table-column>
-                    </template>
-                  </b-table>
-                </article>
-              </div>
-            </div>
-            <div class="tile is-parent is-6 is-12-mobile">
-              <div class="tile is-child box">
-                <help-modal
-                  modal="isTopTaggersModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
-                <article class="is-white">
-                  <h2 class="title is-5">Top taggers</h2>
-                  <b-table :data="taggers || []" focusable>
-                    <template slot="footer" v-if="!isCustom">
-                      <div class="has-text-right">
-                        <router-link :to="{ name: 'taggers' }"
-                          >Browse taggers </router-link
-                        >&nbsp;
-                        <b-icon
-                          icon="arrow-right"
-                          type="is-dark"
-                          size="is-small"
-                        >
-                        </b-icon>
-                      </div>
-                    </template>
-                    <template slot-scope="props">
-                      <b-table-column field="id" label="Tagger">
-                        <eth-account
-                          :value="props.row.id"
-                          route="tagger-detail"
-                        ></eth-account>
-                      </b-table-column>
-                      <b-table-column
-                        field="tagCount"
-                        label="Tag count"
-                        centered
-                      >
-                        {{ props.row.tagCount }}
-                      </b-table-column>
-                    </template>
-                  </b-table>
-                </article>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Help modals -->
-      <b-modal
-        :active.sync="isNewHashtagsModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="dashboard-newest-hashtags"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? "What's a Hashtag Token?"
-                      : "What's a Hashtag Token?"
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="020-what-is-hashtag-token"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isRecentlyTaggedModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="dashboard-recently-tagged"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content"?'
-                      : 'What is "tagged content"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isTopPublishersModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="dashboard-top-publishers"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What\'s a "Publisher"?'
-                      : 'What\'s a "Publisher"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="040-what-is-a-publisher"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isTopOwnersModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="dashboard-top-owners"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open ? 'What\'s an "Owner"?' : 'What\'s an "Owner"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="050-what-is-an-owner"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isPopHashtagsModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="dashboard-popular-hashtags"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? "What's a Hashtag Token?"
-                      : "What's a Hashtag Token?"
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="020-what-is-hashtag-token"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isTopTaggersModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="dashboard-top-taggers"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open ? 'What\'s a "Tagger"?' : 'What\'s a "Tagger"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="060-what-is-a-tagger"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isTagModalActive"
-        :width="720"
-        scroll="keep"
-        @close="resetModalForm"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="tile is-ancestor">
-              <div class="tile is-5">
-                <!-- 1/3 -->
-                <div class="card">
-                  <div class="card-image">
-                    <figure class="image">
-                      <img
-                        v-if="modalForm.nft"
-                        :src="modalForm.nft.metadataImageURI"
-                        alt="Image"
-                      />
-                    </figure>
-                  </div>
-                  <div class="card-content">
-                    <span
-                      class="has-text-weight-bold is-size-6 is-block"
-                      v-if="modalForm.nft"
-                      >{{ modalForm.nft.metadataName }}</span
+      </section>
+      <section class="main">
+        <div class="container">
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
+              <div class="tile is-parent is-6 is-12-mobile is-vertical">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '020-what-is-hashtag-token',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Newest hashtags</h2>
+                    <b-table
+                      :data="hashtags ? hashtags.slice(0, 10) : []"
+                      focusable
                     >
-                    <Span class="is-size-7 is-block">Known Origin</Span>
-                  </div>
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'hashtags' }"
+                            >Browse hashtags </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props">
+                        <b-table-column field="name" label="Hashtag">
+                          <hashtag :value="props.row.displayHashtag"></hashtag>
+                        </b-table-column>
+                        <b-table-column field="timestamp" label="Created">
+                          <timestamp-from
+                            :value="props.row.timestamp"
+                          ></timestamp-from>
+                        </b-table-column>
+                        <b-table-column
+                          field="creator"
+                          label="Creator"
+                          :visible="$screen.desktop"
+                        >
+                          <eth-account
+                            :value="props.row.creator"
+                            route="creator-detail"
+                          ></eth-account>
+                        </b-table-column>
+                        <b-table-column
+                          field="publisher"
+                          label="Publisher"
+                          :visible="$screen.widescreen"
+                        >
+                          <eth-account
+                            :value="props.row.publisher"
+                            route="publisher-detail"
+                          ></eth-account>
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
                 </div>
               </div>
-              <div class="tile">
-                <div class="tile is-child modal-tag">
-                  <div class="content">
-                    <span class="has-text-weight-bold is-size-4 is-block"
-                      >Tag this asset</span
-                    >
-                    <span class="is-block is-size-6"
-                      >Choose a hashtag to describe this digital asset.</span
-                    >
-                  </div>
-
-                  <form>
-                    <div class="field">
-                      <div class="control">
-                        <b-taginput
-                          v-model="modalForm.hashtag"
-                          :data="hashtagInputTags"
-                          autocomplete
-                          :allow-new="true"
-                          maxtags="1"
-                          :has-counter="false"
-                          field="name"
-                          ref="tagginginput"
-                          icon="pound"
-                          placeholder="Enter a hashtag"
-                          @typing="getFilteredTags"
-                          @add="tagAssetValidation"
-                          :before-adding="validateTag"
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '030-what-is-tagged-content',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Recently tagged content</h2>
+                    <b-table :data="tags || []" focusable>
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'nfts' }"
+                            >Browse tagged assets </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props">
+                        <b-table-column field="nftId" centered>
+                          <router-link
+                            :to="{
+                              name: 'nft-detail',
+                              params: {
+                                type: 'nft',
+                                contract: props.row.nftContract,
+                                id: props.row.nftId,
+                              },
+                            }"
+                          >
+                            <img
+                              :src="props.row.nftImage"
+                              :alt="props.row.nftName"
+                              class="nft-thumb"
+                            />
+                          </router-link>
+                        </b-table-column>
+                        <b-table-column field="nftName" label="Asset Name">
+                          <nft-link
+                            type="nft"
+                            :name="props.row.nftName"
+                            :contract="props.row.nftContract"
+                            :id="props.row.nftId"
+                          ></nft-link>
+                        </b-table-column>
+                        <b-table-column
+                          field="projectName"
+                          label="Project"
+                          :visible="$screen.widescreen"
                         >
-                          <template slot-scope="props">
-                            <b-taglist attached>
-                              <b-tag type="is-primary" size="is-medium"
-                                >#{{ props.option.displayHashtag }}
-                              </b-tag>
-                              <b-tag type="is-dark" size="is-medium"
-                                >{{ props.option.tagCount }}
-                              </b-tag>
-                            </b-taglist>
-                          </template>
-                          <template slot="empty">
-                            New hashtag! Press enter to continue...
-                          </template>
-                          <template slot="selected" slot-scope="props">
-                            <div v-bind:class="{ box: isTaggable }">
-                              <b-tag
-                                v-for="(tag, index) in props.tags"
-                                :key="index"
-                                :tabstop="false"
-                                ellipsis
-                                attached
-                                type="is-primary"
-                                size="is-medium"
-                                closable
-                                close-type="is-dark"
-                                @close="
-                                  $refs.tagginginput.removeTag(index, $event)
-                                "
-                              >
-                                <div v-if="tag.displayHashtag">
-                                  #{{ tag.displayHashtag }}
-                                </div>
-                                <div v-else>#{{ tag }}</div>
-                              </b-tag>
-                              <div class="field">
-                                <div class="control">
-                                  <b-button
-                                    type="is-primary"
-                                    class="is-outlined"
-                                    @click="tagNft()"
-                                    :disabled="!isTaggable"
-                                    v-bind:class="{
-                                      'is-hidden': !isTaggable,
-                                    }"
-                                    >Tag asset
-                                  </b-button>
-                                </div>
-                              </div>
-                            </div>
-                          </template>
-                        </b-taginput>
-                      </div>
+                          {{ props.row.nftContractName }}
+                        </b-table-column>
+                        <b-table-column field="hashtagName" label="Hashtag">
+                          <hashtag
+                            :value="props.row.hashtagDisplayHashtag"
+                          ></hashtag>
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '045-what-is-creator',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Top creators</h2>
+                    <b-table :data="creators || []">
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'creators' }"
+                            >Browse creators </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props" focusable>
+                        <b-table-column field="id" label="Creator">
+                          <eth-account
+                            :value="props.row.id"
+                            route="creator-detail"
+                          ></eth-account>
+                        </b-table-column>
+                        <b-table-column
+                          field="mintedCount"
+                          label="Hashtags"
+                          centered
+                        >
+                          {{ props.row.mintCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="revenue"
+                          label="Revenue"
+                          centered
+                        >
+                          <eth-amount :value="props.row.tagFees"></eth-amount>
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '040-what-is-a-publisher',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Top publishers</h2>
+                    <b-table :data="publishers || []">
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'publishers' }"
+                            >Browse publishers </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props" focusable>
+                        <b-table-column field="id" label="Publisher">
+                          <eth-account
+                            :value="props.row.id"
+                            route="publisher-detail"
+                          ></eth-account>
+                        </b-table-column>
+                        <b-table-column
+                          field="mintedCount"
+                          label="Hashtags"
+                          centered
+                        >
+                          {{ props.row.mintCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                        <b-table-column
+                          field="revenue"
+                          label="Revenue"
+                          centered
+                        >
+                          <eth-amount :value="props.row.tagFees"></eth-amount>
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <a
+                    @click="
+                      cardModal({
+                        type: 'faq',
+                        content: '060-what-is-a-tagger',
+                      })
+                    "
+                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                  />
+                  <article class="is-white">
+                    <h2 class="title is-5">Top taggers</h2>
+                    <b-table :data="taggers || []" focusable>
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'taggers' }"
+                            >Browse taggers </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props">
+                        <b-table-column field="id" label="Tagger">
+                          <eth-account
+                            :value="props.row.id"
+                            route="tagger-detail"
+                          ></eth-account>
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <article class="is-white">
+                    <a
+                      @click="
+                        cardModal({
+                          type: 'faq',
+                          content: '020-what-is-hashtag-token',
+                        })
+                      "
+                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    />
+                    <h2 class="title is-5">Popular hashtags</h2>
+                    <b-table :data="popular || []" focusable>
+                      <template slot="footer" v-if="!isCustom">
+                        <div class="has-text-right">
+                          <router-link :to="{ name: 'hashtags' }"
+                            >Browse hashtags </router-link
+                          >&nbsp;
+                          <b-icon
+                            icon="arrow-right"
+                            type="is-dark"
+                            size="is-small"
+                          >
+                          </b-icon>
+                        </div>
+                      </template>
+                      <template slot-scope="props">
+                        <b-table-column field="name" label="Hashtag">
+                          <hashtag :value="props.row.displayHashtag"></hashtag>
+                        </b-table-column>
+                        <b-table-column
+                          field="tagCount"
+                          label="Tag count"
+                          centered
+                        >
+                          {{ props.row.tagCount }}
+                        </b-table-column>
+                      </template>
+                    </b-table>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tile is-ancestor">
+            <div class="tile is-horizontal">
+              <div class="tile is-parent is-6 is-12-mobile">
+                <div class="tile is-child box">
+                  <a
+                    @click="
+                      cardModal({
+                        type: 'faq',
+                        content: '050-what-is-an-owner',
+                      })
+                    "
+                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                  />
+                  <article class="is-white coming-soon">
+                    <h2 class="title is-5">Top owners</h2>
+                    <div class="coming-soon-img">
+                      <a href="/auction"
+                        ><img src="../assets/coming-soon-banner.png"
+                      /></a>
                     </div>
-                  </form>
+                    <pseudo-owners />
+                  </article>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </b-modal>
-    </section>
-    <Footer>
-      <span v-if="platform" class="has-text-grey-light">
-        Platform revenue
-        <eth-amount-sum
-          :value1="platform.mintFees"
-          :value2="platform.tagFees"
-        ></eth-amount-sum>
-      </span>
-    </Footer>
+      </section>
+    </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
-import EthAmountSum from "../components/EthAmountSum";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
+import MarkdownModal from "../components/MarkdownModal";
+import Mint from "../components/Mint";
+import MintAndTag from "../components/MintAndTag";
 import NftLink from "../components/NftLink";
-import {
-  SNAPSHOT,
-  FIRST_THOUSAND_HASHTAGS,
-  NFTS_ASSETS_NAME_CONTAINS,
-} from "@/queries";
-import { mapGetters } from "vuex";
+import PseudoOwners from "../components/PseudoOwners";
+
+import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+//import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
-import HashtagValidationService from "@/services/HashtagValidationService";
-import debounce from "lodash/debounce";
+//import HashtagValidationService from "@/services/HashtagValidationService";
+//import debounce from "lodash/debounce";
 
 export default {
   name: "Hashtags",
   components: {
-    TimestampFrom,
     EthAccount,
     EthAmount,
-    EthAmountSum,
-    MarkdownDoc,
     Footer,
     Hashtag,
     Header,
-    HelpModal,
+    Mint,
+    MintAndTag,
     NftLink,
+    PseudoOwners,
+    TimestampFrom,
   },
   data() {
     return {
-      isNewHashtagsModalActive: false,
-      isRecentlyTaggedModalActive: false,
-      isTopPublishersModalActive: false,
-      isTopOwnersModalActive: false,
-      isPopHashtagsModalActive: false,
-      isTopTaggersModalActive: false,
-      isTagModalActive: false,
       isCustom: false,
-      modalForm: {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-        mintAndTag: false,
-      },
-      hashtagInput: null,
-      hashtagInputTags: [],
-      nameContains: [],
-      isFetching: false,
-      tagForm: {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      },
     };
   },
-  computed: {
-    ...mapGetters(["supportedNfts", "nftAssetCache"]),
-    isTaggable() {
-      return (
-        this.modalForm.nftName &&
-        this.modalForm.nftName.length > 0 &&
-        this.modalForm.hashtag &&
-        this.modalForm.hashtag.length > 0
-      );
+  methods: {
+    cardModal(props) {
+      this.$buefy.modal.open({
+        parent: this,
+        component: MarkdownModal,
+        props: props,
+        hasModalCard: true,
+        trapFocus: true,
+      });
     },
   },
+
   apollo: {
     hashtags: {
       query: FIRST_THOUSAND_HASHTAGS,
@@ -922,6 +470,10 @@ export default {
     publishers: {
       query: SNAPSHOT,
       pollInterval: 1000, // ms
+    },
+    creators: {
+      query: SNAPSHOT,
+      pollInterval: 1000,
     },
     owners: {
       query: SNAPSHOT,
@@ -944,124 +496,15 @@ export default {
       pollInterval: 1000, // ms
     },
   },
-  methods: {
-    getAsyncData: debounce(async function (name) {
-      if (!name.length) {
-        this.nameContains = [];
-        return;
-      }
-
-      const { data } = await this.$apollo.query({
-        query: NFTS_ASSETS_NAME_CONTAINS,
-        client: "nftsClient",
-        variables: {
-          first: 100,
-          name: name,
-        },
-      });
-
-      this.nameContains = data.nameContains;
-    }, 300),
-    async tagNft() {
-      if (this.modalForm.mintAndTag) {
-        await this.$store.dispatch("mintAndTag", {
-          hashtag: this.modalForm.hashtag[0],
-          nftContract: this.modalForm.nft.contractAddress,
-          nftId: this.modalForm.nft.tokenId,
-        });
-      } else {
-        await this.$store.dispatch("tag", {
-          hashtagId: this.modalForm.hashtag[0].id,
-          nftContract: this.modalForm.nft.contractAddress,
-          nftId: this.modalForm.nft.tokenId,
-        });
-      }
-
-      this.resetModalForm();
-      this.isTagModalActive = false;
-    },
-    getFilteredTags: function (text) {
-      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
-      });
-    },
-    isNewTag: function () {
-      if (
-        this.hashtagInput &&
-        Array.isArray(this.hashtagInput) &&
-        (typeof this.hashtagInput[0] === "string" ||
-          this.hashtagInput[0] instanceof String)
-      ) {
-        return (
-          (this.hashtags || []).filter((option) => {
-            return (
-              option.name
-                .toLowerCase()
-                .indexOf(this.hashtagInput[0].toLowerCase()) >= 0
-            );
-          }).length === 0
-        );
-      }
-      return false;
-    },
-    mintHashtag() {
-      this.$store.dispatch("mint", this.hashtagInput[0]);
-    },
-    onNftSelected(nft) {
-      this.modalForm.nft = nft;
-      this.modalForm.nftName = nft.metadataName;
-      this.isTagModalActive = true;
-    },
-    resetModalForm() {
-      this.modalForm = {
-        hashtag: null,
-        nft: null,
-        nftName: null,
-      };
-    },
-    validateTag(hashtag) {
-      return this.hashtagValidationService.validateTag(hashtag);
-    },
-    tagAssetValidation(hashtag) {
-      const tagContentValid = this.validateTag(hashtag);
-      if (tagContentValid) {
-        const hashtagValue =
-          this.modalForm.hashtag[0] && this.modalForm.hashtag[0].name
-            ? this.modalForm.hashtag[0].name
-            : this.modalForm.hashtag[0];
-
-        const isNewHashtag =
-          (this.hashtagInputTags || []).filter((option) => {
-            return (
-              option.name.toLowerCase().indexOf(hashtagValue.toLowerCase()) >= 0
-            );
-          }).length === 0;
-
-        this.modalForm.mintAndTag = isNewHashtag;
-      }
-    },
-  },
-  created() {
-    this.hashtagValidationService = new HashtagValidationService(
-      this.$buefy.toast
-    );
-  },
 };
 </script>
 
-<style lang="scss">
-.modal-tag {
-  padding: 1rem;
+<style lang="scss" scoped>
+section.widgets {
+  padding-bottom: 5rem;
 }
 
-section.hero {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 2rem;
-
-  &.dash {
-    padding-bottom: 5rem;
-    margin-bottom: -4rem;
-  }
+.modal-tag {
+  padding: 1rem;
 }
 </style>

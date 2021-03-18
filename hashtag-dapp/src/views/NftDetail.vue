@@ -1,12 +1,6 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+    <Header />
     <section class="main" v-if="tagsByDigitalAsset">
       <div class="container">
         <h1 class="title is-1">{{ tagsByDigitalAsset[0].nftName }}</h1>
@@ -67,11 +61,6 @@
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
                 <article class="tile is-child box">
-                  <help-modal
-                    modal="isTagAssetModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
                   <p class="title is-5">Tag this asset</p>
                   <form>
                     <div class="field">
@@ -93,9 +82,9 @@
                         >
                           <template slot-scope="props">
                             <b-taglist attached>
-                              <b-tag type="is-primary" size="is-medium"
-                                >#{{ props.option.displayHashtag }}</b-tag
-                              >
+                              <b-tag type="is-primary" size="is-medium">{{
+                                props.option.displayHashtag
+                              }}</b-tag>
                               <b-tag type="is-dark" size="is-medium">{{
                                 props.option.tagCount
                               }}</b-tag>
@@ -121,7 +110,7 @@
                                 "
                               >
                                 <div v-if="tag.displayHashtag">
-                                  #{{ tag.displayHashtag }}
+                                  {{ tag.displayHashtag }}
                                 </div>
                                 <div v-else>#{{ tag }}</div>
                               </b-tag>
@@ -146,11 +135,6 @@
                     </div>
                   </form>
                   <hr />
-                  <help-modal
-                    modal="isRecentTagsModalActive"
-                    @popModalFromChild="popModal"
-                    class="is-pulled-right"
-                  ></help-modal>
                   <h2 class="title is-5">Recent tags</h2>
                   <div class="b-table">
                     <div class="table-wrapper has-mobile-cards">
@@ -212,88 +196,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isTagAssetModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagged-asset-detail-tag-asset"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content"?'
-                      : 'What is "tagged content"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal
-        :active.sync="isRecentTagsModalActive"
-        :width="640"
-        scroll="keep"
-      >
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="tagged-asset-detail-recent-tags"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content"?'
-                      : 'What is "tagged content"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <section v-else>Loading...</section>
     <Footer></Footer>
@@ -305,8 +207,6 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import TimestampFrom from "../components/TimestampFrom";
 import { TAGS_BY_DIGITAL_ASSET, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 
@@ -319,15 +219,11 @@ export default {
     Footer,
     Hashtag,
     Header,
-    HelpModal,
-    MarkdownDoc,
     TimestampFrom,
   },
   data() {
     return {
       activeTab: null,
-      isTagAssetModalActive: false,
-      isRecentTagsModalActive: false,
       name: this.$route.params.name,
       type: this.$route.params.type,
       contract: this.$route.params.contract,
@@ -365,13 +261,24 @@ export default {
     async tagNft() {
       if (this.mintAndTag) {
         await this.$store.dispatch("mintAndTag", {
-          hashtag: this.hashtag[0],
+          hashtag: `#${this.hashtag[0]}`,
           nftContract: this.tagsByDigitalAsset[0].nftContract,
           nftId: this.tagsByDigitalAsset[0].nftId,
         });
       } else {
+        const hashtag = this.hashtag[0];
+        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
+
+        if (hashtagValue.charAt(0) !== "#") {
+          hashtagValue = `#${hashtagValue}`;
+        }
+        const hashtags = this.hashtagInputTags || [];
+        const findExistingHashtagResult = hashtags.filter(
+          (option) => option.name.toLowerCase() === hashtagValue.toLowerCase()
+        );
+
         await this.$store.dispatch("tag", {
-          hashtagId: this.hashtag[0].id,
+          hashtagId: findExistingHashtagResult[0].id,
           nftContract: this.tagsByDigitalAsset[0].nftContract,
           nftId: this.tagsByDigitalAsset[0].nftId,
         });
@@ -379,9 +286,10 @@ export default {
     },
     // Bulma taginput widget.
     getFilteredTags: function (text) {
-      this.hashtagInputTags = (this.hashtags || []).filter((option) => {
-        return option.name.toLowerCase().indexOf(text.toLowerCase()) === 0;
-      });
+      const hashtags = this.hashtags || [];
+      this.hashtagInputTags = hashtags.filter(
+        (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
+      );
     },
     validateTag(hashtag) {
       return this.hashtagValidationService.validateTag(hashtag);
@@ -390,17 +298,17 @@ export default {
       const tagContentValid = this.validateTag(hashtag);
 
       if (tagContentValid) {
-        const hashtagValue =
-          hashtag[0] && hashtag[0].name ? hashtag[0].name : hashtag[0];
+        let hashtagValue = hashtag && hashtag.name ? hashtag.name : hashtag;
+        if (hashtagValue.charAt(0) !== "#") {
+          hashtagValue = `#${hashtagValue}`;
+        }
 
-        const isNewHashtag =
-          (this.hashtagInputTags || []).filter((option) => {
-            return (
-              (option.name || "")
-                .toLowerCase()
-                .indexOf((hashtagValue || "").toLowerCase()) >= 0
-            );
-          }).length === 0;
+        const hashtags = this.hashtagInputTags || [];
+        const findExistingHashtagResult = hashtags.filter(
+          (option) => option.name.toLowerCase() === hashtagValue.toLowerCase()
+        );
+
+        const isNewHashtag = findExistingHashtagResult.length !== 1;
 
         this.mintAndTag = isNewHashtag;
       }

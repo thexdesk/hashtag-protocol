@@ -1,5 +1,5 @@
 <template>
-  <b-navbar :fixed-top="true" class="container">
+  <b-navbar>
     <template slot="brand">
       <b-navbar-item tag="a" :href="this.website">
         <img
@@ -20,7 +20,7 @@
           <a :href="this.app" class="button is-primary is-outlined"> App </a>
         </div>
       </b-navbar-item>
-      <div class="is-hidden-tablet">
+      <div class="is-hidden-desktop">
         <hr />
         <b-navbar-item>
           <Sidebar :items="sidebarItems"></Sidebar>
@@ -32,7 +32,7 @@
 
 <script>
 import Sidebar from "./Sidebar";
-import { resolveSidebarItems } from "../util";
+import { resolveSidebarItems } from "@vuepress/theme-default/util/index.js";
 
 export default {
   name: "Navbar",

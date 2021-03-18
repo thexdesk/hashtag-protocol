@@ -1,4 +1,4 @@
-import {Owner, Platform, Publisher, Tagger} from "../generated/schema";
+import {Creator, Owner, Platform, Publisher, Tagger} from "../generated/schema";
 import {BigInt, Bytes, ipfs, json, JSONValue} from "@graphprotocol/graph-ts/index";
 
 /*
@@ -6,6 +6,25 @@ import {BigInt, Bytes, ipfs, json, JSONValue} from "@graphprotocol/graph-ts/inde
  */
 export const ONE = BigInt.fromI32(1);
 export const ZERO = BigInt.fromI32(0);
+
+export function toLowerCase(input: string): string {
+    let lowerString: string = ""
+    for(let i = 0; i < input.length; i++) {
+        let inputCharAtIndex: i32 = input.charCodeAt(i)
+
+        let lowercaseChar: i32
+        // A is char code 65 and Z is 90. If the char code is in this range, add 32 to make it lower case
+        if (inputCharAtIndex >= 65 && inputCharAtIndex <= 90) {
+            lowercaseChar = inputCharAtIndex + 32
+        } else {
+            lowercaseChar = inputCharAtIndex
+        }
+
+        lowerString = lowerString.concat(String.fromCharCode(lowercaseChar))
+    }
+
+    return lowerString
+}
 
 /*
  * Safely loads (and initialises if needed) an Owner entity
@@ -37,7 +56,6 @@ export function safeLoadPublisher(id: string): Publisher | null {
         entity = new Publisher(id);
         entity.mintCount = ZERO;
         entity.tagCount = ZERO;
-        entity.mintFees = ZERO;
         entity.tagFees = ZERO;
     }
 
@@ -56,7 +74,6 @@ export function safeLoadPlatform(id: string): Platform | null {
 
     if (entity === null) {
         entity = new Platform(id);
-        entity.mintFees = ZERO;
         entity.tagFees = ZERO;
     }
 
@@ -77,6 +94,26 @@ export function safeLoadTagger(id: string): Tagger | null {
         entity = new Tagger(id);
         entity.tagCount = ZERO;
         entity.feesPaid = ZERO;
+    }
+
+    return entity;
+}
+
+/*
+ * Safely loads (and initialises if needed) an Creator entity
+ *
+ * Note: A Creator is the person who made the first instance of a tag
+ *
+ * id identifer; in this case the Ethereum account
+ */
+export function safeLoadCreator(id: string): Creator | null {
+    let entity = Creator.load(id);
+
+    if (entity === null) {
+        entity = new Creator(id);
+        entity.mintCount = ZERO;
+        entity.tagCount = ZERO;
+        entity.tagFees = ZERO;
     }
 
     return entity;

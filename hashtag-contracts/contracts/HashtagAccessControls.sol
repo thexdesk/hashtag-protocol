@@ -1,4 +1,6 @@
-pragma solidity 0.6.6;
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
@@ -16,14 +18,12 @@ contract HashtagAccessControls is AccessControl {
     }
 
     /**
-     * @notice Allows the DEFAULT_ADMIN_ROLE that controls all roles to be overridden thereby creating hierarchies
-     * @param _role keccak256 hash of the role name
-     * @param _adminRole keccak256 hash of the role that can control the base role
+     * @notice Checks whether an address has a smart contract role
+     * @param _addr Address being checked
+     * @return bool True if the address has the role, false if not
     */
-    function setRoleAdmin(bytes32 _role, bytes32 _adminRole) external {
-        require(hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "AccessControl: sender must be an admin to set role admin");
-
-        _setRoleAdmin(_role, _adminRole);
+    function isSmartContract(address _addr) public view returns (bool) {
+        return hasRole(SMART_CONTRACT_ROLE, _addr);
     }
 
     /**

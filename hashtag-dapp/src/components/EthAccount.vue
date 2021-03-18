@@ -28,7 +28,7 @@
       size="is-small"
     >
       <a :href="this.addressUrl" target="_blank">
-        <b-icon icon="ethereum" type="is-primary" size="is-small"> </b-icon>
+        <b-icon icon="ethereum" type="is-grey-light" size="is-small"> </b-icon>
       </a>
     </b-tooltip>
   </span>
@@ -54,7 +54,7 @@ export default {
     this.ens = this.homesteadProvider
       ? await this.homesteadProvider.lookupAddress(this.value)
       : null;
-    this.addressUrl = `${this.etherscanRinkby}/address/${this.value}`;
+    this.addressUrl = `${this.etherscanBaseUrl}/address/${this.value}`;
   },
 };
 </script>

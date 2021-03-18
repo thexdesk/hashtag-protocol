@@ -1,12 +1,6 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+    <Header />
     <section class="main" v-if="foundPublisher">
       <div class="container">
         <h1 class="title is-1">Publisher: {{ foundPublisher.name }}</h1>
@@ -23,11 +17,6 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isPubInfoModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Publisher information</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
@@ -67,11 +56,6 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Market summary for KnownOrigin</h2>
                 <div class="b-table" v-if="publisherByAcc">
                   <div class="table-wrapper">
@@ -85,11 +69,7 @@
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Hashtag revenue</td>
-                          <td>
-                            <eth-amount
-                              :value="publisherByAcc.mintFees"
-                            ></eth-amount>
-                          </td>
+                          <td>Pending auction</td>
                         </tr>
                         <tr>
                           <td class="has-text-weight-bold">Tag count</td>
@@ -108,10 +88,9 @@
                         <tr>
                           <td class="has-text-weight-bold">Total revenue</td>
                           <td>
-                            <eth-amount-sum
-                              :value1="publisherByAcc.mintFees"
-                              :value2="publisherByAcc.tagFees"
-                            ></eth-amount-sum>
+                            <eth-amount
+                              :value="publisherByAcc.tagFees"
+                            ></eth-amount>
                           </td>
                         </tr>
                       </tbody>
@@ -125,11 +104,6 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isActivityModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
               <h2 class="title is-4 is-spaced">
                 Recent activity on KnownOrigin
               </h2>
@@ -153,6 +127,12 @@
                             <th class="">
                               <div class="th-wrap">
                                 Created
+                                <!---->
+                              </div>
+                            </th>
+                            <th class="">
+                              <div class="th-wrap">
+                                Creator
                                 <!---->
                               </div>
                             </th>
@@ -189,12 +169,13 @@
                                 :value="hashtag.timestamp"
                               ></timestamp-from>
                             </td>
-                            <td data-label="Owner" class="">
+                            <td data-label="Creator" class="">
                               <eth-account
-                                :value="hashtag.owner"
+                                :value="hashtag.creator"
                                 route="owner-detail"
                               ></eth-account>
                             </td>
+                            <td data-label="Owner" class="">Pending Auction</td>
                             <td data-label="tag-count" class="">
                               {{ hashtag.tagCount }}
                             </td>
@@ -328,98 +309,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isPubInfoModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publisher-detail-publisher-info"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What\'s a "Publisher"?'
-                      : 'What\'s a "Publisher"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="040-what-is-a-publisher"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publisher-detail-market-summary"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                position="is-top"
-                aria-id="contentIdForA11y1"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is the "Hashtag Market"?'
-                      : 'What is the "Hashtag Market"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isActivityModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="publisher-detail-recent-activity"
-              ></markdown-doc>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -429,7 +318,6 @@
 import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
 import {
   ALL_HASHTAG_IDS_BY_PUBLISHER,
   PAGED_HASHTAGS_BY_PUBLISHER,
@@ -437,10 +325,8 @@ import {
   ALL_TAG_IDS_BY_PUBLISHER,
   PAGED_TAGS_BY_PUBLISHER,
 } from "../queries";
-import EthAmountSum from "../components/EthAmountSum";
 import EthAmount from "../components/EthAmount";
 import Hashtag from "../components/Hashtag";
-import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import TimestampFrom from "../components/TimestampFrom";
@@ -456,26 +342,16 @@ export default {
     TimestampFrom,
     Hashtag,
     EthAmount,
-    EthAmountSum,
     EthAccount,
     Footer,
     Header,
-    HelpModal,
-    MarkdownDoc,
     Pagination,
   },
   data() {
     return {
       activeTab: null,
       hashtagsByName: null,
-      isPubInfoModalActive: false,
-      isSummaryModalActive: false,
-      isActivityModalActive: false,
       publisher: this.$route.params.address,
-      publisherName: "KnownOrigin",
-      publisherRegistration: "https://#",
-      publisherWebsite: "https://knownorigin.io",
-      publisherRegURL: null,
       tagsByHashtag: null,
       hashtagsTab: {
         pageSize: PAGE_SIZE,

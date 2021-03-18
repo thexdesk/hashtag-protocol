@@ -1,19 +1,14 @@
 <template>
   <div class="body">
-    <section class="hero has-background-grey-dark is-bold">
-      <div class="hero-head">
-        <div class="container">
-          <Header></Header>
-        </div>
-      </div>
-    </section>
+    <Header />
     <section class="main" v-if="hashtagsByName && hashtagsByName[0]">
       <div class="container">
-        <h1 class="title is-1">#{{ hashtagsByName[0].displayHashtag }}</h1>
+        <h1 class="title is-1">{{ hashtagsByName[0].displayHashtag }}</h1>
         <h2 class="subtitle">
-          Hashtag Protocol Token
+          HASHTAG token
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
-            <router-link :to="{ name: 'hashtags' }">Browse hashtags</router-link
+            <router-link :to="{ name: 'hashtags' }"
+              >Browse HASHTAG tokens</router-link
             >&nbsp;
             <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
           </span>
@@ -22,11 +17,6 @@
           <div class="tile is-horizontal">
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isOverviewModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Token overview</h2>
                 <div class="b-table" v-if="hashtagsByName">
                   <div class="table-wrapper">
@@ -36,6 +26,7 @@
                           <td class="has-text-weight-bold">Token ID</td>
                           <td>
                             <HashtagTokenId
+                              :hashtag="hashtagsByName[0].displayHashtag"
                               :value="hashtagsByName[0].id"
                             ></HashtagTokenId>
                           </td>
@@ -52,19 +43,14 @@
                           <td class="has-text-weight-bold">Creator</td>
                           <td>
                             <eth-account
-                              :value="hashtagsByName[0].owner"
-                              route="owner-detail"
+                              :value="hashtagsByName[0].creator"
+                              route="creator-detail"
                             ></eth-account>
                           </td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Owner</td>
-                          <td>
-                            <eth-account
-                              :value="hashtagsByName[0].owner"
-                              route="owner-detail"
-                            ></eth-account>
-                          </td>
+                          <td>Pending auction</td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Publisher</td>
@@ -93,28 +79,14 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <help-modal
-                  modal="isSummaryModalActive"
-                  @popModalFromChild="popModal"
-                  class="is-pulled-right"
-                ></help-modal>
                 <h2 class="title is-4">Market summary</h2>
                 <div class="b-table">
                   <div class="table-wrapper">
                     <table class="table">
                       <tbody>
                         <tr draggable="false" class="">
-                          <td class="has-text-weight-bold">Creation price</td>
-                          <td>
-                            {{ hashtagsByName[0].totalMintingFee | toEth }}
-                            Ξ<br />{{
-                              hashtagsByName[0].publisherMintingFee | toEth
-                            }}
-                            Ξ to Publisher<br />{{
-                              hashtagsByName[0].platformMintingFee | toEth
-                            }}
-                            Ξ to Protocol
-                          </td>
+                          <td class="has-text-weight-bold">Sale price</td>
+                          <td>Pending Auction</td>
                         </tr>
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagged content</td>
@@ -125,6 +97,8 @@
                         <tr draggable="false" class="">
                           <td class="has-text-weight-bold">Tagging revenue</td>
                           <td>
+                            {{ hashtagsByName[0].creatorRevenue | toEth }} Ξ
+                            Creator<br />
                             {{ hashtagsByName[0].ownerRevenue | toEth }} Ξ
                             Owner<br />{{
                               hashtagsByName[0].publisherRevenue | toEth
@@ -146,13 +120,8 @@
         <div class="columns is-tablet is-centered">
           <div class="column is-12">
             <article class="is-white box">
-              <help-modal
-                modal="isTaggedModalActive"
-                @popModalFromChild="popModal"
-                class="is-pulled-right"
-              ></help-modal>
               <h2 class="title is-4 is-spaced">
-                Content tagged with #{{ hashtag }}
+                Content tagged with {{ hashtag }}
               </h2>
               <b-tabs v-model="activeTab" :animated="true">
                 <b-tab-item label="ERC-721 NFTs">
@@ -256,123 +225,6 @@
           </div>
         </div>
       </div>
-      <b-modal :active.sync="isOverviewModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtag-detail-token-overview"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="tokenOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="tokenOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? "What's a Hashtag Token?"
-                      : "What's a Hashtag Token?"
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="020-what-is-hashtag-token"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isSummaryModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtag-detail-market-summary"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="MarketOverview"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="MarketOverview"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is the "Hashtag Market"?'
-                      : 'What is the "Hashtag Market"?'
-                  }}
-                </a>
-                <markdown-doc
-                  doc-type="faq"
-                  filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
-      <b-modal :active.sync="isTaggedModalActive" :width="640" scroll="keep">
-        <div class="card">
-          <div class="card-content">
-            <div class="content">
-              <markdown-doc
-                doc-type="help"
-                filename="hashtag-detail-tagged-content"
-              ></markdown-doc>
-              <b-collapse
-                :open="false"
-                aria-id="taggedContent"
-                animation="slide"
-                class="pt-1 pb-1"
-              >
-                <a
-                  slot="trigger"
-                  slot-scope="props"
-                  aria-controls="taggedContent"
-                  class="has-text-weight-bold"
-                >
-                  <b-icon
-                    :icon="!props.open ? 'menu-down' : 'menu-up'"
-                  ></b-icon>
-                  {{
-                    !props.open
-                      ? 'What is "tagged content?"'
-                      : 'What is "tagged content?"'
-                  }}
-                </a>
-                <markdown-doc
-                  docType="faq"
-                  filename="030-what-is-tagged-content"
-                  class="pt-1 pb-1"
-                ></markdown-doc>
-              </b-collapse>
-            </div>
-          </div>
-        </div>
-      </b-modal>
     </section>
     <Footer></Footer>
   </div>
@@ -383,8 +235,6 @@ import EthAccount from "../components/EthAccount";
 import Footer from "../components/Footer";
 import HashtagTokenId from "../components/HashtagTokenId";
 import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
-import MarkdownDoc from "../components/MarkdownDoc";
 import NftLink from "../components/NftLink";
 import Pagination from "../components/Pagination";
 import {
@@ -403,23 +253,22 @@ export default {
     TimestampFormatted,
     TimestampFrom,
     EthAccount,
-    MarkdownDoc,
     NftLink,
     Footer,
     HashtagTokenId,
     Header,
-    HelpModal,
     Pagination,
   },
   data() {
+    let routeHashtag = this.$route.params.hashtag;
+    routeHashtag = routeHashtag.replace("#", "");
+    routeHashtag = routeHashtag.toLowerCase();
+
     return {
       activeTab: null,
       erc721: "http://erc721.org",
-      hashtag: this.$route.params.hashtag,
+      hashtag: routeHashtag,
       hashtagsByName: null,
-      isOverviewModalActive: false,
-      isSummaryModalActive: false,
-      isTaggedModalActive: false,
       tagsByHashtag: null,
       first: PAGE_SIZE,
       skip: 0,
@@ -432,7 +281,7 @@ export default {
       query: PAGED_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          hashtag: this.hashtag,
           first: this.first,
           skip: this.skip,
         };
@@ -443,7 +292,7 @@ export default {
       query: ALL_TAGS_BY_HASHTAG,
       variables() {
         return {
-          hashtag: this.hashtag && this.hashtag.toLowerCase(),
+          hashtag: this.hashtag,
         };
       },
       manual: true,
@@ -456,7 +305,7 @@ export default {
       query: HASHTAGS_BY_NAME,
       variables() {
         return {
-          name: this.hashtag && this.hashtag.toLowerCase(),
+          name: this.hashtag,
         };
       },
       pollInterval: 1000, // ms
@@ -466,6 +315,9 @@ export default {
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
     },
+  },
+  created() {
+    this.$router.replace(`/hashtag/${this.hashtag}`);
   },
 };
 </script>

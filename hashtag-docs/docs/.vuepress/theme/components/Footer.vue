@@ -2,27 +2,55 @@
   <footer class="footer">
     <nav class="level container">
       <!-- Left side -->
-      <div class="level-item">
-        <p>© Hashtag Protocol, Inc. 2020</p>
+      <div class="level-left">
+        <div class="level-item">
+          <p class="is-size-6">
+            <small>
+              © {{ this.year }} Hashtag Protocol, Inc. All Rights Reserved
+            </small>
+          </p>
+        </div>
       </div>
-
       <!-- Right side -->
-      <div class="level-item">
-        <a :href="this.build" title="Github" class="navbar-item">
-          <span class="icon"
-            ><i class="mdi mdi-github-circle mdi-24px"></i
-          ></span>
-        </a>
-        <a :href="this.build" title="Discord" class="navbar-item">
-          <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
-        </a>
-        <a
-          href="https://hashtagprotocol.substack.com"
-          title="Substack"
-          class="navbar-item"
-        >
-          <span class="icon substack"><i></i></span>
-        </a>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="level is-mobile">
+            <a
+              :href="this.build"
+              target="_blank"
+              title="Github"
+              class="navbar-item"
+            >
+              <span class="icon"
+                ><i class="mdi mdi-github-circle mdi-24px"></i
+              ></span>
+            </a>
+            <a
+              :href="this.discord"
+              target="_blank"
+              title="Discord"
+              class="is-dark navbar-item"
+            >
+              <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
+            </a>
+            <a
+              href="mailto:info@hashtag-protocol.org"
+              title="info@hashtag-protocol.org"
+              class="is-dark navbar-item"
+              target="_blank"
+            >
+              <span class="icon"><i class="mdi mdi-email mdi-24px"></i></span>
+            </a>
+            <a
+              href="https://hashtagprotocol.substack.com"
+              title="Substack"
+              class="navbar-item"
+              target="_blank"
+            >
+              <span class="icon substack"><i></i></span>
+            </a>
+          </div>
+        </div>
       </div>
     </nav>
   </footer>
@@ -34,23 +62,28 @@ export default {
   data() {
     return {
       build: "",
+      year: "2020",
     };
   },
   mounted() {
     this.build = this.website + "/build";
+    this.year = new Date().getFullYear();
   },
 };
 </script>
 
 <style scoped lang="scss">
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  .newsletter {
+    padding: 3rem 0 4rem;
+    background-color: $grey-dark;
+  }
 
   a {
     &.navbar-item {
+      display: flex;
       border-radius: 3px;
+
       &:hover {
         background: none;
       }
