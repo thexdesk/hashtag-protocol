@@ -53,7 +53,7 @@ contract('ERC721', function (accounts) {
       const baseURI = 'https://api.com/v2/';
 
       it('it is not empty by default', async function () {
-        expect(await this.token.tokenURI(firstTokenId)).to.be.equal('https://api.com/v1/1');
+        expect(await this.token.tokenURI(firstTokenId)).to.be.equal('https://api.hashtag-protocol.io/1');
       });
 
       it('reverts when queried for non existent token id', async function () {

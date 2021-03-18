@@ -79,7 +79,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     mapping(address => mapping(address => bool)) internal operatorApprovals;
 
     /// @notice baseURI for looking up up tokenURI for a token
-    string public baseURI = "https://api.com/v1/";
+    string public baseURI = "https://api.hashtag-protocol.io/";
 
     /// @notice Definition of a Hashtag which bundles associated metadata
     struct Hashtag {
@@ -107,7 +107,7 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     uint256 constant public hashtagMinStringLength = 3;
 
     /// @notice maximum hashtag length
-    uint256 constant public hashtagMaxStringLength = 32;
+    uint256 public hashtagMaxStringLength = 32;
 
     /// @notice access controls smart contract
     HashtagAccessControls public accessControls;
@@ -141,6 +141,14 @@ contract HashtagProtocol is IERC721Token, ERC165, Context {
     */
     function setBaseURI(string memory _baseURI) onlyAdmin public {
         baseURI = _baseURI;
+    }
+
+    /**
+     * @notice Admin method for updating the max string length of a hashtag
+     * @param _hashtagMaxStringLength max length
+    */
+    function setHashtagMaxStringLength(uint256 _hashtagMaxStringLength) onlyAdmin public {
+        hashtagMaxStringLength = _hashtagMaxStringLength;
     }
 
     /**
