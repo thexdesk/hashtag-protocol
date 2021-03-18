@@ -4,9 +4,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: HashtagProtocol
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x3a7a449308052d74256Bb6867979AbA51b2cD887"
+      address: "0xA948549116e716CC0Da11AFdbCabf01ff04Fc35e"
       abi: HashtagProtocol
       startBlock: 7893216
     mapping:
@@ -24,9 +24,9 @@ dataSources:
       file: ./src/protocol-mapping.ts
   - kind: ethereum/contract
     name: ERC721HashtagRegistry
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x4f1f007F2db30fb61fDad2598417B8019f311A37"
+      address: "0x2a23A463C7d676f3C94402eA0B0450E36BF14305"
       abi: ERC721HashtagRegistry
       startBlock: 7893219
     mapping:
@@ -46,9 +46,9 @@ dataSources:
       file: ./src/erc721-hashtag-registry.ts
   - kind: ethereum/contract
     name: HashtagAccessControls
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x0F5eeCe5f30f5d10301f0c59f579B486A44d55C6"
+      address: "0x51958b4F2917a2D0Ea56bDe98341190199B056F4"
       abi: HashtagAccessControls
       startBlock: 7893214
     mapping:
