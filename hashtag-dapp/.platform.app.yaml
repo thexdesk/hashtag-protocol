@@ -108,6 +108,7 @@ hooks:
     build: |
       set -e
       yarn install
+      yarn build
 
       # We are building locally.
       if ! [ -d /app/.global ]; then
@@ -117,5 +118,4 @@ hooks:
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
-      yarn build
       yarn buildenvvar
