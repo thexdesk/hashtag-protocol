@@ -118,8 +118,4 @@ hooks:
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
-      if [ -d /app/.global ]; then
-        /app/scripts/platformsh/entrypoint.sh
-      fi
-
       yarn buildenvvar
