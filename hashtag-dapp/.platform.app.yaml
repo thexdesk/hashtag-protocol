@@ -108,10 +108,24 @@ hooks:
     build: |
       set -e
       yarn install
-      yarn build
+
+      if [ -f /app/scripts/platformsh/detect-master.sh ] && [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Master flag detected; building for production."
+        echo "----------------------------------------------"
+        yarn build
+      else
+        echo "----------------------------------------------"
+        echo "Non-production env detected; building for dev"
+        echo "----------------------------------------------"
+        yarn build --mode development
+      fi
 
       # We are building locally.
       if ! [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Move raw markdown documents from hashtag-docs"
+        echo "----------------------------------------------"
         # Move raw markdown documents from hashtag-docs.
         ./scripts/pull-docs.sh
       fi
