@@ -39,5 +39,7 @@ package-lock.json
 */tmp
 */node_modules
 */public/docs
+.platform/local/
+_www/
 
 hashtag-docs/docs/.vuepress/dist/*
