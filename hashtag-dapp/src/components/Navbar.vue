@@ -134,7 +134,7 @@ export default {
         },
         discord: {
           text: "Discord",
-          path: process.env.VUE_APP_DISCORD_SERVER,
+          path: this.$appConfig.discordServer,
         },
         substack: {
           text: "Substack",
