@@ -56,7 +56,9 @@
             </div>
             <div class="tile is-parent is-6 is-12-mobile">
               <div class="tile is-child box">
-                <h2 class="title is-4">Market summary for KnownOrigin</h2>
+                <h2 class="title is-4">
+                  Market summary for {{ foundPublisher.name }}
+                </h2>
                 <div class="b-table" v-if="publisherByAcc">
                   <div class="table-wrapper">
                     <table class="table">
@@ -105,7 +107,7 @@
           <div class="column is-12">
             <article class="is-white box">
               <h2 class="title is-4 is-spaced">
-                Recent activity on KnownOrigin
+                Recent activity on {{ foundPublisher.name }}
               </h2>
               <b-tabs v-model="activeTab" :animated="false">
                 <b-tab-item label="Hashtags">
