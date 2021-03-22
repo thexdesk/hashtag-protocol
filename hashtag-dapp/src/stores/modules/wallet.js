@@ -40,8 +40,9 @@ const state = {
   web3Objects: {},
   fees: {
     protocol: 0,
-    tagging: ethers.utils.parseEther("0.01"),
-    mintAndTag: ethers.utils.parseEther("0.01"),
+    // @ todo: pull fee from contract.
+    tagging: ethers.utils.parseEther("0.001"),
+    mintAndTag: ethers.utils.parseEther("0.001"),
   },
   accrued: null,
   openModalCloseFn: () => {},
