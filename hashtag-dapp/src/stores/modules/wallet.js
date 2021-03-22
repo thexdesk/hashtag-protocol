@@ -41,8 +41,8 @@ const state = {
   fees: {
     protocol: 0,
     // @ todo: pull fee from contract.
-    tagging: ethers.utils.parseEther("0.001"),
-    mintAndTag: ethers.utils.parseEther("0.001"),
+    tagging: null,
+    mintAndTag: null,
   },
   accrued: null,
   openModalCloseFn: () => {},
@@ -311,7 +311,6 @@ const actions = {
   async getTaggingFee({ state, commit }) {
     const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
     const fee = (await erc721HashtagRegistryContract.tagFee()).toString();
-
     commit("setTaggingFee", fee);
   },
 
@@ -356,15 +355,18 @@ const actions = {
 
 const mutations = {
   async setProtocolFee(state, fee) {
-    Vue.set(state, "fees.platform", fee);
+    //Vue.set(state, "fees.platform", fee);
+    state.fees.platform = fee;
   },
 
   async setTaggingFee(state, fee) {
-    Vue.set(state, "fees.tagging", fee);
+    //Vue.set(state, "fees.tagging", fee);
+    state.fees.tagging = fee;
   },
 
   async setMintAndTagFee(state, fee) {
-    Vue.set(state, "fees.mintAndTag", fee);
+    //Vue.set(state, "fees.mintAndTag", fee);
+    state.fees.mintAndTag = fee;
   },
 
   setWeb3Objects(state, payload) {
