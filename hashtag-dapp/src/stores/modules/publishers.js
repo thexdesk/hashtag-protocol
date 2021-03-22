@@ -6,6 +6,12 @@ const state = {
       registration: "https://#",
       website: "https://knownorigin.io",
     },
+    {
+      address: "0xf6423a8769292bbeef9335c5a26254c759e3bfbe",
+      name: "Hashtag Protocol",
+      registration: "https://#",
+      website: "https://hashtag-protocol.org",
+    },
   ],
 };
 
