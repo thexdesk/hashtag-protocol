@@ -113,7 +113,7 @@ hooks:
       # Building on platform.sh
       if [ -d /app/.global ]; then
         echo "Symlink /tmp/config.js to build_platform/config.js"
-        ln -s /tmp/config.js build_platform/config.js
+        ln -fs /tmp/config.js build_platform/config.js
       fi
 
       # We are building locally.
@@ -130,6 +130,6 @@ hooks:
       # Deploying on platform.sh
       if [ -d /app/.global ]; then
         echo "Put $PLATFORM_VARIABLES into /tmp/config.js"
-        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /tmp/config.js
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
       fi
       yarn buildenvvar
