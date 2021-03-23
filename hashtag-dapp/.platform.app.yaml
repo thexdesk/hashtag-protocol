@@ -127,4 +127,3 @@ hooks:
         echo "----------------------------------------------"
         echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
       fi
-      yarn buildenvvar
