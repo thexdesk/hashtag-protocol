@@ -33,7 +33,6 @@ package-lock.json
 # Common directories for sub-projects
 */_www
 */.tmp_platformsh
-*/build_platform
 */build_platform/*
 */build
 */dist
@@ -43,7 +42,6 @@ package-lock.json
 .platform/local/
 _www/
 
-build_platform/
 build_platform/*
 .platform/local/
 _www/

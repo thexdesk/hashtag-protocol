@@ -108,18 +108,8 @@ hooks:
     build: |
       set -e
       yarn install
-
-      if [ -f /app/scripts/platformsh/detect-master.sh ] && [ -d /app/.global ]; then
-        echo "----------------------------------------------"
-        echo "Master flag detected; building for production."
-        echo "----------------------------------------------"
-        yarn build
-      else
-        echo "----------------------------------------------"
-        echo "Non-production env detected; building for dev"
-        echo "----------------------------------------------"
-        yarn build --mode development
-      fi
+      yarn build
+      ln -s /tmp/config.js public/config.js
 
       # We are building locally.
       if ! [ -d /app/.global ]; then
@@ -132,4 +122,5 @@ hooks:
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
+      echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /tmp/config.js
       yarn buildenvvar
