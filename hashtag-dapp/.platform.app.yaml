@@ -108,20 +108,17 @@ hooks:
     build: |
       set -e
       yarn install
+      yarn build
 
-      if [ -f /app/scripts/platformsh/detect-master.sh ] && [ -d /app/.global ]; then
-        echo "----------------------------------------------"
-        echo "Master flag detected; building for production."
-        echo "----------------------------------------------"
-        yarn build
-      else
-        echo "----------------------------------------------"
-        echo "Non-production env detected; building for dev"
-        echo "----------------------------------------------"
-        yarn build --mode development
+      # Building on platform.sh
+      if [ -d /app/.global ]; then
+        echo "--------------------------------------------------"
+        echo "Symlink /tmp/config.js to build_platform/config.js"
+        echo "--------------------------------------------------"
+        ln -fs /tmp/config.js build_platform/config.js
       fi
 
-      # We are building locally.
+      # Building locally.
       if ! [ -d /app/.global ]; then
         echo "----------------------------------------------"
         echo "Move raw markdown documents from hashtag-docs"
@@ -132,4 +129,11 @@ hooks:
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
+      # Deploying on platform.sh
+      if [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
+        echo "----------------------------------------------"
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
+      fi
       yarn buildenvvar
