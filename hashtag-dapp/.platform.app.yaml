@@ -10,12 +10,6 @@ build:
 # The configuration of app when it is exposed to the web.
 web:
     # Specific parameters for different URL prefixes.
-    commands:
-        start: |
-            echo "----------------------------------------------"
-            echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
-            echo "----------------------------------------------"
-            echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
     locations:
         "/":
             # The folder from which to serve static assets, for this location.
@@ -74,15 +68,6 @@ disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
-  '/build_platform':
-    source: local
-    source_path: files/build_platform
-  '/build_platform/docs':
-    source: local
-    source_path: files/docs
-  '/build_platform/test-results':
-    source: local
-    source_path: files/test-results
   '/.tmp_platformsh':
     source: local
     source_path: files/tmp_platformsh
@@ -121,6 +106,7 @@ hooks:
         echo "--------------------------------------------------"
         echo "Symlink /tmp/config.js to build_platform/config.js"
         echo "--------------------------------------------------"
+        rm 
         ln -fs /tmp/config.js build_platform/config.js
       fi
 
@@ -136,10 +122,10 @@ hooks:
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
       # Deploying on platform.sh
-      # if [ -d /app/.global ]; then
-      #   echo "----------------------------------------------"
-      #   echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
-      #   echo "----------------------------------------------"
-      #   echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
-      # fi
+      if [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
+        echo "----------------------------------------------"
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
+      fi
       yarn buildenvvar
