@@ -112,11 +112,13 @@ hooks:
 
       # Building on platform.sh
       if [ -d /app/.global ]; then
+        echo "--------------------------------------------------"
         echo "Symlink /tmp/config.js to build_platform/config.js"
+        echo "--------------------------------------------------"
         ln -fs /tmp/config.js build_platform/config.js
       fi
 
-      # We are building locally.
+      # Building locally.
       if ! [ -d /app/.global ]; then
         echo "----------------------------------------------"
         echo "Move raw markdown documents from hashtag-docs"
@@ -129,7 +131,9 @@ hooks:
     deploy: |
       # Deploying on platform.sh
       if [ -d /app/.global ]; then
-        echo "Put $PLATFORM_VARIABLES into /tmp/config.js"
+        echo "----------------------------------------------"
+        echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
+        echo "----------------------------------------------"
         echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
       fi
       yarn buildenvvar
