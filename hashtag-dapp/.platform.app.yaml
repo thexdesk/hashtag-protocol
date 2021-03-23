@@ -109,7 +109,11 @@ hooks:
       set -e
       yarn install
       yarn build
-      ln -s /tmp/config.js public/config.js
+
+      # Building on platform.sh
+      if [ -d /app/.global ]; then
+        ln -s /tmp/config.js build_platform/config.js
+      fi
 
       # We are building locally.
       if ! [ -d /app/.global ]; then
@@ -122,5 +126,8 @@ hooks:
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
-      echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /tmp/config.js
+      # Deploying on platform.sh
+      if [ -d /app/.global ]; then
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /tmp/config.js
+      fi
       yarn buildenvvar
