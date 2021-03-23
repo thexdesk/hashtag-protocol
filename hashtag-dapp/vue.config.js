@@ -22,4 +22,9 @@ module.exports = {
       .use("file-loader")
       .loader("file-loader");
   },
+  configureWebpack: {
+    externals: {
+      config: "config",
+    },
+  },
 };

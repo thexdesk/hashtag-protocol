@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <div>{{ variable1 }}</div>
-    <div>{{ variable2 }}</div>
-    <div>{{ variable3 }}</div>
     <router-view></router-view>
+    <div v-if="variable3 == 'development'" class="is-size-7">
+      <div>{{ variable1 }}</div>
+      <div>{{ variable2 }}</div>
+      <div>Build type: {{ variable3 }}</div>
+    </div>
   </div>
 </template>
 

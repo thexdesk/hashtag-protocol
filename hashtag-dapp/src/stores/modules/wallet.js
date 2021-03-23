@@ -1,5 +1,5 @@
 import Vue from "vue";
-import AppConfig from "@/config";
+import AppConfig from "@/appconfig";
 import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
 import BlocknativeSdk from "bnc-sdk";

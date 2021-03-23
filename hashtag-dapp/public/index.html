@@ -7,8 +7,9 @@
     <meta name="description" content="An experimental content tagging protocol for the decentralized internet."/>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>Hashtag Protocol Demo</title>
-    <script>
-      // CONFIGURATIONS_PLACEHOLDER
+    <script type="text/javascript">
+      var cachebuster = Math.round(new Date().getTime() / 1000);
+      document.write('<scr' + 'ipt type="text/javascript" src="<%= BASE_URL %>config.js?cb=' + cachebuster + '"></scr' + 'ipt>');
     </script>
   </head>
   <body>
