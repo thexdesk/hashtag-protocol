@@ -33,7 +33,6 @@ package-lock.json
 # Common directories for sub-projects
 */_www
 */.tmp_platformsh
-*/build_platform
 */build
 */dist
 */tmp
