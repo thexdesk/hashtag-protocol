@@ -16,7 +16,7 @@ web:
             #
             # This is a filesystem path, relative to the application root.
             # Folder name is set in npm run buildenvvar.
-            root: "build_platform"
+            root: "dist"
             index:
                 - "index.html"
             passthru: /index.html
@@ -104,9 +104,9 @@ hooks:
       # Building on platform.sh
       if [ -d /app/.global ]; then
         echo "--------------------------------------------------"
-        echo "Symlink /tmp/config.js to build_platform/config.js"
+        echo "Symlink /tmp/config.js to dist/config.js"
         echo "--------------------------------------------------"
-        ln -fs /tmp/config.js build_platform/config.js
+        ln -fs /tmp/config.js dist/config.js
       fi
 
       # Building locally.
