@@ -106,7 +106,6 @@ hooks:
         echo "--------------------------------------------------"
         echo "Symlink /tmp/config.js to build_platform/config.js"
         echo "--------------------------------------------------"
-        rm 
         ln -fs /tmp/config.js build_platform/config.js
       fi
 
