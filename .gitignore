@@ -34,6 +34,7 @@ package-lock.json
 */_www
 */.tmp_platformsh
 */build_platform
+*/build_platform/*
 */build
 */dist
 */tmp
@@ -42,6 +43,8 @@ package-lock.json
 .platform/local/
 _www/
 
+build_platform/
+build_platform/*
 .platform/local/
 _www/
 
