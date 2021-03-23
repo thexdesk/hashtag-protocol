@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import AppConfig from "@/config";
+import AppConfig from "@/appconfig";
 import { router } from "./routes";
 import store from "./stores/index";
 import ApolloClient from "apollo-boost";
