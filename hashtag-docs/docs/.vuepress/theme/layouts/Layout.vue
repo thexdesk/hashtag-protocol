@@ -1,5 +1,15 @@
 <template>
   <div class="body">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-MRK383F"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <div class="content-wrapper">
       <section class="nav">
         <div class="container"><Navbar /></div>
