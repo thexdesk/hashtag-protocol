@@ -1,4 +1,4 @@
-# Protocol Overview
+# Hashtag Protocol Overview
 
 <!-- markdownlint-disable MD013 -->
 | Conventions used in documentation |                                                         |
@@ -17,11 +17,12 @@
 |            |                                              |
 <!-- markdownlint-enable -->
 
-The centerpiece of Hashtag is the `HASHTAG` token (`HASHTAG`), an Ethereum
-ERC-721 non-fungible token.  have the following features:
+The centerpiece of Hashtag Protocol is the `HASHTAG` token (`HASHTAG`), an
+Ethereum ERC-721 non-fungible token.  HASHTAG tokens have the following
+features:
 
-1. Each `HASHTAG` both contains and represents a unique hashtag string. There
-   is only one instance of each `HASHTAG` token - no two may contain the same
+1. Each `HASHTAG` both contains and represents a unique hashtag string. There is
+   only one instance of each `HASHTAG` token - no two may contain the same
    string.
 2. Minting contract validates that the unique string contained and referenced by
    a `HASHTAG` adheres to the following:
@@ -34,9 +35,9 @@ ERC-721 non-fungible token.  have the following features:
 3. There is no upper limit to the number of `HASHTAG` that can be minted; the
    only requirement is that the text string they contain must be _unique_ and
    _valid_.
-4. New `HASHTAG` are created (aka. “minted”) on enabled **_Publisher_**
-   platforms by users interacting with their application or programmatically by
-   the **_Publisher_** itself.
+4. New `HASHTAG` are “minted” on enabled **_Publisher_** platforms by users
+   interacting with their application or programmatically by the **_Publisher_**
+   itself.
 5. Tokens cost nothing to create (no **_Protocol_** fee) except for the standard
    Ethereum network gas fee to execute the minting contract.
 6. The wallet address that pays the minting transaction fee is recorded as the
@@ -47,13 +48,15 @@ ERC-721 non-fungible token.  have the following features:
 8. When a `HASHTAG` is created, ownership is transferred to the **_Protocol_**
    where they are held until released for auction.
 9. While pending release for auction, a `HASHTAG` may be used to tag digital
-   assets by any user on any **_Publisher_** platform. The first auction
-   commences in Phase 3 of the [project roadmap](/essentials/roadmap) and run
-   continually there after.
+   assets by any user on any **_Publisher_** platform. The `HASHTAG` token
+   auction commences in Phase 3 of the [project roadmap](/essentials/roadmap)
+   and will run continually thereafter.
 10. Once released for auction, anyone may bid on a `HASHTAG` on any platform
-    hosting auctions. See [`HASHTAG` Auction](#hashtag-auction) for more
-    details.
-11. Once purchased at auction, `HASHTAG` is transferred to **_Owner_** wallet.
+    hosting auctions. See [`HASHTAG` Auction](#hashtag-auction) for more details
+    on the auction itself.
+11. When the auction ends, the `HASHTAG` token is transferred to the wallet of
+    the winning bidder, and that wallet address represents the `HASHTAG` token
+    **_Owner_**.
 12. Auction proceeds are divided up held by the **_Protocol_** in participant
     accrual accounts mapped to their wallet address as follows:
     1. 40% **_Creator_** (ETH address that created `HASHTAG`)
@@ -65,13 +68,12 @@ ERC-721 non-fungible token.  have the following features:
     participants](/essentials/participants) for more details.
 13. Participants may draw down earnings from their accrual account to their
     wallet at any time. Transaction gas fees apply.
-14. Initial price for a `HASHTAG` is determined by public auction. Subsequently,
-    `HASHTAG` may be traded in the open market on standard NFT platforms such as
-    OpenSea.
+14. An **_Owner_** may sell/trade their `HASHTAG` tokens on the open market
+    peer-to-peer or on standard NFT platforms such as OpenSea.
 15. **_Owner_** receives 100% of resale revenue.
 16. `HASHTAG` **_Owner_** must renew, without cost, their claim on a `HASHTAG`
     token every two years. Tokens that are not renewed return to the
-    **_Protocol_** and re-released for auction.
+    **_Protocol_** and are re-released for auction.
 
 ## Tagging Digital Content
 
@@ -87,7 +89,8 @@ This design pattern permits great flexibility in how `HASHTAG` utility can be
 extended by the **_Protocol_** and third-party developers. We envision and hope
 new and novel tagging contracts will be developed as the **_Protocol_** matures.
 
-Hashtag is launching with a single tagging contract with the following features:
+Hashtag Protocol is launching with a single tagging contract with the following
+features:
 
 1. Tagging is restricted to other ERC-721 NFTs. (ie. Contract validates that the
    content being tagged is a ERC-721 NFT.)
@@ -119,17 +122,17 @@ Hashtag is launching with a single tagging contract with the following features:
 
 ## Surfacing Tagging & Market Data
 
-The Minting and tagging transactions are captured by the Hashtag Subgraph hosted
-on The Graph. This permits querying Hashtag data in extremely efficient and
-targeted ways.
+The Minting and tagging transactions are captured by the Hashtag Protocol
+Subgraph hosted on The Graph. This permits querying Hashtag Protocol data in
+extremely efficient and targeted ways.
 
 More details coming soon.
 
 ## Hashtag Token Auction
 
-To ensure fair and accurate pricing of newly minted `HASHTAG`, we intend to
-utilize an auction. Whether we utilize a third party auction platform (eg.
-OpenSea) or develop our own is TBD in [Phase
+To ensure fair and accurate pricing of newly minted `HASHTAG`, we will utilize
+an auction. Whether we utilize a third party auction platform (eg. OpenSea) or
+develop our own is TBD in [Phase
 2](/essentials/roadmap.html#phase-2-platform-promotion).
 
 At this point, we believe it would be advantageous to develop our own for
@@ -154,12 +157,14 @@ Auction:
 * Once a `HASHTAG` is released (either in a batch or individually) the status of
     the `HASHTAG` moves to “Released”.
 * Once “Released”, the `HASHTAG` can be bid on by any user on any
-    **_Auctioneer_** platform. **_Publishers_** may also act as **_Auctioneers_**.
+    **_Auctioneer_** platform. **_Publishers_** may also act as
+    **_Auctioneers_**.
 * Once the `HASHTAG` receives a bid, status of the `HASHTAG` moves to “In
     auction” and the auction begins.
 * If a “Released” `HASHTAG` receives no bid, it simply stays in the “Released”
     status indefinitely, available for tagging. Tagging revenues will flow to
-    pre-auction participants as outlined below in [revenue sharing](#revenue-sharing).
+    pre-auction participants as outlined below in [revenue
+    sharing](#revenue-sharing).
 * `HASHTAG` auctions last for TBD blocks. Thinking 1-2 weeks.
 * `HASHTAG` is transferred to winning bidder wallet, and that wallet is now the
   **_Owner_**.
@@ -179,9 +184,9 @@ following on bids:
     all others, the auction will automatically extend by 5 minutes. This can
     continue for up to a week of extensions.
 
-With the Hashtag auction, when a user bids, their funds are locked in the
-auction contract. Not sure what this means for handling additional bids. Ie. do
-we edit the first bid, or create a completely separate bid, locking up
+With the Hashtag Protocol auction, when a user bids, their funds are locked in
+the auction contract. Not sure what this means for handling additional bids. Ie.
+do we edit the first bid, or create a completely separate bid, locking up
 additional funds.
 
 When auction finishing block height is reached (thus triggering the end of
@@ -194,11 +199,14 @@ of losing bidders are unlocked and can be pulled down.
 <!-- markdownlint-enable -->
 
 Note: A participant may perform several roles at the same time. For example, a
-**_Publisher_** could create a `HASHTAG` on their own platform and auction it
-there. That would make this participant **_Publisher_**, **_Creator_** &
-**_Auctioneer_** and revenue would flow accordingly.
+**_Publisher_** could mint a `HASHTAG` on their own platform and auction it
+there. That would make this participant **_Creator_**, **_Publisher_** &
+**_Auctioneer_** and would receive 80% of the initial token auction revenue.
 
 **_Publishers_** and **_Auctioneers_** must be enabled to run the Protocol.
 Please contact us at
 [contact@hashtag-protocol.org](mailto:contact@hashtag-protocol.org) if you would
 like to have your application enabled.
+
+See [Key Participants](/essentials/participants) for more details on participant
+use cases and financial incentives.

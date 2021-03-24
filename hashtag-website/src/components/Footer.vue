@@ -44,8 +44,8 @@
               <span class="icon"><i class="mdi mdi-discord mdi-24px"></i></span>
             </a>
             <a
-              href="mailto:info@hashtag-protocol.org"
-              title="info@hashtag-protocol.org"
+              href="mailto:contact@hashtag-protocol.org"
+              title="contact@hashtag-protocol.org"
               class="is-dark navbar-item"
               target="_blank"
             >

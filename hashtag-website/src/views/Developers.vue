@@ -6,13 +6,13 @@
           <Navbar></Navbar>
         </div>
       </section>
-      <section class="section">
+      <section class="section" id="overview">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h1 class="is-size-1 title is-spaced">
-                Provide your users rich, decentralized content tagging stored to
-                a global, immutable database.
+                Provide users rich, decentralized content tagging stored to a
+                global, immutable database.
               </h1>
               <div class="is-size-5 is-spaced">
                 <strong>Demo</strong>&nbsp;
@@ -36,14 +36,21 @@
               </span>
             </div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            type="is-primary"
+            icon-right="arrow-down"
+            onClick="document.getElementById('create').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-dark">
+      <section class="section is-medium has-background-dark" id="create">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h2 class="title is-size-3 is-spaced has-text-white-ter">
-                Create HASHTAG Tokens
+                Create HASHTAG tokens
               </h2>
               <div class="content is-medium has-text-white-ter">
                 <p>
@@ -53,12 +60,12 @@
                 </p>
                 <p>
                   As a whitelisted publisher, you can generate revenue from
-                  HASHTAG minted in your application.
+                  HASHTAG tokens minted in your application.
                 </p>
                 <p>
                   <a
                     href="https://docs.hashtag-protocol.org/essentials/#hashtag-token-hashtag"
-                    >Learn about HASHTAG cryptoeconomics</a
+                    >Learn about HASHTAG token cryptoeconomics</a
                   >
                   <span class="icon has-text-primary">
                     <i class="mdi mdi-arrow-right mdi-18px"></i>
@@ -83,9 +90,17 @@
               </div>
             </div>
           </div>
+          <b-button
+            outlined
+            inverted
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('tagging').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-white">
+      <section class="section is-medium has-background-white" id="tagging">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-6">
@@ -113,11 +128,12 @@
             </div>
             <div class="column is-4 is-offset-1">
               <h2 class="title is-size-3 is-spaced">
-                Tag content with HASHTAG
+                Tag content with HASHTAG tokens
               </h2>
               <div class="content is-medium">
                 <p>
-                  Generate revenue when users tag content in your application.
+                  Generate revenue for yourself, token creators & owners when
+                  users tag content in your application.
                 </p>
                 <p>
                   Our first tagging contract supports on-chain tagging of other
@@ -136,9 +152,19 @@
               </div>
             </div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('subgraph').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-dark subgraph">
+      <section
+        class="section is-medium has-background-dark subgraph"
+        id="subgraph"
+      >
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
@@ -150,13 +176,14 @@
                   Minting and tagging events from all publishers are captured by
                   the
                   <a
-                    href="https://thegraph.com/explorer/subgraph/hashtag-protocol/hashtag-rinkby"
+                    target="_blank"
+                    href="https://thegraph.com/explorer/subgraph/hashtag-protocol/hashtag-mainnet"
                     >Hashtag Protocol subgraph</a
                   >.
                 </p>
                 <p>
-                  Rapidly query Protocol transaction data and present in your
-                  own way.
+                  Rapidly query Hashtag Protocol transaction data and present it
+                  in your own way.
                 </p>
               </div>
             </div>
@@ -204,15 +231,23 @@
               </div>
             </div>
           </div>
+          <b-button
+            outlined
+            inverted
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('revenue').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-white">
+      <section class="section is-medium has-background-white" id="revenue">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h2 class="title is-size-3 is-spaced">
-                Generate revenue from Hashtag’s permissionless, decentralized
-                tagging protocol.
+                Generate revenue from Hashtag Protocol's permissionless,
+                decentralized tagging protocol.
               </h2>
               <div class="content is-size-5">
                 <p>
@@ -234,14 +269,21 @@
               </div>
             </div>
             <div class="column is-5 is-offset-1">
-              <span class="image">
+              <span class="image participants">
                 <img :src="require(`../assets/img/participants.png`)" />
               </span>
             </div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('build').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-dark">
+      <section class="section is-medium has-background-dark" id="build">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-4"></div>
@@ -279,6 +321,13 @@
             </div>
             <div class="column is-offset-1 is-1"></div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-up"
+            type="is-primary"
+            onClick="window.scrollTo({top: 0, behavior: 'smooth'});"
+          />
         </div>
       </section>
     </div>
@@ -564,6 +613,12 @@ code {
       overflow-y: scroll;
       margin: 0;
     }
+  }
+}
+
+.participants {
+  img {
+    width: 90%;
   }
 }
 

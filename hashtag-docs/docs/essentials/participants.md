@@ -1,8 +1,8 @@
 # Key Participants
 
-Stitched into Hashtag Protocol are incentive mechanisms that
-harnesses the self-interest of at least six key market participants to drive
-positive network growth.
+Stitched into Hashtag Protocol are incentive mechanisms that harnesses the
+self-interest of at least six key market participants to drive positive network
+growth.
 
 <!-- markdownlint-disable MD013 MD033-->
 <br /><br />
@@ -40,7 +40,7 @@ enabled by Protocol to implement minting and tagging contracts.
       </td>
       <td>
         <ul>
-          <li>20% of auction proceeds for <code>HASHTAG</code> tokens minted on their platform. Note: Publisher may also act as Auctioneer in which case they would receive auction revenue for a total of 40% of sale revenue.</li>
+          <li>20% of initial token auction proceeds for <code>HASHTAG</code> tokens minted on their platform. Note: Publisher may also act as Auctioneer in which case they would receive auction revenue for a total of 40% of sale revenue.</li>
           <li>30% of tagging fee for content tagged with any <code>HASHTAG</code> on their platform.</li>
         </ul>
       </td>
@@ -51,9 +51,10 @@ enabled by Protocol to implement minting and tagging contracts.
 
 ## Creator (phase 1,2)
 
-User that creates (“mints”) a new <code>HASHTAG</code> token on a participating Publisher
-platform. Publishers may also create <code>HASHTAG</code> tokens on their own platform, which
-in effect gives them the benefits of being the Creator.
+User that creates (“mints”) a new <code>HASHTAG</code> token on a participating
+Publisher platform. Publishers may also create <code>HASHTAG</code> tokens on
+their own platform, which in effect gives them the benefits of being the
+Creator.
 
 <!-- markdownlint-disable MD013 MD033-->
 <table>
@@ -73,7 +74,7 @@ in effect gives them the benefits of being the Creator.
       </td>
       <td>
         <ul>
-          <li>50% of auction proceeds from sale of <code>HASHTAG</code> tokens they create.</li>
+          <li>50% of initial token auction proceeds from sale of <code>HASHTAG</code> tokens they create.</li>
         </ul>
       </td>
     </tr>
@@ -115,7 +116,8 @@ content with <code>HASHTAG</code> tokens.
 
 ## Owner (phase 3)
 
-User that purchases <code>HASHTAG</code> token(s) via auction or secondary market.
+User that purchases <code>HASHTAG</code> token(s) via auction or secondary
+market.
 
 <!-- markdownlint-disable MD013 MD033-->
 <table>
@@ -137,7 +139,7 @@ User that purchases <code>HASHTAG</code> token(s) via auction or secondary marke
       <td>
         <ul>
           <li>50% of tagging fees.</li>
-          <li>Secondary market resale.</li>
+          <li>100% of secondary market resale.</li>
         </ul>
       </td>
     </tr>
@@ -167,7 +169,7 @@ Publishers, Auctioneers must be whitelisted by Protocol to host auctions.
       </td>
       <td>
         <ul>
-          <li>20% of <code>HASHTAG</code> auction sale price</li>
+          <li>20% of <code>HASHTAG</code> initial token auction sale price</li>
         </ul>
       </td>
     </tr>
@@ -207,10 +209,14 @@ User that engages in tagging data quality curation.
 **Notes:**
 
 A participant may perform several roles at the same time. For example,
-participant could create a <code>HASHTAG</code> on their own platform and auction it there.
-That would make this participant **_Publisher_**, **_Creator_** &
-**_Auctioneer_** and revenue would flow accordingly.
+participant could create a <code>HASHTAG</code> on their own platform and
+auction it there. That would make this participant **_Publisher_**,
+**_Creator_** & **_Auctioneer_** and revenue would flow accordingly.
 
 **_Publisher_** and **_Auctioneer_** must be enabled to run the Protocol. Please
-contact us at [contact@hashtag-protocol.org](mailto:contact@hashtag-protocol.org) if you would like to enable your
-application.
+contact us at
+[contact@hashtag-protocol.org](mailto:contact@hashtag-protocol.org) if you would
+like to enable your application.
+
+See [revenue sharing](/essentials/protocol-overview.html#revenue-sharing) in the
+protocol overview section for a summary table of participant revenue sharing.
