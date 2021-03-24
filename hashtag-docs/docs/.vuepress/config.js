@@ -76,12 +76,6 @@ module.exports = {
   },
   plugins: [
     [
-      "vuepress-plugin-google-tag-manager",
-      {
-        gtm: "GTM-MRK383F",
-      },
-    ],
-    [
       "vuepress-plugin-code-copy",
       {
         color: "#188c4a",
