@@ -16,7 +16,7 @@ web:
             #
             # This is a filesystem path, relative to the application root.
             # Folder name is set in npm run buildenvvar.
-            root: "build_platform"
+            root: "dist"
             index:
                 - "index.html"
             passthru: /index.html
@@ -68,15 +68,6 @@ disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
-  '/build_platform':
-    source: local
-    source_path: files/build_platform
-  '/build_platform/docs':
-    source: local
-    source_path: files/docs
-  '/build_platform/test-results':
-    source: local
-    source_path: files/test-results
   '/.tmp_platformsh':
     source: local
     source_path: files/tmp_platformsh
@@ -110,12 +101,29 @@ hooks:
       yarn install
       yarn build
 
-      # We are building locally.
+      # Building on platform.sh
+      if [ -d /app/.global ]; then
+        echo "--------------------------------------------------"
+        echo "Symlink /tmp/config.js to dist/config.js"
+        echo "--------------------------------------------------"
+        ln -fs /tmp/config.js dist/config.js
+      fi
+
+      # Building locally.
       if ! [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Move raw markdown documents from hashtag-docs"
+        echo "----------------------------------------------"
         # Move raw markdown documents from hashtag-docs.
         ./scripts/pull-docs.sh
       fi
 
     # The deploy hook runs after your application has been deployed and started.
     deploy: |
-      yarn buildenvvar
+      # Deploying on platform.sh
+      if [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
+        echo "----------------------------------------------"
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
+      fi

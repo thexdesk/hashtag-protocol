@@ -1,4 +1,5 @@
 import Vue from "vue";
+import AppConfig from "@/appconfig";
 import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
 import BlocknativeSdk from "bnc-sdk";
@@ -12,8 +13,8 @@ import onBoardChainMap from "../../data/onBoardChainMap";
 let provider;
 let onboard = {};
 let blocknative = {};
-const localstorageWalletKey =
-  process.env.VUE_APP_ONBOARD_LOCALSTORAGE_WALLET_KEY;
+
+const localstorageWalletKey = AppConfig.localstorageWalletKey;
 
 /**
  * The Vuex 'state' object.
@@ -39,8 +40,9 @@ const state = {
   web3Objects: {},
   fees: {
     protocol: 0,
-    tagging: ethers.utils.parseEther("0.01"),
-    mintAndTag: ethers.utils.parseEther("0.01"),
+    // @ todo: pull fee from contract.
+    tagging: null,
+    mintAndTag: null,
   },
   accrued: null,
   openModalCloseFn: () => {},
@@ -62,8 +64,8 @@ const actions = {
   async initOnboard({ dispatch, commit }) {
     // Initialize onboard.
     onboard = Onboard({
-      dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
-      networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
+      dappId: AppConfig.blocknativeApiKey,
+      networkId: AppConfig.onboardNetworkID,
       subscriptions: {
         address: (address) => {
           commit("setWalletAddress", address);
@@ -86,8 +88,8 @@ const actions = {
 
     // Initialize blocknative SDK for mempool notifications.
     blocknative = new BlocknativeSdk({
-      dappId: process.env.VUE_APP_BLOCKNATIVE_API_KEY,
-      networkId: Number(process.env.VUE_APP_ONBOARD_NETWORK_ID),
+      dappId: AppConfig.blocknativeApiKey,
+      networkId: AppConfig.onboardNetworkID,
     });
 
     dispatch("reconnectWallet");
@@ -127,7 +129,7 @@ const actions = {
         hashtagProtocolContract,
         erc721HashtagRegistryContract,
       },
-      publisher: process.env.VUE_APP_PUBLISHER_ADDRESS,
+      publisher: AppConfig.publisherWalletAddress,
     });
 
     dispatch("getTaggingFee");
@@ -309,7 +311,6 @@ const actions = {
   async getTaggingFee({ state, commit }) {
     const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
     const fee = (await erc721HashtagRegistryContract.tagFee()).toString();
-
     commit("setTaggingFee", fee);
   },
 
@@ -354,15 +355,18 @@ const actions = {
 
 const mutations = {
   async setProtocolFee(state, fee) {
-    Vue.set(state, "fees.platform", fee);
+    //Vue.set(state, "fees.platform", fee);
+    state.fees.platform = fee;
   },
 
   async setTaggingFee(state, fee) {
-    Vue.set(state, "fees.tagging", fee);
+    //Vue.set(state, "fees.tagging", fee);
+    state.fees.tagging = fee;
   },
 
   async setMintAndTagFee(state, fee) {
-    Vue.set(state, "fees.mintAndTag", fee);
+    //Vue.set(state, "fees.mintAndTag", fee);
+    state.fees.mintAndTag = fee;
   },
 
   setWeb3Objects(state, payload) {

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueGtm from "vue-gtm";
 import App from "./App.vue";
+import AppConfig from "@/appconfig";
 import { router } from "./routes";
 import store from "./stores/index";
 import ApolloClient from "apollo-boost";
@@ -13,18 +14,19 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 import "@/mixins/global";
 
+Vue.use(AppConfig);
 Vue.use(Buefy);
 Vue.use(VueMoment);
 Vue.use(VueAxios, axios);
 Vue.use(VueScreen, "bulma");
 
-// Connections for GraphQL.
+// Connections for GraphQL. See config.js
 const hashtagClient = new ApolloClient({
-  uri: process.env.VUE_APP_HASHTAG_SUBGRAPH_URL,
+  uri: AppConfig.hashtagSubgraph,
 });
 
 const nftsClient = new ApolloClient({
-  uri: process.env.VUE_APP_TOP_NFTS_SUBGRAPH_URL,
+  uri: AppConfig.nftSearchSubgraph,
 });
 
 const apolloProvider = new VueApollo({

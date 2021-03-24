@@ -3,9 +3,10 @@ import HashtagProtocolTruffleConf from "../truffleconf/HashtagProtocol";
 import ERC721HashtagRegistry from "../truffleconf/ERC721HashtagRegistry";
 import utils from "../utils";
 import onBoardChainMap from "../data/onBoardChainMap.json";
+import AppConfig from "@/appconfig";
 
-const chainID = process.env.VUE_APP_ONBOARD_NETWORK_ID;
-const discordServer = process.env.VUE_APP_DISCORD_SERVER;
+const chainID = AppConfig.onboardNetworkID; // Vue.appConfig.hashtagSubgraph;
+const discordServer = AppConfig.discordServer; //Vue.prototype.appConfig.discordServer;
 
 Vue.mixin({
   data: function () {
