@@ -73,6 +73,9 @@ export default {
       );
     },
   },
+  mounted() {
+    this.$gtm.trackView(this.$page, this.$page.regularPath);
+  },
 };
 </script>
 
