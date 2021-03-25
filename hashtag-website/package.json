@@ -29,6 +29,7 @@
     "vue-apollo": "^3.0.3",
     "vue-axios": "^2.1.5",
     "vue-axios-cors": "^1.0.1",
+    "vue-gtm": "3.0.0-vue2",
     "vue-moment": "^4.1.0",
     "vue-prismjs": "^1.2.0",
     "vue-router": "^3.1.6",
