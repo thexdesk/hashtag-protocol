@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="block newsletter">
       <div class="block container has-text-centered has-text-white-ter">
-        <p class="is-size-3 has-text-weight-bold">#KeepMeUpdated</p>
+        <p class="is-size-3 has-text-weight-bold">#TokenizeEverything</p>
         <p class="has-text-grey-light">
           Sign up to our newsletter for occasional updates about our movement to
           decentralize hashtags
