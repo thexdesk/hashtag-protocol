@@ -6,13 +6,13 @@
           <Navbar></Navbar>
         </div>
       </section>
-      <section class="section">
+      <section class="section" id="overview">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h1 class="is-size-1 title is-spaced">
-                Provide your users rich, decentralized content tagging stored to
-                a global, immutable database.
+                Provide users rich, decentralized content tagging stored to a
+                global, immutable database.
               </h1>
               <div class="is-size-5 is-spaced">
                 <strong>Demo</strong>&nbsp;
@@ -36,14 +36,21 @@
               </span>
             </div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            type="is-primary"
+            icon-right="arrow-down"
+            onClick="document.getElementById('create').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-dark">
+      <section class="section is-medium has-background-dark" id="create">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h2 class="title is-size-3 is-spaced has-text-white-ter">
-                Create HASHTAG Tokens
+                Create HASHTAG tokens
               </h2>
               <div class="content is-medium has-text-white-ter">
                 <p>
@@ -53,12 +60,12 @@
                 </p>
                 <p>
                   As a whitelisted publisher, you can generate revenue from
-                  HASHTAG minted in your application.
+                  HASHTAG tokens minted in your application.
                 </p>
                 <p>
                   <a
                     href="https://docs.hashtag-protocol.org/essentials/#hashtag-token-hashtag"
-                    >Learn about HASHTAG cryptoeconomics</a
+                    >Learn about HASHTAG token cryptoeconomics</a
                   >
                   <span class="icon has-text-primary">
                     <i class="mdi mdi-arrow-right mdi-18px"></i>
@@ -83,9 +90,17 @@
               </div>
             </div>
           </div>
+          <b-button
+            outlined
+            inverted
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('tagging').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-white">
+      <section class="section is-medium has-background-white" id="tagging">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-6">
@@ -113,11 +128,12 @@
             </div>
             <div class="column is-4 is-offset-1">
               <h2 class="title is-size-3 is-spaced">
-                Tag content with HASHTAG
+                Tag content with HASHTAG tokens
               </h2>
               <div class="content is-medium">
                 <p>
-                  Generate revenue when users tag content in your application.
+                  Generate revenue for yourself, token creators & owners when
+                  users tag content in your application.
                 </p>
                 <p>
                   Our first tagging contract supports on-chain tagging of other
@@ -136,9 +152,19 @@
               </div>
             </div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('subgraph').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-dark subgraph">
+      <section
+        class="section is-medium has-background-dark subgraph"
+        id="subgraph"
+      >
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
@@ -150,13 +176,14 @@
                   Minting and tagging events from all publishers are captured by
                   the
                   <a
-                    href="https://thegraph.com/explorer/subgraph/hashtag-protocol/hashtag-rinkby"
+                    target="_blank"
+                    href="https://thegraph.com/explorer/subgraph/hashtag-protocol/hashtag-mainnet"
                     >Hashtag Protocol subgraph</a
                   >.
                 </p>
                 <p>
-                  Rapidly query Protocol transaction data and present in your
-                  own way.
+                  Rapidly query Hashtag Protocol transaction data and present it
+                  in your own way.
                 </p>
               </div>
             </div>
@@ -176,8 +203,23 @@
                   <b-tab-item label="Display" class="nftDisplay">
                     <b-table :data="tags || []" focusable>
                       <template slot-scope="props">
-                        <b-table-column field="nftId" label="" width="75">
-                          <img :src="props.row.nftImage" />
+                        <b-table-column field="nftId" centered>
+                          <router-link
+                            :to="{
+                              name: 'nft-detail',
+                              params: {
+                                type: 'nft',
+                                contract: props.row.nftContract,
+                                id: props.row.nftId,
+                              },
+                            }"
+                          >
+                            <img
+                              :src="props.row.nftImage"
+                              :alt="props.row.nftName"
+                              class="nft-thumb"
+                            />
+                          </router-link>
                         </b-table-column>
                         <b-table-column field="nftName" label="Asset Name">
                           <nft-link
@@ -195,7 +237,9 @@
                           {{ props.row.nftContractName }}
                         </b-table-column>
                         <b-table-column field="hashtagName" label="Hashtag">
-                          <hashtag :value="props.row.hashtagName"></hashtag>
+                          <hashtag
+                            :value="props.row.hashtagDisplayHashtag"
+                          ></hashtag>
                         </b-table-column>
                       </template>
                     </b-table>
@@ -204,15 +248,23 @@
               </div>
             </div>
           </div>
+          <b-button
+            outlined
+            inverted
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('revenue').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-white">
+      <section class="section is-medium has-background-white" id="revenue">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-5">
               <h2 class="title is-size-3 is-spaced">
-                Generate revenue from Hashtag’s permissionless, decentralized
-                tagging protocol.
+                Generate revenue from Hashtag Protocol's permissionless,
+                decentralized tagging protocol.
               </h2>
               <div class="content is-size-5">
                 <p>
@@ -234,14 +286,21 @@
               </div>
             </div>
             <div class="column is-5 is-offset-1">
-              <span class="image">
+              <span class="image participants">
                 <img :src="require(`../assets/img/participants.png`)" />
               </span>
             </div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-down"
+            type="is-primary"
+            onClick="document.getElementById('build').scrollIntoView({block: 'start', behavior: 'smooth'});"
+          />
         </div>
       </section>
-      <section class="section is-medium has-background-dark">
+      <section class="section is-medium has-background-dark" id="build">
         <div class="container">
           <div class="columns is-vcentered">
             <div class="column is-4"></div>
@@ -279,6 +338,13 @@
             </div>
             <div class="column is-offset-1 is-1"></div>
           </div>
+          <b-button
+            outlined
+            class="is-pulled-right is-hidden-touch"
+            icon-right="arrow-up"
+            type="is-primary"
+            onClick="window.scrollTo({top: 0, behavior: 'smooth'});"
+          />
         </div>
       </section>
     </div>
@@ -312,12 +378,16 @@ query {
   tags(first: 5, orderBy: timestamp, orderDirection: desc) {
     id
     hashtagId
-    hashtagName
+    hashtagDisplayHashtag
+    hashtag
+    hashtagWithoutHash
     nftContract
-    nftContractName
-    nftImage
-    nftName
     nftId
+    nftContractName
+    nftTokenUri
+    nftName
+    nftDescription
+    nftImage
     tagger
     timestamp
     publisher
@@ -328,69 +398,52 @@ query {
   "data": {
     "tags": [
       {
-        "hashtagId": "5",
-        "hashtagName": "bob",
-        "id": "0x749819150d62630594d3b600699fdabb87c47c0997ace7e8da00c91f54e4ad59",
-        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "hashtag": "#tesla",
+        "hashtagDisplayHashtag": "#Tesla",
+        "hashtagId": "4",
+        "hashtagWithoutHash": "tesla",
+        "id": "0x5cd73ce1328dc497ada2d29eb5beccefd46fb589e3e60e80e1658444732a7020",
+        "nftContract": "0xfbeef911dc5821886e1dda71586d90ed28174b7d",
         "nftContractName": "KnownOriginDigitalAsset",
-        "nftId": "50401",
-        "nftImage": "https://ipfs.infura.io/ipfs/QmUhQxQPi1XbzRzJ8T9PDCWZugsoG29ytEkq7bpWbuWcUC",
-        "nftName": "Bonsai code",
-        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "timestamp": "1599750144"
+        "nftId": "115851",
+        "nftImage": "https://ipfs.infura.io/ipfs/Qma6W5ZfbJuqqufKabZ7NvtXarX7gFBEr3tRdgNsL7ZYMf",
+        "nftName": "Tesla and his ideas",
+        "nftTokenUri": "https://ipfs.infura.io/ipfs/QmbG7sFzrGb15CHdRV5z4w7p7GV8uK2L92i37YZWf4tM7v",
+        "publisher": "0xf6423a8769292bbeef9335c5a26254c759e3bfbe",
+        "tagger": "0x477cec669b2b22e79fad05d1c034fc9d897ad4ef",
+        "timestamp": "1616644746"
       },
       {
-        "hashtagId": "11",
-        "hashtagName": "jenkins",
-        "id": "0x4720dcac73ae6adcc0280206413f5665d362c9e908385b69fa223ac0bcd8e9f0",
-        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "hashtag": "#twitter",
+        "hashtagDisplayHashtag": "#Twitter",
+        "hashtagId": "3",
+        "hashtagWithoutHash": "twitter",
+        "id": "0x7ae34eab1d9de6fb2439bc6d2dc2aa9d1750d6b2bbdbd88042cad2671834811b",
+        "nftContract": "0xfbeef911dc5821886e1dda71586d90ed28174b7d",
         "nftContractName": "KnownOriginDigitalAsset",
-        "nftId": "41101",
-        "nftImage": "https://ipfs.infura.io/ipfs/QmSas9z2iudgDFfZc5fJzpzMYEbv5hy6LyroYQCGLtT9GW",
-        "nftName": "Dreaming Big Color Dreams",
-        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "timestamp": "1599749949"
-      },
-      {
-        "hashtagId": "10",
-        "hashtagName": "mountains",
-        "id": "0x7a13da22d607297d7ef1cc05bce61a44ce7710591af0e5247129f83ae0af1d2c",
-        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
-        "nftContractName": "KnownOriginDigitalAsset",
-        "nftId": "51201",
-        "nftImage": "https://ipfs.infura.io/ipfs/QmY4XQ2qvrRwEZWr918BCjbW35Q7WJ7rsYZsDB1f8fhk7K",
-        "nftName": "webp",
-        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
+        "nftId": "268127",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmdbjJAoApvhgjhzU2mg6H447SRAbKGN8Do2w1UbXL9w8X/asset.png",
+        "nftName": "Twitter vs Trump",
+        "nftTokenUri": "https://ipfs.infura.io/ipfs/QmPno2pBJomppz3W9hFnFcpecY4ZPt3HR6oPxRdzuZg8de",
+        "publisher": "0xf6423a8769292bbeef9335c5a26254c759e3bfbe",
         "tagger": "0x07bd3b64f9f51fe1d5c79f81dfc0460fff305b0e",
-        "timestamp": "1596246628"
+        "timestamp": "1616525667"
       },
       {
-        "hashtagId": "9",
-        "hashtagName": "blue",
-        "id": "0x7e1c2541271d253f00beeaf2f8c73b67fdf3b4d21e4a8cb8a188ef3f6aae1d6c",
-        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
+        "hashtag": "#tokenizeeverything",
+        "hashtagDisplayHashtag": "#TokenizeEverything",
+        "hashtagId": "1",
+        "hashtagWithoutHash": "tokenizeeverything",
+        "id": "0xfdefdc3f5ef8ca42eefd7ee23dafbdaadce412ca1e2c6c3994bbcc0b1f98cf1a",
+        "nftContract": "0xfbeef911dc5821886e1dda71586d90ed28174b7d",
         "nftContractName": "KnownOriginDigitalAsset",
-        "nftId": "41101",
-        "nftImage": "https://ipfs.infura.io/ipfs/QmSas9z2iudgDFfZc5fJzpzMYEbv5hy6LyroYQCGLtT9GW",
-        "nftName": "Dreaming Big Color Dreams",
-        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "timestamp": "1596124648"
-      },
-      {
-        "hashtagId": "8",
-        "hashtagName": "noeyes",
-        "id": "0x81eda4e8a6d7bf435e62fc32ad7607e20c09bebd1ab33926687c44d831d58698",
-        "nftContract": "0x2df6816286c583a7ef8637cd4b7cc1cc62f6161e",
-        "nftContractName": "KnownOriginDigitalAsset",
-        "nftId": "50401",
-        "nftImage": "https://ipfs.infura.io/ipfs/QmUhQxQPi1XbzRzJ8T9PDCWZugsoG29ytEkq7bpWbuWcUC",
-        "nftName": "Bonsai code",
-        "publisher": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "tagger": "0xd677aed0965ac9b54e709f01a99ceca205aebc4b",
-        "timestamp": "1596124528"
+        "nftId": "81576",
+        "nftImage": "https://ipfs.infura.io/ipfs/QmeqnEwnpcmNotkvorsW3B5qFgERwWcbzC3FwiDuc2bFyL",
+        "nftName": "The revolution shell be tokenized. Unofficial poster - GLITCHY #1",
+        "nftTokenUri": "https://ipfs.infura.io/ipfs/QmcKoLVUL1J2wvmNZToHCzeLDn8Z6rneEDDLyDVGjnkjL8",
+        "publisher": "0xf6423a8769292bbeef9335c5a26254c759e3bfbe",
+        "tagger": "0x477cec669b2b22e79fad05d1c034fc9d897ad4ef",
+        "timestamp": "1616376815"
       }
     ]
   }
@@ -564,6 +617,12 @@ code {
       overflow-y: scroll;
       margin: 0;
     }
+  }
+}
+
+.participants {
+  img {
+    width: 90%;
   }
 }
 

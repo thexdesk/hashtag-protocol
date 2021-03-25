@@ -18,7 +18,7 @@ possible: as such it will be choreographed in the following phases:
    the simplest of use cases: enabling NFT artists and owners to tag NFTs with
    hashtag tokens. This functionality will be provided within the [demonstration
    application](https://app.hashtag-protocol.org) published by the Protocol.
-   This will make Hashtag the first **_Publisher_**.
+   This will make Hashtag Protocol the first **_Publisher_**.
 
 ## Phase 2: Platform promotion
 
@@ -30,12 +30,12 @@ possible: as such it will be choreographed in the following phases:
 4. Promote the Protocol to all appropriate social channels.
 5. Improve & expand documentation.
 6. Recruit [Hashtag Protocol Council](/essentials/hashtag-council).
-7. Develop the Hashtag Auction functionality and UI.
+7. Develop the Hashtag Protocol Auction functionality and UI.
 8. Recruit **_Auctioneers_**
 
 ## Phase 3: Commence HASHTAG auction
 
-1. Launch the [Public Hashtag Token Auction](/essentials/protocol-overview.html#hashtag-token-auction).
+1. Launch the [Hashtag Token Auction](/essentials/protocol-overview.html#hashtag-token-auction).
 2. Continued Hashtag Protocol promotion.
 
 ## Phase 4: Tagger incentivization and data quality mechanisms

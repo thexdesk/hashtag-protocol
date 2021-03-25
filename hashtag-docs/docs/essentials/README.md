@@ -1,4 +1,4 @@
-# Our vision for Hashtag
+# Our vision for Hashtag Protocol
 
 People around the globe use hashtags to increase discoverability and engagement
 of online content. One estimate from 2017 is that on Twitter alone around 125
@@ -22,8 +22,5 @@ strings into ERC-721 non-fungible tokens (NFTs); the “tagging” of other digi
 assets with those tokens; and APIs for surfacing this data for use in networks,
 platforms and applications.
 
-Stitched into Hashtag are game-theory incentive mechanisms that harnesses the
-self-interest of participants to drive positive network growth. 
-
-Stitched into this functionality are mechanisms to incentivize all participants
-of the system.
+Stitched into Hashtag Protocol are crypto-economic incentive mechanisms that
+harness the self-interest of participants to drive positive network growth.
