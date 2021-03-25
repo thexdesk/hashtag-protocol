@@ -5,7 +5,7 @@
         <p class="is-size-3 has-text-weight-bold">#TokenizeEverything</p>
         <p class="has-text-grey-light">
           Sign up for occasional updates about our movement to decentralize
-          hashtags
+          hashtags.
         </p>
       </div>
       <NewsletterForm />
