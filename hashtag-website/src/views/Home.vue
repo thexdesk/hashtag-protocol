@@ -13,12 +13,12 @@
               <div class="column overview">
                 <h1 class="is-size-1 title is-spaced">
                   An experimental content tagging protocol for the decentralized
-                  internet
+                  internet.
                 </h1>
                 <div class="is-size-4 content">
                   <p>
-                    Hashtag is a simple, decentralized protocol built for
-                    developers to tokenize hashtag strings as non-fungible
+                    Hashtag Protocol is a simple, decentralized protocol built
+                    for developers to tokenize hashtag strings as non-fungible
                     tokens (NFTs), link them with online media and surface this
                     data for use in networks, platforms and applications.
                   </p>
@@ -31,7 +31,7 @@
                   </p>
                 </div>
               </div>
-              <div class="column" style="align-self: flex-end">
+              <div class="column hero-img">
                 <span class="image">
                   <img :src="require(`../assets/img/hero.png`)" />
                 </span>
@@ -68,6 +68,10 @@ export default {
   .hero {
     padding-top: 4rem;
     padding-bottom: 0;
+
+    .hero-img {
+      align-self: flex-end;
+    }
   }
 
   .overview {

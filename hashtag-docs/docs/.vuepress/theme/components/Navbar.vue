@@ -6,7 +6,7 @@
           src="@theme/assets/logo.svg"
           alt="Content tagging for the decentralized web"
         />
-        <span>Hashtag</span>
+        <span>Hashtag Protocol Docs</span>
       </b-navbar-item>
     </template>
     <template slot="start"></template>
