@@ -100,7 +100,7 @@ content with <code>HASHTAG</code> tokens.
       <td width="50%">
         <ul>
           <li>Users wishing to increase discoverability and engagement of their or others content.</li>
-          <li>List making; bookmarking; social tagging.</li>
+          <li>Curated lists; bookmarking; social tagging.</li>
         </ul>
       </td>
       <td>
