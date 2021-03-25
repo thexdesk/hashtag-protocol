@@ -40,7 +40,37 @@
           </b-button>
         </div>
       </b-navbar-item>
-      <b-navbar-item>
+      <b-navbar-dropdown
+        class="is-hidden-desktop is-hidden-tablet-only mobile-menu"
+        arrowless="true"
+      >
+        <b-navbar-item
+          v-for="(value, key) in sectionsMenuArr"
+          :key="key"
+          :value="value.text"
+          aria-role="menuitem"
+          :href="value.path"
+        >
+          {{ value.text }}
+        </b-navbar-item>
+        <b-navbar-item
+          tag="div"
+          class="has-text-grey-dark has-text-weight-light"
+        >
+          DEVELOPER RESOURCES
+        </b-navbar-item>
+        <b-navbar-item
+          v-for="(value, key) in supportMenuArr"
+          :key="key"
+          :value="value.text"
+          aria-role="menuitem"
+          :href="value.path"
+        >
+          {{ value.text }}
+        </b-navbar-item>
+      </b-navbar-dropdown>
+
+      <b-navbar-item class="is-hidden-mobile">
         <b-dropdown
           :triggers="['hover']"
           v-model="currentMenu"
@@ -55,7 +85,6 @@
             icon-left="menu"
           >
           </b-button>
-
           <b-dropdown-item
             v-for="(value, key) in sectionsMenuArr"
             :key="key"
@@ -215,6 +244,16 @@ export default {
 <style scoped lang="scss">
 .navbar {
   .navbar-end {
+    .mobile-menu {
+      a.navbar-item:focus,
+      a.navbar-item:focus-within,
+      a.navbar-item:hover,
+      a.navbar-item.is-active {
+        background-color: $primary;
+        color: $white;
+      }
+    }
+
     .navbar-item {
       .buttons {
         button {
