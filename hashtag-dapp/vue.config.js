@@ -27,4 +27,7 @@ module.exports = {
       config: "config",
     },
   },
+  devServer: {
+    proxy: "http://localhost:8000",
+  },
 };
