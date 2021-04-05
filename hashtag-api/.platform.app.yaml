@@ -42,7 +42,7 @@ web:
 
 dependencies:
   nodejs:
-    pm2: "^4.5.0"
+    yarn: "*"
 
 # The size of the persistent disk of the application (in MB).
 disk: 512
