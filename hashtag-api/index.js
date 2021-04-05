@@ -20,7 +20,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/:token_id", async function (req, res) {
   // Parse the token id from the URL.
   const tokenId = parseInt(req.params.token_id).toString();
-
   if (!tokenId) {
     return;
   }
@@ -46,6 +45,7 @@ app.get("/:token_id", async function (req, res) {
       // console.log("axios result", result.data.data.hashtag);
       // Get the data returned from The Graph.
       let hashtag = result.data.data.hashtag;
+      console.log(hashtag);
       // Stitch in nicely formatted token creation date.
       hashtag.date = moment.unix(hashtag.timestamp).format("MMM Do YYYY");
       // Build the token image, and add it to the hashtag object.
