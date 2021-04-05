@@ -27,6 +27,9 @@
   type: upstream
   upstream: "2-hashtag-dapp:http"
 
+"https://api.{default}/":
+  type: upstream
+  upstream: "hashtag-api"
 #http://{default}/:
 #  cache:
 #    cookies:
