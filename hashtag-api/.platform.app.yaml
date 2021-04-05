@@ -14,5 +14,31 @@ web:
   commands:
     start: "node index.js"
 
+    # Specific parameters for different URL prefixes.
+    locations:
+
+        "/public":
+            # The folder from which to serve static assets, for this location.
+            #
+            # This is a filesystem path, relative to the application root.
+            # Folder name is set in npm run buildenvvar.
+            root: "public"
+            passthru: false
+
+            # How long to allow static assets from this location to be cached.
+            #
+            # Can be a time in seconds, or -1 for no caching. Times can be
+            # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+            # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+            # 365 days).
+            expires: 1h
+            scripts: false
+            rules:
+                # Restrict access to markdown (.md) files.
+                \.(png)$:
+                    allow: true
+                ^/robots\.txt$:
+                    allow: false
+
 # The size of the persistent disk of the application (in MB).
 disk: 512
