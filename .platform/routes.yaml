@@ -29,7 +29,7 @@
 
 "https://api.{default}/":
   type: upstream
-  upstream: "hashtag-api"
+  upstream: "hashtag-api:http"
 #http://{default}/:
 #  cache:
 #    cookies:
