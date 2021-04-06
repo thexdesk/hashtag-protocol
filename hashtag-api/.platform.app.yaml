@@ -22,7 +22,7 @@ web:
           #
           # This is a filesystem path, relative to the application root.
           # Folder name is set in npm run buildenvvar.
-          root: "public"
+          root: "public/images"
           passthru: false
 
           # How long to allow static assets from this location to be cached.
