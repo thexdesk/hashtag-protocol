@@ -16,8 +16,7 @@ web:
 
   # Specific parameters for different URL prefixes.
   locations:
-
-      "/public":
+      "/public/images":
           # The folder from which to serve static assets, for this location.
           #
           # This is a filesystem path, relative to the application root.
@@ -34,7 +33,7 @@ web:
           expires: 1h
           scripts: false
           rules:
-              # Restrict access to markdown (.md) files.
+              # Restrict access to markdown (.png) files.
               \.(png)$:
                   allow: true
               ^/robots\.txt$:
@@ -43,19 +42,10 @@ web:
 relationships:
   chromeheadlessbrowser: "headlessbrowser:http"
 
-#dependencies:
-#  nodejs:
-#    yarn: "*"
-#
-#hooks:
-#    build: |
-#      set -e
-#      yarn install
-
 # The size of the persistent disk of the application (in MB).
 disk: 512
 
 mounts:
-  '/public':
+  '/public/images':
     source: local
-    source_path: files/public
+    source_path: images
