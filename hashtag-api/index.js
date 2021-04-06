@@ -26,7 +26,6 @@ app.get("/:token_id", async function (req, res) {
 
   buildMetadata(tokenId, req)
     .then((metadata) => {
-      console.log("build metadata", metadata);
       res.send(metadata);
     })
     .catch((e) => console.log(e));
@@ -36,7 +35,6 @@ async function buildMetadata(tokenId, req) {
   if (!tokenId) {
     return;
   }
-  console.log("tokenId", tokenId);
   let response = await axios({
     url:
       "https://api.thegraph.com/subgraphs/name/hashtag-protocol/hashtag-mainnet",
@@ -61,7 +59,6 @@ async function buildMetadata(tokenId, req) {
   }
 
   let hashtag = response.data.data.hashtag;
-  console.log("axios data", response.data.data.hashtag);
 
   // Stitch in nicely formatted token creation date.
   hashtag.date = moment.unix(hashtag.timestamp).format("MMM Do YYYY");
@@ -124,6 +121,7 @@ async function buildImage(hashtag) {
 
     return `images/${hashtag.id}.png`;
   } catch (e) {
+    console.log(e);
     return Promise.reject(e);
   }
 }

@@ -47,8 +47,6 @@
       body {
         width: 600px;
         height: 600px;
-        margin: 0;
-        padding: 0;
       }
     </style>
   </head>
@@ -77,6 +75,7 @@
         //const creator = "0x9D5Bc338891325896b8fF86EE371DcefEBD106e7";
         //const publisher = "0x9D5Bc338891325896b8fF86EE371DcefEBD106e7";
         //const createDate = "Mar 2, 2021";
+
         const logoData = `<svg width="216px" height="204px" viewBox="0 0 216 204" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <g id="White" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                 <g id="Group-6" fill="#FFFFFF">
@@ -117,9 +116,13 @@
         ctx.font = "bold 20px Roboto";
         ctx.textAlign = "left";
         ctx.textBaseline = "top";
-        ctx.fillText("HASHTAG ID " + id, 10, canvasHeight - 60);
+        ctx.fillText("HASHTAG TOKEN " + id, 10, canvasHeight - 60);
         ctx.textAlign = "right";
-        ctx.fillText(createDate.toUpperCase(), canvasWidth - 10, canvasHeight - 60);
+        ctx.fillText(
+          "MINTED " + createDate.toUpperCase(),
+          canvasWidth - 10,
+          canvasHeight - 60
+        );
 
         ctx.font = "18px Roboto";
         ctx.textBaseline = "top";
@@ -135,7 +138,7 @@
 
         logo.src = "../img/logo-white.svg";
         logo.onload = function () {
-          ctx.drawImage(logo, canvasWidth / 2 - 22, canvasHeight - 60, 45, 45);
+          ctx.drawImage(logo, canvasWidth / 2 - 32, canvasHeight - 75, 60, 60);
           DOMURL.revokeObjectURL(url);
         };
         logo.src = url;
