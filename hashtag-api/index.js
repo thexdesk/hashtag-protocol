@@ -96,7 +96,10 @@ async function buildImage(hashtag) {
     let browser;
     // Connect to chrome-headless using pre-formatted puppeteer credentials
     if (config.isValidPlatform()) {
-      const formattedURL = config.formattedCredentials("headless", "puppeteer");
+      const formattedURL = config.formattedCredentials(
+        "chromeheadlessbrowser",
+        "puppeteer"
+      );
       browser = await puppeteer.connect({ browserURL: formattedURL });
     } else {
       browser = await puppeteer.launch({ headless: true });

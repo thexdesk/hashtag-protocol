@@ -41,7 +41,7 @@ web:
                   allow: false
 
 relationships:
-  headless: "headless:http"
+  chromeheadlessbrowser: "headlessbrowser:http"
 
 #dependencies:
 #  nodejs:
