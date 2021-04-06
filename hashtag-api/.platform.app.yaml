@@ -40,14 +40,17 @@ web:
               ^/robots\.txt$:
                   allow: false
 
-dependencies:
-  nodejs:
-    yarn: "*"
+relationships:
+  headless: "headless:http"
 
-hooks:
-    build: |
-      set -e
-      yarn install
+#dependencies:
+#  nodejs:
+#    yarn: "*"
+#
+#hooks:
+#    build: |
+#      set -e
+#      yarn install
 
 # The size of the persistent disk of the application (in MB).
 disk: 512

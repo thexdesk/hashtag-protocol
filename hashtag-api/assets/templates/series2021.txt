@@ -47,6 +47,8 @@
       body {
         width: 600px;
         height: 600px;
+        margin: 0;
+        padding: 0;
       }
     </style>
   </head>
