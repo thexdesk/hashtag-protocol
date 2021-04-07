@@ -70,6 +70,30 @@ async function buildMetadata(tokenId, req) {
     name: hashtag.displayHashtag,
     external_url: `https://app.hashtag-protocol.org/hashtag/${hashtag.hashtagWithoutHash}`,
     image: `${fullUrl}/${hashtag.image}`,
+    description: "",
+    attributes: [
+      {
+        display_type: "date",
+        trait_type: "minted",
+        value: hashtag.timestamp,
+      },
+      {
+        trait_type: "hashtag",
+        value: hashtag.displayHashtag,
+      },
+      {
+        trait_type: "series",
+        value: moment.unix(hashtag.timestamp).format("YYYY"),
+      },
+      {
+        trait_type: "creator",
+        value: hashtag.creator,
+      },
+      {
+        trait_type: "publisher",
+        value: hashtag.publisher,
+      },
+    ],
   };
 
   return metadata;
@@ -83,7 +107,7 @@ async function buildImage(hashtag) {
     const fs = require("fs");
     const compile = require("es6-template-strings/compile"),
       resolveToString = require("es6-template-strings/resolve-to-string");
-    const data = fs.readFileSync("./assets/templates/series2021.txt", "utf8");
+    const data = fs.readFileSync("./assets/templates/series2021a.txt", "utf8");
     const compiled = compile(data);
 
     const html = resolveToString(compiled, hashtag);
