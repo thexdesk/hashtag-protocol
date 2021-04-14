@@ -1,0 +1,174 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script type="text/javascript">
+      function Duotone(id, src, primaryClr, secondaryClr, actions = () => null) {
+        let canvas = /** @type {HTMLCanvasElement} */ document.getElementById(id);
+        canvas.width = 1200; //horizontal resolution (?) - increase for better looking text
+        canvas.height = 1200; //vertical resolution (?) - increase for better looking text
+        canvas.style.width = 600; //actual width of canvas
+        canvas.style.height = 600; //actual height of canvas
+
+        let ctx = canvas.getContext("2d");
+        let downloadedImg = new Image();
+        downloadedImg.crossOrigin = ""; // to allow us to manipulate the image without tainting canvas
+        downloadedImg.onload = function () {
+          ctx.drawImage(downloadedImg, 0, 0, canvas.width, canvas.height); // draws image to canvas on load
+          // Converts to grayscale by averaging the values of each pixel
+          let imageData = ctx.getImageData(0, 0, 1200, 1200);
+          const pixels = imageData.data;
+          for (let i = 0; i < pixels.length; i += 4) {
+            const red = pixels[i];
+            const green = pixels[i + 1];
+            const blue = pixels[i + 2];
+            // Using relative luminance to convert to grayscale
+            const avg = Math.round((0.299 * red + 0.587 * green + 0.114 * blue) * 1);
+            pixels[i] = avg;
+            pixels[i + 1] = avg;
+            pixels[i + 2] = avg;
+          }
+          // Puts the grayscaled image data back into the canvas
+          ctx.putImageData(imageData, 0, 0);
+          // puts the duotone image into canvas with multiply and lighten
+          ctx.globalCompositeOperation = "multiply";
+          ctx.fillStyle = primaryClr; // colour for highlights
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          // lighten
+          ctx.globalCompositeOperation = "lighten";
+          ctx.fillStyle = secondaryClr; // colour for shadows
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          // calls any other draws that you want through the function parameter passed in
+          actions(ctx);
+        };
+        downloadedImg.src = src; // source for the image
+      }
+    </script>
+    <style>
+      body {
+        width: 600px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <canvas id="duotone"></canvas>
+      <img id="image"> 
+    </div>
+    <script type="text/javascript">
+      function randomIndex() {
+        return Math.floor(Math.random() * 3);
+      }
+
+      function drawText(ctx) {
+        const canvasWidth = 1200; //horizontal resolution (?) - increase for better looking text
+        const canvasHeight = 1200; //vertical resolution (?) - increase for better looking text
+
+        //const hashtag = "${displayHashtag}";
+        //const id = "${id}";
+        //const creator = "${creator}";
+        //const publisher = "${publisher}";
+        //const createDate = "${date}";
+
+        const hashtag = "${displayHashtag}";
+        const id = "001";
+        const creator = "0x9D5Bc338891325896b8fF86EE371DcefEBD106e7";
+        const publisher = "0x9D5Bc338891325896b8fF86EE371DcefEBD106e7";
+        const createDate = "Mar 2, 2021";
+        const logoData = `<svg width="216px" height="204px" viewBox="0 0 216 204" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="White" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Group-6" fill="#FFFFFF">
+                                    <polyline id="Rectangle" points="59.2048198 0 95.2048198 0 91.4627928 36 55.4627928 36"></polyline>
+                                    <polyline id="Rectangle" points="143.20482 0 179.20482 0 175.462793 36 139.462793 36"></polyline>
+                                    <polyline id="Rectangle" points="54.8391216 42 90.8391216 42 87.0970946 78 51.0970946 78"></polyline>
+                                    <polyline id="Rectangle" points="12.8391216 42 48.8391216 42 45.0970946 78 9.09709458 78"></polyline>
+                                    <polyline id="Rectangle" points="138.839122 42 174.839122 42 171.097095 78 135.097095 78"></polyline>
+                                    <polyline id="Rectangle" points="180.839122 42 216.839122 42 213.097095 78 177.097095 78"></polyline>
+                                    <polyline id="Rectangle" points="4.10772522 126 40.1077252 126 36.3656982 162 0.365698193 162"></polyline>
+                                    <polyline id="Rectangle" points="172.107725 126 208.107725 126 204.365698 162 168.365698 162"></polyline>
+                                    <polyline id="Rectangle" points="50.4734234 84 86.4734234 84 82.7313964 120 46.7313964 120"></polyline>
+                                    <polyline id="Rectangle" points="134.473423 84 170.473423 84 166.731396 120 130.731396 120"></polyline>
+                                    <polyline id="Rectangle" points="46.1077252 126 82.1077252 126 78.3656982 162 42.3656982 162"></polyline>
+                                    <polyline id="Rectangle" points="96.8391216 42 132.839122 42 129.097095 78 93.0970946 78"></polyline>
+                                    <polyline id="Rectangle" points="88.1077252 126 124.107725 126 120.365698 162 84.3656982 162"></polyline>
+                                    <polyline id="Rectangle" points="130.107725 126 166.107725 126 162.365698 162 126.365698 162"></polyline>
+                                    <polyline id="Rectangle" points="41.742027 168 77.742027 168 74 204 38 204"></polyline>
+                                    <polyline id="Rectangle" points="125.742027 168 161.742027 168 158 204 122 204"></polyline>
+                                </g>
+                            </g>
+                        </svg>`;
+
+        // Draws text on top of the duotone image
+        let fontsize = 300;
+
+        ctx.fillStyle = "#FFFFFF";
+        // lower the font size until the text fits the canvas
+        do {
+          fontsize--;
+          ctx.font = fontsize + "px Roboto";
+        } while (ctx.measureText(hashtag).width > canvasWidth - 40);
+        // draw the text.
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.fillText(hashtag, canvasHeight / 2, canvasHeight / 2);
+
+        ctx.font = "bold 20px Roboto";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText("HASHTAG TOKEN " + id, 10, canvasHeight - 60);
+        ctx.textAlign = "right";
+        ctx.fillText(
+          "MINTED " + createDate.toUpperCase(),
+          canvasWidth - 10,
+          canvasHeight - 60
+        );
+
+        ctx.font = "18px Roboto";
+        ctx.textBaseline = "top";
+        ctx.textAlign = "left";
+        ctx.fillText("CREATOR " + creator, 10, canvasHeight - 30);
+        ctx.textAlign = "right";
+        ctx.fillText("PUBLISHER " + publisher, canvasWidth - 10, canvasHeight - 30);
+
+        var DOMURL = window.URL || window.webkitURL || window;
+        const logo = new Image();
+        const svg = new Blob([logoData], { type: "image/svg+xml" });
+        const url = DOMURL.createObjectURL(svg);
+
+        logo.src = "../img/logo-white.svg";
+        logo.onload = function () {
+          ctx.drawImage(logo, canvasWidth / 2 - 32, canvasHeight - 75, 60, 60);
+          DOMURL.revokeObjectURL(url);
+        };
+        logo.src = url;
+      }
+
+      function randomizeColors() {
+        // Arrays of colors, with a random index chosen when clicked.
+        let primary = ["#f65e35", "#00ff36", "#77acd4"];
+        let secondary = ["#1e3265", "#23278a", "#033dc5"];
+        let ind = randomIndex();
+
+        Duotone(
+          "duotone",
+          "https://img.pngio.com/ocean-floor-backgroundpng-68030-png-images-pngio-ocean-floor-png-1280_720.png",
+          primary[ind],
+          secondary[ind],
+          //addLogo,
+          drawText
+        );
+      }
+
+      // async font loading
+      // https://github.com/typekit/webfontloader
+      WebFont.load({
+        google: {
+          families: ["Roboto", "Roboto:bold"],
+        },
+        active: function () {
+          randomizeColors();
+        },
+      });
+    </script>
+  </body>
+</html>
