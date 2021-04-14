@@ -17,21 +17,27 @@ app.use(express.static(path.join(__dirname, "public")));
 // Disable favicon.
 app.get("/favicon.ico", (req, res) => res.status(204));
 
-app.get("/:token_id", async function (req, res) {
+app.get("/:token_id/:rebuild?", async function (req, res) {
   // Parse the token id from the URL.
   const tokenId = parseInt(req.params.token_id).toString();
   if (!tokenId) {
     return;
   }
 
-  buildMetadata(tokenId, req)
+  let rebuildImg = false;
+  console.log("param rebuild", req.params.rebuild);
+  if (req.params.rebuild == "rebuild") {
+    rebuildImg = true;
+  }
+
+  buildMetadata(tokenId, rebuildImg, req)
     .then((metadata) => {
       res.send(metadata);
     })
     .catch((e) => console.log(e));
 });
 
-async function buildMetadata(tokenId, req) {
+async function buildMetadata(tokenId, rebuildImg, req) {
   if (!tokenId) {
     return;
   }
@@ -53,7 +59,6 @@ async function buildMetadata(tokenId, req) {
     },
   });
 
-  //console.log("axios response", response);
   if (response.statusText != "OK") {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -62,7 +67,8 @@ async function buildMetadata(tokenId, req) {
 
   // Stitch in nicely formatted token creation date.
   hashtag.date = moment.unix(hashtag.timestamp).format("MMM Do YYYY");
-  hashtag.image = await buildImage(hashtag);
+
+  hashtag.image = await buildImage(hashtag, rebuildImg);
 
   const fullUrl = req.protocol + "://" + req.get("host");
 
@@ -99,12 +105,20 @@ async function buildMetadata(tokenId, req) {
   return metadata;
 }
 
-async function buildImage(hashtag) {
+async function buildImage(hashtag, rebuild) {
+  const fs = require("fs");
+  const path = `./public/images/${hashtag.id}.png`;
+
+  // Build the image if the image doesn't exist, or it exists and
+  // the rebuild flag was passed.
+  if (fs.existsSync(path) && !rebuild) {
+    return `images/${hashtag.id}.png`;
+  }
+
   try {
     // Use es6-template-strings to parse hashtag data
     // into a template, and return as a string
     // to pass to the nodeHtmlToImage processor.
-    const fs = require("fs");
     const compile = require("es6-template-strings/compile"),
       resolveToString = require("es6-template-strings/resolve-to-string");
     const data = fs.readFileSync("./assets/templates/series2021a.txt", "utf8");
