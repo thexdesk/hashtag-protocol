@@ -27,9 +27,26 @@
   type: upstream
   upstream: "2-hashtag-dapp:http"
 
-"https://api.{default}/":
+# Hashtag API
+"https://api.hashtag-protocol.io/":
   type: upstream
   upstream: "hashtag-api:http"
+
+"http://api.hashtag-protocol.io/":
+  type: redirect
+  to: "https://api.hashtag-protocol.io/"
+
+"http://hashtag-protocol.io/":
+  type: redirect
+  to: "https://api.hashtag-protocol.io/"
+
+"https://hashtag-protocol.io/":
+  type: redirect
+  to: "https://api.hashtag-protocol.io/"
+
+
+
+
 #http://{default}/:
 #  cache:
 #    cookies:
