@@ -9,6 +9,10 @@ build:
 
 # The configuration of app when it is exposed to the web.
 web:
+    commands:
+        start: |
+            echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /tmp/config.js
+            sleep infinity
     # Specific parameters for different URL prefixes.
     locations:
         "/":

@@ -8,8 +8,8 @@
   upstream: "3-hashtag-website:http"
 
 "https://{default}/":
-  type: redirect
-  to: "https://www.{default}/"
+  type: upstream
+  upstream: "3-hashtag-website:http"
 
 "http://www.{default}/":
   type: redirect
@@ -26,6 +26,26 @@
 "https://app.{default}/":
   type: upstream
   upstream: "2-hashtag-dapp:http"
+
+# Hashtag API
+"https://api.hashtag-protocol.io/":
+  type: upstream
+  upstream: "hashtag-api:http"
+
+"http://api.hashtag-protocol.io/":
+  type: redirect
+  to: "https://api.hashtag-protocol.io/"
+
+"http://hashtag-protocol.io/":
+  type: redirect
+  to: "https://api.hashtag-protocol.io/"
+
+"https://hashtag-protocol.io/":
+  type: redirect
+  to: "https://api.hashtag-protocol.io/"
+
+
+
 
 #http://{default}/:
 #  cache:

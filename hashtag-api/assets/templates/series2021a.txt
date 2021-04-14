@@ -1,0 +1,186 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <style>
+      body {
+        width: 600px;
+        height: 600px;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script type="text/javascript">
+      // Define some constants.
+      const canvasHeight = 1200;
+      const canvasWidth = 1200;
+
+      /**
+       * Draws a rounded rectangle using the current state of the canvas.
+       * If you omit the last three params, it will draw a rectangle
+       * outline with a 5 pixel border radius
+       * @param {CanvasRenderingContext2D} ctx
+       * @param {Number} x The top left x coordinate
+       * @param {Number} y The top left y coordinate
+       * @param {Number} width The width of the rectangle
+       * @param {Number} height The height of the rectangle
+       * @param {Number} radius The corner radius. Defaults to 5;
+       * @param {Boolean} fill Whether to fill the rectangle. Defaults to false.
+       * @param {Boolean} stroke Whether to stroke the rectangle. Defaults to true.
+       */
+      function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+        if (typeof stroke == "undefined") {
+          stroke = true;
+        }
+        if (typeof radius === "undefined") {
+          radius = 5;
+        }
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+        if (stroke) {
+          ctx.stroke();
+        }
+        if (fill) {
+          ctx.fill();
+        }
+      }
+
+      function drawText(ctx) {
+        const hashtag = "${displayHashtag}";
+        const id = "${id}";
+        const createDate = "${date}";
+        //const creator = "${creator}";
+        //const publisher = "${publisher}";
+
+        //const hashtag = "#AndrewSteinwold";
+        //const id = "001";
+        //const createDate = "Mar 2, 2021";
+        //const creator = "0x9D5Bc338891325896b8fF86EE371DcefEBD106e7";
+        //const publisher = "0x9D5Bc338891325896b8fF86EE371DcefEBD106e7";
+
+        let fontsize = 300;
+        ctx.fillStyle = "#FFFFFF";
+        // lower the font size until the text fits the canvas
+        do {
+          fontsize--;
+          ctx.font = "bold " + fontsize + "px Roboto";
+        } while (ctx.measureText(hashtag).width > canvasWidth - 400);
+        // draw the text.
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.fillText(hashtag, canvasHeight / 2, canvasHeight / 2);
+
+        // Now let's draw the green rectangle background.
+        // We use the width of the letter M as our padding
+        // criteria.
+        let bgRectangleWidth =
+          ctx.measureText(hashtag).width + ctx.measureText("M").width;
+        let bgRectangleHeight = ctx.measureText("M").width * 2;
+
+        ctx.fillStyle = "#24AE60";
+        roundRect(
+          ctx,
+          canvasWidth / 2 - bgRectangleWidth / 2, // x pos
+          canvasHeight / 2 - (bgRectangleHeight / 2 + bgRectangleHeight * 0.05), // y pos
+          bgRectangleWidth, // width
+          bgRectangleHeight, // height
+          15,
+          true,
+          false
+        );
+
+        // Draw the text again.
+        ctx.fillStyle = "#FFF";
+        ctx.fillText(hashtag, canvasHeight / 2, canvasHeight / 2);
+
+        ctx.fillStyle = "#AAA";
+        ctx.font = "bold 20px Roboto";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        ctx.fillText("HASHTAG TOKEN " + id, 20, canvasHeight - 40);
+        ctx.textAlign = "right";
+        ctx.fillText(
+          "MINTED " + createDate.toUpperCase(),
+          canvasWidth - 20,
+          canvasHeight - 40
+        );
+      }
+
+      function drawLogo(ctx) {
+        const logoData = `<svg width="216px" height="204px" viewBox="0 0 216 204" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="logo2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Group-6">
+                                    <polyline id="Rectangle" fill="#24AE60" points="59.2048198 0 95.2048198 0 91.4627928 36 55.4627928 36"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="143.20482 0 179.20482 0 175.462793 36 139.462793 36"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="54.8391216 42 90.8391216 42 87.0970946 78 51.0970946 78"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="12.8391216 42 48.8391216 42 45.0970946 78 9.09709458 78"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="138.839122 42 174.839122 42 171.097095 78 135.097095 78"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="180.839122 42 216.839122 42 213.097095 78 177.097095 78"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="4.10772522 126 40.1077252 126 36.3656982 162 0.365698193 162"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="172.107725 126 208.107725 126 204.365698 162 168.365698 162"></polyline>
+                                    <polyline id="Rectangle" fill="#FFFFFF" points="50.4734234 84 86.4734234 84 82.7313964 120 46.7313964 120"></polyline>
+                                    <polyline id="Rectangle" fill="#FFFFFF" points="134.473423 84 170.473423 84 166.731396 120 130.731396 120"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="46.1077252 126 82.1077252 126 78.3656982 162 42.3656982 162"></polyline>
+                                    <polyline id="Rectangle" fill="#FFFFFF" points="96.8391216 42 132.839122 42 129.097095 78 93.0970946 78"></polyline>
+                                    <polyline id="Rectangle" fill="#FFFFFF" points="88.1077252 126 124.107725 126 120.365698 162 84.3656982 162"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="130.107725 126 166.107725 126 162.365698 162 126.365698 162"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="41.742027 168 77.742027 168 74 204 38 204"></polyline>
+                                    <polyline id="Rectangle" fill="#24AE60" points="125.742027 168 161.742027 168 158 204 122 204"></polyline>
+                                </g>
+                            </g>
+                        </svg>`;
+
+        var DOMURL = window.URL || window.webkitURL || window;
+        const logo = new Image();
+        const svg = new Blob([logoData], { type: "image/svg+xml" });
+        const url = DOMURL.createObjectURL(svg);
+
+        logo.src = "../img/logo-white.svg";
+        logo.onload = function () {
+          ctx.drawImage(logo, canvasWidth / 2 - 32, canvasHeight - 75, 60, 60);
+          DOMURL.revokeObjectURL(url);
+        };
+        logo.src = url;
+      }
+
+      function drawToken() {
+        let canvas = /** @type {HTMLCanvasElement} */ document.getElementById(
+          "canvas"
+        );
+        let ctx = canvas.getContext("2d");
+
+        canvas.width = canvasWidth; //horizontal resolution (?) - increase for better looking text
+        canvas.height = canvasHeight; //vertical resolution (?) - increase for better looking text
+        canvas.style.width = 600; //actual width of canvas
+        canvas.style.height = 600; //actual height of canvas
+        ctx.fillStyle = "#4a4a4a";
+        roundRect(ctx, 0, 0, 1200, 1200, 20, true, false);
+
+        drawText(ctx);
+        // drawLogo(ctx);
+      }
+
+      // async font loading
+      // https://github.com/typekit/webfontloader
+      WebFont.load({
+        google: {
+          families: ["Roboto", "Roboto:bold"],
+        },
+        active: function () {
+          drawToken();
+        },
+      });
+    </script>
+  </body>
+</html>
