@@ -229,6 +229,7 @@ const actions = {
 
     const { emitter } = blocknative.transaction(tx.hash);
 
+    // Send onboard notifications to the Buefy Toast widget.
     emitter.on("all", (transaction) => {
       Toast.open({
         duration: 5000,
@@ -236,6 +237,10 @@ const actions = {
         position: "is-bottom",
         type: eventMap[transaction.eventCode].type,
       });
+
+      if (transaction.eventCode === "txSent") {
+        console.log("here we go");
+      }
     });
   },
 

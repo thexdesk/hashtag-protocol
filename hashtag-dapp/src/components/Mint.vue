@@ -1,5 +1,6 @@
 <template>
   <section class="hashtag-mint">
+    <h1 class="title is-4 has-text-white">{{ msg }}</h1>
     <b-field v-if="hashtags">
       <b-taginput
         v-model="hashtagInput"
@@ -16,6 +17,7 @@
         placeholder="Enter hashtag"
         @typing="getFilteredTags"
         :before-adding="validateTag"
+        v-on:keyup.enter="onEnter"
       >
         <template slot-scope="props">
           <b-taglist attached>
@@ -78,6 +80,7 @@ export default {
   components: {},
   data() {
     return {
+      msg: "test",
       hashtagInput: null,
       hashtagInputTags: [],
     };
@@ -95,6 +98,17 @@ export default {
         (tag) => `${tag.name.toLowerCase()}`.indexOf(text.toLowerCase()) === 1
       );
     },
+    onEnter: function () {
+      this.msg = "on enter event";
+    },
+    /**
+     * Check if string being typed in is a new hashtag.
+     *
+     * Compares string being typed in against firs 1000 hashtags (FIRST_THOUSAND_HASHTAGS)
+     *
+     * @return boolean true for new hashtag.
+     * @todo make the hashtag check more dynamic.
+     */
     isNewTag: function () {
       if (
         this.hashtagInput &&
@@ -114,6 +128,7 @@ export default {
       }
       return false;
     },
+    // Mint new hashtag button is clicked.
     mintHashtag() {
       this.$store.dispatch("mint", `#${this.hashtagInput[0]}`);
     },
