@@ -444,6 +444,7 @@ export const FIRST_THOUSAND_HASHTAGS = gql(`
       id
       name
       displayHashtag
+      hashtagWithoutHash
       owner
       creator
       publisher
