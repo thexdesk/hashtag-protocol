@@ -46,6 +46,8 @@ const state = {
   },
   accrued: null,
   openModalCloseFn: () => {},
+
+  transactionState: null,
 };
 
 const getters = {
@@ -58,6 +60,7 @@ const getters = {
   },
   balance: (state) => state.balance,
   wallet: (state) => state.wallet,
+  transactionState: (state) => state.transactionState,
 };
 
 const actions = {
@@ -214,36 +217,97 @@ const actions = {
     commit("setOpenModalCloseFn", openModalCloseFn);
   },
 
-  async mint({ state, dispatch }, payload) {
+  /**
+   * Confirm web3 transaction to mint a new HASHTAG token.
+   *
+   * User has clicked the "confirm" minting button. User
+   * Will now be prompted to approve web3 transaction in
+   * their wallet.
+   *
+   * @action mint
+   * @param { state, dispatch, commit } Vuex objects
+   * @param { string } payload Hashtag string being minted.
+   * @returns { void }
+   */
+  async mint({ state, dispatch, commit }, payload) {
+    // Check that wallet is ready to transact via Blocknative onboard library.
     const ready = await dispatch("readyToTransact");
     if (!ready) return;
 
+    // Mutate transactionState state to "confirmed". This will
+    // prompt user to "approve this transaction in your wallet".
+    commit("setTransactionState", "mintConfirmed");
+
+    // If ready, the web3Objects will have been
+    // properly initialized available for use.
     const { contracts, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    const tx = await hashtagProtocolContract.mint(
+    // The wallet has been popped and is waiting for user
+    // to confirm or reject the transaction. When confirmed
+    // we will have a txn object.
+    const txn = await hashtagProtocolContract.mint(
       payload,
       publisher,
       state.address
     );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    // Start a blocknative SDK listener for blockchain events.
+    const { emitter } = blocknative.transaction(txn.hash);
 
-    // Send onboard notifications to the Buefy Toast widget.
     emitter.on("all", (transaction) => {
-      Toast.open({
-        duration: 5000,
-        message: eventMap[transaction.eventCode].msg,
-        position: "is-bottom",
-        type: eventMap[transaction.eventCode].type,
-      });
-
-      if (transaction.eventCode === "txSent") {
-        console.log("here we go");
-      }
+      dispatch("updateTransactionState", transaction);
     });
   },
 
+  /**
+   * Updates the vuex transactionState from the blocknative event listener
+   * after a wallet transaction is confirmed.
+   *
+   * @action updateTransactionState=transactionState
+   * @param { object } transaction A blocknative/eth transaction object
+   * @returns { void }
+   * @see
+   * {@link https://docs.blocknative.com/notify-sdk#transaction-object|Blocknative Sdk transaction object }
+   */
+  updateTransactionState({ commit }, transaction) {
+    // Give toast notifications for blockchain events.
+    // eg. txn sent, txn in mempool, etc.
+    console.log("updateTransactionState", transaction.eventCode);
+
+    Toast.open({
+      duration: 5000,
+      message: eventMap[transaction.eventCode].msg,
+      position: "is-bottom",
+      type: eventMap[transaction.eventCode].type,
+    });
+
+    // Mutate transactionState.
+    commit("setTransactionState", transaction.eventCode);
+  },
+
+  /**
+   * updateTransactionStatePreTxn=transactionState
+   *
+   * Simpler method for directly updating transactionState
+   * before web3 transaction is approved.
+   *
+   * Potential options are "rejected", "mintPreconfirmed", "mintConfirmed".
+   * Other states are handled after web3 transaction is confirmed.
+   *
+   * @param {string } transactionState
+   * @see updateTransactionState
+   */
+  updateTransactionStatePreTxn({ commit }, transactionState) {
+    commit("setTransactionState", transactionState);
+  },
+
+  /**
+   *
+   * @param {*} param0
+   * @param {*} payload
+   * @returns
+   */
   async tag({ state, dispatch }, payload) {
     const ready = await dispatch("readyToTransact");
     if (!ready) return;
@@ -363,47 +427,40 @@ const mutations = {
     //Vue.set(state, "fees.platform", fee);
     state.fees.platform = fee;
   },
-
   async setTaggingFee(state, fee) {
     //Vue.set(state, "fees.tagging", fee);
     state.fees.tagging = fee;
   },
-
   async setMintAndTagFee(state, fee) {
     //Vue.set(state, "fees.mintAndTag", fee);
     state.fees.mintAndTag = fee;
   },
-
   setWeb3Objects(state, payload) {
     Vue.set(state, "web3Objects", payload);
   },
-
   setAccrued(state, accrued) {
     Vue.set(state, "accrued", accrued);
   },
-
   setOpenModalCloseFn(state, openModalCloseFn) {
     Vue.set(state, "openModalCloseFn", openModalCloseFn);
   },
-
   setWalletAddress(state, address) {
     Vue.set(state, "address", address);
   },
-
   setWalletNetworkId(state, networkId) {
     Vue.set(state, "networkId", networkId);
   },
-
   setWalletBalance(state, balance) {
     Vue.set(state, "balance", balance);
   },
-
   setWallet(state, wallet) {
     Vue.set(state, "wallet", wallet);
   },
-
   setProvider(state, provider) {
     Vue.set(state, "provider", provider);
+  },
+  setTransactionState(state, payload) {
+    state.transactionState = payload;
   },
 };
 
