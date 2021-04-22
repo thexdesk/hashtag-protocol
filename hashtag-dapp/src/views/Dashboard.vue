@@ -39,28 +39,37 @@
                       class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
                     />
                     <h2 class="title is-5">Newest hashtags</h2>
-                    <b-table
-                      :data="hashtags ? hashtags.slice(0, 10) : []"
-                      focusable
-                    >
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'hashtags' }"
-                            >Browse hashtags </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props">
-                        <b-table-column field="name" label="Hashtag">
+                    <template>
+                      <b-table
+                        :data="hashtags ? hashtags.slice(0, 10) : []"
+                        focusable
+                      >
+                        <template slot="footer" v-if="!isCustom">
+                          <div class="has-text-right">
+                            <router-link :to="{ name: 'hashtags' }"
+                              >Browse hashtags </router-link
+                            >&nbsp;
+                            <b-icon
+                              icon="arrow-right"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                            </b-icon>
+                          </div>
+                        </template>
+                        <b-table-column
+                          field="name"
+                          label="Hashtag"
+                          width="40"
+                          v-slot="props"
+                        >
                           <hashtag :value="props.row.displayHashtag"></hashtag>
                         </b-table-column>
-                        <b-table-column field="timestamp" label="Created">
+                        <b-table-column
+                          field="timestamp"
+                          label="Created"
+                          v-slot="props"
+                        >
                           <timestamp-from
                             :value="props.row.timestamp"
                           ></timestamp-from>
@@ -69,6 +78,7 @@
                           field="creator"
                           label="Creator"
                           :visible="$screen.desktop"
+                          v-slot="props"
                         >
                           <eth-account
                             :value="props.row.creator"
@@ -79,14 +89,15 @@
                           field="publisher"
                           label="Publisher"
                           :visible="$screen.widescreen"
+                          v-slot="props"
                         >
                           <eth-account
                             :value="props.row.publisher"
                             route="publisher-detail"
                           ></eth-account>
                         </b-table-column>
-                      </template>
-                    </b-table>
+                      </b-table>
+                    </template>
                   </article>
                 </div>
               </div>
@@ -103,22 +114,22 @@
                       class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
                     />
                     <h2 class="title is-5">Recently tagged content</h2>
-                    <b-table :data="tags || []" focusable>
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'nfts' }"
-                            >Browse tagged assets </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props">
-                        <b-table-column field="nftId" centered>
+                    <template>
+                      <b-table :data="tags || []" focusable>
+                        <template slot="footer" v-if="!isCustom">
+                          <div class="has-text-right">
+                            <router-link :to="{ name: 'nfts' }"
+                              >Browse tagged assets </router-link
+                            >&nbsp;
+                            <b-icon
+                              icon="arrow-right"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                            </b-icon>
+                          </div>
+                        </template>
+                        <b-table-column field="nftId" centered v-slot="props">
                           <router-link
                             :to="{
                               name: 'nft-detail',
@@ -136,7 +147,11 @@
                             />
                           </router-link>
                         </b-table-column>
-                        <b-table-column field="nftName" label="Asset Name">
+                        <b-table-column
+                          field="nftName"
+                          label="Asset Name"
+                          v-slot="props"
+                        >
                           <nft-link
                             type="nft"
                             :name="props.row.nftName"
@@ -148,16 +163,24 @@
                           field="projectName"
                           label="Project"
                           :visible="$screen.widescreen"
+                          v-slot="props"
                         >
                           {{ props.row.nftContractName }}
                         </b-table-column>
-                        <b-table-column field="hashtagName" label="Hashtag">
+                        <b-table-column
+                          field="hashtagName"
+                          label="Hashtag"
+                          v-slot="props"
+                        >
                           <hashtag
                             :value="props.row.hashtagDisplayHashtag"
                           ></hashtag>
                         </b-table-column>
-                      </template>
-                    </b-table>
+                        <template #empty>
+                          <div class="has-text-centered">No records</div>
+                        </template>
+                      </b-table>
+                    </template>
                   </article>
                 </div>
               </div>
@@ -178,22 +201,26 @@
                       class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
                     />
                     <h2 class="title is-5">Top creators</h2>
-                    <b-table :data="creators || []">
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'creators' }"
-                            >Browse creators </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props" focusable>
-                        <b-table-column field="id" label="Creator">
+                    <template>
+                      <b-table :data="creators || []">
+                        <template slot="footer" v-if="!isCustom">
+                          <div class="has-text-right">
+                            <router-link :to="{ name: 'creators' }"
+                              >Browse creators </router-link
+                            >&nbsp;
+                            <b-icon
+                              icon="arrow-right"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                            </b-icon>
+                          </div>
+                        </template>
+                        <b-table-column
+                          field="id"
+                          label="Creator"
+                          v-slot="props"
+                        >
                           <eth-account
                             :value="props.row.id"
                             route="creator-detail"
@@ -203,6 +230,7 @@
                           field="mintedCount"
                           label="Hashtags"
                           centered
+                          v-slot="props"
                         >
                           {{ props.row.mintCount }}
                         </b-table-column>
@@ -210,6 +238,7 @@
                           field="tagCount"
                           label="Tag count"
                           centered
+                          v-slot="props"
                         >
                           {{ props.row.tagCount }}
                         </b-table-column>
@@ -217,11 +246,12 @@
                           field="revenue"
                           label="Revenue"
                           centered
+                          v-slot="props"
                         >
                           <eth-amount :value="props.row.tagFees"></eth-amount>
                         </b-table-column>
-                      </template>
-                    </b-table>
+                      </b-table>
+                    </template>
                   </article>
                 </div>
               </div>
@@ -238,22 +268,26 @@
                       class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
                     />
                     <h2 class="title is-5">Top publishers</h2>
-                    <b-table :data="publishers || []">
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'publishers' }"
-                            >Browse publishers </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props" focusable>
-                        <b-table-column field="id" label="Publisher">
+                    <template>
+                      <b-table :data="publishers || []">
+                        <template slot="footer" v-if="!isCustom">
+                          <div class="has-text-right">
+                            <router-link :to="{ name: 'publishers' }"
+                              >Browse publishers </router-link
+                            >&nbsp;
+                            <b-icon
+                              icon="arrow-right"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                            </b-icon>
+                          </div>
+                        </template>
+                        <b-table-column
+                          field="id"
+                          label="Publisher"
+                          v-slot="props"
+                        >
                           <eth-account
                             :value="props.row.id"
                             route="publisher-detail"
@@ -263,6 +297,7 @@
                           field="mintedCount"
                           label="Hashtags"
                           centered
+                          v-slot="props"
                         >
                           {{ props.row.mintCount }}
                         </b-table-column>
@@ -270,6 +305,7 @@
                           field="tagCount"
                           label="Tag count"
                           centered
+                          v-slot="props"
                         >
                           {{ props.row.tagCount }}
                         </b-table-column>
@@ -277,11 +313,12 @@
                           field="revenue"
                           label="Revenue"
                           centered
+                          v-slot="props"
                         >
                           <eth-amount :value="props.row.tagFees"></eth-amount>
                         </b-table-column>
-                      </template>
-                    </b-table>
+                      </b-table>
+                    </template>
                   </article>
                 </div>
               </div>
@@ -302,22 +339,26 @@
                   />
                   <article class="is-white">
                     <h2 class="title is-5">Top taggers</h2>
-                    <b-table :data="taggers || []" focusable>
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'taggers' }"
-                            >Browse taggers </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props">
-                        <b-table-column field="id" label="Tagger">
+                    <template>
+                      <b-table :data="taggers || []" focusable>
+                        <template slot="footer" v-if="!isCustom">
+                          <div class="has-text-right">
+                            <router-link :to="{ name: 'taggers' }"
+                              >Browse taggers </router-link
+                            >&nbsp;
+                            <b-icon
+                              icon="arrow-right"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                            </b-icon>
+                          </div>
+                        </template>
+                        <b-table-column
+                          field="id"
+                          label="Tagger"
+                          v-slot="props"
+                        >
                           <eth-account
                             :value="props.row.id"
                             route="tagger-detail"
@@ -327,11 +368,12 @@
                           field="tagCount"
                           label="Tag count"
                           centered
+                          v-slot="props"
                         >
                           {{ props.row.tagCount }}
                         </b-table-column>
-                      </template>
-                    </b-table>
+                      </b-table>
+                    </template>
                   </article>
                 </div>
               </div>
@@ -348,33 +390,38 @@
                       class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
                     />
                     <h2 class="title is-5">Popular hashtags</h2>
-                    <b-table :data="popular || []" focusable>
-                      <template slot="footer" v-if="!isCustom">
-                        <div class="has-text-right">
-                          <router-link :to="{ name: 'hashtags' }"
-                            >Browse hashtags </router-link
-                          >&nbsp;
-                          <b-icon
-                            icon="arrow-right"
-                            type="is-dark"
-                            size="is-small"
-                          >
-                          </b-icon>
-                        </div>
-                      </template>
-                      <template slot-scope="props">
-                        <b-table-column field="name" label="Hashtag">
+                    <template>
+                      <b-table :data="popular || []" focusable>
+                        <template slot="footer" v-if="!isCustom">
+                          <div class="has-text-right">
+                            <router-link :to="{ name: 'hashtags' }"
+                              >Browse hashtags </router-link
+                            >&nbsp;
+                            <b-icon
+                              icon="arrow-right"
+                              type="is-dark"
+                              size="is-small"
+                            >
+                            </b-icon>
+                          </div>
+                        </template>
+                        <b-table-column
+                          field="name"
+                          label="Hashtag"
+                          v-slot="props"
+                        >
                           <hashtag :value="props.row.displayHashtag"></hashtag>
                         </b-table-column>
                         <b-table-column
                           field="tagCount"
                           label="Tag count"
                           centered
+                          v-slot="props"
                         >
                           {{ props.row.tagCount }}
                         </b-table-column>
-                      </template>
-                    </b-table>
+                      </b-table>
+                    </template>
                   </article>
                 </div>
               </div>
@@ -422,7 +469,7 @@ import Header from "../components/Header";
 import MarkdownModal from "../components/MarkdownModal";
 import Mint from "../components/Mint";
 import MintAndTag from "../components/MintAndTag";
-import NftLink from "../components/NftLink";
+//import NftLink from "../components/NftLink";
 import PseudoOwners from "../components/PseudoOwners";
 
 import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
@@ -441,7 +488,7 @@ export default {
     Header,
     Mint,
     MintAndTag,
-    NftLink,
+    //NftLink,
     PseudoOwners,
     TimestampFrom,
   },
