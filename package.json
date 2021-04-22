@@ -15,5 +15,7 @@
     "stylelint-processor-html": "^1.0.0",
     "stylelint-scss": "^3.18.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "eslint": "^7.24.0"
+  }
 }
