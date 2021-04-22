@@ -1,6 +1,7 @@
 // vue.config.js
 module.exports = {
   // Make variables available in SASS for all components.
+  runtimeCompiler: true,
   css: {
     loaderOptions: {
       sass: {
