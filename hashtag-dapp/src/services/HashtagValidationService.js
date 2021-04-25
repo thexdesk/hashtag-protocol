@@ -7,7 +7,7 @@ class HashtagValidationService {
     this.buefyToast.open({
       duration: 5000,
       message,
-      position: "is-bottom",
+      position: "is-top",
       type: "is-danger",
     });
   }

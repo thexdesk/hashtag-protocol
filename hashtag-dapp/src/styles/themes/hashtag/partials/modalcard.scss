@@ -1,6 +1,10 @@
 .modal-card {
   border-radius: $radius-large;
 
+  .modal-card-foot {
+    justify-content: center;
+  }
+
   &.markdown-modal {
     h2 {
       font-size: $size-3;

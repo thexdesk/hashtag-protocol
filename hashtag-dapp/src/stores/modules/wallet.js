@@ -31,6 +31,7 @@ const localstorageWalletKey = AppConfig.localstorageWalletKey;
  * @property {number} fees.mintAndTag Fee to tag when minting at same time.
  * @property {number} accrued Amount of revenue in Eth accrued for address from using protocol.
  * @property {function} openModalCloseFn Name of function to close accrued modal.
+ * @property {object} transactionState txn object of last web3 txn.
  */
 const state = {
   address: null,
@@ -47,7 +48,7 @@ const state = {
   accrued: null,
   openModalCloseFn: () => {},
 
-  transactionState: null,
+  transactionState: {},
 };
 
 const getters = {
@@ -229,14 +230,13 @@ const actions = {
    * @param { string } payload Hashtag string being minted.
    * @returns { void }
    */
-  async mint({ state, dispatch, commit }, payload) {
+  async mint({ state, dispatch }, payload) {
     // Check that wallet is ready to transact via Blocknative onboard library.
     const ready = await dispatch("readyToTransact");
     if (!ready) return;
 
-    // Mutate transactionState state to "confirmed". This will
-    // prompt user to "approve this transaction in your wallet".
-    commit("setTransactionState", "mintConfirmed");
+    // Prompts user to complete transaction in their wallet.
+    await dispatch("updateTransactionState", { eventCode: "mintConfirmed" });
 
     // If ready, the web3Objects will have been
     // properly initialized available for use.
@@ -261,45 +261,30 @@ const actions = {
   },
 
   /**
-   * Updates the vuex transactionState from the blocknative event listener
-   * after a wallet transaction is confirmed.
+   * Updates the vuex transactionState object. If transaction.status
+   * is set, user has submitted txn to blockchain and transaction
+   * object has everything provided by the Blocknative transaction object.
    *
    * @action updateTransactionState=transactionState
-   * @param { object } transaction A blocknative/eth transaction object
+   * @param { object } transaction A transaction object
    * @returns { void }
    * @see
    * {@link https://docs.blocknative.com/notify-sdk#transaction-object|Blocknative Sdk transaction object }
    */
   updateTransactionState({ commit }, transaction) {
     // Give toast notifications for blockchain events.
-    // eg. txn sent, txn in mempool, etc.
-    console.log("updateTransactionState", transaction.eventCode);
+    if (transaction.status) {
+      Toast.open({
+        duration: 5000,
+        message: eventMap[transaction.eventCode].msg,
+        position: "is-top",
+        type: eventMap[transaction.eventCode].type,
+      });
+    }
 
-    Toast.open({
-      duration: 5000,
-      message: eventMap[transaction.eventCode].msg,
-      position: "is-bottom",
-      type: eventMap[transaction.eventCode].type,
-    });
-
+    console.log("updateTransactionState", transaction);
     // Mutate transactionState.
-    commit("setTransactionState", transaction.eventCode);
-  },
-
-  /**
-   * updateTransactionStatePreTxn=transactionState
-   *
-   * Simpler method for directly updating transactionState
-   * before web3 transaction is approved.
-   *
-   * Potential options are "rejected", "mintPreconfirmed", "mintConfirmed".
-   * Other states are handled after web3 transaction is confirmed.
-   *
-   * @param {string } transactionState
-   * @see updateTransactionState
-   */
-  updateTransactionStatePreTxn({ commit }, transactionState) {
-    commit("setTransactionState", transactionState);
+    commit("setTransactionState", transaction);
   },
 
   /**
@@ -461,6 +446,9 @@ const mutations = {
   },
   setTransactionState(state, payload) {
     state.transactionState = payload;
+  },
+  setLastTransaction(state, payload) {
+    state.lastTransaction = payload;
   },
 };
 

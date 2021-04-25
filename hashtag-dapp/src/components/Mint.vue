@@ -77,13 +77,10 @@
 <script>
 import { FIRST_THOUSAND_HASHTAGS } from "@/queries";
 import HashtagValidationService from "@/services/HashtagValidationService";
-import MintModal from "./MintModal";
+import TransactionModal from "./TxnModal";
 
 export default {
-  name: "Hashtags",
-  //props: {
-  //  newHashtag: String,
-  //},
+  name: "Mint",
   components: {},
   data() {
     return {
@@ -114,11 +111,11 @@ export default {
       this.validateTag(tag.hashtagWithoutHash);
     },
     /**
-     * Capture the enter key and submit Hashtag for minting.
+     * Capture the enter key and pop the transaction modal.
      *
      * Function to capture the input field when user hits "Enter."
      * Passes value to validateTag service and pops the
-     * minting modal if it passes validation. Otherwise
+     * transaction modal if it passes validation. Otherwise
      * validateTag shows toast errors.
      */
     checkIfEnterKey: function (event) {
@@ -128,12 +125,14 @@ export default {
         if (this.validateTag(this.newHashtag)) {
           const mintModal = this.$buefy.modal.open({
             parent: this,
-            component: MintModal,
+            component: TransactionModal,
+            animation: "zoom-in",
             hasModalCard: true,
             customClass: "custom-class custom-class-2",
             trapFocus: true,
             props: {
               newHashtag: this.newHashtag,
+              txnType: "mint",
             },
           });
 
