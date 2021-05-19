@@ -271,7 +271,7 @@
                 position="is-top"
                 aria-id="contentIdForA11y1"
                 animation="slide"
-                class="pt-1 pb-1"
+                class="py-4"
               >
                 <a
                   slot="trigger"
@@ -289,7 +289,7 @@
                 <markdown-doc
                   doc-type="faq"
                   filename="050-what-is-an-owner"
-                  class="pt-1 pb-1"
+                  class="py-4"
                 ></markdown-doc>
               </b-collapse>
             </div>
@@ -309,7 +309,7 @@
                 position="is-top"
                 aria-id="contentIdForA11y1"
                 animation="slide"
-                class="pt-1 pb-1"
+                class="py-4"
               >
                 <a
                   slot="trigger"
@@ -329,7 +329,7 @@
                 <markdown-doc
                   doc-type="faq"
                   filename="070-what-is-the-hashtag-market"
-                  class="pt-1 pb-1"
+                  class="py-4"
                 ></markdown-doc>
               </b-collapse>
             </div>

@@ -1,5 +1,6 @@
 import EthGasFeeService from "@/services/EthGasFeeService";
 import ExchangeRateService from "@/services/ExchangeRateService";
+import protocolActionMap from "src/data/protocolActionMap";
 import { format } from "timeago.js";
 
 const state = {
@@ -10,12 +11,8 @@ const state = {
   gasUpdated: null,
   ethUsdExchange: null,
   exchangeRateUpdated: null,
-  mintingFeeETH: {},
-  taggingFeeETH: null,
-  mintAndTagFeeETH: null,
-  mintingFeeUSD: {},
-  taggingFeeUSD: null,
-  mintAndTagFeeUSD: null,
+  feeETH: {},
+  feeUSD: {},
 };
 
 const getters = {
@@ -26,20 +23,21 @@ const getters = {
   gasUpdated: (state) => state.gasUpdated,
   ethUsdExchange: (state) => state.ethUsdExchange,
   exchangeRateUpdated: (state) => state.exchangeRateUpdated,
-  mintingFeeETH: (state) => state.mintingFeeETH,
-  taggingFeeETH: (state) => state.taggingFeeETH,
-  mintAndTagFeeETH: (state) => state.mintAndTagFeeETH,
-  mintingFeeUSD: (state) => state.mintingFeeUSD,
-  taggingFeeUSD: (state) => state.taggingFeeUSD,
-  mintAndTagFeeUSD: (state) => state.mintAndTagFeeUSD,
+  feeETH: (state) => state.feeETH,
+  feeUSD: (state) => state.feeUSD,
 };
 
 const actions = {
   async updateFees({ commit, dispatch }) {
+    if (!this.state.protocolAction.protocolAction) {
+      return;
+    }
     this.ethGasFeeService = new EthGasFeeService();
+    /* eslint-disable no-console */
     this.ethGasFees = await this.ethGasFeeService
       .fetchGasFees()
       .catch((e) => console.log(e));
+    /* eslint-enable no-console */
 
     if (this.ethGasFees.success) {
       commit("setGasFastest", this.ethGasFees.estimates.fastest);
@@ -53,9 +51,11 @@ const actions = {
     }
 
     this.exchangeRateService = new ExchangeRateService();
+    /* eslint-disable no-console */
     this.ethUsdExchangeRate = await this.exchangeRateService
       .fetchEthUsd()
       .catch((e) => console.log(e));
+    /* eslint-enable no-console */
 
     if (this.ethUsdExchangeRate.data.rateUsd) {
       commit("setEthUsdExchange", this.ethUsdExchangeRate.data.rateUsd);
@@ -76,30 +76,32 @@ const actions = {
 
   async updateTransactionFees({ state, commit }) {
     const ethUsdRate = state.ethUsdExchange / 1000000000;
-    const gasLimitMint = 145000;
+    const protocolAction = this.state.protocolAction.protocolAction;
+    const gasLimit = protocolActionMap[protocolAction].ethGasLimit;
+
     let fastest, fast, average, slow;
     //let mintingFeeUSD, mintingFeeETH;
     //const gasLimitTagging = 150000;
     //const gasLimitMintAndTag = 190000;
 
-    fastest = (state.gasFastest * gasLimitMint * 0.000000001).toFixed(4);
-    fast = (state.gasFast * gasLimitMint * 0.000000001).toFixed(4);
-    average = (state.gasMedium * gasLimitMint * 0.000000001).toFixed(4);
-    slow = (state.gasSlow * gasLimitMint * 0.000000001).toFixed(4);
+    fastest = (state.gasFastest * gasLimit * 0.000000001).toFixed(4);
+    fast = (state.gasFast * gasLimit * 0.000000001).toFixed(4);
+    average = (state.gasMedium * gasLimit * 0.000000001).toFixed(4);
+    slow = (state.gasSlow * gasLimit * 0.000000001).toFixed(4);
 
-    commit("setMintingFeeETH", {
+    commit("setFeeETH", {
       fastest: fastest,
       fast: fast,
       average: average,
       slow: slow,
     });
 
-    fastest = (state.gasFastest * gasLimitMint * ethUsdRate).toFixed(2);
-    fast = (state.gasFast * gasLimitMint * ethUsdRate).toFixed(2);
-    average = (state.gasMedium * gasLimitMint * ethUsdRate).toFixed(2);
-    slow = (state.gasSlow * gasLimitMint * ethUsdRate).toFixed(2);
+    fastest = (state.gasFastest * gasLimit * ethUsdRate).toFixed(2);
+    fast = (state.gasFast * gasLimit * ethUsdRate).toFixed(2);
+    average = (state.gasMedium * gasLimit * ethUsdRate).toFixed(2);
+    slow = (state.gasSlow * gasLimit * ethUsdRate).toFixed(2);
 
-    commit("setMintingFeeUSD", {
+    commit("setFeeUSD", {
       fastest: fastest,
       fast: fast,
       average: average,
@@ -130,11 +132,11 @@ const mutations = {
   setExchangeRateUpdated(state, payload) {
     state.exchangeRateUpdated = payload;
   },
-  setMintingFeeETH(state, payload) {
-    state.mintingFeeETH = payload;
+  setFeeETH(state, payload) {
+    state.feeETH = payload;
   },
-  setMintingFeeUSD(state, payload) {
-    state.mintingFeeUSD = payload;
+  setFeeUSD(state, payload) {
+    state.feeUSD = payload;
   },
 };
 

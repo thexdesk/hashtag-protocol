@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
 import BlocknativeSdk from "bnc-sdk";
 import { ToastProgrammatic as Toast } from "buefy";
-import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
-import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
-import utils from "../../utils";
-import eventMap from "../../data/blocknativeEventMap";
-import onBoardChainMap from "../../data/onBoardChainMap";
+import HashtagProtocolTruffleConf from "src/truffleconf/HashtagProtocol";
+import ERC721HashtagRegistry from "src/truffleconf/ERC721HashtagRegistry";
+import utils from "src/utils";
+import eventMap from "src/data/blocknativeEventMap";
+import onBoardChainMap from "src/data/onBoardChainMap";
 
 let provider;
 let onboard = {};
@@ -236,7 +236,9 @@ const actions = {
     if (!ready) return;
 
     // Prompts user to complete transaction in their wallet.
-    await dispatch("updateTransactionState", { eventCode: "mintConfirmed" });
+    await dispatch("updateTransactionState", {
+      eventCode: "protocolActionConfirmed",
+    });
 
     // If ready, the web3Objects will have been
     // properly initialized available for use.
@@ -252,7 +254,80 @@ const actions = {
       state.address
     );
 
-    // Start a blocknative SDK listener for blockchain events.
+    // We have a txn object. Start a blocknative SDK listener for blockchain events.
+    const { emitter } = blocknative.transaction(txn.hash);
+
+    emitter.on("all", (transaction) => {
+      dispatch("updateTransactionState", transaction);
+    });
+  },
+
+  /**
+   *
+   * @param {*} param0
+   * @param {*} payload
+   * @returns
+   */
+  async tag({ state, dispatch }, payload) {
+    const ready = await dispatch("readyToTransact");
+    if (!ready) return;
+
+    // Prompts user to complete transaction in their wallet.
+    await dispatch("updateTransactionState", {
+      eventCode: "protocolActionConfirmed",
+    });
+
+    const { web3Objects, fees } = state;
+    const { contracts, publisher } = web3Objects;
+    const { erc721HashtagRegistryContract } = contracts;
+    const { hashtagId, nftContract, nftId } = payload;
+
+    // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
+    const txn = await erc721HashtagRegistryContract.tag(
+      hashtagId,
+      nftContract,
+      nftId,
+      publisher,
+      state.address,
+      {
+        value: ethers.utils.bigNumberify(fees.tagging),
+      }
+    );
+
+    // We have a txn object. Start a blocknative SDK listener for blockchain events.
+    const { emitter } = blocknative.transaction(txn.hash);
+
+    emitter.on("all", (transaction) => {
+      dispatch("updateTransactionState", transaction);
+    });
+  },
+
+  async mintAndTag({ state, dispatch }, payload) {
+    const ready = await dispatch("readyToTransact");
+    if (!ready) return;
+
+    // Prompts user to complete transaction in their wallet.
+    await dispatch("updateTransactionState", {
+      eventCode: "protocolActionConfirmed",
+    });
+
+    const { web3Objects, fees } = state;
+    const { contracts, publisher } = web3Objects;
+    const { erc721HashtagRegistryContract } = contracts;
+    const { hashtag, nftContract, nftId } = payload;
+
+    const txn = await erc721HashtagRegistryContract.mintAndTag(
+      hashtag.indexOf("#") === 0 ? hashtag : `#${hashtag}`,
+      nftContract,
+      nftId,
+      publisher,
+      state.address,
+      {
+        value: ethers.utils.bigNumberify(fees.tagging),
+      }
+    );
+
+    // We have a txn object. Start a blocknative SDK listener for blockchain events.
     const { emitter } = blocknative.transaction(txn.hash);
 
     emitter.on("all", (transaction) => {
@@ -269,11 +344,14 @@ const actions = {
    * @param { object } transaction A transaction object
    * @returns { void }
    * @see
-   * {@link https://docs.blocknative.com/notify-sdk#transaction-object|Blocknative Sdk transaction object }
+   * {@link https://docs.blocknative.com/notify-sdk#transaction-object | Blocknative Sdk transaction object }
    */
   updateTransactionState({ commit }, transaction) {
     // Give toast notifications for blockchain events.
+    console.log("updateTxnState", transaction.eventCode);
+
     if (transaction.status) {
+      // If status is defined, it means a web3 txn has begun.
       Toast.open({
         duration: 5000,
         message: eventMap[transaction.eventCode].msg,
@@ -282,80 +360,9 @@ const actions = {
       });
     }
 
-    console.log("updateTransactionState", transaction);
+    //console.log("updateTransactionState", transaction);
     // Mutate transactionState.
     commit("setTransactionState", transaction);
-  },
-
-  /**
-   *
-   * @param {*} param0
-   * @param {*} payload
-   * @returns
-   */
-  async tag({ state, dispatch }, payload) {
-    const ready = await dispatch("readyToTransact");
-    if (!ready) return;
-
-    const { web3Objects, fees } = state;
-    const { contracts, publisher } = web3Objects;
-    const { erc721HashtagRegistryContract } = contracts;
-    const { hashtagId, nftContract, nftId } = payload;
-
-    // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
-    const tx = await erc721HashtagRegistryContract.tag(
-      hashtagId,
-      nftContract,
-      nftId,
-      publisher,
-      state.address,
-      {
-        value: ethers.utils.bigNumberify(fees.tagging),
-      }
-    );
-
-    const { emitter } = blocknative.transaction(tx.hash);
-
-    emitter.on("all", (transaction) => {
-      Toast.open({
-        duration: 5000,
-        message: eventMap[transaction.eventCode].msg,
-        position: "is-bottom",
-        type: eventMap[transaction.eventCode].type,
-      });
-    });
-  },
-
-  async mintAndTag({ state, dispatch }, payload) {
-    const ready = await dispatch("readyToTransact");
-    if (!ready) return;
-
-    const { web3Objects, fees } = state;
-    const { contracts, publisher } = web3Objects;
-    const { erc721HashtagRegistryContract } = contracts;
-    const { hashtag, nftContract, nftId } = payload;
-
-    const tx = await erc721HashtagRegistryContract.mintAndTag(
-      hashtag.indexOf("#") === 0 ? hashtag : `#${hashtag}`,
-      nftContract,
-      nftId,
-      publisher,
-      state.address,
-      {
-        value: ethers.utils.bigNumberify(fees.tagging),
-      }
-    );
-
-    const { emitter } = blocknative.transaction(tx.hash);
-
-    emitter.on("all", (transaction) => {
-      Toast.open({
-        duration: 5000,
-        message: eventMap[transaction.eventCode].msg,
-        position: "is-bottom",
-        type: eventMap[transaction.eventCode].type,
-      });
-    });
   },
 
   async getProtocolFee({ commit }) {

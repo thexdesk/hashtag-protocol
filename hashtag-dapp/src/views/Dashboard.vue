@@ -8,7 +8,7 @@
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
                 <p class="title is-4 has-text-white">Create a HASHTAG token</p>
-                <Mint />
+                <MintingWidget />
               </article>
             </div>
             <div class="divider is-vertical is-hidden-mobile">OR</div>
@@ -16,7 +16,7 @@
             <div class="column is-5 is-12-mobile">
               <article class="tile is-child">
                 <p class="title is-4 has-text-white">Tag some content</p>
-                <MintAndTag />
+                <TaggingWidget />
               </article>
             </div>
           </div>
@@ -70,9 +70,9 @@
                           label="Created"
                           v-slot="props"
                         >
-                          <timestamp-from
+                          <TimestampFrom
                             :value="props.row.timestamp"
-                          ></timestamp-from>
+                          ></TimestampFrom>
                         </b-table-column>
                         <b-table-column
                           field="creator"
@@ -467,30 +467,26 @@ import Footer from "../components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import MarkdownModal from "../components/MarkdownModal";
-import Mint from "../components/Mint";
-import MintAndTag from "../components/MintAndTag";
-//import NftLink from "../components/NftLink";
+import NftLink from "../components/NftLink";
 import PseudoOwners from "../components/PseudoOwners";
-
 import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
 //import { mapGetters } from "vuex";
 import TimestampFrom from "../components/TimestampFrom";
-//import HashtagValidationService from "@/services/HashtagValidationService";
-//import debounce from "lodash/debounce";
+import MintingWidget from "../components/MintingWidget";
+import TaggingWidget from "../components/TaggingWidget";
 
 export default {
-  name: "Hashtags",
   components: {
     EthAccount,
     EthAmount,
     Footer,
     Hashtag,
     Header,
-    Mint,
-    MintAndTag,
-    //NftLink,
+    NftLink,
     PseudoOwners,
     TimestampFrom,
+    MintingWidget,
+    TaggingWidget,
   },
   data() {
     return {

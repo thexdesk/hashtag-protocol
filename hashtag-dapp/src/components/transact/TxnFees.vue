@@ -31,12 +31,22 @@
       <tfoot align="center">
         <tr>
           <th colspan="2" class="has-text-weight-normal">
-            <span>Gas price: upvest.co | Updated: {{ gasUpdated }}</span
-            ><br />
-            <span
-              >Exchange rate: coincap.io | Updated:
-              {{ exchangeRateUpdated }}</span
-            >
+            <p>
+              <strong>Ouch that's expensive!</strong> We get it -- and we're
+              working on this right now.<br />
+              <a
+                href="https://hashtagprotocol.substack.com/welcome"
+                target="_blank"
+                >Subscribe to our Substack</a
+              >
+              to keep updated with our progress
+            </p>
+            <p>
+              <span>Gas price | Updated: {{ gasUpdated }}</span
+              >&nbsp;-&nbsp;
+              <span>Exchange rate | Updated: {{ exchangeRateUpdated }}</span>
+              <br />
+            </p>
           </th>
         </tr>
       </tfoot>
@@ -47,32 +57,14 @@
 import { mapGetters } from "vuex";
 export default {
   name: "TxnFees",
-  data() {
-    return {};
-  },
-  props: {
-    txnType: String,
-  },
   computed: {
     ...mapGetters([
-      "mintingFeeETH",
-      "mintingFeeUSD",
+      "feeETH",
+      "feeUSD",
       "gasUpdated",
       "exchangeRateUpdated",
+      "protocolAction",
     ]),
-    feeETH: function () {
-      // txnType is passed in from parent component.
-      if (this.txnType == "mint") {
-        return this.mintingFeeETH;
-      }
-      return false;
-    },
-    feeUSD: function () {
-      if (this.txnType == "mint") {
-        return this.mintingFeeUSD;
-      }
-      return false;
-    },
   },
 };
 </script>

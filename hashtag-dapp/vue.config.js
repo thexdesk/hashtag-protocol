@@ -1,4 +1,5 @@
 // vue.config.js
+const path = require("path");
 module.exports = {
   // Make variables available in SASS for all components.
   runtimeCompiler: true,
@@ -26,6 +27,11 @@ module.exports = {
   configureWebpack: {
     externals: {
       config: "config",
+    },
+    resolve: {
+      alias: {
+        src: path.resolve(__dirname, "src"),
+      },
     },
   },
   devServer: {

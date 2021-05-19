@@ -81,7 +81,7 @@ $ yarn global add truffle ganache-cli
 2. In the same tab, start a local blockchain using ganache-cli
 
 ``` zsh
-ganache-cli -h 0.0.0.0 -m "worth grunt bridge trade chuckle stand lamp jealous snow order pluck mobile" -i 5777 --chainId 5777
+ganache-cli -h 0.0.0.0 -m "worth grunt bridge trade chuckle stand lamp jealous snow order pluck mobile" -i 5777 --chainId 5777 -b 20
 ```
 
 3. Open another tab (tab #2). Navigate to the hashtag-contracts directory and
