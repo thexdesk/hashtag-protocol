@@ -1,7 +1,7 @@
 name: 1-hashtag-docs
 
 # The toolstack used to build the application.
-type: nodejs:10
+type: nodejs:14
 
 # Configuration of the build of this application.
 build:
@@ -39,7 +39,7 @@ web:
 disk: 512
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
-# Become available after 
+# Become available after
 mounts:
   '/deploy':
     source: local

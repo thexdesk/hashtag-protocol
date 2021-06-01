@@ -1,7 +1,7 @@
 name: 2-hashtag-dapp
 
 # The toolstack used to build the application.
-type: nodejs:10
+type: nodejs:14
 
 # Configuration of the build of this application.
 build:
@@ -31,7 +31,7 @@ web:
             # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
             # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
             # 365 days).
-            
+
             expires: 300s
             scripts: true
 
