@@ -348,15 +348,17 @@
         </div>
       </section>
     </div>
-    <Footer></Footer>
+    <Newsletter />
+    <Footer />
   </div>
 </template>
 
 <script>
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Hashtag from "../components/Hashtag";
 import Navbar from "../components/Navbar";
 import NftLink from "../components/NftLink";
+import Newsletter from "../components/Newsletter";
 // import RevenueModel from "../components/RevenueModel";
 
 import { SNAPSHOT } from "@/queries";
@@ -368,6 +370,7 @@ export default {
     Hashtag,
     Navbar,
     NftLink,
+    Newsletter,
     // RevenueModel,
   },
   data() {
