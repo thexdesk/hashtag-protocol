@@ -36,7 +36,11 @@
                           content: '020-what-is-hashtag-token',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Newest hashtags</h2>
                     <b-table
@@ -100,7 +104,11 @@
                           content: '030-what-is-tagged-content',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Recently tagged content</h2>
                     <b-table :data="tags || []" focusable>
@@ -175,7 +183,11 @@
                           content: '045-what-is-creator',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Top creators</h2>
                     <b-table :data="creators || []">
@@ -235,7 +247,11 @@
                           content: '040-what-is-a-publisher',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Top publishers</h2>
                     <b-table :data="publishers || []">
@@ -298,7 +314,11 @@
                         content: '060-what-is-a-tagger',
                       })
                     "
-                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    class="
+                      mdi mdi-help-circle-outline mdi-24px
+                      is-pulled-right
+                      has-text-grey
+                    "
                   />
                   <article class="is-white">
                     <h2 class="title is-5">Top taggers</h2>
@@ -345,7 +365,11 @@
                           content: '020-what-is-hashtag-token',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Popular hashtags</h2>
                     <b-table :data="popular || []" focusable>
@@ -391,7 +415,11 @@
                         content: '050-what-is-an-owner',
                       })
                     "
-                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    class="
+                      mdi mdi-help-circle-outline mdi-24px
+                      is-pulled-right
+                      has-text-grey
+                    "
                   />
                   <article class="is-white coming-soon">
                     <h2 class="title is-5">Top owners</h2>

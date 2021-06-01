@@ -481,8 +481,8 @@ query {
    * @return _tokenId ID of the new hashtag
    */
   function mint(
-    string memory _hashtag, 
-    address payable _publisher, 
+    string memory _hashtag,
+    address payable _publisher,
     address _recipient) payable public returns (uint256 _tokenId) {
       require(
         accessControls.isPublisher(_publisher),

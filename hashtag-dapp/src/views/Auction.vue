@@ -7,7 +7,12 @@
         <h2 class="subtitle">
           Purchase HASHTAG tokens
           <span
-            class="has-text-primary is-italic has-text-weight-bold is-hidden-desktop"
+            class="
+              has-text-primary
+              is-italic
+              has-text-weight-bold
+              is-hidden-desktop
+            "
             >COMING SOON!</span
           >
           <span class="is-pulled-right is-size-6 has-text-weight-bold">

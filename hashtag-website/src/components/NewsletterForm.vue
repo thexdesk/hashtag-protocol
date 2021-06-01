@@ -78,8 +78,9 @@ export default {
   },
   computed: {
     isValidEmail() {
-      // eslint-disable-next-line no-useless-escape
-      const rule = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      const rule =
+        // eslint-disable-next-line no-useless-escape
+        /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
       return Boolean(this.email && rule.test(this.email));
     },
     payload() {
