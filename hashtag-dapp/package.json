@@ -22,7 +22,7 @@
     "ethers": "^4.0.46",
     "graphql": "^14.6.0",
     "gulp": "^4.0.2",
-    "hashtag-components": "0.1.0",
+    "hashtag-components": "^0.1.0",
     "lodash": "^4.17.20",
     "platformsh-config": "^2.3.1",
     "platformsh_variables": "^1.0.5",
