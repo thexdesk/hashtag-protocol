@@ -2,12 +2,9 @@
   "name": "hashtag-protocol-mono-repo",
   "private": true,
   "workspaces": [
-    "hashtag-api",
     "hashtag-components",
-    "hashtag-contracts",
     "hashtag-dapp",
     "hashtag-docs",
-    "hashtag-subgraph",
     "hashtag-website"
   ],
   "scripts": {
