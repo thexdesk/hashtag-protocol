@@ -1,3 +1,58 @@
+-   name: hashtag-api
+    type: nodejs:14
+    source:
+        root: /
+    web:
+        commands:
+            start: "node hashtag-api/index.js"
+    relationships:
+        chromeheadlessbrowser: "headlessbrowser:http"
+    disk: 512
+
+-   name: 1-hashtag-docs
+    type: nodejs:14
+    source:
+        root: /
+    build:
+        flavor: none
+    web:
+        commands:
+            # Run a no-op process that uses no CPU resources, since this is a static site.
+            start: sleep infinity
+        locations:
+            "/":
+                root: "hashtag-docs/build"
+                index:
+                    - "index.html"
+                expires: 300s
+                scripts: true
+                allow: true
+                rules:
+                    \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
+                        allow: true
+                    ^/robots\.txt$:
+                        allow: true
+    disk: 512
+    dependencies:
+        nodejs:
+            yarn: "*"
+    hooks:
+        build: |
+            set -e
+            yarn install
+            yarn workspace hashtag-docs build
+
+        # mkdir hashtag-docs/build
+        # mkdir hashtag-docs/tmp
+        # post_deploy: |
+        #   # If we're building on Platform.sh...
+        #   if [ -d /app/.global ]; then
+        #     # Copy raw markdown documents to shared drive.
+        #     /app/hashtag-docs/scripts/platformsh/push-docs.sh
+        #     # Move static build files to deploy/web folder.
+        #     cp -R hashtag-docs/build/* deploy/
+        #   fi
+
 -   name: 2-hashtag-dapp
     type: nodejs:14
     source:
@@ -7,33 +62,34 @@
             set -e
             yarn install
             yarn workspace hashtag-dapp build
+        # yarn install
 
-            # Building on platform.sh
-            if [ -d /app/.global ]; then
-              echo "--------------------------------------------------"
-              echo "Symlink /tmp/config.js to dist/config.js"
-              echo "--------------------------------------------------"
-              ln -fs /tmp/config.js dist/config.js
-            fi
+        # # Building on platform.sh
+        # if [ -d /app/.global ]; then
+        #   echo "--------------------------------------------------"
+        #   echo "Symlink /hashtag-dapp/tmp/config.js to hashtag-dapp/dist/config.js"
+        #   echo "--------------------------------------------------"
+        #   ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
+        # fi
 
-            # Building locally.
-            if ! [ -d /app/.global ]; then
-              echo "----------------------------------------------"
-              echo "Move raw markdown documents from hashtag-docs"
-              echo "----------------------------------------------"
-              # Move raw markdown documents from hashtag-docs.
-              ./scripts/pull-docs.sh
-            fi
+        # # Building locally.
+        # if ! [ -d /app/.global ]; then
+        #   echo "----------------------------------------------"
+        #   echo "Move raw markdown documents from hashtag-docs"
+        #   echo "----------------------------------------------"
+        #   # Move raw markdown documents from hashtag-docs.
+        #   ./hashtag-dapp/scripts/pull-docs.sh
+        # fi
 
         # The deploy hook runs after your application has been deployed and started.
-        deploy: |
-            # Deploying on platform.sh
-            if [ -d /app/.global ]; then
-              echo "----------------------------------------------"
-              echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
-              echo "----------------------------------------------"
-              echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
-            fi
+        # deploy: |
+        #     # Deploying on platform.sh
+        #     if [ -d /app/.global ]; then
+        #       echo "----------------------------------------------"
+        #       echo "Putting PLATFORM_VARIABLES into /hashtag-dapp/tmp/config.js"
+        #       echo "----------------------------------------------"
+        #       echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /hashtag-dapp/tmp/config.js
+        #     fi
 
     web:
         upstream:
@@ -41,7 +97,7 @@
             protocol: http
         commands:
             start:
-                echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /tmp/config.js
+                # echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /hashtag-dapp/tmp/config.js
                 sleep infinity
         locations:
             "/":
@@ -49,14 +105,6 @@
                 index:
                     - "index.html"
                 passthru: /index.html
-
-                # How long to allow static assets from this location to be cached.
-                #
-                # Can be a time in seconds, or -1 for no caching. Times can be
-                # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
-                # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
-                # 365 days).
-
                 expires: 300s
                 scripts: true
 
@@ -67,58 +115,42 @@
                         allow: true
                     ^/robots\.txt$:
                         allow: true
-
-            # "/docs":
-            #     # The folder from which to serve static assets, for this location.
-            #     #
-            #     # This is a filesystem path, relative to the application root.
-            #     # Folder name is set in npm run buildenvvar.
-            #     root: "shared/docs"
-            #     index:
-            #         - "index.html"
-            #     passthru: /index.html
-
-            #     # How long to allow static assets from this location to be cached.
-            #     #
-            #     # Can be a time in seconds, or -1 for no caching. Times can be
-            #     # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
-            #     # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
-            #     # 365 days).
-            #     expires: 1h
-            #     scripts: false
-            #     rules:
-            #         # Restrict access to markdown (.md) files.
-            #         \.(md|txt)$:
-            #             allow: true
-            #         ^/robots\.txt$:
-            #             allow: false
-
     disk: 512
-
-    # The 'mounts' describe writable, persistent filesystem mounts in the application.
-    mounts:
-      '/.tmp_platformsh':
-        source: local
-        source_path: files/tmp_platformsh
-      '/shared':
-        source: service
-        service: shared
-        source_path: shared
-
-    # Build dependencies
     dependencies:
-      nodejs:
-        yarn: "*"
-        babel-eslint: '10.0.3'
-        eslint: '6.7.2'
-        eslint-plugin-vue: '6.1.2'
-        eslint-config-prettier: '2.9.0'
-        eslint-plugin-prettier: '2.6.2'
-        prettier: '1.14.0'
-        sass-lint: '1.12.1'
-        stylelint: '13.2.1'
-        stylelint-checkstyle-formatter: '0.1.1'
-        stylelint-config-recommended-scss: '4.2.0'
-        stylelint-config-standard: '20.0.0'
-        stylelint-processor-html: '1.0.0'
-        stylelint-scss: '3.16.0'
+        nodejs:
+            yarn: "*"
+
+-   name: 3-hashtag-website
+    type: nodejs:14
+    source:
+        root: /
+    build:
+        flavor: none
+    web:
+        locations:
+            "/":
+                root: "hashtag-website/dist"
+                index:
+                    - "index.html"
+                passthru: /index.html
+                expires: 300s
+                scripts: true
+
+                # Deny access to static files in this location.
+                allow: false
+                rules:
+                    \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
+                        allow: true
+                    ^/robots\.txt$:
+                        allow: true
+    disk: 512
+    dependencies:
+        nodejs:
+            yarn: "*"
+    hooks:
+        build: |
+            set -e
+            yarn install
+            yarn workspace hashtag-website build
+        # deploy: |
+        #     yarn workspace hashtag-website buildenvvar
