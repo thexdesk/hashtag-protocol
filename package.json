@@ -1,5 +1,5 @@
 {
-  "name": "hashtag-protocol-mono-repo",
+  "name": "hashtag-protocol",
   "private": true,
   "workspaces": [
     "hashtag-components",
