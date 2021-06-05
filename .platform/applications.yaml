@@ -62,7 +62,6 @@
             set -e
             yarn install
             yarn workspace hashtag-dapp build
-        # yarn install
 
         # # Building on platform.sh
         # if [ -d /app/.global ]; then
@@ -107,7 +106,6 @@
                 passthru: /index.html
                 expires: 300s
                 scripts: true
-
                 # Deny access to static files in this location.
                 allow: false
                 rules:
@@ -135,7 +133,6 @@
                 passthru: /index.html
                 expires: 300s
                 scripts: true
-
                 # Deny access to static files in this location.
                 allow: false
                 rules:
