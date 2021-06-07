@@ -17,7 +17,7 @@ module.exports = {
     `,
     ],
   ],
-  dest: "build",
+  dest: "../web/hashtag-docs",
   temp: "tmp",
   themeConfig: {
     smoothScroll: true,

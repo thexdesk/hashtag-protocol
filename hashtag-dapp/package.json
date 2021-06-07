@@ -6,8 +6,7 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "buildenvvar": "platform-var dist"
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "@creativebulma/bulma-divider": "^1.0.0",

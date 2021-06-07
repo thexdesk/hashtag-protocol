@@ -1,153 +1,152 @@
--   name: hashtag-api
-    type: nodejs:14
-    source:
-        root: /
-    web:
-        commands:
-            start: "node hashtag-api/index.js"
-    relationships:
-        chromeheadlessbrowser: "headlessbrowser:http"
-    disk: 512
+- name: hashtag-api
+  type: nodejs:14
+  source:
+    root: /
+  web:
+    commands:
+      start: "node hashtag-api/index.js"
+  relationships:
+    chromeheadlessbrowser: "headlessbrowser:http"
+  disk: 512
 
--   name: 1-hashtag-docs
-    type: nodejs:14
-    source:
-        root: /
-    build:
-        flavor: none
-    web:
-        commands:
-            # Run a no-op process that uses no CPU resources, since this is a static site.
-            start: sleep infinity
-        locations:
-            "/":
-                root: "hashtag-docs/build"
-                index:
-                    - "index.html"
-                expires: 300s
-                scripts: true
-                allow: true
-                rules:
-                    \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
-                        allow: true
-                    ^/robots\.txt$:
-                        allow: true
-    disk: 512
-    dependencies:
-        nodejs:
-            yarn: "*"
-    hooks:
-        build: |
-            set -e
-            yarn install
-            yarn workspace hashtag-docs build
+- name: 1-hashtag-docs
+  type: nodejs:14
+  source:
+    root: /
+  build:
+    flavor: none
+  web:
+    commands:
+      # Run a no-op process that uses no CPU resources, since this is a static site.
+      start: sleep infinity
+    locations:
+      "/":
+        root: "hashtag-docs/build"
+        index:
+          - "index.html"
+        expires: 300s
+        scripts: true
+        allow: true
+        rules:
+          \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
+            allow: true
+          ^/robots\.txt$:
+            allow: true
+  disk: 512
+  dependencies:
+    nodejs:
+      yarn: "*"
+  hooks:
+    build: |
+      set -e
+      cd hashtag-docs
+      yarn install
+      yarn build
+    #  mkdir build
+    #  mkdir tmp
+    #post_deploy: |
+    #  # If we're building on Platform.sh...
+    #  if [ -d /app/.global ]; then
+    #    # Copy raw markdown documents to shared drive.
+    #    /app/hashtag-docs/scripts/platformsh/push-docs.sh
+    #    # Move static build files to deploy/web folder.
+    #    cp -R hashtag-docs/build/* deploy/
+    #  fi
 
-        # mkdir hashtag-docs/build
-        # mkdir hashtag-docs/tmp
-        # post_deploy: |
-        #   # If we're building on Platform.sh...
-        #   if [ -d /app/.global ]; then
-        #     # Copy raw markdown documents to shared drive.
-        #     /app/hashtag-docs/scripts/platformsh/push-docs.sh
-        #     # Move static build files to deploy/web folder.
-        #     cp -R hashtag-docs/build/* deploy/
-        #   fi
+- name: 2-hashtag-dapp
+  type: nodejs:14
+  source:
+    root: /
+  build:
+    flavor: none
+  hooks:
+    build: |
+      set -e
+      cd hashtag-dapp
+      yarn install
+      yarn build
+    # # Building on platform.sh
+    # if [ -d /app/.global ]; then
+    #   echo "--------------------------------------------------"
+    #   echo "Symlink /hashtag-dapp/tmp/config.js to hashtag-dapp/dist/config.js"
+    #   echo "--------------------------------------------------"
+    #   ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
+    # fi
+    # # Building locally.
+    # if ! [ -d /app/.global ]; then
+    #   echo "----------------------------------------------"
+    #   echo "Move raw markdown documents from hashtag-docs"
+    #   echo "----------------------------------------------"
+    #   # Move raw markdown documents from hashtag-docs.
+    #   ./hashtag-dapp/scripts/pull-docs.sh
+    # fi
+    # The deploy hook runs after your application has been deployed and started.
+    # deploy: |
+    #     # Deploying on platform.sh
+    #     if [ -d /app/.global ]; then
+    #       echo "----------------------------------------------"
+    #       echo "Putting PLATFORM_VARIABLES into /hashtag-dapp/tmp/config.js"
+    #       echo "----------------------------------------------"
+    #       echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /hashtag-dapp/tmp/config.js
+    #     fi
 
--   name: 2-hashtag-dapp
-    type: nodejs:14
-    source:
-        root: /
-    hooks:
-        build: |
-            set -e
-            yarn install
-            yarn workspace hashtag-dapp build
+  web:
+    upstream:
+      socket_family: tcp
+      protocol: http
+    commands:
+      start:
+        # echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /hashtag-dapp/tmp/config.js
+        sleep infinity
+    locations:
+      "/":
+        root: "hashtag-dapp/dist"
+        index:
+          - "index.html"
+        passthru: /index.html
+        expires: 300s
+        scripts: true
+        # Deny access to static files in this location.
+        allow: false
+        rules:
+          \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
+            allow: true
+          ^/robots\.txt$:
+            allow: true
+  disk: 512
+  dependencies:
+    nodejs:
+      yarn: "*"
 
-        # # Building on platform.sh
-        # if [ -d /app/.global ]; then
-        #   echo "--------------------------------------------------"
-        #   echo "Symlink /hashtag-dapp/tmp/config.js to hashtag-dapp/dist/config.js"
-        #   echo "--------------------------------------------------"
-        #   ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
-        # fi
-
-        # # Building locally.
-        # if ! [ -d /app/.global ]; then
-        #   echo "----------------------------------------------"
-        #   echo "Move raw markdown documents from hashtag-docs"
-        #   echo "----------------------------------------------"
-        #   # Move raw markdown documents from hashtag-docs.
-        #   ./hashtag-dapp/scripts/pull-docs.sh
-        # fi
-
-        # The deploy hook runs after your application has been deployed and started.
-        # deploy: |
-        #     # Deploying on platform.sh
-        #     if [ -d /app/.global ]; then
-        #       echo "----------------------------------------------"
-        #       echo "Putting PLATFORM_VARIABLES into /hashtag-dapp/tmp/config.js"
-        #       echo "----------------------------------------------"
-        #       echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /hashtag-dapp/tmp/config.js
-        #     fi
-
-    web:
-        upstream:
-            socket_family: tcp
-            protocol: http
-        commands:
-            start:
-                # echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /hashtag-dapp/tmp/config.js
-                sleep infinity
-        locations:
-            "/":
-                root: "hashtag-dapp/dist"
-                index:
-                    - "index.html"
-                passthru: /index.html
-                expires: 300s
-                scripts: true
-                # Deny access to static files in this location.
-                allow: false
-                rules:
-                    \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
-                        allow: true
-                    ^/robots\.txt$:
-                        allow: true
-    disk: 512
-    dependencies:
-        nodejs:
-            yarn: "*"
-
--   name: 3-hashtag-website
-    type: nodejs:14
-    source:
-        root: /
-    build:
-        flavor: none
-    web:
-        locations:
-            "/":
-                root: "hashtag-website/dist"
-                index:
-                    - "index.html"
-                passthru: /index.html
-                expires: 300s
-                scripts: true
-                # Deny access to static files in this location.
-                allow: false
-                rules:
-                    \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
-                        allow: true
-                    ^/robots\.txt$:
-                        allow: true
-    disk: 512
-    dependencies:
-        nodejs:
-            yarn: "*"
-    hooks:
-        build: |
-            set -e
-            yarn install
-            yarn workspace hashtag-website build
-        # deploy: |
-        #     yarn workspace hashtag-website buildenvvar
+- name: 3-hashtag-website
+  type: nodejs:14
+  source:
+    root: /
+  build:
+    flavor: none
+  web:
+    locations:
+      "/":
+        root: "hashtag-website/dist"
+        index:
+          - "index.html"
+        passthru: /index.html
+        expires: 300s
+        scripts: true
+        # Deny access to static files in this location.
+        allow: false
+        rules:
+          \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|html|ico|svg?)$:
+            allow: true
+          ^/robots\.txt$:
+            allow: true
+  disk: 512
+  dependencies:
+    nodejs:
+      yarn: "*"
+  hooks:
+    build: |
+      set -e
+      cd hashtag-website
+      yarn install
+      yarn build
