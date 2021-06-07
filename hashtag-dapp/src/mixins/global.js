@@ -10,7 +10,6 @@ const discordServer = AppConfig.discordServer; //Vue.prototype.appConfig.discord
 
 Vue.mixin({
   data: function () {
-    console.log("global", chainID);
     return {
       // @TODO: Put the following into env. variables?
       discordServer: discordServer,
