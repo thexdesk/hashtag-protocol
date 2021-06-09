@@ -2,12 +2,42 @@
   type: nodejs:14
   source:
     root: /
+  build:
+    flavor: none
   web:
     commands:
       start: "node hashtag-api/index.js"
+    # Specific parameters for different URL prefixes.
+    locations:
+      "/public/images":
+        # The folder from which to serve static assets, for this location.
+        #
+        # This is a filesystem path, relative to the application root.
+        # Folder name is set in npm run buildenvvar.
+        root: "public/images"
+        passthru: false
+
+        # How long to allow static assets from this location to be cached.
+        #
+        # Can be a time in seconds, or -1 for no caching. Times can be
+        # suffixed with "s" (seconds), "m" (minutes), "h" (hours), "d"
+        # (days), "w" (weeks), "M" (months, as 30 days) or "y" (years, as
+        # 365 days).
+        expires: 1h
+        scripts: false
+        rules:
+          # Restrict access to markdown (.png) files.
+          \.(png)$:
+            allow: true
+          ^/robots\.txt$:
+            allow: false
   relationships:
     chromeheadlessbrowser: "headlessbrowser:http"
   disk: 512
+  mounts:
+  "/public/images":
+    source: local
+    source_path: images
 
 - name: 1-hashtag-docs
   type: nodejs:14
@@ -42,16 +72,6 @@
       cd hashtag-docs
       yarn install
       yarn build
-    #  mkdir build
-    #  mkdir tmp
-    #post_deploy: |
-    #  # If we're building on Platform.sh...
-    #  if [ -d /app/.global ]; then
-    #    # Copy raw markdown documents to shared drive.
-    #    /app/hashtag-docs/scripts/platformsh/push-docs.sh
-    #    # Move static build files to deploy/web folder.
-    #    cp -R hashtag-docs/build/* deploy/
-    #  fi
 
 - name: 2-hashtag-dapp
   type: nodejs:14
@@ -72,14 +92,6 @@
         echo "--------------------------------------------------"
         ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
       fi
-    # # Building locally.
-    # if ! [ -d /app/.global ]; then
-    #   echo "----------------------------------------------"
-    #   echo "Move raw markdown documents from hashtag-docs"
-    #   echo "----------------------------------------------"
-    #   # Move raw markdown documents from hashtag-docs.
-    #   ./hashtag-dapp/scripts/pull-docs.sh
-    # fi
     #The deploy hook runs after your application has been deployed and started.
     deploy: |
       # Deploying on platform.sh
@@ -96,7 +108,7 @@
       protocol: http
     commands:
       start:
-        # echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /hashtag-dapp/tmp/config.js
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" > /hashtag-dapp/tmp/config.js
         sleep infinity
     locations:
       "/":
