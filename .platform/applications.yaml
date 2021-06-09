@@ -88,9 +88,9 @@
       # Building on platform.sh
       if [ -d /app/.global ]; then
         echo "--------------------------------------------------"
-        echo "Symlink /hashtag-dapp/tmp/config.js to hashtag-dapp/dist/config.js"
+        echo "Symlink /hashtag-dapp/tmp/config.js to dist/config.js"
         echo "--------------------------------------------------"
-        ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
+        ln -fs /hashtag-dapp/tmp/config.js dist/config.js
       fi
     #The deploy hook runs after your application has been deployed and started.
     deploy: |
