@@ -35,9 +35,9 @@
     chromeheadlessbrowser: "headlessbrowser:http"
   disk: 512
   mounts:
-  "/public/images":
-    source: local
-    source_path: images
+    "/public/images":
+      source: local
+      source_path: images
 
 - name: 1-hashtag-docs
   type: nodejs:14
