@@ -65,13 +65,13 @@
       cd hashtag-dapp
       yarn install
       yarn build
-    # # Building on platform.sh
-    # if [ -d /app/.global ]; then
-    #   echo "--------------------------------------------------"
-    #   echo "Symlink /hashtag-dapp/tmp/config.js to hashtag-dapp/dist/config.js"
-    #   echo "--------------------------------------------------"
-    #   ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
-    # fi
+      # Building on platform.sh
+      if [ -d /app/.global ]; then
+        echo "--------------------------------------------------"
+        echo "Symlink /hashtag-dapp/tmp/config.js to hashtag-dapp/dist/config.js"
+        echo "--------------------------------------------------"
+        ln -fs /hashtag-dapp/tmp/config.js hashtag-dapp/dist/config.js
+      fi
     # # Building locally.
     # if ! [ -d /app/.global ]; then
     #   echo "----------------------------------------------"
@@ -80,15 +80,15 @@
     #   # Move raw markdown documents from hashtag-docs.
     #   ./hashtag-dapp/scripts/pull-docs.sh
     # fi
-    # The deploy hook runs after your application has been deployed and started.
-    # deploy: |
-    #     # Deploying on platform.sh
-    #     if [ -d /app/.global ]; then
-    #       echo "----------------------------------------------"
-    #       echo "Putting PLATFORM_VARIABLES into /hashtag-dapp/tmp/config.js"
-    #       echo "----------------------------------------------"
-    #       echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /hashtag-dapp/tmp/config.js
-    #     fi
+    #The deploy hook runs after your application has been deployed and started.
+    deploy: |
+      # Deploying on platform.sh
+      if [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Putting PLATFORM_VARIABLES into /hashtag-dapp/tmp/config.js"
+        echo "----------------------------------------------"
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /hashtag-dapp/tmp/config.js
+      fi
 
   web:
     upstream:
