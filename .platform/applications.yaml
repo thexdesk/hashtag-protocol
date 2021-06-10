@@ -9,7 +9,7 @@
       start: "node hashtag-api/index.js"
     # Specific parameters for different URL prefixes.
     locations:
-      "/public/images":
+      "/hashtag-api/public/images":
         # The folder from which to serve static assets, for this location.
         #
         # This is a filesystem path, relative to the application root.
@@ -34,11 +34,11 @@
     chromeheadlessbrowser: "headlessbrowser:http"
   disk: 512
   mounts:
-    "/public/images":
+    "/hashtag-api/public/images":
       source: local
       source_path: images
 
-- name: 1-hashtag-docs
+- name: hashtag-docs
   type: nodejs:14
   source:
     root: /
@@ -72,7 +72,7 @@
       yarn install
       yarn build
 
-- name: 2-hashtag-dapp
+- name: hashtag-dapp
   type: nodejs:14
   source:
     root: /
@@ -128,7 +128,7 @@
         echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
       fi
 
-- name: 3-hashtag-website
+- name: hashtag-website
   type: nodejs:14
   source:
     root: /
