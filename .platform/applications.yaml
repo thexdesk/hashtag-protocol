@@ -9,7 +9,7 @@
       start: "node hashtag-api/index.js"
     # Specific parameters for different URL prefixes.
     locations:
-      "/hashtag-api/public/images":
+      "/":
         # The folder from which to serve static assets, for this location.
         #
         # This is a filesystem path, relative to the application root.
@@ -37,6 +37,14 @@
     "/hashtag-api/public/images":
       source: local
       source_path: images
+  dependencies:
+    nodejs:
+      yarn: "*"
+  hooks:
+    build: |
+      set -e
+      cd hashtag-api
+      yarn install
 
 - name: hashtag-docs
   type: nodejs:14
