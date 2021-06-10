@@ -6,14 +6,14 @@
     flavor: none
   web:
     commands:
-      start: "node hashtag-api/index.js"
+      start: "PM2_HOME=/app/run pm2 start hashtag-api/index.js --no-daemon"
     # Specific parameters for different URL prefixes.
     locations:
-      "/":
+      "/hashtag-api/public/images":
         # The folder from which to serve static assets, for this location.
         #
         # This is a filesystem path, relative to the application root.
-        root: "public/images"
+        root: "hashtag-api/public/images"
         passthru: false
 
         # How long to allow static assets from this location to be cached.
@@ -40,6 +40,7 @@
   dependencies:
     nodejs:
       yarn: "*"
+      pm2: "^4.5.0"
   hooks:
     build: |
       set -e
