@@ -1952,10 +1952,17 @@
     "@lerna/validation-error" "4.0.0"
     npmlog "^4.1.2"
 
+<<<<<<< HEAD
 "@lerna/exec@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@lerna/exec/-/exec-4.0.0.tgz#eb6cb95cb92d42590e9e2d628fcaf4719d4a8be6"
   integrity sha512-VGXtL/b/JfY84NB98VWZpIExfhLOzy0ozm/0XaS4a2SmkAJc5CeUfrhvHxxkxiTBLkU+iVQUyYEoAT0ulQ8PCw==
+=======
+glob-parent@^5.1.0:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
+  integrity sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==
+>>>>>>> stage
   dependencies:
     "@lerna/child-process" "4.0.0"
     "@lerna/command" "4.0.0"
@@ -20590,6 +20597,7 @@ websocket@^1.0.32:
     utf-8-validate "^5.0.2"
     yaeti "^0.0.6"
 
+<<<<<<< HEAD
 whatwg-fetch@2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.4.tgz#dde6a5df315f9d39991aa17621853d720b85566f"
@@ -20608,6 +20616,12 @@ whatwg-url@^8.4.0:
     lodash "^4.7.0"
     tr46 "^2.0.2"
     webidl-conversions "^6.1.0"
+=======
+trim-newlines@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-3.0.1.tgz#260a5d962d8b752425b32f3a7db0dcacd176c144"
+  integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
+>>>>>>> stage
 
 when@~3.6.x:
   version "3.6.4"
