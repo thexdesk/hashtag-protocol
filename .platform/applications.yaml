@@ -13,7 +13,6 @@
         # The folder from which to serve static assets, for this location.
         #
         # This is a filesystem path, relative to the application root.
-        # Folder name is set in npm run buildenvvar.
         root: "public/images"
         passthru: false
 
@@ -79,29 +78,6 @@
     root: /
   build:
     flavor: none
-  hooks:
-    build: |
-      set -e
-      cd hashtag-dapp
-      yarn install
-      yarn build
-      # Building on platform.sh
-      if [ -d /app/.global ]; then
-        echo "--------------------------------------------------"
-        echo "Symlink /hashtag-dapp/tmp/config.js to dist/config.js"
-        echo "--------------------------------------------------"
-        ln -fs /hashtag-dapp/tmp/config.js dist/config.js
-      fi
-    #The deploy hook runs after your application has been deployed and started.
-    deploy: |
-      # Deploying on platform.sh
-      if [ -d /app/.global ]; then
-        echo "----------------------------------------------"
-        echo "Putting PLATFORM_VARIABLES into /hashtag-dapp/tmp/config.js"
-        echo "----------------------------------------------"
-        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /hashtag-dapp/tmp/config.js
-      fi
-
   web:
     upstream:
       socket_family: tcp
@@ -129,6 +105,28 @@
   dependencies:
     nodejs:
       yarn: "*"
+  hooks:
+    build: |
+      set -e
+      cd hashtag-dapp
+      yarn install
+      yarn build
+      # Building on platform.sh
+      if [ -d /app/.global ]; then
+        echo "--------------------------------------------------"
+        echo "Symlink /tmp/config.js to dist/config.js"
+        echo "--------------------------------------------------"
+        ln -fs /tmp/config.js dist/config.js
+      fi
+    #The deploy hook runs after your application has been deployed and started.
+    deploy: |
+      # Deploying on platform.sh
+      if [ -d /app/.global ]; then
+        echo "----------------------------------------------"
+        echo "Putting PLATFORM_VARIABLES into /tmp/config.js"
+        echo "----------------------------------------------"
+        echo "config = $(echo $PLATFORM_VARIABLES | base64 -d)" >| /tmp/config.js
+      fi
 
 - name: 3-hashtag-website
   type: nodejs:14
