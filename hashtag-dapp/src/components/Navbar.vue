@@ -42,7 +42,7 @@
       </b-navbar-item>
       <b-navbar-dropdown
         class="is-hidden-desktop is-hidden-tablet-only mobile-menu"
-        arrowless="true"
+        :arrowless="true"
       >
         <b-navbar-item
           v-for="(value, key) in sectionsMenuArr"

@@ -232,7 +232,7 @@
 
 <script>
 import EthAccount from "../components/EthAccount";
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import HashtagTokenId from "../components/HashtagTokenId";
 import Header from "../components/Header";
 import NftLink from "../components/NftLink";

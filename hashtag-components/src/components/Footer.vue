@@ -1,15 +1,5 @@
 <template>
   <footer class="footer">
-    <div class="block newsletter">
-      <div class="block container has-text-centered has-text-white-ter">
-        <p class="is-size-3 has-text-weight-bold">#TokenizeEverything</p>
-        <p class="has-text-grey-light">
-          Sign up for occasional updates about our movement to decentralize
-          hashtags.
-        </p>
-      </div>
-      <NewsletterForm />
-    </div>
     <nav class="level container">
       <!-- Left side -->
       <div class="level-left">
@@ -26,17 +16,15 @@
         <div class="level-item">
           <div class="level is-mobile">
             <a
-              :href="this.build"
+              :href="githubUrl"
               target="_blank"
               title="Github"
               class="navbar-item"
             >
-              <span class="icon"
-                ><i class="mdi mdi-github-circle mdi-24px"></i
-              ></span>
+              <span class="icon"><i class="mdi mdi-github mdi-24px"></i></span>
             </a>
             <a
-              :href="this.discord"
+              :href="discordUrl"
               target="_blank"
               title="Discord"
               class="is-dark navbar-item"
@@ -67,37 +55,43 @@
 </template>
 
 <script>
-import NewsletterForm from "./NewsletterForm";
-
 export default {
   name: "Footer",
-  components: {
-    NewsletterForm,
+  props: {
+    discordUrl: {
+      type: String,
+      default: "https://discord.com/invite/EyTJFRm",
+    },
+    githubUrl: {
+      type: String,
+      default: "https://github.com/hashtag-protocol/hashtag-protocol",
+    },
   },
   data() {
     return {
-      build: "",
-      year: "2020",
+      year: "2021",
     };
   },
   mounted() {
-    this.build = this.website + "/build";
     this.year = new Date().getFullYear();
   },
 };
 </script>
 
 <style scoped lang="scss">
+@import "../styles/themes/hashtag/theme";
+
 .footer {
-  .newsletter {
-    padding: 9rem 0;
-    background-color: $grey-dark;
-  }
+  padding-top: 1.5rem;
 
   a {
     &.navbar-item {
+      display: flex;
+      color: $dark;
       border-radius: 3px;
+
       &:hover {
+        color: $primary;
         background: none;
       }
     }
@@ -110,6 +104,7 @@ export default {
   background-image: url("data:image/svg+xml,%3Csvg fill='%234a4a4a' width='136px' height='155px' viewBox='0 0 136 155' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Crect id='Rectangle' x='0' y='0' width='136' height='19'%3E%3C/rect%3E%3Crect id='Rectangle' x='0' y='35' width='136' height='19'%3E%3C/rect%3E%3Cpolygon id='Path' points='0 69 136 69 136 155 68 117 0 155'%3E%3C/polygon%3E%3C/svg%3E");
   background-size: 20px 20px;
   background-repeat: no-repeat;
+
   &:hover {
     background-image: url("data:image/svg+xml,%3Csvg fill='%2324ae60' width='136px' height='155px' viewBox='0 0 136 155' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Crect id='Rectangle' x='0' y='0' width='136' height='19'%3E%3C/rect%3E%3Crect id='Rectangle' x='0' y='35' width='136' height='19'%3E%3C/rect%3E%3Cpolygon id='Path' points='0 69 136 69 136 155 68 117 0 155'%3E%3C/polygon%3E%3C/svg%3E");
   }

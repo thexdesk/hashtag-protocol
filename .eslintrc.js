@@ -10,6 +10,7 @@ module.exports = {
     parser: "babel-eslint",
     // specifying a module sourcetype prevent eslint from marking import statements as errors
     sourceType: "module",
+    ecmaVersion: 2020
   },
   extends: [
     // use the recommended rule set for both plain javascript and vue

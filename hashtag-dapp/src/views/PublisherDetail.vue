@@ -318,7 +318,7 @@
 
 <script>
 import EthAccount from "../components/EthAccount";
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Header from "../components/Header";
 import {
   ALL_HASHTAG_IDS_BY_PUBLISHER,

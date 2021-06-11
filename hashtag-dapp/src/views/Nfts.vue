@@ -111,7 +111,7 @@
 
 <script>
 import EthAccount from "../components/EthAccount";
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import NftLink from "../components/NftLink";

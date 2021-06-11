@@ -1,7 +1,13 @@
 <template>
   <section class="hero has-background-grey-dark is-bold">
     <div
-      class="beta-warning has-background-primary has-text-white has-text-weight-medium has-text-centered"
+      class="
+        beta-warning
+        has-background-primary
+        has-text-white
+        has-text-weight-medium
+        has-text-centered
+      "
     >
       <p>This protocol & interface is in beta. Use it at your own risk.</p>
     </div>
