@@ -1,22 +1,18 @@
 - name: hashtag-api
+
+  # The runtime the application uses.
   type: nodejs:14
+
   source:
     root: /
-  build:
-    flavor: none
+  # The configuration of app when it is exposed to the web.
   web:
     commands:
       start: "node hashtag-api/index.js"
+
     # Specific parameters for different URL prefixes.
     locations:
-      "/":
-        # The folder from which to serve static assets, for this location.
-        #
-        # This is a filesystem path, relative to the application root.
-        root: "hashtag-api"
-        passthru: false
-        scripts: true
-      "/hashtag-api/public/images":
+      "/public/images":
         # The folder from which to serve static assets, for this location.
         #
         # This is a filesystem path, relative to the application root.
@@ -37,16 +33,22 @@
             allow: true
           ^/robots\.txt$:
             allow: false
+
   relationships:
     chromeheadlessbrowser: "headlessbrowser:http"
+
+  # The size of the persistent disk of the application (in MB).
   disk: 512
+
   mounts:
     "/hashtag-api/public/images":
       source: local
       source_path: images
+
   dependencies:
     nodejs:
       yarn: "*"
+
   hooks:
     build: |
       set -e
