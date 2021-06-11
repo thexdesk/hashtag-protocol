@@ -6,7 +6,7 @@
     flavor: none
   web:
     commands:
-      start: "PM2_HOME=/app/run pm2 start hashtag-api/index.js --no-daemon"
+      start: "node hashtag-api/index.js"
     # Specific parameters for different URL prefixes.
     locations:
       "/":
@@ -47,7 +47,6 @@
   dependencies:
     nodejs:
       yarn: "*"
-      pm2: "^4.5.0"
   hooks:
     build: |
       set -e
