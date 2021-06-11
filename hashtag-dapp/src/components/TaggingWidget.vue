@@ -71,6 +71,7 @@ export default {
       await this.$store.dispatch("updateTransactionState", {
         eventCode: "taggingSelectHashtag",
       });
+      /* eslint-disable-next-line no-console */
       console.log("onNftSelected", nft);
       const taggingModal = this.$buefy.modal.open({
         parent: this,

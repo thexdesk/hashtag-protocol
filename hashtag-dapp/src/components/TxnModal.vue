@@ -101,6 +101,7 @@ export default {
     // Mint new hashtag button is clicked.
     async mintHashtag(hashtag) {
       try {
+        /* eslint-disable-next-line no-console */
         console.log("mintHashtag", hashtag);
         await this.$store.dispatch("mint", hashtag);
       } catch (e) {
@@ -114,6 +115,7 @@ export default {
     },
     async tagContent() {
       const hashtag = this.targetHashtag;
+      /* eslint-disable-next-line no-console */
       console.log("tagContent", hashtag);
       if (hashtag.id) {
         // Tag with existing HASHTAG.
@@ -132,8 +134,11 @@ export default {
           }
         }
       } else {
+        /* eslint-disable-next-line no-console */
         console.log("mint and tag");
+        /* eslint-disable-next-line no-console */
         console.log("nft", this.targetNft);
+        /* eslint-disable-next-line no-console */
         console.log("hashtag", hashtag.displayHashtag);
         // Mint new HASHTAG and tag with that.
         try {

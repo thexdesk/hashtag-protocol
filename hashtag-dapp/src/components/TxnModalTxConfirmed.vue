@@ -83,6 +83,7 @@ export default {
       return protocolActionMap[this.protocolAction].txnConfirmedMsg;
     },
     hashtag: function () {
+      /* eslint-disable-next-line no-console */
       console.log(this.newHashtag);
       return this.isNewHashtag ? this.newHashtag : null;
     },

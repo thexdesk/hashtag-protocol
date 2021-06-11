@@ -17,6 +17,7 @@ export default {
     async selectHashtag(hashtag) {
       //await this.$store.dispatch("updateTargetHashtag", hashtag);
       if (hashtag.id) {
+        /* eslint-disable-next-line no-console */
         console.log("minting widget existing Hashtag", hashtag);
       } else {
         await this.$store.dispatch("updateNewHashtag", hashtag);
@@ -57,6 +58,7 @@ export default {
       // User is hitting enter.
       if (event.which === 13) {
         const newHashtag = document.getElementById("mint-hashtag").value;
+        /* eslint-disable-next-line no-console */
         console.log("checkIfEnterKey", newHashtag);
         if (this.validateTag(newHashtag)) {
           // This is a valid, new hashtag, update the application.

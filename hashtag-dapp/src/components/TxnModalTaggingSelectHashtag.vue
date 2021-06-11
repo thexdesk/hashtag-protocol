@@ -60,6 +60,7 @@ export default {
      * Function to handle when user selects hashtag in HashtagSearch widget.
      */
     async selectHashtag(hashtag) {
+      /* eslint-disable-next-line no-console */
       console.log("tagging selectHashtag", hashtag);
       await this.$store.dispatch("updateTargetHashtag", hashtag);
       if (hashtag.id) {
