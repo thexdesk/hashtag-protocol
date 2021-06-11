@@ -107,7 +107,7 @@ async function buildMetadata(tokenId, rebuildImg, req) {
 
 async function buildImage(hashtag, rebuild) {
   const fs = require("fs");
-  const path = `./public/images/${hashtag.id}.png`;
+  const path = `./hashtag-api/public/images/${hashtag.id}.png`;
 
   // Build the image if the image doesn't exist, or it exists and
   // the rebuild flag was passed.
@@ -121,11 +121,14 @@ async function buildImage(hashtag, rebuild) {
     // to pass to the nodeHtmlToImage processor.
     const compile = require("es6-template-strings/compile"),
       resolveToString = require("es6-template-strings/resolve-to-string");
-    const data = fs.readFileSync("./assets/templates/series2021a.txt", "utf8");
+    const data = fs.readFileSync(
+      "./hashtag-api/assets/templates/series2021a.txt",
+      "utf8"
+    );
     const compiled = compile(data);
 
     const html = resolveToString(compiled, hashtag);
-    const path = `./public/images/${hashtag.id}.png`;
+    const path = `./hashtag-api/public/images/${hashtag.id}.png`;
     const puppeteer = require("puppeteer");
 
     let browser;

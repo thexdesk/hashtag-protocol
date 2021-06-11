@@ -36,7 +36,11 @@
                           content: '020-what-is-hashtag-token',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Newest hashtags</h2>
                     <template>
@@ -111,7 +115,11 @@
                           content: '030-what-is-tagged-content',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Recently tagged content</h2>
                     <template>
@@ -198,7 +206,11 @@
                           content: '045-what-is-creator',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Top creators</h2>
                     <template>
@@ -265,7 +277,11 @@
                           content: '040-what-is-a-publisher',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Top publishers</h2>
                     <template>
@@ -335,7 +351,11 @@
                         content: '060-what-is-a-tagger',
                       })
                     "
-                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    class="
+                      mdi mdi-help-circle-outline mdi-24px
+                      is-pulled-right
+                      has-text-grey
+                    "
                   />
                   <article class="is-white">
                     <h2 class="title is-5">Top taggers</h2>
@@ -387,7 +407,11 @@
                           content: '020-what-is-hashtag-token',
                         })
                       "
-                      class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                      class="
+                        mdi mdi-help-circle-outline mdi-24px
+                        is-pulled-right
+                        has-text-grey
+                      "
                     />
                     <h2 class="title is-5">Popular hashtags</h2>
                     <template>
@@ -438,7 +462,11 @@
                         content: '050-what-is-an-owner',
                       })
                     "
-                    class="mdi mdi-help-circle-outline mdi-24px is-pulled-right has-text-grey"
+                    class="
+                      mdi mdi-help-circle-outline mdi-24px
+                      is-pulled-right
+                      has-text-grey
+                    "
                   />
                   <article class="is-white coming-soon">
                     <h2 class="title is-5">Top owners</h2>
@@ -463,7 +491,7 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import EthAmount from "../components/EthAmount";
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Hashtag from "../components/Hashtag";
 import Header from "../components/Header";
 import MarkdownModal from "../components/MarkdownModal";

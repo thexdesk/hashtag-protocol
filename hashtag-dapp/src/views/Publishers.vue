@@ -107,7 +107,7 @@
 <script>
 import EthAccount from "../components/EthAccount";
 import EthAmountSum from "../components/EthAmountSum";
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Header from "../components/Header";
 import Pagination from "../components/Pagination";
 import { PAGED_PUBLISHERS, ALL_PUBLISHERS } from "../queries";

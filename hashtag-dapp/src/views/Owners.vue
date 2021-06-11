@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Header from "../components/Header";
 import MarkdownDoc from "../components/MarkdownDoc";
 import { PAGED_OWNERS, ALL_OWNER_ADDRESSES } from "../queries";

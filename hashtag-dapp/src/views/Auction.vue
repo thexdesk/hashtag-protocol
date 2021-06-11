@@ -7,7 +7,12 @@
         <h2 class="subtitle">
           Purchase HASHTAG tokens
           <span
-            class="has-text-primary is-italic has-text-weight-bold is-hidden-desktop"
+            class="
+              has-text-primary
+              is-italic
+              has-text-weight-bold
+              is-hidden-desktop
+            "
             >COMING SOON!</span
           >
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
@@ -46,7 +51,7 @@
 </template>
 
 <script>
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Header from "../components/Header";
 import MarkdownDoc from "../components/MarkdownDoc";
 

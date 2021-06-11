@@ -5,11 +5,11 @@
 
 "https://www.{default}/":
   type: upstream
-  upstream: "3-hashtag-website:http"
+  upstream: "hashtag-website:http"
 
 "https://{default}/":
   type: upstream
-  upstream: "3-hashtag-website:http"
+  upstream: "hashtag-website:http"
 
 "http://www.{default}/":
   type: redirect
@@ -21,11 +21,11 @@
 
 "https://docs.{default}/":
   type: upstream
-  upstream: "1-hashtag-docs:http"
+  upstream: "hashtag-docs:http"
 
 "https://app.{default}/":
   type: upstream
-  upstream: "2-hashtag-dapp:http"
+  upstream: "hashtag-dapp:http"
 
 # Hashtag API
 "https://api.hashtag-protocol.io/":
@@ -43,10 +43,6 @@
 "https://hashtag-protocol.io/":
   type: redirect
   to: "https://api.hashtag-protocol.io/"
-
-
-
-
 #http://{default}/:
 #  cache:
 #    cookies:
@@ -54,9 +50,9 @@
 #    default_ttl: 0
 #    enabled: true
 ##    headers:
- #   - Accept
- #   - Accept-Language
- # ssi:
- #   enabled: false
- # type: upstream
- # upstream: ui:http
+#   - Accept
+#   - Accept-Language
+# ssi:
+#   enabled: false
+# type: upstream
+# upstream: ui:http

@@ -348,15 +348,17 @@
         </div>
       </section>
     </div>
-    <Footer></Footer>
+    <Newsletter />
+    <Footer />
   </div>
 </template>
 
 <script>
-import Footer from "../components/Footer";
+import Footer from "hashtag-components/src/components/Footer";
 import Hashtag from "../components/Hashtag";
 import Navbar from "../components/Navbar";
 import NftLink from "../components/NftLink";
+import Newsletter from "../components/Newsletter";
 // import RevenueModel from "../components/RevenueModel";
 
 import { SNAPSHOT } from "@/queries";
@@ -368,6 +370,7 @@ export default {
     Hashtag,
     Navbar,
     NftLink,
+    Newsletter,
     // RevenueModel,
   },
   data() {
@@ -481,8 +484,8 @@ query {
    * @return _tokenId ID of the new hashtag
    */
   function mint(
-    string memory _hashtag, 
-    address payable _publisher, 
+    string memory _hashtag,
+    address payable _publisher,
     address _recipient) payable public returns (uint256 _tokenId) {
       require(
         accessControls.isPublisher(_publisher),
