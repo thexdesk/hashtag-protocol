@@ -46,6 +46,9 @@
       source_path: images
 
   dependencies:
+    # Not totally sure if we need this as it appears that platform default build
+    # flavor is handing dependencies. But gonna leave it for now cause it's not
+    # hurting.
     nodejs:
       yarn: "*"
 
