@@ -348,6 +348,7 @@ const actions = {
    */
   updateTransactionState({ commit }, transaction) {
     // Give toast notifications for blockchain events.
+    /* eslint-disable-next-line no-console */
     console.log("updateTxnState", transaction.eventCode);
 
     if (transaction.status) {
