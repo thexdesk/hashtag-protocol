@@ -30,7 +30,8 @@ Vue.component("prism", Prism);
 
 // Connection for GraphQL.
 const client = new ApolloClient({
-  uri: "https://api.thegraph.com/subgraphs/name/hashtag-protocol/hashtag-mainnet",
+  uri:
+    "https://api.thegraph.com/subgraphs/name/hashtag-protocol/hashtag-mainnet",
 });
 
 const apolloProvider = new VueApollo({
