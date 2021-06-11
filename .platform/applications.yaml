@@ -13,7 +13,7 @@
         # The folder from which to serve static assets, for this location.
         #
         # This is a filesystem path, relative to the application root.
-        root: "/hashtag-api"
+        root: "hashtag-api"
         passthru: false
         scripts: true
       "/hashtag-api/public/images":
