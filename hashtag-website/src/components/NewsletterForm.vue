@@ -10,7 +10,7 @@
         required
         :loading="this.isLoading"
         :disabled="this.isLoading"
-        style="width: 300px"
+        style="width: 300px;"
       >
       </b-input>
       <p>
