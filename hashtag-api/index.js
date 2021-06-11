@@ -128,7 +128,7 @@ async function buildImage(hashtag, rebuild) {
     const compiled = compile(data);
 
     const html = resolveToString(compiled, hashtag);
-    const path = `./public/images/${hashtag.id}.png`;
+    const path = `./hashtag-api/public/images/${hashtag.id}.png`;
     const puppeteer = require("puppeteer");
 
     let browser;
