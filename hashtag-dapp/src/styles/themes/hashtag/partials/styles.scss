@@ -144,3 +144,19 @@ article {
     }
   }
 }
+
+.radius-small {
+  border-radius: $radius-small;
+}
+
+.radius {
+  border-radius: $radius;
+}
+
+.radius-large {
+  border-radius: $radius-large;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

@@ -1,6 +1,8 @@
 // vue.config.js
+const path = require("path");
 module.exports = {
   // Make variables available in SASS for all components.
+  runtimeCompiler: true,
   css: {
     loaderOptions: {
       sass: {
@@ -26,5 +28,13 @@ module.exports = {
     externals: {
       config: "config",
     },
+    resolve: {
+      alias: {
+        src: path.resolve(__dirname, "src"),
+      },
+    },
+  },
+  devServer: {
+    proxy: "http://localhost:8000",
   },
 };

@@ -6,5 +6,9 @@
   "4": {
     "Name": "Rinkby",
     "url": "https://rinkeby.etherscan.io"
+  },
+  "5777": {
+    "Name": "Localdev",
+    "url": "https://rinkeby.etherscan.io"
   }
 }

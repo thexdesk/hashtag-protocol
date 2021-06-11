@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
 import BlocknativeSdk from "bnc-sdk";
 import { ToastProgrammatic as Toast } from "buefy";
-import HashtagProtocolTruffleConf from "../../truffleconf/HashtagProtocol";
-import ERC721HashtagRegistry from "../../truffleconf/ERC721HashtagRegistry";
-import utils from "../../utils";
-import eventMap from "../../data/blocknativeEventMap";
-import onBoardChainMap from "../../data/onBoardChainMap";
+import HashtagProtocolTruffleConf from "src/truffleconf/HashtagProtocol";
+import ERC721HashtagRegistry from "src/truffleconf/ERC721HashtagRegistry";
+import utils from "src/utils";
+import eventMap from "src/data/blocknativeEventMap";
+import onBoardChainMap from "src/data/onBoardChainMap";
 
 let provider;
 let onboard = {};
@@ -31,6 +31,7 @@ const localstorageWalletKey = AppConfig.localstorageWalletKey;
  * @property {number} fees.mintAndTag Fee to tag when minting at same time.
  * @property {number} accrued Amount of revenue in Eth accrued for address from using protocol.
  * @property {function} openModalCloseFn Name of function to close accrued modal.
+ * @property {object} transactionState txn object of last web3 txn.
  */
 const state = {
   address: null,
@@ -46,6 +47,8 @@ const state = {
   },
   accrued: null,
   openModalCloseFn: () => {},
+
+  transactionState: {},
 };
 
 const getters = {
@@ -58,6 +61,7 @@ const getters = {
   },
   balance: (state) => state.balance,
   wallet: (state) => state.wallet,
+  transactionState: (state) => state.transactionState,
 };
 
 const actions = {
@@ -99,11 +103,10 @@ const actions = {
     const signer = provider.getSigner();
     const chain = state.networkId;
 
-    const hashtagProtocolContractAddress =
-      utils.getContractAddressFromTruffleConf(
-        HashtagProtocolTruffleConf,
-        chain
-      );
+    const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
+      HashtagProtocolTruffleConf,
+      chain
+    );
 
     const hashtagProtocolContract = new ethers.Contract(
       hashtagProtocolContractAddress,
@@ -111,8 +114,10 @@ const actions = {
       signer
     );
 
-    const erc721HashtagRegistryAddress =
-      utils.getContractAddressFromTruffleConf(ERC721HashtagRegistry, chain);
+    const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
+      ERC721HashtagRegistry,
+      chain
+    );
 
     const erc721HashtagRegistryContract = new ethers.Contract(
       erc721HashtagRegistryAddress,
@@ -213,34 +218,64 @@ const actions = {
     commit("setOpenModalCloseFn", openModalCloseFn);
   },
 
+  /**
+   * Confirm web3 transaction to mint a new HASHTAG token.
+   *
+   * User has clicked the "confirm" minting button. User
+   * Will now be prompted to approve web3 transaction in
+   * their wallet.
+   *
+   * @action mint
+   * @param { state, dispatch, commit } Vuex objects
+   * @param { string } payload Hashtag string being minted.
+   * @returns { void }
+   */
   async mint({ state, dispatch }, payload) {
+    // Check that wallet is ready to transact via Blocknative onboard library.
     const ready = await dispatch("readyToTransact");
     if (!ready) return;
 
+    // Prompts user to complete transaction in their wallet.
+    await dispatch("updateTransactionState", {
+      eventCode: "protocolActionConfirmed",
+    });
+
+    // If ready, the web3Objects will have been
+    // properly initialized available for use.
     const { contracts, publisher } = state.web3Objects;
     const { hashtagProtocolContract } = contracts;
 
-    const tx = await hashtagProtocolContract.mint(
+    // The wallet has been popped and is waiting for user
+    // to confirm or reject the transaction. When confirmed
+    // we will have a txn object.
+    const txn = await hashtagProtocolContract.mint(
       payload,
       publisher,
       state.address
     );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    // We have a txn object. Start a blocknative SDK listener for blockchain events.
+    const { emitter } = blocknative.transaction(txn.hash);
 
     emitter.on("all", (transaction) => {
-      Toast.open({
-        duration: 5000,
-        message: eventMap[transaction.eventCode].msg,
-        position: "is-bottom",
-        type: eventMap[transaction.eventCode].type,
-      });
+      dispatch("updateTransactionState", transaction);
     });
   },
 
+  /**
+   *
+   * @param {*} param0
+   * @param {*} payload
+   * @returns
+   */
   async tag({ state, dispatch }, payload) {
     const ready = await dispatch("readyToTransact");
     if (!ready) return;
+
+    // Prompts user to complete transaction in their wallet.
+    await dispatch("updateTransactionState", {
+      eventCode: "protocolActionConfirmed",
+    });
 
     const { web3Objects, fees } = state;
     const { contracts, publisher } = web3Objects;
@@ -248,7 +283,7 @@ const actions = {
     const { hashtagId, nftContract, nftId } = payload;
 
     // function tag(uint256 _hashtagId, address _nftContract, uint256 _nftId, address _publisher, address _tagger) payable public {
-    const tx = await erc721HashtagRegistryContract.tag(
+    const txn = await erc721HashtagRegistryContract.tag(
       hashtagId,
       nftContract,
       nftId,
@@ -259,15 +294,11 @@ const actions = {
       }
     );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    // We have a txn object. Start a blocknative SDK listener for blockchain events.
+    const { emitter } = blocknative.transaction(txn.hash);
 
     emitter.on("all", (transaction) => {
-      Toast.open({
-        duration: 5000,
-        message: eventMap[transaction.eventCode].msg,
-        position: "is-bottom",
-        type: eventMap[transaction.eventCode].type,
-      });
+      dispatch("updateTransactionState", transaction);
     });
   },
 
@@ -275,12 +306,17 @@ const actions = {
     const ready = await dispatch("readyToTransact");
     if (!ready) return;
 
+    // Prompts user to complete transaction in their wallet.
+    await dispatch("updateTransactionState", {
+      eventCode: "protocolActionConfirmed",
+    });
+
     const { web3Objects, fees } = state;
     const { contracts, publisher } = web3Objects;
     const { erc721HashtagRegistryContract } = contracts;
     const { hashtag, nftContract, nftId } = payload;
 
-    const tx = await erc721HashtagRegistryContract.mintAndTag(
+    const txn = await erc721HashtagRegistryContract.mintAndTag(
       hashtag.indexOf("#") === 0 ? hashtag : `#${hashtag}`,
       nftContract,
       nftId,
@@ -291,16 +327,43 @@ const actions = {
       }
     );
 
-    const { emitter } = blocknative.transaction(tx.hash);
+    // We have a txn object. Start a blocknative SDK listener for blockchain events.
+    const { emitter } = blocknative.transaction(txn.hash);
 
     emitter.on("all", (transaction) => {
+      dispatch("updateTransactionState", transaction);
+    });
+  },
+
+  /**
+   * Updates the vuex transactionState object. If transaction.status
+   * is set, user has submitted txn to blockchain and transaction
+   * object has everything provided by the Blocknative transaction object.
+   *
+   * @action updateTransactionState=transactionState
+   * @param { object } transaction A transaction object
+   * @returns { void }
+   * @see
+   * {@link https://docs.blocknative.com/notify-sdk#transaction-object | Blocknative Sdk transaction object }
+   */
+  updateTransactionState({ commit }, transaction) {
+    // Give toast notifications for blockchain events.
+    /* eslint-disable-next-line no-console */
+    console.log("updateTxnState", transaction.eventCode);
+
+    if (transaction.status) {
+      // If status is defined, it means a web3 txn has begun.
       Toast.open({
         duration: 5000,
         message: eventMap[transaction.eventCode].msg,
-        position: "is-bottom",
+        position: "is-top",
         type: eventMap[transaction.eventCode].type,
       });
-    });
+    }
+
+    //console.log("updateTransactionState", transaction);
+    // Mutate transactionState.
+    commit("setTransactionState", transaction);
   },
 
   async getProtocolFee({ commit }) {
@@ -357,47 +420,43 @@ const mutations = {
     //Vue.set(state, "fees.platform", fee);
     state.fees.platform = fee;
   },
-
   async setTaggingFee(state, fee) {
     //Vue.set(state, "fees.tagging", fee);
     state.fees.tagging = fee;
   },
-
   async setMintAndTagFee(state, fee) {
     //Vue.set(state, "fees.mintAndTag", fee);
     state.fees.mintAndTag = fee;
   },
-
   setWeb3Objects(state, payload) {
     Vue.set(state, "web3Objects", payload);
   },
-
   setAccrued(state, accrued) {
     Vue.set(state, "accrued", accrued);
   },
-
   setOpenModalCloseFn(state, openModalCloseFn) {
     Vue.set(state, "openModalCloseFn", openModalCloseFn);
   },
-
   setWalletAddress(state, address) {
     Vue.set(state, "address", address);
   },
-
   setWalletNetworkId(state, networkId) {
     Vue.set(state, "networkId", networkId);
   },
-
   setWalletBalance(state, balance) {
     Vue.set(state, "balance", balance);
   },
-
   setWallet(state, wallet) {
     Vue.set(state, "wallet", wallet);
   },
-
   setProvider(state, provider) {
     Vue.set(state, "provider", provider);
+  },
+  setTransactionState(state, payload) {
+    state.transactionState = payload;
+  },
+  setLastTransaction(state, payload) {
+    state.lastTransaction = payload;
   },
 };
 

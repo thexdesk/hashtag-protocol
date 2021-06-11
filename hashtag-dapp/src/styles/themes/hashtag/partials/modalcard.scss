@@ -1,9 +1,44 @@
 .modal-card {
   border-radius: $radius-large;
 
+  .modal-card-foot {
+    justify-content: center;
+  }
+
   &.markdown-modal {
     h2 {
       font-size: $size-3;
+    }
+  }
+
+  &.transaction-modal {
+    //max-width: 960px;
+    //width: 800px;
+
+    .card {
+      @include mobile {
+        margin-bottom: 1rem;
+
+        .hashtag-search-wrapper {
+          .box {
+            margin-bottom: 1rem;
+          }
+        }
+      }
+
+      @include from($tablet) {
+        margin-right: 2rem;
+      }
+    }
+
+    .hashtag-search-wrapper {
+      p.is-title {
+        line-height: 3rem;
+      }
+
+      .buttons {
+        justify-content: center;
+      }
     }
   }
 

@@ -6,10 +6,10 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ blockrockettech/hashtag",
-    "create-local": "graph create --node http://localhost:8020/ hashtag-protocol/hashtag-rinkby",
-    "remove-local": "graph remove --node http://localhost:8020/ hashtag-protocol/hashtag-rinkby",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hashtag-protocol/hashtag",
-    "run-graph-node": "docker-compose -f graph-node/docker-compose.yml up -d && ganache-cli -h 0.0.0.0 -i 5777"
+    "create-local": "graph create --node http://localhost:8020/ hashtag-protocol/hashtag-local",
+    "remove-local": "graph remove --node http://localhost:8020/ hashtag-protocol/hashtag-local",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hashtag-protocol/hashtag-local",
+    "run-graph-node": "docker-compose -f graph-node/docker-compose.yml up -d && ganache-cli -h 0.0.0.0 -m 'worth grunt bridge trade chuckle stand lamp jealous snow order pluck mobile' -i 5777 --chainId 5777"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.16.2",
