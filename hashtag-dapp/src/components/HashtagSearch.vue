@@ -95,6 +95,7 @@ export default {
      * @param { object } hashtag
      */
     selectHashtag(hashtag) {
+      /* eslint-disable-next-line no-console */
       console.log("Hashtag Seatch selectHashtag");
       if (this.validateTag(hashtag)) {
         // Process the selected hashtag in the parent compoent.
@@ -110,7 +111,7 @@ export default {
       // User is hitting enter.
       if (event.which === 13) {
         const input = document.getElementById(this.widget).value;
-
+        /* eslint-disable-next-line no-console */
         console.log("checkIfEnterKey", input);
         // Let's skip it when user toggles down to an existing hashtag
         // and hits enter. That's handled by the "before-adding" function

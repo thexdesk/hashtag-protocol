@@ -103,11 +103,10 @@ const actions = {
     const signer = provider.getSigner();
     const chain = state.networkId;
 
-    const hashtagProtocolContractAddress =
-      utils.getContractAddressFromTruffleConf(
-        HashtagProtocolTruffleConf,
-        chain
-      );
+    const hashtagProtocolContractAddress = utils.getContractAddressFromTruffleConf(
+      HashtagProtocolTruffleConf,
+      chain
+    );
 
     const hashtagProtocolContract = new ethers.Contract(
       hashtagProtocolContractAddress,
@@ -115,8 +114,10 @@ const actions = {
       signer
     );
 
-    const erc721HashtagRegistryAddress =
-      utils.getContractAddressFromTruffleConf(ERC721HashtagRegistry, chain);
+    const erc721HashtagRegistryAddress = utils.getContractAddressFromTruffleConf(
+      ERC721HashtagRegistry,
+      chain
+    );
 
     const erc721HashtagRegistryContract = new ethers.Contract(
       erc721HashtagRegistryAddress,

@@ -30,12 +30,7 @@
         </div>
       </nav>
       <p
-        class="
-          box
-          has-text-weight-medium has-background-dark has-text-white
-          address
-          has-text-centered
-        "
+        class="box has-text-weight-medium has-background-dark has-text-white address has-text-centered"
       >
         {{ address }}
       </p>
