@@ -146,23 +146,43 @@ export class NftMetadata {
  * tokenUri location of the metadata in IPFS
  */
 export function extractNftIPFSMetadata(tokenUri: string): NftMetadata | null {
-    let ipfsParts: string[] = tokenUri.split('/');
+  let ipfsHash = getIpfsHash(tokenUri);
 
-    if (ipfsParts.length > 0) {
-        let ipfsHash: string = ipfsParts[ipfsParts.length - 1];
-        let data = ipfs.cat('/ipfs/' + ipfsHash);
+  if (ipfsHash != null) {
 
-        if (data !== null) {
-            let jsonData: JSONValue = json.fromBytes(data as Bytes);
+    //let ipfsParts: string[] = tokenUri.split('/');
 
-            let nftName = jsonData.toObject().get('name').toString();
-            let nftDescription = jsonData.toObject().get('description').toString();
-            let nftImage = jsonData.toObject().get('image').toString();
+  // if (ipfsParts.length > 0) {
+  // let ipfsHash: string = ipfsParts[ipfsParts.length - 1];
+    let data = ipfs.cat('/ipfs/' + ipfsHash);
 
-            return new NftMetadata(nftName, nftDescription, nftImage);
-        }
+    if (data !== null) {
+      let jsonData: JSONValue = json.fromBytes(data as Bytes);
+
+      let nftName = jsonData.toObject().get('name').toString();
+      let nftDescription = jsonData.toObject().get('description').toString();
+      let nftImage = jsonData.toObject().get('image').toString();
+
+      return new NftMetadata(nftName, nftDescription, nftImage);
     }
+  }
+  else {
+    let msg = '--';
+    let nftImage = 'https://icon-library.com/images/no-image-available-icon/no-image-available-icon-12.jpg';
+    return new NftMetadata(msg, msg, nftImage);
+  }
 
-    return null;
+  return null;
 }
 
+export function getIpfsHash(uri: string | null): string | null {
+  if (uri != null) {
+    let hash = uri.split('/').pop()
+
+    if (hash != null && hash.startsWith('Qm')) {
+      return hash
+    }
+  }
+
+  return null
+}
