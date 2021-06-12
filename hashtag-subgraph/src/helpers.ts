@@ -149,11 +149,6 @@ export function extractNftIPFSMetadata(tokenUri: string): NftMetadata | null {
   let ipfsHash = getIpfsHash(tokenUri);
 
   if (ipfsHash != null) {
-
-    //let ipfsParts: string[] = tokenUri.split('/');
-
-  // if (ipfsParts.length > 0) {
-  // let ipfsHash: string = ipfsParts[ipfsParts.length - 1];
     let data = ipfs.cat('/ipfs/' + ipfsHash);
 
     if (data !== null) {
