@@ -40,80 +40,40 @@
           </b-button>
         </div>
       </b-navbar-item>
-      <b-navbar-dropdown
-        class="is-hidden-desktop is-hidden-tablet-only mobile-menu"
-        :arrowless="true"
-      >
+
+      <b-navbar-dropdown :right="true" :arrowless="true">
+        <template slot="label">
+          <b-button
+            class="button is-primary is-hidden-mobile"
+            type="button"
+            icon-left="menu"
+          >
+          </b-button>
+        </template>
         <b-navbar-item
           v-for="(value, key) in sectionsMenuArr"
           :key="key"
-          :value="value.text"
-          aria-role="menuitem"
           :to="value.path"
           tag="nuxt-link"
+          :active="value.path === $nuxt.$route.path"
         >
           {{ value.text }}
         </b-navbar-item>
+        <hr class="dropdown-divider" />
         <b-navbar-item
           tag="div"
-          class="has-text-grey-dark has-text-weight-light"
+          class="has-text-grey-dark has-text-weight-light is-capitalized is"
         >
           DEVELOPER RESOURCES
         </b-navbar-item>
         <b-navbar-item
           v-for="(value, key) in supportMenuArr"
           :key="key"
-          :value="value.text"
-          aria-role="menuitem"
           :href="value.path"
         >
           {{ value.text }}
         </b-navbar-item>
       </b-navbar-dropdown>
-
-      <b-navbar-item class="is-hidden-mobile">
-        <b-dropdown
-          :triggers="['hover']"
-          v-model="currentMenu"
-          aria-role="menu"
-          position="is-bottom-left"
-        >
-          <b-button
-            class="button is-primary"
-            type="button"
-            slot="trigger"
-            role="button"
-            icon-left="menu"
-          >
-          </b-button>
-          <b-dropdown-item
-            v-for="(value, key) in sectionsMenuArr"
-            :key="key"
-            :value="value.text"
-            aria-role="menuitem"
-            :href="value.path"
-          >
-            {{ value.text }}
-          </b-dropdown-item>
-          <hr class="dropdown-divider" aria-role="menuitem" />
-          <b-dropdown-item
-            custom
-            aria-role="menuitem"
-            class="has-text-grey-dark has-text-weight-light"
-          >
-            DEVELOPER RESOURCES
-          </b-dropdown-item>
-          <b-dropdown-item
-            v-for="(value, key) in supportMenuArr"
-            :key="key"
-            :value="value.text"
-            aria-role="menuitem"
-            :href="value.path"
-          >
-            {{ value.text }}
-          </b-dropdown-item>
-        </b-dropdown>
-      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
@@ -197,7 +157,7 @@ export default {
     this.initOnboard();
   },
   beforeDestroy() {
-    this.unsubscribe();
+    this.unsubscribe?.();
   },
   computed: {
     ...mapGetters("wallet", ["accrued", "balance", "address", "onboard"]),
@@ -227,7 +187,7 @@ export default {
       this.$store.dispatch("wallet/captureOpenModalCloseFn", result.close);
     },
     setCurrentMenu() {
-      this.currentMenu = this.$data.sectionsMenuArr[this.section].text;
+      this.currentMenu = this.$data.sectionsMenuArr[this.section]?.text;
     },
     drawdown() {
       const result = this.$buefy.modal.open({
@@ -247,14 +207,12 @@ export default {
 <style scoped lang="scss">
 .navbar {
   .navbar-end {
-    .mobile-menu {
-      a.navbar-item:focus,
-      a.navbar-item:focus-within,
-      a.navbar-item:hover,
-      a.navbar-item.is-active {
-        background-color: $primary;
-        color: $white;
-      }
+    a.navbar-item:focus,
+    a.navbar-item:focus-within,
+    a.navbar-item:hover,
+    a.navbar-item.is-active {
+      background-color: $primary !important;
+      color: $white;
     }
 
     .navbar-item {
