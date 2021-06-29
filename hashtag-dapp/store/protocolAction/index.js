@@ -4,12 +4,12 @@
  * @property {object} targetNft Selected NFT being tagged.
  * @property {object} targetHashtag Existing Hashtag used to tag content.
  */
-const state = {
+const state = () => ({
   protocolAction: null,
   newHashtag: null,
   targetNft: {},
   targetHashtag: {},
-};
+});
 
 const getters = {
   protocolAction: (state) => state.protocolAction,

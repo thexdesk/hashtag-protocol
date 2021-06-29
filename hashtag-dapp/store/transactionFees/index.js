@@ -3,7 +3,7 @@ import ExchangeRateService from "~/services/ExchangeRateService";
 import protocolActionMap from "~/data/protocolActionMap";
 import { format } from "timeago.js";
 
-const state = {
+const state = () => ({
   gasFastest: null,
   gasFast: null,
   gasMedium: null,
@@ -13,7 +13,7 @@ const state = {
   exchangeRateUpdated: null,
   feeETH: {},
   feeUSD: {},
-};
+});
 
 const getters = {
   gasFastest: (state) => state.gasFastest,

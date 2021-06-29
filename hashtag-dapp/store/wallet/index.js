@@ -32,7 +32,7 @@ const localstorageWalletKey = process.env.localstorageWalletKey;
  * @property {function} openModalCloseFn Name of function to close accrued modal.
  * @property {object} transactionState txn object of last web3 txn.
  */
-const state = {
+const state = () => ({
   address: null,
   networkId: null,
   balance: null,
@@ -48,7 +48,7 @@ const state = {
   openModalCloseFn: () => {},
 
   transactionState: {},
-};
+});
 
 const getters = {
   homesteadProvider: (state) => state.web3Objects.homesteadProvider,
