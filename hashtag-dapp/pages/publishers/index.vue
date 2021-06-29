@@ -124,7 +124,6 @@ export default {
   },
   data() {
     return {
-      activeTab: null,
       pageSize: PAGE_SIZE,
       first: PAGE_SIZE,
       skip: 0,

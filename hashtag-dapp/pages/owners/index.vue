@@ -82,7 +82,6 @@ export default {
   },
   data() {
     return {
-      activeTab: null,
       isOverviewModalActive: false,
       skip: 0,
       ownersCount: 0,

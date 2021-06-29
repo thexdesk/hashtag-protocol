@@ -225,7 +225,6 @@ export default {
   },
   asyncData({ params }) {
     return {
-      activeTab: null,
       name: params.name,
       type: params.type,
       contract: params.contract,
