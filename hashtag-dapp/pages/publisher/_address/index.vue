@@ -350,7 +350,7 @@ export default {
   },
   asyncData({ params }) {
     return {
-      activeTab: null,
+      activeTab: 0,
       hashtagsByName: null,
       publisher: params.address,
       tagsByHashtag: null,

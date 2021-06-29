@@ -214,7 +214,7 @@ export default {
   },
   asyncData({ params }) {
     return {
-      activeTab: null,
+      activeTab: 0,
       tagger: params.address,
       tagsByHashtag: null,
       hashtagsByName: null,
