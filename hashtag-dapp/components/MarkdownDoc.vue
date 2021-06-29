@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     async getDoc() {
-      let markdown = require(`raw-loader!../../../hashtag-docs/docs/shared/faqs/${this.filename}.md`);
+      let markdown = require(`raw-loader!../../hashtag-docs/docs/shared/faqs/${this.filename}.md`);
       this.docBody = md.render(markdown.default);
     },
   },
