@@ -289,7 +289,7 @@ const actions = {
       publisher,
       state.address,
       {
-        value: ethers.utils.bigNumberify(fees.tagging),
+        value: ethers.BigNumber.from(fees.tagging),
       }
     );
 
@@ -322,7 +322,7 @@ const actions = {
       publisher,
       state.address,
       {
-        value: ethers.utils.bigNumberify(fees.tagging),
+        value: ethers.BigNumber.from(fees.tagging),
       }
     );
 

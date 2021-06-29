@@ -10,9 +10,9 @@ export default {
   props: ["value1", "value2"],
   methods: {
     sum() {
-      return ethers.utils
-        .bigNumberify(this.value1)
-        .add(ethers.utils.bigNumberify(this.value2));
+      return ethers
+        .BigNumber.from(this.value1)
+        .add(ethers.BigNumber.from(this.value2));
     },
   },
 };
