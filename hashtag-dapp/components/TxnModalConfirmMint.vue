@@ -76,16 +76,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "protocolAction",
-      "newHashtag",
-      "address",
-      "transactionState",
-    ]),
+    ...mapGetters("protocolAction", ["protocolAction", "newHashtag"]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
   },
   methods: {
     async connectWallet() {
-      await this.$store.dispatch("connectWallet");
+      await this.$store.dispatch("wallet/connectWallet");
     },
     async mintHashtag() {
       await this.$emit("mint-hashtag", this.newHashtag.displayHashtag);

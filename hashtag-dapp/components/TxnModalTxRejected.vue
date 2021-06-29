@@ -34,7 +34,7 @@ export default {
     txnType: String,
   },
   computed: {
-    ...mapGetters(["address", "transactionState"]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
   },
 };
 </script>

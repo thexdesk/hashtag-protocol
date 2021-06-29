@@ -44,17 +44,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters("protocolAction", [
       "protocolAction",
       "targetNft",
       "targetHashtag",
-      "address",
-      "transactionState",
     ]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
   },
   methods: {
     async connectWallet() {
-      await this.$store.dispatch("connectWallet");
+      await this.$store.dispatch("wallet/connectWallet");
     },
     /**
      * Function to handle when user selects hashtag in HashtagSearch widget.
@@ -62,15 +61,21 @@ export default {
     async selectHashtag(hashtag) {
       /* eslint-disable-next-line no-console */
       console.log("tagging selectHashtag", hashtag);
-      await this.$store.dispatch("updateTargetHashtag", hashtag);
+      await this.$store.dispatch("protocolAction/updateTargetHashtag", hashtag);
       if (hashtag.id) {
-        await this.$store.dispatch("updateProtocolAction", "tagContent");
+        await this.$store.dispatch(
+          "protocolAction/updateProtocolAction",
+          "tagContent"
+        );
       } else {
-        await this.$store.dispatch("updateProtocolAction", "mintAndTagContent");
-        await this.$store.dispatch("updateNewHashtag", hashtag);
+        await this.$store.dispatch(
+          "protocolAction/updateProtocolAction",
+          "mintAndTagContent"
+        );
+        await this.$store.dispatch("protocolAction/updateNewHashtag", hashtag);
       }
       // Updates the transaction fees grid.
-      await this.$store.dispatch("updateFees");
+      await this.$store.dispatch("transactionFees/updateFees");
     },
   },
 };

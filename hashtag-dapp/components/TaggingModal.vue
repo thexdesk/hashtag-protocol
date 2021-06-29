@@ -117,7 +117,7 @@ export default {
     nft: Object,
   },
   computed: {
-    ...mapGetters(["address", "transactionState"]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
     isTaggable() {
       return (
         this.nftName &&
@@ -136,10 +136,10 @@ export default {
   methods: {
     // Updates the transaction fees grid.
     async updateFees() {
-      await this.$store.dispatch("updateFees");
+      await this.$store.dispatch("transactionFees/updateFees");
     },
     async connectWallet() {
-      await this.$store.dispatch("connectWallet");
+      await this.$store.dispatch("wallet/connectWallet");
     },
     /**
      * Search for existing tags in tagging widget.
@@ -194,13 +194,13 @@ export default {
           //    txnType: "mint",
           //  },
           //});
-          //this.$store.dispatch("captureOpenModalCloseFn", mintModal.close);
+          //this.$store.dispatch("wallet/captureOpenModalCloseFn", mintModal.close);
         }
       }
     },
     async tagNft() {
       if (this.mintAndTag) {
-        await this.$store.dispatch("mintAndTag", {
+        await this.$store.dispatch("wallet/mintAndTag", {
           hashtag: this.hashtag[0],
           nftContract: this.nft.contractAddress,
           nftId: this.nft.tokenId,
@@ -217,7 +217,7 @@ export default {
           (tag) => tag.name.toLowerCase() === hashtagValue.toLowerCase()
         );
 
-        await this.$store.dispatch("tag", {
+        await this.$store.dispatch("wallet/tag", {
           hashtagId: findExistingHashtagResult[0].id,
           nftContract: this.nft.contractAddress,
           nftId: this.nft.tokenId,
@@ -256,11 +256,11 @@ export default {
     // Mint new hashtag button is clicked.
     async mintHashtag() {
       try {
-        await this.$store.dispatch("mint", `#${this.newHashtag}`);
+        await this.$store.dispatch("wallet/mint", `#${this.newHashtag}`);
       } catch (e) {
         if (e.code == 4001) {
           // user rejected txn in metamask.
-          await this.$store.dispatch("updateTransactionState", {
+          await this.$store.dispatch("wallet/updateTransactionState", {
             eventCode: "rejected",
           });
         }
@@ -269,7 +269,7 @@ export default {
   },
   async mounted() {
     this.updateFees();
-    this.$store.dispatch("updateTransactionState", {
+    this.$store.dispatch("wallet/updateTransactionState", {
       eventCode: "mintPreconfirmed",
     });
   },

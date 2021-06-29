@@ -239,14 +239,13 @@ export default {
     TransactionFees,
   },
   computed: {
-    ...mapGetters([
-      "address",
-      "transactionState",
+    ...mapGetters("protocolAction", [
       "protocolAction",
       "targetNft",
       "targetHashtag",
       "newHashtag",
     ]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
   },
 };
 </script>

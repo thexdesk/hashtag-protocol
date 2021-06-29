@@ -431,7 +431,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["publisherDirectory"]),
+    ...mapGetters("publishers", ["publisherDirectory"]),
     foundPublisher() {
       if (this.publisherDirectory) {
         const filteredResults = this.publisherDirectory.filter(

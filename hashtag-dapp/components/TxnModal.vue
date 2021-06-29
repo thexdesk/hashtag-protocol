@@ -70,14 +70,13 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters("protocolAction", [
       "protocolAction",
       "newHashtag",
       "targetNft",
       "targetHashtag",
-      "address",
-      "transactionState",
     ]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
     /**
      * Boolean on whether a hashtag was selected for tagging an NFT.
      */
@@ -93,21 +92,21 @@ export default {
   methods: {
     // Update the transaction fees grid.
     async updateFees() {
-      await this.$store.dispatch("updateFees");
+      await this.$store.dispatch("transactionFees/updateFees");
     },
     async connectWallet() {
-      await this.$store.dispatch("connectWallet");
+      await this.$store.dispatch("wallet/connectWallet");
     },
     // Mint new hashtag button is clicked.
     async mintHashtag(hashtag) {
       try {
         /* eslint-disable-next-line no-console */
         console.log("mintHashtag", hashtag);
-        await this.$store.dispatch("mint", hashtag);
+        await this.$store.dispatch("wallet/mint", hashtag);
       } catch (e) {
         if (e.code == 4001) {
           // user rejected txn in metamask.
-          await this.$store.dispatch("updateTransactionState", {
+          await this.$store.dispatch("wallet/updateTransactionState", {
             eventCode: "rejected",
           });
         }
@@ -120,7 +119,7 @@ export default {
       if (hashtag.id) {
         // Tag with existing HASHTAG.
         try {
-          await this.$store.dispatch("tag", {
+          await this.$store.dispatch("wallet/tag", {
             hashtagId: hashtag.id,
             nftContract: this.targetNft.contractAddress,
             nftId: this.targetNft.tokenId,
@@ -128,7 +127,7 @@ export default {
         } catch (e) {
           if (e.code == 4001) {
             // user rejected txn in metamask.
-            await this.$store.dispatch("updateTransactionState", {
+            await this.$store.dispatch("wallet/updateTransactionState", {
               eventCode: "rejected",
             });
           }
@@ -142,7 +141,7 @@ export default {
         console.log("hashtag", hashtag.displayHashtag);
         // Mint new HASHTAG and tag with that.
         try {
-          await this.$store.dispatch("mintAndTag", {
+          await this.$store.dispatch("wallet/mintAndTag", {
             hashtag: hashtag.displayHashtag,
             nftContract: this.targetNft.contractAddress,
             nftId: this.targetNft.tokenId,
@@ -150,7 +149,7 @@ export default {
         } catch (e) {
           if (e.code == 4001) {
             // user rejected txn in metamask.
-            await this.$store.dispatch("updateTransactionState", {
+            await this.$store.dispatch("wallet/updateTransactionState", {
               eventCode: "rejected",
             });
           }
@@ -158,11 +157,11 @@ export default {
       }
     },
     async cancelTagging() {
-      await this.$store.dispatch("updateTargetHashtag", {});
+      await this.$store.dispatch("protocolAction/updateTargetHashtag", {});
     },
     async closeModal() {
       this.$parent.close();
-      await this.$store.dispatch("updateTargetHashtag", {});
+      await this.$store.dispatch("protocolAction/updateTargetHashtag", {});
     },
   },
   async mounted() {

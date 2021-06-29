@@ -42,13 +42,12 @@ export default {
     LottieAnimation,
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters("protocolAction", [
       "protocolAction",
       "newHashtag",
       "targetNft",
-      "address",
-      "transactionState",
     ]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
     etherscanUrl: function () {
       return `${this.etherscanBaseUrl}/tx/${this.transactionState.hash}`;
     },

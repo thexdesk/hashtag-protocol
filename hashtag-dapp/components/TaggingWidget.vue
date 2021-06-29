@@ -67,8 +67,8 @@ export default {
       this.nameContains = data.nameContains;
     }, 300),
     async onNftSelected(nft) {
-      await this.$store.dispatch("updateTargetNft", nft);
-      await this.$store.dispatch("updateTransactionState", {
+      await this.$store.dispatch("protocolAction/updateTargetNft", nft);
+      await this.$store.dispatch("wallet/updateTransactionState", {
         eventCode: "taggingSelectHashtag",
       });
       /* eslint-disable-next-line no-console */
@@ -82,7 +82,10 @@ export default {
         trapFocus: true,
       });
 
-      this.$store.dispatch("captureOpenModalCloseFn", taggingModal.close);
+      this.$store.dispatch(
+        "wallet/captureOpenModalCloseFn",
+        taggingModal.close
+      );
     },
   },
 };

@@ -43,7 +43,9 @@ export default {
     value: String,
     route: String,
   },
-  computed: mapGetters(["homesteadProvider"]),
+  computed: {
+    ...mapGetters("wallet", ["homesteadProvider"]),
+  },
   data() {
     return {
       ens: null,

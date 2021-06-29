@@ -96,20 +96,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "address",
-      "transactionState",
+    ...mapGetters("protocolAction", [
       "protocolAction",
       "targetNft",
       "targetHashtag",
     ]),
+    ...mapGetters("wallet", ["address", "transactionState"]),
     actionButtonLabel: function () {
       return protocolActionMap[this.protocolAction].actionLabel;
     },
   },
   methods: {
     async connectWallet() {
-      await this.$store.dispatch("connectWallet");
+      await this.$store.dispatch("wallet/connectWallet");
     },
     async tagContent() {
       this.$emit("tag-content");

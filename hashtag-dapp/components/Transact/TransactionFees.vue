@@ -58,13 +58,13 @@ import { mapGetters } from "vuex";
 export default {
   name: "TxnFees",
   computed: {
-    ...mapGetters([
+    ...mapGetters("transactionFees", [
       "feeETH",
       "feeUSD",
       "gasUpdated",
       "exchangeRateUpdated",
-      "protocolAction",
     ]),
+    ...mapGetters("protocolAction", ["protocolAction"]),
   },
 };
 </script>

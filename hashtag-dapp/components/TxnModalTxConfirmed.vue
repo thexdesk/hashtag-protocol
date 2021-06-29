@@ -69,13 +69,13 @@ import protocolActionMap from "src/data/protocolActionMap";
 export default {
   name: "TxnModalTxConfirmed",
   computed: {
-    ...mapGetters([
-      "transactionState",
+    ...mapGetters("protocolAction", [
       "protocolAction",
       "newHashtag",
       "targetNft",
       "targetHashtag",
     ]),
+    ...mapGetters("wallet", ["transactionState"]),
     /**
      * Show txn complete title depending on transaction type.
      */
@@ -109,10 +109,10 @@ export default {
   methods: {
     async tagAgain() {
       // Resets the tagging form.
-      await this.$store.dispatch("updateTransactionState", {
+      await this.$store.dispatch("wallet/updateTransactionState", {
         eventCode: "taggingSelectHashtag",
       });
-      await this.$store.dispatch("updateTargetHashtag", {});
+      await this.$store.dispatch("protocolAction/updateTargetHashtag", {});
     },
   },
 };
