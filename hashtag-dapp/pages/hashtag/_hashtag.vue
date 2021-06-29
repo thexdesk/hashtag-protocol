@@ -267,7 +267,7 @@ export default {
     routeHashtag = routeHashtag.toLowerCase();
 
     return {
-      activeTab: null,
+      activeTab: 0,
       erc721: "http://erc721.org",
       hashtag: routeHashtag,
       hashtagsByName: null,
