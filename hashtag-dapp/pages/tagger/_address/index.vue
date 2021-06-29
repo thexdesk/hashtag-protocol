@@ -184,19 +184,19 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import EthAmount from "../components/EthAmount";
-import Footer from "hashtag-components/src/components/Footer";
-import Hashtag from "../components/Hashtag";
-import Header from "../components/Header";
-import NftLink from "../components/NftLink";
-import Pagination from "../components/Pagination";
+import EthAccount from "~/components/EthAccount";
+import EthAmount from "~/components/EthAmount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Hashtag from "~/components/Hashtag";
+import Header from "~/components/Header";
+import NftLink from "~/components/NftLink";
+import Pagination from "~/components/Pagination";
 import {
   TAGGER_BY_ACC,
   PAGED_TAGS_BY_TAGGER,
   ALL_TAG_IDS_BY_TAGGER,
-} from "../queries";
-import TimestampFrom from "../components/TimestampFrom";
+} from "~/apollo/queries";
+import TimestampFrom from "~/components/TimestampFrom";
 
 const PAGE_SIZE = 10;
 

@@ -43,8 +43,8 @@
   </form>
 </template>
 <script>
-import HashtagValidationService from "@/services/HashtagValidationService";
-import { FIRST_THOUSAND_HASHTAGS } from "@/queries";
+import HashtagValidationService from "~/services/HashtagValidationService";
+import { FIRST_THOUSAND_HASHTAGS } from "~/apollo/queries";
 export default {
   name: "HashtagSearch",
   props: ["widget"],

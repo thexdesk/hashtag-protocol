@@ -63,7 +63,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import ExplainProtocol from "src/components/transact/ExplainProtocol.vue";
+import ExplainProtocol from "~/components/Transact/ExplainProtocol.vue";
 
 export default {
   name: "TxnModalConfirmMint",

@@ -81,13 +81,13 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { FIRST_THOUSAND_HASHTAGS } from "@/queries";
-import HashtagValidationService from "@/services/HashtagValidationService";
-//import TxnModalPreconfirmed from "./TxnModalPreconfirmed";
-//import TxnModalConfirmed from "./TxnModalConfirmed";
-//import TxnModalRejected from "./TxnModalRejected";
-//import TxnModalTxSent from "./TxnModalTxSent";
-//import TxnModalTxConfirmed from "./TxnModalTxConfirmed";
+import { FIRST_THOUSAND_HASHTAGS } from "~/apollo/queries";
+import HashtagValidationService from "~/services/HashtagValidationService";
+//import TxnModalPreconfirmed from "~/components/TxnModalPreconfirmed";
+//import TxnModalConfirmed from "~/components/TxnModalConfirmed";
+//import TxnModalRejected from "~/components/TxnModalRejected";
+//import TxnModalTxSent from "~/components/TxnModalTxSent";
+//import TxnModalTxConfirmed from "~/components/TxnModalTxConfirmed";
 export default {
   name: "TaggingModal",
   components: {

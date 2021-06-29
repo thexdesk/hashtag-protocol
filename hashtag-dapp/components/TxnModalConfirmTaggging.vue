@@ -81,8 +81,8 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import protocolActionMap from "src/data/protocolActionMap";
-import ExplainProtocol from "src/components/transact/ExplainProtocol";
+import protocolActionMap from "~/data/protocolActionMap";
+import ExplainProtocol from "~/components/Transact/ExplainProtocol";
 import Nft from "~/components/Assets/Nft";
 export default {
   name: "TxnModalConfirmTagging",

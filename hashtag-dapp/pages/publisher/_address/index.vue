@@ -316,21 +316,21 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import Footer from "hashtag-components/src/components/Footer";
-import Header from "../components/Header";
+import EthAccount from "~/components/EthAccount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Header from "~/components/Header";
 import {
   ALL_HASHTAG_IDS_BY_PUBLISHER,
   PAGED_HASHTAGS_BY_PUBLISHER,
   PUBLISHER_BY_ACC,
   ALL_TAG_IDS_BY_PUBLISHER,
   PAGED_TAGS_BY_PUBLISHER,
-} from "../queries";
-import EthAmount from "../components/EthAmount";
-import Hashtag from "../components/Hashtag";
-import NftLink from "../components/NftLink";
-import Pagination from "../components/Pagination";
-import TimestampFrom from "../components/TimestampFrom";
+} from "~/apollo/queries";
+import EthAmount from "~/components/EthAmount";
+import Hashtag from "~/components/Hashtag";
+import NftLink from "~/components/NftLink";
+import Pagination from "~/components/Pagination";
+import TimestampFrom from "~/components/TimestampFrom";
 import { mapGetters } from "vuex";
 import { ethers } from "ethers";
 

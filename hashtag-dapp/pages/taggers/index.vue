@@ -83,11 +83,11 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import Footer from "hashtag-components/src/components/Footer";
-import Header from "../components/Header";
-import Pagination from "../components/Pagination";
-import { PAGED_TAGGERS, ALL_TAGGERS } from "../queries";
+import EthAccount from "~/components/EthAccount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Header from "~/components/Header";
+import Pagination from "~/components/Pagination";
+import { PAGED_TAGGERS, ALL_TAGGERS } from "~/apollo/queries";
 
 const PAGE_SIZE = 10;
 

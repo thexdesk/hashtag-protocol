@@ -48,13 +48,13 @@
  * on transaction status and transaction type.
  */
 import { mapGetters } from "vuex";
-import TxnModalConfirmMint from "src/components/TxnModalConfirmMint";
-import TxnModalTaggingSelectHashtag from "src/components/TxnModalTaggingSelectHashtag";
-import TxnModalConfirmTagging from "src/components/TxnModalConfirmTaggging";
-import TxnModalProtocolActionConfirmed from "src/components/TxnModalProtocolActionConfirmed";
-import TxnModalTxRejected from "src/components/TxnModalTxRejected";
-import TxnModalTxSent from "src/components/TxnModalTxSent";
-import TxnModalTxConfirmed from "src/components/TxnModalTxConfirmed";
+import TxnModalConfirmMint from "~/components/TxnModalConfirmMint";
+import TxnModalTaggingSelectHashtag from "~/components/TxnModalTaggingSelectHashtag";
+import TxnModalConfirmTagging from "~/components/TxnModalConfirmTaggging";
+import TxnModalProtocolActionConfirmed from "~/components/TxnModalProtocolActionConfirmed";
+import TxnModalTxRejected from "~/components/TxnModalTxRejected";
+import TxnModalTxSent from "~/components/TxnModalTxSent";
+import TxnModalTxConfirmed from "~/components/TxnModalTxConfirmed";
 export default {
   name: "TxnModal",
   components: {

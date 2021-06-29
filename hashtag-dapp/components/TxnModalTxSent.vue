@@ -34,7 +34,7 @@
  * @see TxnModal.vue for transaction screen sequence.
  */
 import { mapGetters } from "vuex";
-import protocolActionMap from "src/data/protocolActionMap";
+import protocolActionMap from "~/data/protocolActionMap";
 import LottieAnimation from "lottie-vuejs/src/LottieAnimation.vue"; // import lottie-vuejs
 export default {
   name: "TxnModalSent",

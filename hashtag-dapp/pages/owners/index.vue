@@ -16,7 +16,7 @@
             <article class="is-white coming-soon">
               <h2 class="title is-5">Top owners</h2>
               <div class="coming-soon-img">
-                <img src="../assets/coming-soon-banner.png" />
+                <img src="~/assets/coming-soon-banner.png" />
               </div>
               <pseudo-owners />
             </article>
@@ -66,11 +66,11 @@
 </template>
 
 <script>
-import Footer from "hashtag-components/src/components/Footer";
-import Header from "../components/Header";
-import MarkdownDoc from "../components/MarkdownDoc";
-import { PAGED_OWNERS, ALL_OWNER_ADDRESSES } from "../queries";
-import PseudoOwners from "../components/PseudoOwners";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Header from "~/components/Header";
+import MarkdownDoc from "~/components/MarkdownDoc";
+import { PAGED_OWNERS, ALL_OWNER_ADDRESSES } from "~/apollo/queries";
+import PseudoOwners from "~/components/PseudoOwners";
 
 export default {
   name: "Owners",

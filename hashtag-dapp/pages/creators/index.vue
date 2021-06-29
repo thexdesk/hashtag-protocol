@@ -102,12 +102,12 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import EthAmount from "../components/EthAmount";
-import Footer from "hashtag-components/src/components/Footer";
-import Header from "../components/Header";
-import Pagination from "../components/Pagination";
-import { PAGED_CREATORS, ALL_CREATORS } from "@/queries";
+import EthAccount from "~/components/EthAccount";
+import EthAmount from "~/components/EthAmount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Header from "~/components/Header";
+import Pagination from "~/components/Pagination";
+import { PAGED_CREATORS, ALL_CREATORS } from "~/apollo/queries";
 
 const PAGE_SIZE = 10;
 

@@ -1,6 +1,6 @@
-import EthGasFeeService from "@/services/EthGasFeeService";
-import ExchangeRateService from "@/services/ExchangeRateService";
-import protocolActionMap from "src/data/protocolActionMap";
+import EthGasFeeService from "~/services/EthGasFeeService";
+import ExchangeRateService from "~/services/ExchangeRateService";
+import protocolActionMap from "~/data/protocolActionMap";
 import { format } from "timeago.js";
 
 const state = {

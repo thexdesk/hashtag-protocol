@@ -4,8 +4,8 @@
   </section>
 </template>
 <script>
-import HashtagSearch from "src/components/HashtagSearch";
-import TxnModal from "src/components/TxnModal";
+import HashtagSearch from "~/components/HashtagSearch";
+import TxnModal from "~/components/TxnModal";
 
 export default {
   name: "Mint",

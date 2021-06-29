@@ -3,7 +3,7 @@
     <template slot="brand">
       <b-navbar-item tag="nuxt-link" :to="{ path: '/' }">
         <img
-          src="../assets/logo-white.svg"
+          src="~/assets/logo-white.svg"
           alt="Content tagging for the decentralized web"
         />
         <h1>Hashtag Protocol</h1>
@@ -119,8 +119,8 @@
 </template>
 
 <script>
-import Drawdown from "./Drawdown";
-import WalletInfo from "./WalletInfo";
+import Drawdown from "~/components/Drawdown";
+import WalletInfo from "~/components/WalletInfo";
 import { mapGetters } from "vuex";
 export default {
   name: "Navbar",

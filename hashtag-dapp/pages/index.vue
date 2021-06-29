@@ -450,7 +450,7 @@
                     <h2 class="title is-5">Top owners</h2>
                     <div class="coming-soon-img">
                       <a href="/auction"
-                        ><img src="../assets/coming-soon-banner.png"
+                        ><img src="~/assets/coming-soon-banner.png"
                       /></a>
                     </div>
                     <pseudo-owners />
@@ -467,19 +467,18 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import EthAmount from "../components/EthAmount";
-import Footer from "hashtag-components/src/components/Footer";
-import Hashtag from "../components/Hashtag";
-import Header from "../components/Header";
-import MarkdownModal from "../components/MarkdownModal";
-import NftLink from "../components/NftLink";
-import PseudoOwners from "../components/PseudoOwners";
-import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "@/queries";
-//import { mapGetters } from "vuex";
-import TimestampFrom from "../components/TimestampFrom";
-import MintingWidget from "../components/MintingWidget";
-import TaggingWidget from "../components/TaggingWidget";
+import EthAccount from "~/components/EthAccount";
+import EthAmount from "~/components/EthAmount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Hashtag from "~/components/Hashtag";
+import Header from "~/components/Header";
+import MarkdownModal from "~/components/MarkdownModal";
+import NftLink from "~/components/NftLink";
+import PseudoOwners from "~/components/PseudoOwners";
+import { SNAPSHOT, FIRST_THOUSAND_HASHTAGS } from "~/apollo/queries";
+import TimestampFrom from "~/components/TimestampFrom";
+import MintingWidget from "~/components/MintingWidget";
+import TaggingWidget from "~/components/TaggingWidget";
 
 export default {
   name: "Home",

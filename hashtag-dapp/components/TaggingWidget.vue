@@ -31,11 +31,10 @@
   </section>
 </template>
 <script>
-import { NFTS_ASSETS_NAME_CONTAINS } from "@/queries";
-import { mapGetters } from "vuex";
+import { NFTS_ASSETS_NAME_CONTAINS } from "~/apollo/queries";
 import debounce from "lodash/debounce";
-import TxnModal from "./TxnModal";
-//import TaggingModal from "./TaggingModal";
+import TxnModal from "~/components/TxnModal";
+//import TaggingModal from "~/components/TaggingModal";
 
 export default {
   name: "TaggingWidget",

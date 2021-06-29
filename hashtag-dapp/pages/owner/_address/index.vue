@@ -353,24 +353,24 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import Footer from "hashtag-components/src/components/Footer";
-import Header from "../components/Header";
-import HelpModal from "../components/HelpModal";
+import EthAccount from "~/components/EthAccount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Header from "~/components/Header";
+import HelpModal from "~/components/HelpModal";
 import {
   PAGED_HASHTAGS_BY_OWNER,
   OWNER_BY_ACC,
   PAGED_TAGS_BY_TAGGER,
   ALL_TAG_IDS_BY_TAGGER,
   ALL_HASHTAG_IDS_BY_OWNER,
-} from "../queries";
-import EthAmount from "../components/EthAmount";
-import EthAmountSum from "../components/EthAmountSum";
-import Hashtag from "../components/Hashtag";
-import TimestampFrom from "../components/TimestampFrom";
-import MarkdownDoc from "../components/MarkdownDoc";
-import NftLink from "../components/NftLink";
-import Pagination from "../components/Pagination";
+} from "~/apollo/queries";
+import EthAmount from "~/components/EthAmount";
+import EthAmountSum from "~/components/EthAmountSum";
+import Hashtag from "~/components/Hashtag";
+import TimestampFrom from "~/components/TimestampFrom";
+import MarkdownDoc from "~/components/MarkdownDoc";
+import NftLink from "~/components/NftLink";
+import Pagination from "~/components/Pagination";
 
 const PAGE_SIZE = 10;
 

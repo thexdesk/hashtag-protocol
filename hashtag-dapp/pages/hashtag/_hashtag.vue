@@ -231,19 +231,20 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import Footer from "hashtag-components/src/components/Footer";
-import HashtagTokenId from "../components/HashtagTokenId";
-import Header from "../components/Header";
-import NftLink from "../components/NftLink";
-import Pagination from "../components/Pagination";
+import EthAccount from "~/components/EthAccount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import HashtagTokenId from "~/components/HashtagTokenId";
+import Header from "~/components/Header";
+import NftLink from "~/components/NftLink";
+import Pagination from "~/components/Pagination";
+import SocialHead from "~/components/SocialHead";
 import {
   PAGED_TAGS_BY_HASHTAG,
   HASHTAGS_BY_NAME,
   ALL_TAGS_BY_HASHTAG,
-} from "../queries";
-import TimestampFrom from "../components/TimestampFrom";
-import TimestampFormatted from "../components/TimestampFormatted";
+} from "~/apollo/queries";
+import TimestampFrom from "~/components/TimestampFrom";
+import TimestampFormatted from "~/components/TimestampFormatted";
 
 const PAGE_SIZE = 10;
 

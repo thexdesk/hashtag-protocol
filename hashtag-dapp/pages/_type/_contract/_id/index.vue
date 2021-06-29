@@ -202,14 +202,17 @@
 </template>
 
 <script>
-import EthAccount from "../components/EthAccount";
-import Footer from "hashtag-components/src/components/Footer";
-import Hashtag from "../components/Hashtag";
-import Header from "../components/Header";
-import TimestampFrom from "../components/TimestampFrom";
-import { TAGS_BY_DIGITAL_ASSET, FIRST_THOUSAND_HASHTAGS } from "@/queries";
+import EthAccount from "~/components/EthAccount";
+import Footer from "hashtag-components/src/components/Footer.vue";
+import Hashtag from "~/components/Hashtag";
+import Header from "~/components/Header";
+import TimestampFrom from "~/components/TimestampFrom";
+import {
+  TAGS_BY_DIGITAL_ASSET,
+  FIRST_THOUSAND_HASHTAGS,
+} from "~/apollo/queries";
 
-import HashtagValidationService from "@/services/HashtagValidationService";
+import HashtagValidationService from "~/services/HashtagValidationService";
 
 export default {
   name: "NftDetail",

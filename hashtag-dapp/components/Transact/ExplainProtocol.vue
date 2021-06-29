@@ -230,7 +230,7 @@
   </div>
 </template>
 <script>
-import TransactionFees from "src/components/transact/TxnFees";
+import TransactionFees from "~/components/Transact/TransactionFees";
 import { mapGetters } from "vuex";
 
 export default {
