@@ -46,9 +46,10 @@
                       >
                         <template slot="footer" v-if="!isCustom">
                           <div class="has-text-right">
-                            <router-link :to="{ name: 'hashtags' }"
-                              >Browse hashtags </router-link
-                            >&nbsp;
+                            <nuxt-link :to="{ name: 'hashtags' }"
+                              >Browse hashtags
+                            </nuxt-link>
+                            &nbsp;
                             <b-icon
                               icon="arrow-right"
                               type="is-dark"
@@ -118,9 +119,10 @@
                       <b-table :data="tags || []" focusable>
                         <template slot="footer" v-if="!isCustom">
                           <div class="has-text-right">
-                            <router-link :to="{ name: 'nfts' }"
-                              >Browse tagged assets </router-link
-                            >&nbsp;
+                            <nuxt-link :to="{ name: 'nfts' }">
+                              Browse tagged assets
+                            </nuxt-link>
+                            &nbsp;
                             <b-icon
                               icon="arrow-right"
                               type="is-dark"
@@ -130,7 +132,7 @@
                           </div>
                         </template>
                         <b-table-column field="nftId" centered v-slot="props">
-                          <router-link
+                          <nuxt-link
                             :to="{
                               name: 'nft-detail',
                               params: {
@@ -145,7 +147,7 @@
                               :alt="props.row.nftName"
                               class="nft-thumb"
                             />
-                          </router-link>
+                          </nuxt-link>
                         </b-table-column>
                         <b-table-column
                           field="nftName"
@@ -205,9 +207,10 @@
                       <b-table :data="creators || []">
                         <template slot="footer" v-if="!isCustom">
                           <div class="has-text-right">
-                            <router-link :to="{ name: 'creators' }"
-                              >Browse creators </router-link
-                            >&nbsp;
+                            <nuxt-link :to="{ name: 'creators' }">
+                              Browse creators
+                            </nuxt-link>
+                            &nbsp;
                             <b-icon
                               icon="arrow-right"
                               type="is-dark"
@@ -272,9 +275,10 @@
                       <b-table :data="publishers || []">
                         <template slot="footer" v-if="!isCustom">
                           <div class="has-text-right">
-                            <router-link :to="{ name: 'publishers' }"
-                              >Browse publishers </router-link
-                            >&nbsp;
+                            <nuxt-link :to="{ name: 'publishers' }">
+                              Browse publishers
+                            </nuxt-link>
+                            &nbsp;
                             <b-icon
                               icon="arrow-right"
                               type="is-dark"
@@ -343,9 +347,10 @@
                       <b-table :data="taggers || []" focusable>
                         <template slot="footer" v-if="!isCustom">
                           <div class="has-text-right">
-                            <router-link :to="{ name: 'taggers' }"
-                              >Browse taggers </router-link
-                            >&nbsp;
+                            <nuxt-link :to="{ name: 'taggers' }">
+                              Browse taggers
+                            </nuxt-link>
+                            &nbsp;
                             <b-icon
                               icon="arrow-right"
                               type="is-dark"
@@ -394,9 +399,10 @@
                       <b-table :data="popular || []" focusable>
                         <template slot="footer" v-if="!isCustom">
                           <div class="has-text-right">
-                            <router-link :to="{ name: 'hashtags' }"
-                              >Browse hashtags </router-link
-                            >&nbsp;
+                            <nuxt-link :to="{ name: 'hashtags' }">
+                              Browse hashtags
+                            </nuxt-link>
+                            &nbsp;
                             <b-icon
                               icon="arrow-right"
                               type="is-dark"

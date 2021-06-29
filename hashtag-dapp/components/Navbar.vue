@@ -1,7 +1,7 @@
 <template>
   <b-navbar :transparent="true">
     <template slot="brand">
-      <b-navbar-item :href="this.app">
+      <b-navbar-item tag="nuxt-link" :to="{ path: '/' }">
         <img
           src="../assets/logo-white.svg"
           alt="Content tagging for the decentralized web"
@@ -49,7 +49,8 @@
           :key="key"
           :value="value.text"
           aria-role="menuitem"
-          :href="value.path"
+          :to="value.path"
+          tag="nuxt-link"
         >
           {{ value.text }}
         </b-navbar-item>

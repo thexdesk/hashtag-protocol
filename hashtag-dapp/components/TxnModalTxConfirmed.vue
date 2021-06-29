@@ -29,18 +29,18 @@
           <a @click="$emit('close-modal')">Mint another token</a>
         </p>
         <p v-if="isTagging">
-          <router-link @click.native="$emit('close-modal')" :to="targetNftRoute"
-            >View tagged NFT</router-link
+          <nuxt-link @click.native="$emit('close-modal')" :to="targetNftRoute"
+            >View tagged NFT</nuxt-link
           >
         </p>
         <p v-if="isNewHashtag">
-          <router-link
+          <nuxt-link
             @click.native="$emit('close-modal')"
             :to="{
               name: 'hashtag-detail',
               params: { hashtag: hashtag.hashtagWithoutHash },
             }"
-            >View <strong>{{ hashtag.displayHashtag }}</strong></router-link
+            >View <strong>{{ hashtag.displayHashtag }}</strong></nuxt-link
           >
         </p>
       </div>
