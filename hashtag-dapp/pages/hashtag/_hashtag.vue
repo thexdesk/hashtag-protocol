@@ -262,7 +262,6 @@ export default {
   },
   asyncData({ params }) {
     let routeHashtag = params.hashtag;
-    console.log(routeHashtag);
     routeHashtag = routeHashtag.replace("#", "");
     routeHashtag = routeHashtag.toLowerCase();
 
