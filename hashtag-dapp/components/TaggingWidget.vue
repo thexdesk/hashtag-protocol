@@ -44,9 +44,6 @@ export default {
       isFetching: false,
     };
   },
-  computed: {
-    ...mapGetters(["supportedNfts", "nftAssetCache"]),
-  },
   methods: {
     getAsyncData: debounce(async function (name) {
       if (!name.length) {
