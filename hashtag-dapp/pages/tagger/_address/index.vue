@@ -212,10 +212,10 @@ export default {
     Pagination,
     TimestampFrom,
   },
-  data() {
+  asyncData({ params }) {
     return {
       activeTab: null,
-      tagger: this.$route.params.address,
+      tagger: params.address,
       tagsByHashtag: null,
       hashtagsByName: null,
       pageSize: PAGE_SIZE,

@@ -348,11 +348,11 @@ export default {
     Header,
     Pagination,
   },
-  data() {
+  asyncData({ params }) {
     return {
       activeTab: null,
       hashtagsByName: null,
-      publisher: this.$route.params.address,
+      publisher: params.address,
       tagsByHashtag: null,
       hashtagsTab: {
         pageSize: PAGE_SIZE,

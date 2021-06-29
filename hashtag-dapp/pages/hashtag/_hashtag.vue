@@ -260,8 +260,9 @@ export default {
     Header,
     Pagination,
   },
-  data() {
-    let routeHashtag = this.$route.params.hashtag;
+  asyncData({ params }) {
+    let routeHashtag = params.hashtag;
+    console.log(routeHashtag);
     routeHashtag = routeHashtag.replace("#", "");
     routeHashtag = routeHashtag.toLowerCase();
 

@@ -223,13 +223,13 @@ export default {
     Header,
     TimestampFrom,
   },
-  data() {
+  asyncData({ params }) {
     return {
       activeTab: null,
-      name: this.$route.params.name,
-      type: this.$route.params.type,
-      contract: this.$route.params.contract,
-      id: this.$route.params.id,
+      name: params.name,
+      type: params.type,
+      contract: params.contract,
+      id: params.id,
       tagsByHashtag: null,
       hashtagsByName: null,
       hashtag: null,

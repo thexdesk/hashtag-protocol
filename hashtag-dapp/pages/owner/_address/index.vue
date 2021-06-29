@@ -389,13 +389,13 @@ export default {
     Pagination,
     TimestampFrom,
   },
-  data() {
+  asyncData({ params }) {
     return {
       activeTab: null,
       isOwnerInfoModalActive: false,
       isMarketSummaryActive: false,
       isActivityModalActive: false,
-      owner: this.$route.params.address,
+      owner: params.address,
       tagsByHashtag: null,
       hashtagsByName: null,
       hashtagsTab: {
