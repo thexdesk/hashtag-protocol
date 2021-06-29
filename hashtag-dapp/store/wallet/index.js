@@ -1,5 +1,4 @@
 import Vue from "vue";
-import AppConfig from "@/appconfig";
 import { ethers } from "ethers";
 import Onboard from "bnc-onboard";
 import BlocknativeSdk from "bnc-sdk";
@@ -14,7 +13,7 @@ let provider;
 let onboard = {};
 let blocknative = {};
 
-const localstorageWalletKey = AppConfig.localstorageWalletKey;
+const localstorageWalletKey = process.env.localstorageWalletKey;
 
 /**
  * The Vuex 'state' object.
@@ -68,8 +67,8 @@ const actions = {
   async initOnboard({ dispatch, commit }) {
     // Initialize onboard.
     onboard = Onboard({
-      dappId: AppConfig.blocknativeApiKey,
-      networkId: AppConfig.onboardNetworkID,
+      dappId: process.env.blocknativeApiKey,
+      networkId: process.env.onboardNetworkID,
       subscriptions: {
         address: (address) => {
           commit("setWalletAddress", address);
@@ -92,8 +91,8 @@ const actions = {
 
     // Initialize blocknative SDK for mempool notifications.
     blocknative = new BlocknativeSdk({
-      dappId: AppConfig.blocknativeApiKey,
-      networkId: AppConfig.onboardNetworkID,
+      dappId: process.env.blocknativeApiKey,
+      networkId: process.env.onboardNetworkID,
     });
 
     dispatch("reconnectWallet");
@@ -133,7 +132,7 @@ const actions = {
         hashtagProtocolContract,
         erc721HashtagRegistryContract,
       },
-      publisher: AppConfig.publisherWalletAddress,
+      publisher: process.env.publisherWalletAddress,
     });
 
     dispatch("getTaggingFee");

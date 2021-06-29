@@ -26,8 +26,7 @@ export default {
     };
   },
   created() {
-    // @see /src/mixins/global.js for url parts.
-    this.tokenUrl = `${this.etherscanBaseUrl}/token/${this.hashtagProtocolContractAddress}?a=${this.value}`;
+    this.tokenUrl = `${process.env.etherscanBaseUrl}/token/${process.env.hashtagProtocolContractAddress}?a=${this.value}`;
     this.label = `View ${this.hashtag} on Etherscan`;
   },
 };

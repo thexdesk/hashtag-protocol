@@ -164,7 +164,7 @@ export default {
         },
         discord: {
           text: "Discord",
-          path: this.$appConfig.discordServer,
+          path: process.env.discordServer,
         },
         substack: {
           text: "Substack",
