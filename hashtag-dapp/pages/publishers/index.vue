@@ -76,8 +76,8 @@
                         </td>
                         <td data-label="Revenue" class="has-text-centered">
                           <eth-amount-sum
-                            :value1="publisher.mintFees"
-                            :value2="publisher.tagFees"
+                            :value1="publisher.tagFees"
+                            :value2="0"
                           ></eth-amount-sum>
                         </td>
                         <!---->
