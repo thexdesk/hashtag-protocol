@@ -125,7 +125,7 @@ import { PAGED_HASHTAGS, ALL_HASHTAG_TOKEN_IDS } from "../queries";
 const PAGE_SIZE = 10;
 
 export default {
-  name: "Nfts",
+  name: "Hashtags",
   components: {
     EthAccount,
     TimestampFrom,

@@ -73,7 +73,7 @@ import { PAGED_OWNERS, ALL_OWNER_ADDRESSES } from "../queries";
 import PseudoOwners from "../components/PseudoOwners";
 
 export default {
-  name: "Nfts",
+  name: "Owners",
   components: {
     Footer,
     Header,

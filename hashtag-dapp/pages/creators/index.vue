@@ -112,7 +112,7 @@ import { PAGED_CREATORS, ALL_CREATORS } from "@/queries";
 const PAGE_SIZE = 10;
 
 export default {
-  name: "Nfts",
+  name: "Creators",
   components: {
     EthAmount,
     EthAccount,

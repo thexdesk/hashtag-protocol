@@ -50,7 +50,7 @@ import Header from "../components/Header";
 import MarkdownDoc from "../components/MarkdownDoc";
 
 export default {
-  name: "Nfts",
+  name: "Auction",
   components: {
     Footer,
     Header,

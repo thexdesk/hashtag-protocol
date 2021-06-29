@@ -92,7 +92,7 @@ import { PAGED_TAGGERS, ALL_TAGGERS } from "../queries";
 const PAGE_SIZE = 10;
 
 export default {
-  name: "Nfts",
+  name: "Taggers",
   components: {
     EthAccount,
     Footer,

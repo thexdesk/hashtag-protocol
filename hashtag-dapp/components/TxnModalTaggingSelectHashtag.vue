@@ -32,10 +32,10 @@
  *
  */
 import { mapGetters } from "vuex";
-import nft from "src/components/assets/nft";
 import HashtagSearch from "src/components/HashtagSearch";
+import Nft from "~/components/Assets/Nft";
 export default {
-  components: { nft, HashtagSearch },
+  components: { Nft, HashtagSearch },
   name: "TaggingModal",
   data() {
     return {

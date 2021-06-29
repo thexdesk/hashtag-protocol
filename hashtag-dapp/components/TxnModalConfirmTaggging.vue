@@ -83,12 +83,12 @@
 import { mapGetters } from "vuex";
 import protocolActionMap from "src/data/protocolActionMap";
 import ExplainProtocol from "src/components/transact/ExplainProtocol";
-import nft from "src/components/assets/nft";
+import Nft from "~/components/Assets/Nft";
 export default {
   name: "TxnModalConfirmTagging",
   components: {
     ExplainProtocol,
-    nft,
+    Nft,
   },
   data() {
     return {

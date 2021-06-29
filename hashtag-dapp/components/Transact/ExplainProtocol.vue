@@ -234,7 +234,7 @@ import TransactionFees from "src/components/transact/TxnFees";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "TxnModal",
+  name: "ExplainProtocol",
   components: {
     TransactionFees,
   },

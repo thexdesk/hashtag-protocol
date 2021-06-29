@@ -482,6 +482,7 @@ import MintingWidget from "../components/MintingWidget";
 import TaggingWidget from "../components/TaggingWidget";
 
 export default {
+  name: "Home",
   components: {
     EthAccount,
     EthAmount,

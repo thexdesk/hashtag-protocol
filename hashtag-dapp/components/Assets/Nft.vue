@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: "nft",
+  name: "Nft",
   props: {
     nft: Object,
   },

@@ -114,7 +114,7 @@ import { PAGED_PUBLISHERS, ALL_PUBLISHERS } from "../queries";
 const PAGE_SIZE = 10;
 
 export default {
-  name: "Nfts",
+  name: "Publishers",
   components: {
     EthAmountSum,
     EthAccount,
