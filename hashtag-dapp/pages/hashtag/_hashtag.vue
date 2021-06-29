@@ -318,9 +318,6 @@ export default {
       this.skip = id * PAGE_SIZE;
     },
   },
-  created() {
-    this.$router.replace(`/hashtag/${this.hashtag}`);
-  },
 };
 </script>
 
