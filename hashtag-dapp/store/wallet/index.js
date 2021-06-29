@@ -36,7 +36,7 @@ const state = () => ({
   address: null,
   networkId: null,
   balance: null,
-  wallet: {},
+  name: "",
   web3Objects: {},
   fees: {
     protocol: 0,
@@ -59,7 +59,7 @@ const getters = {
     return onBoardChainMap[state.networkId];
   },
   balance: (state) => state.balance,
-  wallet: (state) => state.wallet,
+  name: (state) => state.name,
   transactionState: (state) => state.transactionState,
 };
 
@@ -142,14 +142,14 @@ const actions = {
 
   setWallet({ commit }, wallet) {
     if (wallet.provider) {
-      commit("setWallet", wallet);
+      commit("setWalletName", wallet.name);
       const ethersProvider = new ethers.providers.Web3Provider(wallet.provider);
       provider = ethersProvider;
       // store the selected wallet name to be retrieved next time the app loads.
       localStorage.setItem(localstorageWalletKey, wallet.name);
     } else {
       provider = null;
-      commit("setWallet", {});
+      commit("setWalletName", "");
     }
   },
 
@@ -445,8 +445,8 @@ const mutations = {
   setWalletBalance(state, balance) {
     Vue.set(state, "balance", balance);
   },
-  setWallet(state, wallet) {
-    Vue.set(state, "wallet", wallet);
+  setWalletName(state, name) {
+    Vue.set(state, "name", name);
   },
   setProvider(state, provider) {
     Vue.set(state, "provider", provider);

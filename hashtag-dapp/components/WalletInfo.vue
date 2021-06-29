@@ -25,7 +25,7 @@
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Wallet</p>
-            <p class="subtitle" v-if="wallet">{{ wallet.name }}</p>
+            <p class="subtitle" v-if="name">{{ name }}</p>
           </div>
         </div>
       </nav>
