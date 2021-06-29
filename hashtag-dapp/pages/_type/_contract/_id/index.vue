@@ -175,13 +175,13 @@
                             <td data-label="Owner" class="">
                               <eth-account
                                 :value="tag.tagger"
-                                route="tagger-detail"
+                                route="tagger-address"
                               ></eth-account>
                             </td>
                             <td data-label="Publisher" class="">
                               <eth-account
                                 :value="tag.publisher"
-                                route="publisher-detail"
+                                route="publisher-address"
                               ></eth-account>
                             </td>
                           </tr>

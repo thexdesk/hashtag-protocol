@@ -83,7 +83,7 @@
                         >
                           <eth-account
                             :value="props.row.creator"
-                            route="creator-detail"
+                            route="creator-address"
                           ></eth-account>
                         </b-table-column>
                         <b-table-column
@@ -94,7 +94,7 @@
                         >
                           <eth-account
                             :value="props.row.publisher"
-                            route="publisher-detail"
+                            route="publisher-address"
                           ></eth-account>
                         </b-table-column>
                       </b-table>
@@ -134,7 +134,7 @@
                         <b-table-column field="nftId" centered v-slot="props">
                           <nuxt-link
                             :to="{
-                              name: 'nft-detail',
+                              name: 'type-contract-id',
                               params: {
                                 type: 'nft',
                                 contract: props.row.nftContract,
@@ -226,7 +226,7 @@
                         >
                           <eth-account
                             :value="props.row.id"
-                            route="creator-detail"
+                            route="creator-address"
                           ></eth-account>
                         </b-table-column>
                         <b-table-column
@@ -294,7 +294,7 @@
                         >
                           <eth-account
                             :value="props.row.id"
-                            route="publisher-detail"
+                            route="publisher-address"
                           ></eth-account>
                         </b-table-column>
                         <b-table-column
@@ -366,7 +366,7 @@
                         >
                           <eth-account
                             :value="props.row.id"
-                            route="tagger-detail"
+                            route="tagger-address"
                           ></eth-account>
                         </b-table-column>
                         <b-table-column

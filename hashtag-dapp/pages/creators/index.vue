@@ -7,8 +7,7 @@
         <h2 class="subtitle">
           Hashtag Creators
           <span class="is-pulled-right is-size-6 has-text-weight-bold">
-            <router-link :to="{ name: 'dashboard' }">Dashboard</router-link
-            >&nbsp;
+            <nuxt-link :to="{ name: 'index' }">Dashboard</nuxt-link>&nbsp;
             <b-icon icon="arrow-up" type="is-dark" size="is-small"></b-icon>
           </span>
         </h2>
@@ -66,7 +65,7 @@
                         <td data-label="Owner" class="">
                           <eth-account
                             :value="creator.id"
-                            route="creator-detail"
+                            route="creator-address"
                           ></eth-account>
                         </td>
                         <td data-label="Hashtags" class="has-text-centered">

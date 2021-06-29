@@ -37,7 +37,7 @@
           <nuxt-link
             @click.native="$emit('close-modal')"
             :to="{
-              name: 'hashtag-detail',
+              name: 'hashtag-hashtag',
               params: { hashtag: hashtag.hashtagWithoutHash },
             }"
             >View <strong>{{ hashtag.displayHashtag }}</strong></nuxt-link
