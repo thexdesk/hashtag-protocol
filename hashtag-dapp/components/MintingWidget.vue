@@ -8,7 +8,7 @@ import HashtagSearch from "~/components/HashtagSearch";
 import TxnModal from "~/components/TxnModal";
 
 export default {
-  name: "Mint",
+  name: "MintingWidget",
   components: { HashtagSearch },
   methods: {
     /**

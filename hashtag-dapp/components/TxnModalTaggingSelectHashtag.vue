@@ -36,7 +36,7 @@ import Nft from "~/components/Assets/Nft";
 import HashtagSearch from "~/components/HashtagSearch";
 export default {
   components: { Nft, HashtagSearch },
-  name: "TaggingModal",
+  name: "TxnModalTaggingSelectHashtag",
   data() {
     return {
       hashtagInputTags: [],
