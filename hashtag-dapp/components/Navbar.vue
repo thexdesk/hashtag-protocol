@@ -154,7 +154,7 @@ export default {
     this.initOnboard();
   },
   beforeDestroy() {
-    this.unsubscribe?.();
+    this.unsubscribe();
   },
   computed: {
     ...mapGetters("wallet", ["accrued", "balance", "address", "onboard"]),
