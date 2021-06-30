@@ -19,7 +19,6 @@ Vue.filter("shortEth", function (value) {
 Vue.filter("toEth", function (value, decimals = null) {
   if (!value) return value;
   if (decimals) {
-    console.log("sup", value, decimals);
     let ether = Number(ethers.utils.formatEther(ethers.BigNumber.from(value)));
     return ether.toFixed(decimals);
   }
