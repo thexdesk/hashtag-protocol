@@ -383,7 +383,7 @@ const actions = {
     commit("setAccrued", accrued);
   },
 
-  async getMintAndTagFee({ commit }) {
+  async getMintAndTagFee({ state, commit }) {
     const { erc721HashtagRegistryContract } = state.web3Objects.contracts;
     const fee = (await erc721HashtagRegistryContract.tagFee()).toString();
 
