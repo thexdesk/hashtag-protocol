@@ -69,6 +69,7 @@ export default {
     website: "https://www.hashtag-protocol.org",
     app: "https://app.hashtag-protocol.org",
     docs: "https://docs.hashtag-protocol.org",
+    substack: "https://hashtagprotocol.substack.com",
     etherscanBaseUrl:
       onBoardChainMap[process.env.VUE_APP_ONBOARD_NETWORK_ID].url,
     hashtagProtocolContractAddress: utils.getContractAddressFromTruffleConf(
@@ -95,7 +96,7 @@ export default {
       process.env.VUE_APP_ONBOARD_LOCALSTORAGE_WALLET_KEY ||
       "HashtagSelectedWallet",
     discordServer:
-      process.env.VUE_APP_DISCORD_SERVER || "http://localhost:8080/",
+      process.env.VUE_APP_DISCORD_SERVER || "https://discord.gg/EyTJFRm",
   },
 
   gtm: {
