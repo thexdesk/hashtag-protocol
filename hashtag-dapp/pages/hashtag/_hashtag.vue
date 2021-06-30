@@ -1,5 +1,10 @@
 <template>
   <div class="body">
+    <SocialHead
+      :title="hashtagsByName[0].displayHashtag + '| Hashtag Protocol'"
+      :description="hashtagsByName[0].displayHashtag + '| Hashtag Protocol'"
+      :image="image"
+    />
     <Header />
     <section class="main" v-if="hashtagsByName && hashtagsByName[0]">
       <div class="container">
@@ -259,6 +264,7 @@ export default {
     HashtagTokenId,
     Header,
     Pagination,
+    SocialHead,
   },
   asyncData({ params }) {
     let routeHashtag = params.hashtag;
@@ -275,6 +281,18 @@ export default {
       skip: 0,
       tagsCount: 0,
       pageSize: PAGE_SIZE,
+    };
+  },
+  head() {
+    return {
+      title: "Hashtag Protocol",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "",
+        },
+      ],
     };
   },
   apollo: {
@@ -315,6 +333,11 @@ export default {
   methods: {
     tabSelected(id) {
       this.skip = id * PAGE_SIZE;
+    },
+  },
+  computed: {
+    image() {
+      return process.env.imageApi + this.hashtagsByName[0].id + ".png";
     },
   },
 };
