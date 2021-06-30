@@ -86,7 +86,6 @@ export default {
   name: "Navbar",
   data() {
     return {
-      currentMenu: "Dashboard",
       sectionsMenuArr: {
         dashboard: {
           text: "Dashboard",
@@ -138,8 +137,6 @@ export default {
     };
   },
   mounted() {
-    // Sets the currently active dropdown menu.
-    this.setCurrentMenu();
     // Start a mutation subscriber to watch for
     // an initialized/changed wallet address.
     this.unsubscribe = this.$store.subscribe((mutation) => {
@@ -185,9 +182,6 @@ export default {
         width: 550,
       });
       this.$store.dispatch("wallet/captureOpenModalCloseFn", result.close);
-    },
-    setCurrentMenu() {
-      this.currentMenu = this.$data.sectionsMenuArr[this.section]?.text;
     },
     drawdown() {
       const result = this.$buefy.modal.open({
