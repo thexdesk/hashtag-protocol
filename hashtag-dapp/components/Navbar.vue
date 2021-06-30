@@ -120,7 +120,7 @@ export default {
       supportMenuArr: {
         docs: {
           text: "Docs",
-          path: "https://docs.hashtag-protocol.org",
+          path: process.env.docs,
         },
         discord: {
           text: "Discord",
@@ -128,11 +128,11 @@ export default {
         },
         substack: {
           text: "Substack",
-          path: "https://hashtagprotocol.substack.com/",
+          path: process.env.substack,
         },
         website: {
           text: "Website",
-          path: "https://www.hashtag-protocol.org",
+          path: process.env.website,
         },
       },
     };
