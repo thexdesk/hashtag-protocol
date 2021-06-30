@@ -140,7 +140,7 @@ export default {
     // Start a mutation subscriber to watch for
     // an initialized/changed wallet address.
     this.unsubscribe = this.$store.subscribe((mutation) => {
-      if (mutation.type == "setWalletAddress") {
+      if (mutation.type == "wallet/setWalletAddress") {
         if (typeof mutation.payload !== "undefined") {
           // Wallet address has changed, initialize the protocol.
           this.initProtocol();
