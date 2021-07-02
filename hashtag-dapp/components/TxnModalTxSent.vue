@@ -58,7 +58,7 @@ export default {
       return protocolActionMap[this.protocolAction].txnSentMsg;
     },
     animation: function () {
-      return `~/assets/animations/${
+      return `./animations/${
         protocolActionMap[this.protocolAction].animationFile
       }`;
     },
