@@ -1,8 +1,8 @@
 <template>
   <div class="body">
     <SocialHead
-      :title="hashtagsByName[0].displayHashtag + '| Hashtag Protocol'"
-      :description="hashtagsByName[0].displayHashtag + '| Hashtag Protocol'"
+      :title="hashtagsByName[0].displayHashtag + ' | Hashtag Protocol'"
+      :description="hashtagsByName[0].displayHashtag + ' | Hashtag Protocol'"
       :image="image"
     />
     <Header />
