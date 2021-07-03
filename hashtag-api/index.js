@@ -3,6 +3,8 @@ const express = require("express");
 const path = require("path");
 const moment = require("moment");
 const config = require("platformsh-config").config();
+require("dotenv").config();
+const hashtag_subgraph = process.env.HASHTAG_SUBGRAPH_URL;
 //const nodeHtmlToImage = require("node-html-to-image");
 
 let PORT;
@@ -41,9 +43,11 @@ async function buildMetadata(tokenId, rebuildImg, req) {
   if (!tokenId) {
     return;
   }
+
+  console.log("hashtag_subgraph", hashtag_subgraph);
+
   let response = await axios({
-    url:
-      "https://api.thegraph.com/subgraphs/name/hashtag-protocol/hashtag-mainnet",
+    url: hashtag_subgraph,
     method: "post",
     data: {
       query: `{
@@ -71,6 +75,11 @@ async function buildMetadata(tokenId, rebuildImg, req) {
   hashtag.image = await buildImage(hashtag, rebuildImg);
 
   const fullUrl = req.protocol + "://" + req.get("host");
+
+  if (config.isValidPlatform()) {
+    const dapp = config.getRoute("hashtag-dapp");
+    console.log("dapp route", dapp);
+  }
 
   const metadata = {
     name: hashtag.displayHashtag,
