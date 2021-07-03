@@ -4,7 +4,7 @@ const path = require("path");
 const moment = require("moment");
 const config = require("platformsh-config").config();
 require("dotenv").config();
-const hashtag_subgraph = process.env.HASHTAG_SUBGRAPH_URL;
+const hashtag_subgraph = process.env.VUE_APP_HASHTAG_SUBGRAPH_URL;
 //const nodeHtmlToImage = require("node-html-to-image");
 
 let PORT;
