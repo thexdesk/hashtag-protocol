@@ -86,7 +86,7 @@ async function buildMetadata(tokenId, rebuildImg, req) {
 
   if (config.isValidPlatform()) {
     const dapp = config.getRoute("hashtag-dapp");
-    external_url = `${dapp.url}/hashtag/${hashtag.hashtagWithoutHash}`;
+    external_url = `${dapp.url}hashtag/${hashtag.hashtagWithoutHash}`;
   } else {
     external_url = `${fullUrl}/hashtag/${hashtag.hashtagWithoutHash}`;
   }
