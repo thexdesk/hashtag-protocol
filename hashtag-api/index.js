@@ -5,9 +5,12 @@ const moment = require("moment");
 const config = require("platformsh-config").config();
 require("dotenv").config();
 const hashtag_subgraph = process.env.VUE_APP_HASHTAG_SUBGRAPH_URL;
-//const nodeHtmlToImage = require("node-html-to-image");
 
 let PORT;
+
+// If not running on platform.sh, set port manually,
+// otherwise, pull from platform.sh env config.
+// see https://github.com/platformsh/config-reader-nodejs
 if (!config.isValidPlatform()) {
   PORT = 5000;
 } else {
@@ -44,8 +47,6 @@ async function buildMetadata(tokenId, rebuildImg, req) {
     return;
   }
 
-  console.log("hashtag_subgraph", hashtag_subgraph);
-
   let response = await axios({
     url: hashtag_subgraph,
     method: "post",
@@ -71,19 +72,29 @@ async function buildMetadata(tokenId, rebuildImg, req) {
 
   // Stitch in nicely formatted token creation date.
   hashtag.date = moment.unix(hashtag.timestamp).format("MMM Do YYYY");
-
   hashtag.image = await buildImage(hashtag, rebuildImg);
 
+  // Form the base URL to the hashtag.image
   const fullUrl = req.protocol + "://" + req.get("host");
+
+  // Next, create the "external url", which should lead back to the
+  // hashtag protocol dApp. If we are running on platform.sh
+  // let's pull route to the hashtag-dapp from the platform config.
+  // otherwise, let's use the fullUrl formed above, which
+  // will default to the localhost.
+  let external_url;
 
   if (config.isValidPlatform()) {
     const dapp = config.getRoute("hashtag-dapp");
-    console.log("dapp route", dapp);
+    external_url = `${dapp.url}/hashtag/${hashtag.hashtagWithoutHash}`;
+  } else {
+    external_url = `${fullUrl}/hashtag/${hashtag.hashtagWithoutHash}`;
   }
 
+  // Form our metadata json.
   const metadata = {
     name: hashtag.displayHashtag,
-    external_url: `https://app.hashtag-protocol.org/hashtag/${hashtag.hashtagWithoutHash}`,
+    external_url: external_url,
     image: `${fullUrl}/${hashtag.image}`,
     description: "",
     attributes: [
