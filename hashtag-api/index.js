@@ -75,7 +75,7 @@ async function buildMetadata(tokenId, rebuildImg, req) {
   hashtag.image = await buildImage(hashtag, rebuildImg);
 
   // Form the base URL to the hashtag.image
-  const fullUrl = req.protocol + "://" + req.get("host");
+  const fullUrl = req.protocol + "://" + req.get("host") + "/";
 
   // Next, create the "external url", which should lead back to the
   // hashtag protocol dApp. If we are running on platform.sh
@@ -88,14 +88,14 @@ async function buildMetadata(tokenId, rebuildImg, req) {
     const dapp = config.getRoute("hashtag-dapp");
     external_url = `${dapp.url}hashtag/${hashtag.hashtagWithoutHash}`;
   } else {
-    external_url = `${fullUrl}/hashtag/${hashtag.hashtagWithoutHash}`;
+    external_url = `${fullUrl}hashtag/${hashtag.hashtagWithoutHash}`;
   }
 
   // Form our metadata json.
   const metadata = {
     name: hashtag.displayHashtag,
     external_url: external_url,
-    image: `${fullUrl}/${hashtag.image}`,
+    image: `${fullUrl}${hashtag.image}`,
     description: "",
     attributes: [
       {
