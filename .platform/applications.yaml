@@ -103,8 +103,7 @@
       socket_family: tcp
       protocol: http
     commands:
-      start:
-        yarn start
+      start: yarn start
   disk: 512
   dependencies:
     nodejs:
@@ -114,7 +113,7 @@
       set -e
       cd hashtag-dapp
       yarn install
-      yarn build
+    deploy: yarn build
 
 - name: hashtag-website
   type: nodejs:14
