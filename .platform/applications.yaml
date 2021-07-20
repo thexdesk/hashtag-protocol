@@ -113,7 +113,7 @@
       set -e
       cd hashtag-dapp
       yarn install
-    deploy: yarn build
+      yarn build
 
 - name: hashtag-website
   type: nodejs:14
