@@ -397,9 +397,7 @@ export default {
     },
     facebookSharingUrl() {
       const encodedString = encodeURIComponent(
-        `Check out the hashtag ${
-          this.hashtagsByName[0].displayHashtag
-        } on Hashtag Protocol\n\n${process.env.app + this.$route.path}`
+        process.env.app + this.$route.path
       );
       return "https://www.facebook.com/share.php?u=" + encodedString;
     },
