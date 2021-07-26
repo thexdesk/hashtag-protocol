@@ -382,6 +382,15 @@ export default {
       const url = process.env.app + this.$route.path;
       cb.writeText(url);
     },
+    getRandomSharingMessage() {
+      const messages = [
+        `${this.hashtagsByName[0].displayHashtag} stored as a non-fungible token (NFT) on the blockchain.`,
+        `Not your typical hashtag. This is ${this.hashtagsByName[0].displayHashtag} as an NFT.`,
+        `Hashtag Protocol enables social content tagging for the decentralized internet.`,
+      ];
+      const randomNumber = Math.floor(Math.random() * 3);
+      return messages[randomNumber];
+    },
   },
   computed: {
     image() {
@@ -389,15 +398,17 @@ export default {
     },
     twitterSharingUrl() {
       const encodedString = encodeURIComponent(
-        `Check out the hashtag ${
-          this.hashtagsByName[0].displayHashtag
-        } on @HashtagProtoHQ\n\n${process.env.app + this.$route.path}`
+        `${this.getRandomSharingMessage()}\n\n${
+          process.env.app + this.$route.path
+        }`
       );
       return "https://twitter.com/intent/tweet?text=" + encodedString;
     },
     facebookSharingUrl() {
       const encodedString = encodeURIComponent(
-        process.env.app + this.$route.path
+        `${this.getRandomSharingMessage()}\n\n${
+          process.env.app + this.$route.path
+        }`
       );
       return "https://www.facebook.com/share.php?u=" + encodedString;
     },
