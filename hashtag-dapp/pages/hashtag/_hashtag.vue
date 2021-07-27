@@ -2,7 +2,7 @@
   <div class="body">
     <SocialHead
       :title="hashtagsByName[0].displayHashtag + ' | Hashtag Protocol'"
-      :description="hashtagsByName[0].displayHashtag + ' | Hashtag Protocol'"
+      :description="randomSharingMessage"
       :image="image"
     />
     <Header />
@@ -333,7 +333,7 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: "",
+          content: this.randomSharingMessage,
         },
       ],
     };
@@ -382,7 +382,12 @@ export default {
       const url = process.env.app + this.$route.path;
       cb.writeText(url);
     },
-    getRandomSharingMessage() {
+  },
+  computed: {
+    image() {
+      return process.env.imageApi + this.hashtagsByName[0].id + ".png";
+    },
+    randomSharingMessage() {
       const messages = [
         `${this.hashtagsByName[0].displayHashtag} stored as a non-fungible token (NFT) on the blockchain.`,
         `Not your typical hashtag. This is ${this.hashtagsByName[0].displayHashtag} as an NFT.`,
@@ -391,24 +396,19 @@ export default {
       const randomNumber = Math.floor(Math.random() * 3);
       return messages[randomNumber];
     },
-  },
-  computed: {
-    image() {
-      return process.env.imageApi + this.hashtagsByName[0].id + ".png";
-    },
     twitterSharingUrl() {
       const encodedString = encodeURIComponent(
-        `${this.getRandomSharingMessage()}\n\n${
-          process.env.app + this.$route.path
-        }`
+        `Check out the hashtag ${
+          this.hashtagsByName[0].displayHashtag
+        } on @HashtagProtoHQ\n\n${process.env.app + this.$route.path}`
       );
       return "https://twitter.com/intent/tweet?text=" + encodedString;
     },
     facebookSharingUrl() {
       const encodedString = encodeURIComponent(
-        `${this.getRandomSharingMessage()}\n\n${
-          process.env.app + this.$route.path
-        }`
+        `Check out the hashtag ${
+          this.hashtagsByName[0].displayHashtag
+        } on Hashtag Protocol\n\n${process.env.app + this.$route.path}`
       );
       return "https://www.facebook.com/share.php?u=" + encodedString;
     },
