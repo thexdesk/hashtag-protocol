@@ -28,4 +28,4 @@ The following files and additions make the framework work on Platform.sh, modifi
 * [NuxtJS](https://nuxtjs.org/)
 * [Node.js on Platform.sh](https://docs.platform.sh/languages/nodejs.html)
 
-revised: 07/20/21
+revised: 07/26/21
