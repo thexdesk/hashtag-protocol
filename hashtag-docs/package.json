@@ -36,7 +36,7 @@
     "platformsh-config": "^2.3.1",
     "sass-loader": "8.0.2",
     "vue": "2.6.13",
-    "vue-server-renderer": "2.6.11",
+    "vue-server-renderer": "2.6.12",
     "vue-template-compiler": "2.6.11",
     "vuepress-plugin-code-copy": "^1.0.6",
     "vuepress-plugin-google-tag-manager": "^0.0.5",
