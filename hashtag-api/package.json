@@ -21,7 +21,7 @@
     "mysql2": "^1.6.5",
     "path": "^0.12.7",
     "platformsh-config": "^2.0.0",
-    "puppeteer": "^8.0.0"
+    "puppeteer": "^13.3.0"
   },
   "devDependencies": {
     "eslint": "^7.23.0",
