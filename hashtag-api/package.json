@@ -16,7 +16,7 @@
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "es6-template-strings": "^2.0.1",
-    "express": "^4.17.1",
+    "express": "^4.21.0",
     "moment": "^2.29.1",
     "mysql2": "^1.6.5",
     "path": "^0.12.7",
